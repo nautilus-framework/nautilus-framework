@@ -10,10 +10,13 @@
 	<description>A preference-base objective reduction for SBSE</description>
 	<modules>
 		<module>nautilus-web</module>
+		<module>nautilus-plugin</module>
+		<module>nautilus-plugin-ip</module>
 	</modules>
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<jmetal.version>5.5.3</jmetal.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.test.exclusions>
 			src/test/**
@@ -28,4 +31,27 @@
 		<name>Thiago Ferreira</name>
 		<url>http://github.com/thiagodnf</url>
 	</organization>
+	<dependencies>
+		<!--  JMetal -->
+		<dependency>
+			<groupId>org.uma.jmetal</groupId>
+			<artifactId>jmetal-exec</artifactId>
+			<version>${jmetal.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.uma.jmetal</groupId>
+			<artifactId>jmetal-algorithm</artifactId>
+			<version>${jmetal.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.uma.jmetal</groupId>
+			<artifactId>jmetal-core</artifactId>
+			<version>${jmetal.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.uma.jmetal</groupId>
+			<artifactId>jmetal-problem</artifactId>
+			<version>${jmetal.version}</version>
+		</dependency>
+	</dependencies>
 </project>

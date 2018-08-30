@@ -7,8 +7,8 @@
 		<artifactId>nautilus</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<groupId>thiagodnf.nautilus.server</groupId>
-	<artifactId>nautilus-server</artifactId>
+	<groupId>thiagodnf.nautilus.web</groupId>
+	<artifactId>nautilus-web</artifactId>
 	<name>Nautilus Server</name>
 	<description>A spring boot application</description>
 	<properties>
@@ -51,6 +51,28 @@
 					<artifactId>android-json</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<!-- JQuery -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<!-- Bootstrap -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>3.3.7</version>
+		</dependency>
+		<dependency>
+			<groupId>thiagodnf.nautilus.plugin.ip</groupId>
+			<artifactId>nautilus-plugin-ip</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>thiagodnf.nautilus.plugin</groupId>
+			<artifactId>nautilus-plugin</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 	<build>
