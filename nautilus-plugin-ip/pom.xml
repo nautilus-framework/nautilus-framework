@@ -6,9 +6,9 @@
     <version>1.0.0</version>
   </parent>
   <groupId>thiagodnf.nautilus.plugin.ip</groupId>
-  <artifactId>nautilus-plugin-ip</artifactId>
-  <name>Integer Problem Plugin</name>
-  <description>Integer Problem Plugin</description>
+  <artifactId>nautilus-plugin-mip</artifactId>
+  <name>Minimum Integer Problem</name>
+  <description>Minimum Integer Problem Plugin</description>
   <dependencies>
   	<dependency>
   		<groupId>thiagodnf.nautilus.plugin</groupId>

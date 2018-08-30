@@ -11,7 +11,7 @@
 	<modules>
 		<module>nautilus-web</module>
 		<module>nautilus-plugin</module>
-		<module>nautilus-plugin-ip</module>
+		<module>nautilus-plugin-mip</module>
 	</modules>
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>

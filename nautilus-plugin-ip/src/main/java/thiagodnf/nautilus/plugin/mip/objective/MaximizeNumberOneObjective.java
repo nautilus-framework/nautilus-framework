@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.ip.objective;
+package thiagodnf.nautilus.plugin.mip.objective;
 
 import org.uma.jmetal.solution.IntegerSolution;
 

@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.ip.problem;
+package thiagodnf.nautilus.plugin.mip.problem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,8 +7,8 @@ import java.util.List;
 import org.uma.jmetal.problem.impl.AbstractIntegerProblem;
 import org.uma.jmetal.solution.IntegerSolution;
 
-import thiagodnf.nautilus.plugin.ip.objective.MaximizeNumberOneObjective;
-import thiagodnf.nautilus.plugin.ip.objective.MaximizeNumberTwoObjective;
+import thiagodnf.nautilus.plugin.mip.objective.MaximizeNumberOneObjective;
+import thiagodnf.nautilus.plugin.mip.objective.MaximizeNumberTwoObjective;
 import thiagodnf.nautilus.plugin.objective.AbstractObjective;
 
 public class IntegerProblem extends AbstractIntegerProblem {

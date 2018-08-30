@@ -19,7 +19,7 @@ import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 
-import thiagodnf.nautilus.plugin.ip.problem.IntegerProblem;
+import thiagodnf.nautilus.plugin.mip.problem.IntegerProblem;
 
 @Controller
 public class IndexController {
