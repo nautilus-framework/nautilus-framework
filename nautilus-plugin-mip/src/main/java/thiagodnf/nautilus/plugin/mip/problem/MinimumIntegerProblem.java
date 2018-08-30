@@ -1,17 +1,15 @@
 package thiagodnf.nautilus.plugin.mip.problem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.uma.jmetal.problem.impl.AbstractIntegerProblem;
 import org.uma.jmetal.solution.IntegerSolution;
 
-import thiagodnf.nautilus.plugin.mip.objective.MaximizeNumberOneObjective;
-import thiagodnf.nautilus.plugin.mip.objective.MaximizeNumberTwoObjective;
+import thiagodnf.nautilus.plugin.mip.objective.MinimumNumberObjective;
 import thiagodnf.nautilus.plugin.objective.AbstractObjective;
 
-public class IntegerProblem extends AbstractIntegerProblem {
+public class MinimumIntegerProblem extends AbstractIntegerProblem {
 
 	private static final long serialVersionUID = 5347625751550400087L;
 
@@ -21,18 +19,19 @@ public class IntegerProblem extends AbstractIntegerProblem {
 	
 	private int upperBound= 2;
 	
-	private List<AbstractObjective<IntegerSolution>> objectives = Arrays.asList();
+	private List<AbstractObjective<IntegerSolution>> objectives;
 
-	public IntegerProblem(int size) {
+	public MinimumIntegerProblem(int size) {
+		
 		this.size = size;
-
-		this.objectives.add(new MaximizeNumberOneObjective());
-		this.objectives.add(new MaximizeNumberTwoObjective());
+		this.objectives = new ArrayList<>();
+		this.objectives.add(new MinimumNumberObjective(1));
+		this.objectives.add(new MinimumNumberObjective(2));
 
 		// JMetal's Settings
-		setNumberOfVariables(1);
+		setNumberOfVariables(size);
 		setNumberOfObjectives(objectives.size());
-		setName(IntegerProblem.class.getSimpleName());
+		setName(MinimumIntegerProblem.class.getSimpleName());
 		
 		List<Integer> lowerLimit = new ArrayList<>(getNumberOfVariables());
 		List<Integer> upperLimit = new ArrayList<>(getNumberOfVariables());

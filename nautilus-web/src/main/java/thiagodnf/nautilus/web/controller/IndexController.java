@@ -19,7 +19,7 @@ import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 
-import thiagodnf.nautilus.plugin.mip.problem.IntegerProblem;
+import thiagodnf.nautilus.plugin.mip.problem.MinimumIntegerProblem;
 
 @Controller
 public class IndexController {
@@ -29,7 +29,7 @@ public class IndexController {
 		
 		System.out.println("oi");
 		
-		Problem<IntegerSolution> problem = new IntegerProblem(10);
+		Problem<IntegerSolution> problem = new MinimumIntegerProblem(10);
 		
 		double crossoverProbability = 0.9 ;
 	    double crossoverDistributionIndex = 20.0 ;
