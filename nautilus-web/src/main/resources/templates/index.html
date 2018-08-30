@@ -7,8 +7,23 @@
 		<div th:replace="fragments/navbar :: default('home')"></div>
 	
 		<div class="container">
-			oi
-		
+			<form id="form-execute" action="#" th:action="@{/optimize}" th:object="${parameters}" method="post">
+			 	<div class="form-group">
+			 		<label for="populationSize">Population Size</label>
+		    		<input type="number" class="form-control" th:field="*{populationSize}" />
+		    	</div>
+		    	<div class="form-group">
+		    		<label for="maxEvaluations">Max Evaluations</label>
+		        	<input type="number" class="form-control" th:field="*{maxEvaluations}" />
+		        </div>
+		        <button type="submit" class="btn btn-default">Execute</button>		        
+		    </form>
+		    
+		    <button id="btn-connect" type="submit" class="btn btn-default">Connect</button>	
+		    <button id="btn-disconnect" type="submit" class="btn btn-default">Disconnect</button>
+		     <button id="btn-send" type="submit" class="btn btn-default">SEnd</button>					
+		    
+		    <div id="result"></div>   
 		</div>
 		
 		<div th:replace="fragments/footer :: footer"></div>

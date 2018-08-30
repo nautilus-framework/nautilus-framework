@@ -52,6 +52,26 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- Spring Websocket suport -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+         <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>sockjs-client</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>stomp-websocket</artifactId>
+            <version>2.3.3-1</version>
+        </dependency>
+		<!-- Mongo DB -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
 		<!-- JQuery -->
 		<dependency>
 			<groupId>org.webjars</groupId>
