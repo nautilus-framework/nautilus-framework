@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>thiagodnf.nautilus</groupId>
+	<artifactId>nautilus</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+	<name>Nautilus</name>
+	<description>A preference-base objective reduction for SBSE</description>
+	<modules>
+		<module>nautilus-web</module>
+	</modules>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sonar.test.exclusions>
+			src/test/**
+		</sonar.test.exclusions>
+	</properties>
+	<developers>
+		<developer>
+			<name>Thiago Ferreira</name>
+		</developer>
+	</developers>
+	<organization>
+		<name>Thiago Ferreira</name>
+		<url>http://github.com/thiagodnf</url>
+	</organization>
+</project>
