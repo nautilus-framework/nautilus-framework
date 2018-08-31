@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
+import com.google.gson.Gson;
+
 public class Population {
 
 	@Id
@@ -45,5 +47,9 @@ public class Population {
 
 	public void setSolutions(List<Solution> solutions) {
 		this.solutions = solutions;
+	}
+	
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 }

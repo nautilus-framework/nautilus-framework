@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -7,8 +8,11 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,36 +34,61 @@ import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Population;
 import thiagodnf.nautilus.web.service.PopulationService;
 import thiagodnf.nautilus.web.util.Converter;
+import thiagodnf.nautilus.web.websocket.WebSocketOnConnected;
 
 @Controller
 public class OptimizeController {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(OptimizeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WebSocketOnConnected.class);
 	
 	@Autowired
 	private PopulationService parentoFrontService;
 	
 	//@Autowired
 	//private WebSocketEventConfiguration event;
+	@Autowired
+	private SimpMessageSendingOperations messaging;
 	
-	@MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public String greeting(@Valid Parameters parameters) throws Exception {
+	@MessageMapping("/hello.{sessionId}")
+   // @SendTo("/user/topic/greetings.{id}")
+	@Async
+    public void greeting(@Valid Parameters parameters, @DestinationVariable String sessionId) throws Exception {
         
-		Thread.sleep(1000); // simulated delay
+		logger.info("Optimizing....");
+		logger.info(sessionId);
 		
-		System.out.println(parameters);
+		Thread.currentThread().setName("optimizing-" + sessionId);
 		
-        return "oi";
+		//System.out.println(Thread.currentThread());
+		
+		for (int i = 0; i < 100; i++) {
+			Thread.sleep(parameters.getMaxEvaluations()); // simulated delay
+			messaging.convertAndSend("/topic/greetings." + sessionId, i);
+			System.out.println(i);
+			
+			System.out.println(Thread.currentThread().isInterrupted());
+		}
+		
+		
+		
+		
+		logger.info("Done");
+		
+		//System.out.println(principal);
+		//messaging.convertAndSend(payload);
+		//System.out.println(parameters);
+		
+        //return "oi";
     }
 	
-	@PostMapping("/optimize")
-	public String optimize(@Valid Parameters parameters) {
-		System.out.println("oi");
-		
-		
-		return "result";
-	}
+//	@PostMapping("/optimize")
+//	public void optimize(@Valid Parameters parameters, Principal principal) {
+//		System.out.println("oi");
+//		
+//		
+//		//messaging.convertAndSendToUser(principal.getName(), "/topic/optimize.title." + sessionId, "Optimizing...");
+//		
+//	}
 	
 	
 //	@PostMapping("/optimize")

@@ -1,50 +1,59 @@
 var stompClient = null;
 
-function setConnected(connected) {
-    $("#connect").prop("disabled", connected);
-    $("#disconnect").prop("disabled", !connected);
-    if (connected) {
-    	$("#result").append("Connected");
-        $("#conversation").show();
-    }
-    else {
-    $("#result").append("Disconnected");
-        $("#conversation").hide();
-    }
-    $("#greetings").html("");
-    
-    
+function append(text){
+	$("#result").append(text).append("</br>");
 }
 
+function setConnected(connected) {
+	if (connected) {
+    	append("Connected");
+    }else {
+    	append("Disconnected");
+    }
+}
+
+var sessionId = uuidv1().split("-")[0]
+
 function connect() {
-    var socket = new SockJS('/gs-guide-websocket');
-    //var socket = new SockJS('/gs-guide-websocket', [], {
-	//	sessionId: () => {
-	//		return 12345
-	//	}
-	//});
+    
+	var socket = new SockJS('/gs-guide-websocket', [], {
+	    sessionId: () => {
+	       return sessionId
+	    }
+	 });
 	
-	socket.onclose = function() {
-    	console.log("disconnected");
-	};	
+	append(sessionId)
 	
-    stompClient = Stomp.over(socket);
+	stompClient = Stomp.over(socket);
     
     stompClient.connect({}, function (frame) {
-        setConnected(true);
         
-        stompClient.subscribe('/topic/greetings', function (greeting) {
-            $("#result").append(greeting);
+    	setConnected(true);
+        
+        stompClient.subscribe('/topic/greetings.'+sessionId, function (greeting) {
+        	
+        	$("#progress").html(greeting.body);
+        	//append(greeting.body);
         });
     });
+    
+    var onCloseFromStomp = socket.onclose; 
+    
+    socket.onclose = function() {
+    	
+    	append("Whoops! Lost connection to server");
+    	
+    	onCloseFromStomp();
+	};
 }
 
 function disconnect() {
-    if (stompClient !== null) {
+    
+	if (stompClient !== null) {
         stompClient.disconnect();
     }
-    setConnected(false);
-    console.log("Disconnected");
+	
+	setConnected(false);
 }
 
 function sendName() {
@@ -56,7 +65,7 @@ function sendName() {
 
     console.log(obj)
 
-    stompClient.send("/app/hello", {}, obj);
+    stompClient.send("/app/hello."+sessionId, {}, obj);
 }
 
 function showGreeting(message) {
@@ -80,15 +89,15 @@ $(function(){
     $( "#btn-send" ).click(function() { sendName(); });
     
     
-    window.onbeforeunload = function (e) {
-	    var e = e || window.event;
-	
-	    // For IE and Firefox
-	    if (e) {
-	        e.returnValue = 'Leaving the page';
-	    }
-	
-	    // For Safari
-	    return 'Leaving the page';
-	};
+//    window.onbeforeunload = function (e) {
+//	    var e = e || window.event;
+//	
+//	    // For IE and Firefox
+//	    if (e) {
+//	        e.returnValue = 'Leaving the page';
+//	    }
+//	
+//	    // For Safari
+//	    return 'Leaving the page';
+//	};
 })

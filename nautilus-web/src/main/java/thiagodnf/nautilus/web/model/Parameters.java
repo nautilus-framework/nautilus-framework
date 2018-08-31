@@ -3,6 +3,8 @@ package thiagodnf.nautilus.web.model;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 
+import com.google.gson.Gson;
+
 public class Parameters {
 	
 	@DecimalMin("10")
@@ -28,5 +30,8 @@ public class Parameters {
 	public void setMaxEvaluations(int maxEvaluations) {
 		this.maxEvaluations = maxEvaluations;
 	}
-
+	
+	public String toString() {
+		return new Gson().toJson(this);
+	}
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.google.gson.Gson;
+
 public class Solution {
 	
 	@NotNull
@@ -32,5 +34,9 @@ public class Solution {
 
 	public void setVariables(List<String> variables) {
 		this.variables = variables;
+	}
+	
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 }

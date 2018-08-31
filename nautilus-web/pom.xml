@@ -72,6 +72,20 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
+		<!-- Logger -->
+		<dependency>
+	        <groupId>ch.qos.logback</groupId>
+	        <artifactId>logback-classic</artifactId>
+	    </dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<!-- Google GSON-->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
 		<!-- JQuery -->
 		<dependency>
 			<groupId>org.webjars</groupId>
@@ -84,6 +98,19 @@
 			<artifactId>bootstrap</artifactId>
 			<version>3.3.7</version>
 		</dependency>
+		<!-- UUID -->
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>uuid.js</artifactId>
+		    <version>3.6.1</version>
+		</dependency>
+		<!-- JavaMelody Spring Boot Starter -->
+		<dependency>
+			<groupId>net.bull.javamelody</groupId>
+			<artifactId>javamelody-spring-boot-starter</artifactId>
+			<version>1.70.0</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>thiagodnf.nautilus.plugin.ip</groupId>
 			<artifactId>nautilus-plugin-mip</artifactId>
