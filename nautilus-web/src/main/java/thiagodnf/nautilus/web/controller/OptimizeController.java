@@ -54,6 +54,8 @@ public class OptimizeController {
 	@Async
     public void greeting(@Valid Parameters parameters, @DestinationVariable String sessionId) throws Exception {
         
+		messaging.convertAndSend("/topic/optimize/title." + sessionId, "Optimizing...");
+		
 		logger.info("Optimizing....");
 		logger.info(sessionId);
 		
@@ -61,9 +63,9 @@ public class OptimizeController {
 		
 		//System.out.println(Thread.currentThread());
 		
-		for (int i = 0; i < 100; i++) {
+		for (int i = 1; i <= 100; i++) {
 			Thread.sleep(parameters.getMaxEvaluations()); // simulated delay
-			messaging.convertAndSend("/topic/greetings." + sessionId, i);
+			messaging.convertAndSend("/topic/optimize/progress." + sessionId, i);
 			System.out.println(i);
 			
 			System.out.println(Thread.currentThread().isInterrupted());

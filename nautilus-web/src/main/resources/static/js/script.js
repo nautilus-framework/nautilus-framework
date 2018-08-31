@@ -1,4 +1,5 @@
 var stompClient = null;
+var progressBar = new ProgressBar(".progressbar");
 
 function append(text){
 	$("#result").append(text).append("</br>");
@@ -30,10 +31,19 @@ function connect() {
         
     	setConnected(true);
         
-        stompClient.subscribe('/topic/greetings.'+sessionId, function (greeting) {
-        	
-        	$("#progress").html(greeting.body);
-        	//append(greeting.body);
+//        stompClient.subscribe('/topic/greetings.'+sessionId, function (greeting) {
+//        	
+//        	$("#progress").html(greeting.body);
+//        	
+//        	progressBar.setProgress(greeting.body);
+//        	//append(greeting.body);
+//        });
+        
+        stompClient.subscribe('/topic/optimize/progress.'+sessionId, function (response) {
+        	progressBar.setProgress(response.body);
+        });
+        stompClient.subscribe('/topic/optimize/title.'+sessionId, function (response) {
+        	progressBar.setTitle(response.body);
         });
     });
     
@@ -57,6 +67,8 @@ function disconnect() {
 }
 
 function sendName() {
+	
+	progressBar.setTitle("Waiting the executor...");
 
     var obj = JSON.stringify({
         'populationSize': $("#populationSize").val(),
@@ -88,7 +100,11 @@ $(function(){
     $( "#btn-disconnect" ).click(function() { disconnect(); });
     $( "#btn-send" ).click(function() { sendName(); });
     
+    //progressBar.hide();
     
+    //progressBar.setTitle("ola")
+    progressBar.setProgress(0);
+    //setTitle("este")
 //    window.onbeforeunload = function (e) {
 //	    var e = e || window.event;
 //	
