@@ -8,11 +8,11 @@ import com.google.gson.Gson;
 public class Parameters {
 	
 	@DecimalMin("10")
-	@DecimalMax("100")
+	@DecimalMax("1000")
 	private int populationSize = 100;
 	
-	@DecimalMin("100")
-	@DecimalMax("100000")
+	@DecimalMin("10")
+	@DecimalMax("1000000")
 	private int maxEvaluations = 1000;
 
 	public int getPopulationSize() {

@@ -1,12 +1,13 @@
 package thiagodnf.nautilus.web.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Id;
 
-import com.google.gson.Gson;
-
-public class Population {
+public class Execution {
 
 	@Id
 	private String id;
@@ -15,7 +16,16 @@ public class Population {
 	
 	private long executionTime;
 	
+	@NotNull
+	private Parameters parameters;
+	
+	@NotNull
 	private List<Solution> solutions;
+	
+	public Execution() {
+		this.parameters = new Parameters();
+		this.solutions = new ArrayList<>();
+	}
 
 	public String getId() {
 		return id;
@@ -41,6 +51,14 @@ public class Population {
 		this.executionTime = executionTime;
 	}
 
+	public Parameters getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(Parameters parameters) {
+		this.parameters = parameters;
+	}
+
 	public List<Solution> getSolutions() {
 		return solutions;
 	}
@@ -49,7 +67,5 @@ public class Population {
 		this.solutions = solutions;
 	}
 	
-	public String toString() {
-		return new Gson().toJson(this);
-	}
+	
 }

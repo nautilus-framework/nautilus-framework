@@ -1,41 +1,61 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<head th:replace="fragments/head :: default"></head>
 	<body>
 		<div th:replace="fragments/navbar :: default('home')"></div>
-	
+
 		<div class="container">
-			<form id="form-execute" action="#" th:action="@{/optimize}" th:object="${parameters}" method="post">
-			 	<div class="form-group">
-			 		<label for="populationSize">Population Size</label>
-		    		<input type="number" class="form-control" th:field="*{populationSize}" />
-		    	</div>
-		    	<div class="form-group">
-		    		<label for="maxEvaluations">Max Evaluations</label>
-		        	<input type="number" class="form-control" th:field="*{maxEvaluations}" />
-		        </div>
-		        <button type="submit" class="btn btn-default">Execute</button>		        
-		    </form>
-		    <br/>
-		    
-		    <div class="progressbar">
-				<p class="title">Title</p>
-				<div class="progress">
-				  <div class="progress-bar progress-bar-striped progress-bar-animated " role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+			<div id="alertbox" class="alert alert-danger" role="alert">
+				<strong>Ooops!</strong> An exception was threw. <a href="#" class="alert-link" id="details">Click here</a> to see the details
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<div class="console">
+					<textarea class="form-control" rows="4"></textarea>
 				</div>
 			</div>
+
+
+
+			
 			<br/>
-		    
-		    <button id="btn-connect" type="submit" class="btn btn-default">Connect</button>	
-		    <button id="btn-disconnect" type="submit" class="btn btn-default">Disconnect</button>
-		     <button id="btn-send" type="submit" class="btn btn-default">Send</button>					
-		    
-		    <div id="result"></div> 
-		    <div id="progress"></div>   
+			<hr/>
+			<div class="progressbar">
+				<p class="title">Title</p>
+			</div>
+			<br/>
+
+			<button id="btn-connect" type="submit" class="btn btn-default">Connect</button>
+			<button id="btn-disconnect" type="submit" class="btn btn-default">Disconnect</button>
+			<button id="btn-send" type="submit" class="btn btn-default">Send</button>
+
+
+			<p>
+				<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+					Link with href
+				</a>
+				<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
+				aria-controls="collapseExample">
+					Button with data-target
+				</button>
+			</p>
+			<div class="collapse" id="collapseExample">
+				<div class="card card-body">
+					<div id="progress"></div>
+					<div id="result"></div>
+				</div>
+			</div>
+
+
+
+
+
+
+
 		</div>
-		
+
+		<div th:replace="fragments/modal-progressbar :: progressbar"></div>
 		<div th:replace="fragments/footer :: footer"></div>
 	</body>
+
 </html>

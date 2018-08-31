@@ -1,25 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-	<head></head>
-	<body>
-		<nav th:fragment="default(active)" class="navbar navbar-default navbar-fixed-top" id="custom-bootstrap-menu">
-			<div class="container">
-				<!-- Brand and toggle get grouped for better mobile display -->
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" th:href="@{/}" th:text="#{app.name}"></a>
-				</div>
-				<div id="navbar" class="collapse navbar-collapse">
-					
-				</div>
-			</div>
-		</nav>	
-	</body>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head></head>
+
+<body>
+
+  <nav th:fragment="default(active)" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Nautilus</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      
+
+    </div>
+  </nav>
+
+</body>
+
 </html>
