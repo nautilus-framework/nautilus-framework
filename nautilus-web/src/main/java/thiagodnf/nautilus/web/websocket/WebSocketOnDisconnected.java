@@ -19,21 +19,16 @@ public class WebSocketOnDisconnected implements ApplicationListener<SessionDisco
 		StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
 
 		String sessionId = sha.getSessionId();
-		
+
 		logger.info("User {} Disconnected", sessionId);
-		
 
 		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-		
-		for(Thread t : threadSet) {
-			if(t.getName().equalsIgnoreCase("optimizing-"+sessionId)) {
+
+		for (Thread t : threadSet) {
+			if (t.getName().equalsIgnoreCase("optimizing-" + sessionId)) {
 				t.interrupt();
 			}
-			
+
 		}
-		
-		//Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
-		
-		
 	}
 }

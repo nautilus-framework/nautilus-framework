@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head th:replace="fragments/head :: default"></head>
+
+<body>
+	<div th:replace="fragments/navbar :: default('home')"></div>
+
+	<div class="container">
+		<div class="row titlebar">
+			<div class="col-8">
+				<h4 class="title" th:text="${problemName} + ' :: '+ ${filename}"></h4>
+			</div>
+			<div class="col-4 float-right">
+				<a class="btn btn-success float-right" th:href="@{/optimize/} + ${problemKey} + '/' + ${filename}">Optimize</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" href="#content" role="tab" data-toggle="tab" aria-selected="true">Content</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="#content">
+						<br/>
+						<div th:text="${fileContent}"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+
+</html>

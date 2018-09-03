@@ -66,6 +66,4 @@ public class Execution {
 	public void setSolutions(List<Solution> solutions) {
 		this.solutions = solutions;
 	}
-	
-	
 }

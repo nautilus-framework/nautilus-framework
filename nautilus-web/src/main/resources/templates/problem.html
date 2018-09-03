@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head th:replace="fragments/head :: default"></head>
+
+<body>
+	<div th:replace="fragments/navbar :: default('home')"></div>
+
+	<div class="container">
+		<div class="row titlebar">
+			<div class="col-8">
+				<h4 class="title" th:text="${problemName}"></h4>
+			</div>
+			<div class="col-4 float-right">
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
+					<thead>
+						<tr>
+							<th width="50px">#</th>
+							<th>File</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="instanceFile,i : ${instanceFiles}">
+							<td th:text="${i.count}"></td>
+							<td>
+								<a th:text="${instanceFile.getFileName()}" th:href="@{/instance-file/} + ${problemKey} + '/' + ${instanceFile.getFileName()}"></a>
+							</td>					
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+
+</html>

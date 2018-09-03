@@ -1,7 +1,9 @@
 package thiagodnf.nautilus.web.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,9 +17,13 @@ public class Solution {
 	@NotNull
 	private List<String> variables;
 	
+	@NotNull
+	private Map<String, String> properties;
+	
 	public Solution() {
 		this.objectives = new ArrayList<>();
 		this.variables = new ArrayList<>();
+		this.properties = new HashMap<>();
 	}
 
 	public List<Double> getObjectives() {
@@ -36,6 +42,14 @@ public class Solution {
 		this.variables = variables;
 	}
 	
+	public Map<String, String> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Map<String, String> properties) {
+		this.properties = properties;
+	}
+
 	public String toString() {
 		return new Gson().toJson(this);
 	}

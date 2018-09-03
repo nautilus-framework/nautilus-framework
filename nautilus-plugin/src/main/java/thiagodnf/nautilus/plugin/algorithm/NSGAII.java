@@ -51,13 +51,14 @@ public class NSGAII<S extends Solution<?>> extends org.uma.jmetal.algorithm.mult
 	
 	@Override
 	protected void updateProgress() {
-		super.updateProgress();
-
+		
 		double progress = (((double) evaluations) / ((double) maxEvaluations)) * 100.0;
 		
 		if (onProgressListener != null) {
 			onProgressListener.onProgress(progress);
 		}
+		
+		super.updateProgress();
 	}
 
 	public void setOnProgressListener(OnProgressListener onProgressListener) {

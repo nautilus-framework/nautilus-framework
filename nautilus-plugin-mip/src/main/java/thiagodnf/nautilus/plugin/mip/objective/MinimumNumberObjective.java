@@ -4,22 +4,24 @@ import org.uma.jmetal.solution.IntegerSolution;
 
 import thiagodnf.nautilus.plugin.objective.AbstractObjective;
 
-public class MinimumNumberObjective extends AbstractObjective<IntegerSolution> {
+public class MinimumNumberObjective extends AbstractObjective {
 
-	private int searchNumber;
+	private int searchFor;
 
-	public MinimumNumberObjective(int searchNumber) {
-		this.searchNumber = searchNumber;
+	public MinimumNumberObjective(int searchFor) {
+		this.searchFor = searchFor;
 	}
 
 	@Override
-	public double evaluate(IntegerSolution solution) {
+	public double evaluate(Object sol) {
+		
+		IntegerSolution solution = (IntegerSolution) sol;
 
 		int numbers = 0;
 
 		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
 
-			if (solution.getVariableValue(i) == searchNumber) {
+			if (solution.getVariableValue(i) == searchFor) {
 				numbers++;
 			}
 		}
@@ -27,5 +29,10 @@ public class MinimumNumberObjective extends AbstractObjective<IntegerSolution> {
 		double value = (double) numbers / (double) solution.getNumberOfVariables();
 
 		return minimize(value);
+	}
+
+	@Override
+	public String getName() {
+		return "Number of " + this.searchFor + "s";
 	}
 }

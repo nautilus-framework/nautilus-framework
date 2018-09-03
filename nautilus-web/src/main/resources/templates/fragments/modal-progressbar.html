@@ -6,7 +6,7 @@
 
 <body>
 
-  <div th:fragment="progressbar" id="modal-progressbar" class="modal" tabindex="-1" role="dialog">
+  <div th:fragment="progressbar" id="modal-progressbar" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button id="btn-cancel" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>

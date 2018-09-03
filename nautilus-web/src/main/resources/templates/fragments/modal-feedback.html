@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+</head>
+
+<body>
+
+  <div th:fragment="feedback(executionId,solutionIndex)" id="modal-feedback" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+      	<form action="#" th:action="@{/solution/feedback/} + ${executionId} + '/' + ${solutionIndex}" method="post">
+	        <div class="modal-header">
+	          <h5 class="modal-title">Feedback</h5>
+	        </div>
+	        <div class="modal-body">
+			        <div class="text-center">
+			        	<input id="slider-feedback" name="user-feedback" type="text"/>
+					</div>      
+	          </div>
+	        <div class="modal-footer">
+	        	<button type="submit" id="btn-execute" class="btn btn-success">Save</button>
+	          <button id="btn-cancel" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	        </div>
+    	</form>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+
+</html>

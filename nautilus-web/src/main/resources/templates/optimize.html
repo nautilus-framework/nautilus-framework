@@ -7,50 +7,73 @@
 	<div th:replace="fragments/navbar :: default('home')"></div>
 
 	<div class="container">
-		<h4>Optimize</h4>
-		<br/>
-
-		<ul class="nav nav-tabs" role="tablist">
-			<li class="nav-item">
-				<a class="nav-link active" href="#general" role="tab" data-toggle="tab" aria-selected="true">General</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a>
-			</li>
-		</ul>
-
-		<form id="form-execute" action="#" th:action="@{/optimize}" th:object="${parameters}" method="post">
-			<!-- Tab panes -->
-			<div class="tab-content">
-				<div role="tabpanel" class="tab-pane active" id="general">
-					<br/>
-					<div class="form-group">
-						<label for="populationSize">Population Size</label>
-						<input type="number" class="form-control" th:field="*{populationSize}" />
-					</div>
-					<div class="form-group">
-						<label for="maxEvaluations">Max Evaluations</label>
-						<input type="number" class="form-control" th:field="*{maxEvaluations}" />
-					</div>
-				</div>
-				<div role="tabpanel" class="tab-pane fade" id="objectives">
-					<br/>
-					<div class="form-group">
-						<label for="maxEvaluations">Max Evaluations</label>
-						<input type="number" class="form-control" th:field="*{maxEvaluations}" />
-					</div>
-				</div>
+		<div class="row titlebar">
+			<div class="col-8">
+				<h4 class="title">Optimize</h4>
 			</div>
-			<button type="submit" id="btn-execute" class="btn btn-default">Execute</button>
-		</form>
+			<div class="col-4 float-right">
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
 
-
-
-
-
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" href="#general" role="tab" data-toggle="tab" aria-selected="true">General</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a>
+					</li>
+				</ul>
+		
+				<form id="form-execute" action="#" th:action="@{/optimize}" th:object="${parameters}" method="post">
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="general">
+							<br/>
+							<input type="hidden" class="form-control" th:field="*{problemKey}" />
+							<input type="hidden" class="form-control" th:field="*{filename}" />
+							<div class="form-group">
+								<label for="populationSize">Population Size</label>
+								<input type="number" class="form-control" th:field="*{populationSize}" />
+							</div>
+							<div class="form-group">
+								<label for="maxEvaluations">Max Evaluations</label>
+								<input type="number" class="form-control" th:field="*{maxEvaluations}" />
+							</div>
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="objectives">
+							<br/>
+							<div th:each="objective : ${objectives}">
+								<div class="form-group">
+									<div class="checkbox">
+										<label class="no-select">
+											<input type="checkbox" 
+												class="objectiveKeys"
+												name="objectiveKeys" 
+												checked="checked"
+												th:value="${objective.getKey()}" 
+												th:text="${objective.getName()}"
+											/>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr/>
+					<button type="submit" id="btn-execute" class="btn btn-success">Execute</button>
+					<button class="btn btn-default" onclick="window.history.back()">Cancel</button>
+				</form>
+				<div class="console"></div>
+			</div>
+		</div>
 	</div>
 
 	<div th:replace="fragments/footer :: footer"></div>
+	<div th:replace="fragments/modal-progressbar :: progressbar"></div>
+	<div th:replace="fragments/modal-console :: console"></div>
 	<script type="text/javascript" th:src="@{/js/controller/optimize.js}"></script>
 </body>
 

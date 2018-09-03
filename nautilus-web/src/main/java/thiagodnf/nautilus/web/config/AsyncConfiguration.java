@@ -16,10 +16,13 @@ public class AsyncConfiguration {
 
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 
-		executor.setCorePoolSize(105);
-		executor.setMaxPoolSize(105);
-		executor.setQueueCapacity(500);
+		// Number of thread running at the same time. After this value new ones will wait
+		executor.setCorePoolSize(2);
+		executor.setMaxPoolSize(5);
+		// After this value, a new thread will be rejected
+		executor.setQueueCapacity(10);
 		executor.setThreadNamePrefix("optimizing-");
+		
 		executor.initialize();
 
 		return executor;

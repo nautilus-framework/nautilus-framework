@@ -5,56 +5,36 @@
 		<div th:replace="fragments/navbar :: default('home')"></div>
 
 		<div class="container">
-			<div id="alertbox" class="alert alert-danger" role="alert">
-				<strong>Ooops!</strong> An exception was threw. <a href="#" class="alert-link" id="details">Click here</a> to see the details
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<div class="console">
-					<textarea class="form-control" rows="4"></textarea>
+			<div class="row titlebar">
+				<div class="col-8">
+					<h4 class="title">Problems</h4>
+				</div>
+				<div class="col-4 float-right">
+					
 				</div>
 			</div>
-
-
-
-			
-			<br/>
-			<hr/>
-			<div class="progressbar">
-				<p class="title">Title</p>
-			</div>
-			<br/>
-
-			<button id="btn-connect" type="submit" class="btn btn-default">Connect</button>
-			<button id="btn-disconnect" type="submit" class="btn btn-default">Disconnect</button>
-			<button id="btn-send" type="submit" class="btn btn-default">Send</button>
-
-
-			<p>
-				<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-					Link with href
-				</a>
-				<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
-				aria-controls="collapseExample">
-					Button with data-target
-				</button>
-			</p>
-			<div class="collapse" id="collapseExample">
-				<div class="card card-body">
-					<div id="progress"></div>
-					<div id="result"></div>
+			<div class="row">
+				<div class="col-12">
+					<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
+						<thead>
+							<tr>
+								<th width="50px">#</th>
+								<th>Problem</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="problem,i : ${problems}">
+								<td th:text="${i.count}"></td>
+								<td>
+									<a th:text="${problem.getFileName()}" th:href="@{/problem/} + ${problem.getFileName()}"></a>
+								</td>					
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
-
-
-
-
-
-
-
 		</div>
 
-		<div th:replace="fragments/modal-progressbar :: progressbar"></div>
 		<div th:replace="fragments/footer :: footer"></div>
 	</body>
 

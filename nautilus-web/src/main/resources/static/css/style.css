@@ -9,3 +9,25 @@ body {
 .container{
 	padding-top: 20px;
 }
+.titlebar{
+	margin-bottom: 20px;
+}
+
+.titlebar .title{
+	margin-top: 6px;
+}
+
+.objectiveKeys{
+	margin-right: 10px
+}
+
+#modal-console textarea{
+	font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; 
+}
+
+#modal-feedback .modal-body{
+	
+}
+
+
+

@@ -1,12 +1,16 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.nio.file.Path;
+import java.util.List;
+import java.util.concurrent.Future;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,42 +26,63 @@ import thiagodnf.nautilus.plugin.algorithm.NSGAII;
 import thiagodnf.nautilus.plugin.factory.CrossoverFactory;
 import thiagodnf.nautilus.plugin.factory.MutationFactory;
 import thiagodnf.nautilus.plugin.listener.OnProgressListener;
-import thiagodnf.nautilus.plugin.mip.problem.MinimumIntegerProblem;
+import thiagodnf.nautilus.plugin.objective.AbstractObjective;
+import thiagodnf.nautilus.plugin.util.SolutionListUtils;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.FileService;
+import thiagodnf.nautilus.web.service.PluginService;
+import thiagodnf.nautilus.web.service.WebSocketService;
 import thiagodnf.nautilus.web.util.Converter;
 
 @Controller
 public class OptimizeController {
 	
 	@Autowired
+	private PluginService pluginService;
+	
+	@Autowired
+	private FileService fileService;
+	
+	@Autowired
 	private ExecutionService executionService;
 	
 	@Autowired
-	private SimpMessageSendingOperations messaging;
+	private WebSocketService webSocketService;
 	
-	@GetMapping("/optimize")
-	public String optimize(Model model) {
+	@GetMapping("/optimize/{problemKey}/{filename:.+}")
+	public String optimize(Model model, @PathVariable("problemKey") String problemKey, @PathVariable("filename") String filename) {
 		
-		model.addAttribute("parameters", new Parameters());
+		Parameters parameters = new Parameters();
+		
+		parameters.setProblemKey(problemKey);
+		parameters.setFilename(filename);
+		
+		model.addAttribute("parameters", parameters);
+		model.addAttribute("objectives", pluginService.getObjectives(problemKey));
 		
 		return "optimize";
 	}
 	
 	@Async
 	@MessageMapping("/hello.{sessionId}")
-    public void execute(@Valid Parameters parameters, @DestinationVariable String sessionId) throws Exception {
+    public Future<?> execute(@Valid Parameters parameters, @DestinationVariable String sessionId) throws InterruptedException {
         try {
         	
-        	messaging.convertAndSend("/topic/optimize/title." + sessionId, "Initializing...");
+        	webSocketService.sendTitle(sessionId, "Initializing...");
         	
         	Thread.currentThread().setName("optimizing-" + sessionId);
-			
-			Problem<IntegerSolution> problem = new MinimumIntegerProblem(10);
-			
-			int populationSize = parameters.getPopulationSize();
+        	
+        	String problemKey = parameters.getProblemKey();
+        	int populationSize = parameters.getPopulationSize();
 			int maxEvaluations = parameters.getMaxEvaluations();
+        	
+        	Path instance = fileService.getInstancesFile(problemKey, parameters.getFilename());
+        	
+        	List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, parameters.getObjectiveKeys());
+        	
+        	Problem problem = pluginService.getProblem(problemKey, instance, objectives);
 			
 			CrossoverOperator<IntegerSolution> crossover = CrossoverFactory.<IntegerSolution>getCrossover("IntegerSBXCrossover", 0.9, 20.0);
 			
@@ -70,30 +95,41 @@ public class OptimizeController {
 				
 				@Override
 				public void onProgress(double progress) {
-					messaging.convertAndSend("/topic/optimize/progress." + sessionId, progress);
+					webSocketService.sendProgress(sessionId, progress);
 				}
 			});
 		    
-		    messaging.convertAndSend("/topic/optimize/title." + sessionId, "Optimizing...");
+		    webSocketService.sendTitle(sessionId, "Optimizing...");
 		    
-			AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
-			        .execute() ;
-			
-			messaging.convertAndSend("/topic/optimize/title." + sessionId, "Converting the results...");
+		   	AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
+				        .execute() ;
+		   	
+		   	webSocketService.sendTitle(sessionId, "Removing repeated solutions...");
+		   	
+		   	List<? extends Solution<?>> solutions = algorithm.getResult();
+		   	
+		   	List<Solution<?>> noRepeatedSolutions = SolutionListUtils.removeRepeated(solutions);
+				
+		   	webSocketService.sendTitle(sessionId, "Converting the results...");
 			
 			Execution execution = new Execution();
 			
-			execution.setSolutions(Converter.toSolutions(algorithm.getResult()));
+			execution.setSolutions(Converter.toSolutions(noRepeatedSolutions));
 			execution.setExecutionTime(algorithmRunner.getComputingTime());
+			execution.setParameters(parameters);
 	
-			messaging.convertAndSend("/topic/optimize/title." + sessionId, "Saving the execution...");
+			webSocketService.sendTitle(sessionId, "Saving the execution...");
 			
 			execution = executionService.save(execution);
 	
-			messaging.convertAndSend("/topic/optimize/title." + sessionId, "Done");
-			messaging.convertAndSend("/topic/optimize/done." + sessionId, execution.getId());
+			webSocketService.sendTitle(sessionId, "Done. Redirecting...");
+			webSocketService.sendProgress(sessionId, 100);
+			webSocketService.sendDone(sessionId, execution.getId());
 		} catch (Exception e) {
-			messaging.convertAndSend("/topic/optimize/exception." + sessionId, e.getMessage());
+			webSocketService.sendException(sessionId, e.getMessage());
+			throw new InterruptedException();
 		}
+        
+        return new AsyncResult<>("Success");
     }
 }

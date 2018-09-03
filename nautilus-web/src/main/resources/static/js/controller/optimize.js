@@ -1,139 +1,71 @@
-var stompClient = null;
 var progressBar = new ProgressBar();
-var sessionId = uuidv1().split("-")[0]
-var alertBox = new AlertBox();
+var webSocket = new WebSocket();
 
-function append(text){
-	progressBar.appendToConsole(text);
-}
+webSocket.onDisconnectedListener(function(){
+	progressBar.hide();
+	Console.log("Whoops! Lost connection to server");
+})
 
-function setConnected(connected) {
-	if (connected) {
-    	append("Connected");
-    }else {
-    	append("Disconnected");
-    }
-}
+webSocket.onProgressListener(function(progress){
+	progressBar.setProgress(progress);
+})
 
-function showModal(){
-	$('#modal-progressbar').modal('show')
+webSocket.onTitleChangedListener(function(title){
+	progressBar.setTitle(title);
+})
 
-}
+webSocket.onDoneListener(function(executionId){
+	webSocket.disconnect();
+	window.location.href = "/execution/" + executionId;
+})
 
-function connect() {
-    
-	var socket = new SockJS('/gs-guide-websocket', [], {
-	    sessionId: () => {
-	       return sessionId
-	    }
-	 });
-	
-	append(sessionId)
-	
-	stompClient = Stomp.over(socket);
-    
-    stompClient.connect({}, function (frame) {
-        
-    	setConnected(true);
-        
-//        stompClient.subscribe('/topic/greetings.'+sessionId, function (greeting) {
-//        	
-//        	$("#progress").html(greeting.body);
-//        	
-//        	progressBar.setProgress(greeting.body);
-//        	//append(greeting.body);
-//        });
-        
-        stompClient.subscribe('/topic/optimize/progress.'+sessionId, function (response) {
-        	progressBar.setProgress(response.body);
-        });
-        stompClient.subscribe('/topic/optimize/title.'+sessionId, function (response) {
-        	progressBar.setTitle(response.body);
-        });
-        stompClient.subscribe('/topic/optimize/done.'+sessionId, function (response) {
-			window.location.href = "/view/execution/" + response.body;        	
-        });
-        stompClient.subscribe('/topic/optimize/exception.'+sessionId, function (response) {
-        	progressBar.setTitle("Ooopsss...");
-        	progressBar.appendToConsole(response.body);
-        });
-    });
-    
-    var onCloseFromStomp = socket.onclose; 
-    
-    socket.onclose = function() {
-    	
-    	append("Whoops! Lost connection to server");
-    	
-    	onCloseFromStomp();
-	};
-}
+webSocket.onExceptionListener(function(msg){
+	webSocket.disconnect();
+	progressBar.hide();
+	Console.log(msg);
+})
 
-function disconnect() {
-    
-	if (stompClient !== null) {
-        stompClient.disconnect();
-    }
-	
-	setConnected(false);
-}
+progressBar.onCancelListener(function(){
+	webSocket.disconnect();
+})
 
-function sendName() {
+function execute(array) {
+
+	progressBar.show();
 	
 	progressBar.setTitle("Waiting the executor...");
 	progressBar.setProgress(0);
 
-    var obj = JSON.stringify({
-        'populationSize': $("#populationSize").val(),
-        'maxEvaluations': $("#maxEvaluations").val()
-    });
-
- showModal()
-    console.log(obj)
-
-    stompClient.send("/app/hello."+sessionId, {}, obj);
+	var obj = {};
+	
+	$.each(array, function(index, el){
+		
+		if(el.name in obj){
+			if(!Array.isArray(obj[el.name])){
+				obj[el.name] = [obj[el.name]]
+			}
+			obj[el.name].push(el.value)
+		}else{
+			obj[el.name] = el.value; 
+		}
+	})
+	
+	obj = JSON.stringify(obj);
+	
+    webSocket.execute(obj);
 }
-
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
-}
-
 
 $(function(){
    
 	$("form").on('submit', function (e) {
 		e.preventDefault();
-	});
+		
+		var form = $(this).serializeArray();
+		
+		webSocket.connect(function(){
+			execute(form);
+		});
 	
-	$( "#btn-execute" ).click(function(e) { 
-		e.preventDefault();
-    	
-    	connect(); 
-    	
-    	return false;
+		return false;
 	});
-    
-    $( "#btn-disconnect" ).click(function() { disconnect(); });
-    $( "#btn-send" ).click(function() { sendName(); });
-	
-	alertBox.hide();
-
-    //progressBar.hide();
-    
-    //progressBar.setTitle("ola")
-    progressBar.setProgress(0);
-    //setTitle("este")
-//    window.onbeforeunload = function (e) {
-//	    var e = e || window.event;
-//	
-//	    // For IE and Firefox
-//	    if (e) {
-//	        e.returnValue = 'Leaving the page';
-//	    }
-//	
-//	    // For Safari
-//	    return 'Leaving the page';
-//	};
-
-
 })
