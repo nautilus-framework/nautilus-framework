@@ -91,14 +91,14 @@ public class ContinueController {
 				
 				double value = selectedSolution.getObjectives().get(i);
 
-//				value = NormalizerUtils.normalize(value, 1, 2, 0, 1);
-				//value = 1.0 - value;
-				//rankingForUserFeedback[i] = value;
+				value = NormalizerUtils.normalize(value, 1, 2, 0, 1);
+//				value = 1.0 - value;
+				rankingForUserFeedback[i] = value;
 						
 //				if(feedback < 0) {
 //					rankingForUserFeedback[i] += (value - feedback);
 //				}else {
-					rankingForUserFeedback[i] += (value + feedback);
+//					rankingForUserFeedback[i] += (value + feedback);
 //				rankingForUserFeedback[i] += (feedback);
 //				}
 			}
@@ -110,7 +110,7 @@ public class ContinueController {
 		
 		
 		
-		rankingForUserFeedback = NormalizerUtils.normalize(rankingForUserFeedback, 1, 2, -1, 0);
+		rankingForUserFeedback = NormalizerUtils.normalize(rankingForUserFeedback, 0, 1, -1, 2);
 		
 		//
 //		System.out.println(Arrays.toString(rankingForUserFeedback));
@@ -130,7 +130,7 @@ public class ContinueController {
 		
 		double[] rankings = new double[objectiveKeys.size()];
 		
-		double alpha = 0.5;
+		double alpha = 0.0;
 
 		for (int i = 0; i < rankings.length; i++) {
 			rankings[i] = alpha * rankingForUserSelection[i] + (1.0 - alpha) * rankingForUserFeedback[i];
