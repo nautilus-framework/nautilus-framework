@@ -15,6 +15,7 @@
 		<module>nautilus-core</module>
 	</modules>
 	<properties>
+		<springframework.boot.version>1.5.9.RELEASE</springframework.boot.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<jmetal.version>5.5.3</jmetal.version>
@@ -32,6 +33,18 @@
 		<name>Thiago Ferreira</name>
 		<url>http://github.com/thiagodnf</url>
 	</organization>
+	<dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${springframework.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 	<dependencies>
 		<!--  JMetal -->
 		<dependency>

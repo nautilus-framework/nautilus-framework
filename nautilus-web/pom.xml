@@ -11,21 +11,6 @@
 	<artifactId>nautilus-web</artifactId>
 	<name>Nautilus Server</name>
 	<description>A spring boot application</description>
-	<properties>
-		<springframework.boot.version>1.5.9.RELEASE</springframework.boot.version>
-	</properties>
-	<dependencyManagement>
-        <dependencies>
-            <dependency>
-                <!-- Import dependency management from Spring Boot -->
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${springframework.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 	<dependencies>
 		<!-- Spring MVC Framework -->
 		<dependency>
