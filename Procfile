@@ -1,5 +1,5 @@
 language: java
-install: mvn compile
+install: mvn install
 web: java -jar nautilus-web/target/nautilus-web-1.0.0.jar
 jdk:
   - oraclejdk8
