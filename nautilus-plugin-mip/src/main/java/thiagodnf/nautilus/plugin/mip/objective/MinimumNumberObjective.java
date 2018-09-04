@@ -25,10 +25,19 @@ public class MinimumNumberObjective extends AbstractObjective {
 				numbers++;
 			}
 		}
+		
+		if(searchFor == 1) {
+			for (int i = 0; i < solution.getNumberOfVariables(); i++) {
+
+				if (solution.getVariableValue(i) == 10) {
+					numbers++;
+				}
+			}
+		}
 
 		double value = (double) numbers / (double) solution.getNumberOfVariables();
 
-		return minimize(value);
+		return maximize(value);
 	}
 
 	@Override

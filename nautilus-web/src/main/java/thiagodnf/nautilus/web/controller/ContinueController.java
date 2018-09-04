@@ -20,6 +20,7 @@ import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Solution;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.util.NormalizerUtils;
 
 @Controller
 public class ContinueController {
@@ -43,6 +44,7 @@ public class ContinueController {
 		List<Solution> selectedSolutions = new ArrayList<>();
 		
 		for(Solution sol : execution.getSolutions()) {
+			
 			if(sol.getProperties().containsKey("selected")) {
 				selectedSolutions.add(sol);
 			}
@@ -56,12 +58,20 @@ public class ContinueController {
 		for (Solution selectedSolution : selectedSolutions) {
 			
 			for (int i = 0; i < selectedSolution.getObjectives().size(); i++) {
-				rankingForUserSelection[i] += selectedSolution.getObjectives().get(i);
+				
+				double value = selectedSolution.getObjectives().get(i);
+
+				
+				rankingForUserSelection[i] += value;
 			}
 		}
 		
-		rankingForUserSelection = mean(rankingForUserSelection, selectedSolutions.size());
+		//System.out.println(Arrays.toString(rankingForUserSelection));
 		
+		rankingForUserSelection = meanInverse(rankingForUserSelection, selectedSolutions.size());
+	//	System.out.println(Arrays.toString(rankingForUserSelection));
+		
+		rankingForUserSelection = NormalizerUtils.normalize(rankingForUserSelection, 1, 2, 0, 1);
 		
 		
 		model.addAttribute("rankingForUserSelection", Arrays.toString(rankingForUserSelection));
@@ -78,13 +88,39 @@ public class ContinueController {
 			}
 			
 			for (int i = 0; i < selectedSolution.getObjectives().size(); i++) {
-				rankingForUserFeedback[i] += selectedSolution.getObjectives().get(i) * feedback;
+				
+				double value = selectedSolution.getObjectives().get(i);
+
+//				value = NormalizerUtils.normalize(value, 1, 2, 0, 1);
+				//value = 1.0 - value;
+				//rankingForUserFeedback[i] = value;
+						
+//				if(feedback < 0) {
+//					rankingForUserFeedback[i] += (value - feedback);
+//				}else {
+					rankingForUserFeedback[i] += (value + feedback);
+//				rankingForUserFeedback[i] += (feedback);
+//				}
 			}
 		}
 		
-		rankingForUserFeedback = mean(rankingForUserFeedback, selectedSolutions.size());
+		System.out.println(Arrays.toString(rankingForUserFeedback));
+		//rankingForUserFeedback = meanInverse(rankingForUserFeedback, selectedSolutions.size());
+		System.out.println(Arrays.toString(rankingForUserFeedback));
+		
+		
+		
+		rankingForUserFeedback = NormalizerUtils.normalize(rankingForUserFeedback, 1, 2, -1, 0);
+		
+		//
+//		System.out.println(Arrays.toString(rankingForUserFeedback));
+		
 		
 		model.addAttribute("rankingForUserFeedback", Arrays.toString(rankingForUserFeedback));
+		
+		
+		
+		
 		
 		
 		
@@ -101,43 +137,53 @@ public class ContinueController {
 		}
 		
 		
-		Map<String, Double> ranking = new HashMap<>();
+		Map<String, Double> rankingMap = new HashMap<>();
 
 		for(int i=0;i<rankings.length;i++) {
-			ranking.put(objectiveKeys.get(i), rankings[i]);
+			rankingMap.put(objectiveKeys.get(i), rankings[i]);
 		}
 		
-		ranking = sort(ranking);
+		rankingMap = sort(rankingMap);
 		
 		
 		
-		Map<String, Double> selected = new HashMap<>();
 		
-		double minRanking = 0.0;
-		//double range = 0.02;
 		
-		for(Entry<String, Double> entry : ranking.entrySet()) {
+		
+		
+		double sum = rankingMap.values().stream().reduce(Double::sum).get();
+		double average = (double) sum / (double) objectiveKeys.size();
+		
+		Map<String, Double> selectedMap = new HashMap<>();
+		
+		for(Entry<String, Double> entry : rankingMap.entrySet()) {
 			
 			double value = entry.getValue();
 			
-			if(value >= 0.9) {
-				selected.put(entry.getKey(), entry.getValue());
+			if(value >= average) {
+				selectedMap.put(entry.getKey(), entry.getValue());
 			}
-//			if((minRanking - value) <= range) {
-//				selected.put(entry.getKey(), entry.getValue());
-//				minRanking = value;
-//			}
 		}
 		
-		if(selected.isEmpty()) {
-			selected.putAll(ranking);
+		if(selectedMap.isEmpty()) {
+			selectedMap.putAll(rankingMap);
 		}
 		
-		selected = sort(selected);
+		selectedMap = sort(selectedMap);
 		
 		
-		model.addAttribute("ranking", ranking);
-		model.addAttribute("selected", selected);
+		List<String> selectedObjectives = selectedMap
+				.keySet()
+				.stream()
+				.collect(Collectors.toList());
+		
+		Parameters nextParameters =  execution.getParameters();
+		
+		nextParameters.setObjectiveKeys(selectedObjectives);
+		nextParameters.setLastExecutionId(executionId);
+		
+		model.addAttribute("rankingMap", rankingMap);
+		model.addAttribute("selectedMap", selectedMap);
 		model.addAttribute("execution", execution);
 		
 		return "continue";
@@ -159,7 +205,22 @@ public class ContinueController {
 		double[] newArray = new double[array.length];
 
 		for (int i = 0; i < array.length; i++) {
-			newArray[i] = 1.0 - array[i] / size;
+			newArray[i] = (array[i] / size);
+		}
+
+		return newArray;
+	}
+	
+	protected double[] meanInverse(double[] array, double size) {
+		
+		if (size == 0) {
+			return array;
+		}
+
+		double[] newArray = new double[array.length];
+
+		for (int i = 0; i < array.length; i++) {
+			newArray[i] = 1.0 - (array[i] / size);
 		}
 
 		return newArray;

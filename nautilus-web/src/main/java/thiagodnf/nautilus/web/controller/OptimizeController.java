@@ -1,6 +1,7 @@
 package thiagodnf.nautilus.web.controller;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -35,6 +36,7 @@ import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.service.WebSocketService;
 import thiagodnf.nautilus.web.util.Converter;
+import thiagodnf.nautilus.web.util.NormalizerUtils;
 
 @Controller
 public class OptimizeController {
@@ -65,12 +67,42 @@ public class OptimizeController {
 		return "optimize";
 	}
 	
+	public List<Solution> getInitialPopulation(Problem problem, Execution execution) {
+
+		if (execution == null) {
+			return null;
+		}
+
+		List<Solution> initialPopulation = new ArrayList<>();
+
+		for (thiagodnf.nautilus.web.model.Solution sol : execution.getSolutions()) {
+			
+			Solution s = Converter.toSolutionWithOutObjectives(problem, sol);
+			
+			problem.evaluate(s);
+			
+			initialPopulation.add(s);
+		}
+
+		return initialPopulation;
+	}
+	
 	@Async
 	@MessageMapping("/hello.{sessionId}")
     public Future<?> execute(@Valid Parameters parameters, @DestinationVariable String sessionId) throws InterruptedException {
         try {
+
+        	System.out.println(parameters);
         	
-        	webSocketService.sendTitle(sessionId, "Initializing...");
+			String lastExecutionId = parameters.getLastExecutionId();
+
+			Execution lastExecution = null;
+
+			if (lastExecutionId != null) {
+				lastExecution = executionService.findById(lastExecutionId);
+			}
+			
+			webSocketService.sendTitle(sessionId, "Initializing...");
         	
         	Thread.currentThread().setName("optimizing-" + sessionId);
         	
@@ -84,12 +116,14 @@ public class OptimizeController {
         	
         	Problem problem = pluginService.getProblem(problemKey, instance, objectives);
 			
-			CrossoverOperator<IntegerSolution> crossover = CrossoverFactory.<IntegerSolution>getCrossover("IntegerSBXCrossover", 0.9, 20.0);
+        	List<?> initialPopulation = getInitialPopulation(problem, lastExecution);
+        	
+        	CrossoverOperator<IntegerSolution> crossover = CrossoverFactory.<IntegerSolution>getCrossover("IntegerSBXCrossover", 0.9, 20.0);
 			
 			MutationOperator<IntegerSolution> mutation = MutationFactory.<IntegerSolution>getMutation("IntegerPolynomialMutation", 1.0 / problem.getNumberOfVariables(), 20.0);
 			
 		    NSGAII<? extends Solution<?>> algorithm = new NSGAII<IntegerSolution>(
-		    		problem, maxEvaluations, populationSize, crossover, mutation);
+		    		problem, maxEvaluations, populationSize, crossover, mutation, initialPopulation);
 			
 		    algorithm.setOnProgressListener(new OnProgressListener() {
 				
@@ -106,15 +140,23 @@ public class OptimizeController {
 		   	
 		   	webSocketService.sendTitle(sessionId, "Removing repeated solutions...");
 		   	
-		   	List<? extends Solution<?>> solutions = algorithm.getResult();
+		   	List<? extends Solution<?>> rawSolutions = algorithm.getResult();
 		   	
-		   	List<Solution<?>> noRepeatedSolutions = SolutionListUtils.removeRepeated(solutions);
-				
-		   	webSocketService.sendTitle(sessionId, "Converting the results...");
+		   	List<Solution<?>> noRepeatedSolutions = SolutionListUtils.removeRepeated(rawSolutions);
+		   	
+		   	webSocketService.sendTitle(sessionId, "Converting the solutions...");
+		   	
+		   	List<thiagodnf.nautilus.web.model.Solution> solutions = Converter.toSolutions(noRepeatedSolutions);
+		   	
+		   	webSocketService.sendTitle(sessionId, "Normalizing the solutions...");
+		   	
+		   	List<thiagodnf.nautilus.web.model.Solution> normalizedSolutions = NormalizerUtils.normalize(solutions);
+		   	
+		   	webSocketService.sendTitle(sessionId, "Preparing the results...");
 			
-			Execution execution = new Execution();
-			
-			execution.setSolutions(Converter.toSolutions(noRepeatedSolutions));
+		   	Execution execution = new Execution();
+		   			
+			execution.setSolutions(normalizedSolutions);
 			execution.setExecutionTime(algorithmRunner.getComputingTime());
 			execution.setParameters(parameters);
 	

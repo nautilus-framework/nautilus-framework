@@ -7,12 +7,12 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Id;
 
+import com.google.gson.Gson;
+
 public class Execution {
 
 	@Id
 	private String id;
-	
-	private String lastId;
 	
 	private long executionTime;
 	
@@ -33,14 +33,6 @@ public class Execution {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getLastId() {
-		return lastId;
-	}
-
-	public void setLastId(String lastId) {
-		this.lastId = lastId;
 	}
 
 	public long getExecutionTime() {
@@ -65,5 +57,9 @@ public class Execution {
 
 	public void setSolutions(List<Solution> solutions) {
 		this.solutions = solutions;
+	}
+	
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 }

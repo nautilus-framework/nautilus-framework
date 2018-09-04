@@ -26,7 +26,8 @@ class ScatterChart4D {
 		Highcharts.chart(el, {
 			chart: {
 		        type: 'line',
-		        zoomType: 'y'
+		        zoomType: 'y',
+		        animation: false
 		    },
 			title: {
 				text: undefined
@@ -49,7 +50,7 @@ class ScatterChart4D {
 			    }
 			},
 			boost: {
-		        useGPUTranslations: true,
+				useGPUTranslations: true,
 		        usePreAllocated: true
 		    },
 			plotOptions: {

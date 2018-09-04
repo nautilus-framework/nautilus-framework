@@ -61,7 +61,10 @@
 								<tbody>
 									<tr th:each="solution,i : ${execution.getSolutions()}">
 										<td th:text="${i.count}"/>
-										<td th:each="value : ${solution.getObjectives()}" th:text="${value}"/>	
+										
+										<td th:each="value : ${solution.getObjectives()}" th:text="${value}"/>
+										
+											
 										<td th:text="${solution.getProperties().containsKey('selected')}"/>
 										<td th:text="${solution.getProperties().get('feedback')}"></td>	
 										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i.count-1}">Open</a></td>						

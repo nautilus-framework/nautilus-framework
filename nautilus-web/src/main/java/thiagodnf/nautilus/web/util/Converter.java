@@ -3,7 +3,9 @@ package thiagodnf.nautilus.web.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.solution.impl.DefaultIntegerSolution;
 
 public class Converter {
 	
@@ -27,5 +29,18 @@ public class Converter {
 		}
 
 		return solutions;
+	}
+	
+	public static Solution toSolutionWithOutObjectives(Problem problem, thiagodnf.nautilus.web.model.Solution solution) {
+		
+		Solution newSolution = (Solution) problem.createSolution();
+		
+		for (int i = 0; i < solution.getVariables().size(); i++) {
+			if(newSolution instanceof DefaultIntegerSolution) {
+				newSolution.setVariableValue(i, Integer.valueOf(solution.getVariables().get(i)));
+			}
+		}
+		
+		return newSolution;
 	}
 }

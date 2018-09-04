@@ -41,7 +41,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="obj,i : ${selected}">
+								<tr th:each="obj,i : ${selectedMap}">
 									<td th:text="${i.count}"></td>
 								    <td th:text="${obj.key}"></td>
 								    <td th:text="${obj.value}"></td>
@@ -60,7 +60,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="obj,i : ${ranking}">
+								<tr th:each="obj,i : ${rankingMap}">
 									<td th:text="${i.count}"></td>
 								    <td th:text="${obj.key}"></td>
 								    <td th:text="${obj.value}"></td>
@@ -78,8 +78,8 @@
 				</div>
 			
 			
-			
-			
+				<div class="d-none" id="next-parameters" th:text="${execution.getParameters()}"></div>
+				
 			
 			
 			
@@ -90,13 +90,16 @@
 				
 				
 				<hr/>
-				<a class="btn btn-success" th:href="@{/execution/} + ${executionId}">Optimize</a>
+				<a class="btn btn-success" href="" id="btn-continue" >Continue</a>
 				<a class="btn btn-secondary" th:href="@{/execution/} + ${executionId}">Back</a>
 			</div>
 		</div>
 	</div>
 
 	<div th:replace="fragments/footer :: footer"></div>
+	<div th:replace="fragments/modal-progressbar :: progressbar"></div>
+	<div th:replace="fragments/modal-console :: console"></div>
+	<script type="text/javascript" th:src="@{/js/controller/optimize.js}"></script>
 </body>
 
 </html>

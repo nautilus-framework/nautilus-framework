@@ -6,5 +6,5 @@ import thiagodnf.nautilus.web.model.Execution;
 
 public interface ExecutionRepository extends MongoRepository<Execution, String> {
 
-	public Execution findByLastId(String lastId);
+	
 }

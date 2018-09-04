@@ -78,6 +78,10 @@ class WebSocket {
 		this.stompClient.send("/app/hello."+this.sessionId, {}, obj);
 	}
 	
+	executeAgain(obj){
+		this.stompClient.send("/app/continue."+this.sessionId, {}, obj);
+	}
+	
 	subscribe(url, callback){
 		this.stompClient.subscribe(url, callback)
 	}

@@ -12,10 +12,10 @@ public class Parameters {
 	
 	@DecimalMin("10")
 	@DecimalMax("1000")
-	private int populationSize = 10;
+	private int populationSize = 100;
 	
 	@DecimalMin("10")
-	@DecimalMax("1000000")
+	@DecimalMax("10000000")
 	private int maxEvaluations = 100000;
 	
 	private String problemKey;
@@ -23,6 +23,8 @@ public class Parameters {
 	private String filename;
 	
 	private List<String> objectiveKeys;
+	
+	private String lastExecutionId;
 
 	public Parameters() {
 		this.objectiveKeys = new ArrayList<>();
@@ -71,6 +73,12 @@ public class Parameters {
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-	
-	
+
+	public String getLastExecutionId() {
+		return lastExecutionId;
+	}
+
+	public void setLastExecutionId(String lastExecutionId) {
+		this.lastExecutionId = lastExecutionId;
+	}
 }

@@ -17,7 +17,7 @@ public class MinimumIntegerProblem extends AbstractIntegerProblem {
 
 	private int lowerBound = 1;
 	
-	private int upperBound = 10;
+	private int upperBound = 20;
 	
 	private List<AbstractObjective> objectives;
 

@@ -55,6 +55,16 @@ function execute(array) {
     webSocket.execute(obj);
 }
 
+function executeAgain(nextParameters ) {
+
+	progressBar.show();
+	
+	progressBar.setTitle("Waiting the executor...");
+	progressBar.setProgress(0);
+
+	webSocket.execute(nextParameters);
+}
+
 $(function(){
    
 	$("form").on('submit', function (e) {
@@ -68,4 +78,16 @@ $(function(){
 	
 		return false;
 	});
+	
+	$("#btn-continue").click(function(e){
+		e.preventDefault();
+		
+		var nextParameters = $("#next-parameters").text();
+		
+		webSocket.connect(function(){
+			executeAgain(nextParameters);
+		});
+	
+		return false;
+	})
 })

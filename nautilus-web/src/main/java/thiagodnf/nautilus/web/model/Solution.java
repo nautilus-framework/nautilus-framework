@@ -25,6 +25,12 @@ public class Solution {
 		this.variables = new ArrayList<>();
 		this.properties = new HashMap<>();
 	}
+	
+	public Solution(Solution solution) {
+		this.objectives = new ArrayList<>(solution.getObjectives());
+		this.variables = new ArrayList<>(solution.getVariables());
+		this.properties = new HashMap<>(solution.getProperties());
+	}
 
 	public List<Double> getObjectives() {
 		return objectives;
@@ -52,5 +58,9 @@ public class Solution {
 
 	public String toString() {
 		return new Gson().toJson(this);
+	}
+
+	public Solution copy() {
+		return new Solution(this);
 	}
 }

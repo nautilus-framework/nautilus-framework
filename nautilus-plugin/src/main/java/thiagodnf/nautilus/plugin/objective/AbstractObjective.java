@@ -16,5 +16,9 @@ public abstract class AbstractObjective {
 		return getName().replaceAll("\\s+","-").toLowerCase();
 	}
 	
+	public String toString() {
+		return getKey();
+	}
+	
 	public abstract String getName();
 }
