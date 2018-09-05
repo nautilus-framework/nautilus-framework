@@ -15,6 +15,13 @@ body {
 	border-bottom: 1px solid #dee2e6;
 }
 
+.page-content .path-divider {
+	margin: 0 0.25em;
+	font-size: 18px;
+	line-height: 26px;
+	color: #586069;
+}
+
 .titlebar{
 	margin-bottom: 8px;
 	height: 39px;
@@ -28,8 +35,45 @@ body {
 	margin-top: 6px;
 }
 
+.gray{
+	background-color: #fafbfc;
+}
+
 .objectiveKeys{
 	margin-right: 10px
+}
+
+
+.tab-content{
+	margin-top: 15px;
+}
+
+.nav-tabs .nav-link{
+	color: #495057;
+}
+
+.nav-tabs .nav-item{
+	margin-bottom: -2px;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
+	border-top-color: #e36209;
+	border-top-width: 2px;
+}
+
+
+#objectives .card label{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+#objectives .card .card-header{
+	background-color: #f1f8ff;
+	border-bottom-color: #c8e1ff;
+}
+
+#objectives .card{
+	border: 1px solid #c8e1ff;
 }
 
 

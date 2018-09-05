@@ -2,9 +2,9 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<head></head>
+	<head></head>
 	<body>
-		<head th:fragment="default">
+		<head th:fragment="default(title)">
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 			<meta charset="utf-8" />
 			<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -24,7 +24,8 @@
 			<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/>
 			<link type="text/css" rel="stylesheet" th:href="@{/css/style.css}"/>
 			
-			<title>Nautilus</title>
+			<title th:if="${title}" th:text="${title}+' - Nautilus'"></title>
+			<title th:unless="${title}">Nautilus</title>
 		</head>
 	</body>
 </html>

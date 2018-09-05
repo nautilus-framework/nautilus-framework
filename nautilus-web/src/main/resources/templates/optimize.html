@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<head th:replace="fragments/head :: default"></head>
+<head th:replace="fragments/head :: default(Optimize)"></head>
 
 <body>
 	<div th:replace="fragments/navbar :: default('home')"></div>
-
-	<div class="container">
+	<div class="page-head"></div>
+	
+	<div class="container page-content">
 		<div class="row titlebar">
 			<div class="col-8">
-				<h4 class="title">Optimize</h4>
+				<h5 class="title"><a th:href="@{/}">Optimize</a></h5>
 			</div>
 			<div class="col-4 float-right">
 				
@@ -30,8 +31,7 @@
 				<form id="form-execute" action="#" th:action="@{/optimize}" th:object="${parameters}" method="post">
 					<!-- Tab panes -->
 					<div class="tab-content">
-						<div role="tabpanel" class="tab-pane active" id="general">
-							<br/>
+						<div role="tabpanel" class="tab-pane fade show active" id="general">
 							<input type="hidden" class="form-control" th:field="*{problemKey}" />
 							<input type="hidden" class="form-control" th:field="*{filename}" />
 							<div class="form-group">
@@ -43,28 +43,36 @@
 								<input type="number" class="form-control" th:field="*{maxEvaluations}" />
 							</div>
 						</div>
-						<div role="tabpanel" class="tab-pane fade" id="objectives">
-							<br/>
-							<div th:each="objective : ${objectives}">
-								<div class="form-group">
-									<div class="checkbox">
-										<label class="no-select">
-											<input type="checkbox" 
-												class="objectiveKeys"
-												name="objectiveKeys" 
-												checked="checked"
-												th:value="${objective.getKey()}" 
-												th:text="${objective.getName()}"
-											/>
-										</label>
+						<div class="tab-pane fade" id="objectives">
+							<div class="row" th:with="size=${12/objectiveMap.keySet().size()}">
+								<div th:class="'col-' + ${size}" th:each="obj,i : ${objectiveMap}">
+									<div class="card" >
+										<div class="card-header" th:text="${obj.key}"></div>
+										<div class="card-body">
+											<div th:each="objective : ${obj.value}">
+												<div class="form-group">
+													<div class="checkbox">
+														<label class="no-select">
+															<input type="checkbox" 
+																class="objectiveKeys"
+																name="objectiveKeys" 
+																checked="checked"
+																th:value="${objective.getKey()}" 
+																th:text="${objective.getName()}"
+															/>
+														</label>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<hr/>
-					<button type="submit" id="btn-execute" class="btn btn-success">Execute</button>
-					<button class="btn btn-default" onclick="window.history.back()">Cancel</button>
+					<button type="submit" id="btn-execute" class="btn btn-success btn-sm">Execute</button>
+					<button class="btn btn-light btn-sm" onclick="window.history.back()">Cancel</button>
 				</form>
 				<div class="console"></div>
 			</div>

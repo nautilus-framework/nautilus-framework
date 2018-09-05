@@ -5,18 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import thiagodnf.nautilus.web.service.FileService;
+import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
 public class IndexController {
 	
 	@Autowired
-	private FileService fileService;
+	private PluginService pluginService;
 	
 	@GetMapping("/")
 	public String index(Model model) {
-				
-		model.addAttribute("problems", fileService.getProblems());
+		
+		model.addAttribute("plugins", pluginService.getAllPlugins());
 		
 		return "index";
 	}

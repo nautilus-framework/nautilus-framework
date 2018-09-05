@@ -2,9 +2,11 @@ package thiagodnf.nautilus.web.service;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -35,6 +37,10 @@ public class PluginService {
 		}
 	}
 	
+	public List<AbstractPlugin> getAllPlugins() {
+		return plugins.values().stream().collect(Collectors.toList());
+	}
+	
 	public void add(AbstractPlugin plugin) {
 		plugins.put(plugin.getProblemKey(), plugin);
 	}
@@ -47,19 +53,26 @@ public class PluginService {
 		return getPlugin(problemKey).getProblem(instance, objectives);
 	}
 	
-	public List<AbstractObjective> getObjectives(String problemKey){
+	public Map<String, List<AbstractObjective>> getObjectives(String problemKey){
 		return getPlugin(problemKey).getObjectives();
 	}
 	
 	public List<AbstractObjective> getObjectives(String problemKey, List<String> objectiveKeys){
 		
-		List<AbstractObjective> objectives = getObjectives(problemKey);
-		
-		objectives = objectives
-				.stream()
-	            .filter(x -> objectiveKeys.contains(x.getKey()))
-	            .collect(Collectors.toList());
-		
+		Map<String, List<AbstractObjective>> objectiveMap = getObjectives(problemKey);
+
+		List<AbstractObjective> objectives = new ArrayList<>();
+
+		for (Entry<String, List<AbstractObjective>> entry : objectiveMap.entrySet()) {
+			
+			for (AbstractObjective objetive : entry.getValue()) {
+				
+				if (objectiveKeys.contains(objetive.getKey())) {
+					objectives.add(objetive);
+				}
+			}
+		}
+
 		return objectives;
 	}
 }

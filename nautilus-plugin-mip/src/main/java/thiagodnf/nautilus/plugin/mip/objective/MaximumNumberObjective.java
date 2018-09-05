@@ -4,11 +4,11 @@ import org.uma.jmetal.solution.IntegerSolution;
 
 import thiagodnf.nautilus.plugin.objective.AbstractObjective;
 
-public class MinimumNumberObjective extends AbstractObjective {
+public class MaximumNumberObjective extends AbstractObjective {
 
 	private int searchFor;
 
-	public MinimumNumberObjective(int searchFor) {
+	public MaximumNumberObjective(int searchFor) {
 		this.searchFor = searchFor;
 	}
 

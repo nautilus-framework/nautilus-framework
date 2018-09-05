@@ -11,7 +11,7 @@ import org.uma.jmetal.solution.IntegerSolution;
 
 import thiagodnf.nautilus.plugin.objective.AbstractObjective;
 
-public class MinimumIntegerProblem extends AbstractIntegerProblem {
+public class MaximumIntegerProblem extends AbstractIntegerProblem {
 
 	private static final long serialVersionUID = 5347625751550400087L;
 
@@ -21,7 +21,7 @@ public class MinimumIntegerProblem extends AbstractIntegerProblem {
 	
 	private List<AbstractObjective> objectives;
 
-	public MinimumIntegerProblem(Path path, List<AbstractObjective> objectives) throws IOException {
+	public MaximumIntegerProblem(Path path, List<AbstractObjective> objectives) throws IOException {
 		
 		this.objectives = objectives;
 
@@ -32,7 +32,7 @@ public class MinimumIntegerProblem extends AbstractIntegerProblem {
 		// JMetal's Settings
 		setNumberOfVariables(size);
 		setNumberOfObjectives(objectives.size());
-		setName(MinimumIntegerProblem.class.getSimpleName());
+		setName(MaximumIntegerProblem.class.getSimpleName());
 		
 		List<Integer> lowerLimit = new ArrayList<>(getNumberOfVariables());
 		List<Integer> upperLimit = new ArrayList<>(getNumberOfVariables());

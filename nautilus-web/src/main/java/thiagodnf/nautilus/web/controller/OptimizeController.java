@@ -62,7 +62,7 @@ public class OptimizeController {
 		parameters.setFilename(filename);
 		
 		model.addAttribute("parameters", parameters);
-		model.addAttribute("objectives", pluginService.getObjectives(problemKey));
+		model.addAttribute("objectiveMap", pluginService.getObjectives(problemKey));
 		
 		return "optimize";
 	}
@@ -109,13 +109,13 @@ public class OptimizeController {
         	String problemKey = parameters.getProblemKey();
         	int populationSize = parameters.getPopulationSize();
 			int maxEvaluations = parameters.getMaxEvaluations();
-        	
+			System.out.println("oi3");
         	Path instance = fileService.getInstancesFile(problemKey, parameters.getFilename());
-        	
+        	System.out.println("oi4");
         	List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, parameters.getObjectiveKeys());
-        	
+        	System.out.println("oi1");
         	Problem problem = pluginService.getProblem(problemKey, instance, objectives);
-			
+			System.out.println("oi2");
         	List<?> initialPopulation = getInitialPopulation(problem, lastExecution);
         	
         	CrossoverOperator<IntegerSolution> crossover = CrossoverFactory.<IntegerSolution>getCrossover("IntegerSBXCrossover", 0.9, 20.0);
