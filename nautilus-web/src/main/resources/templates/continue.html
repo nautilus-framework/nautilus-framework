@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<head th:replace="fragments/head :: default"></head>
+<head th:replace="fragments/head :: default(Continue)"></head>
 
 <body>
 	<div th:replace="fragments/navbar :: default('home')"></div>
-
-	<div class="container">
+	<div class="page-head"></div>
+	
+	<div class="container page-content">
 		<div class="row titlebar">
 			<div class="col-8">
-				<h4 class="title">Execution <span th:text="${execution.getId()}"></span></h4>
+				<h5 class="title">Execution <span th:text="${execution.getId()}"></span></h5>
 			</div>
 			<div class="col-4 float-right">
 				
@@ -30,8 +31,7 @@
 				</ul>
 				<!-- Tab panes -->
 				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane active" id="selected">
-						<br/>
+					<div role="tabpanel" class="tab-pane fade show active" id="selected">
 						<table id="execution-table" class="table table-striped table-hover table-sm">
 							<thead>
 								<tr>
@@ -50,7 +50,6 @@
 						</table>
 					</div>
 					<div role="tabpanel" class="tab-pane fade" id="ranking">
-						<br/>
 						<table id="execution-table" class="table table-striped table-hover table-sm">
 							<thead>
 								<tr>
@@ -69,11 +68,8 @@
 						</table>
 					</div>
 					<div role="tabpanel" class="tab-pane fade" id="details">
-						<br/>
-						<p><strong>User Selection</strong></p>
-						<p th:text="${rankingForUserSelection}"></p>
 						<p><strong>User Feedback</strong></p>
-						<p th:text="${rankingForUserFeedback}"></p>
+						<p th:text="${ranking}"></p>
 					</div>
 				</div>
 			
@@ -90,8 +86,8 @@
 				
 				
 				<hr/>
-				<a class="btn btn-success" href="" id="btn-continue" >Continue</a>
-				<a class="btn btn-secondary" th:href="@{/execution/} + ${executionId}">Back</a>
+				<a class="btn btn-success btn-sm" href="" id="btn-continue" >Continue</a>
+				<a class="btn btn-light btn-sm" th:href="@{/execution/} + ${executionId}">Back</a>
 			</div>
 		</div>
 	</div>

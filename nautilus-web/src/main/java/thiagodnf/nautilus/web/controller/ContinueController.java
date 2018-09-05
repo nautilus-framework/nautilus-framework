@@ -16,11 +16,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import thiagodnf.nautilus.core.util.Normalizer;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Solution;
 import thiagodnf.nautilus.web.service.ExecutionService;
-import thiagodnf.nautilus.web.util.NormalizerUtils;
 
 @Controller
 public class ContinueController {
@@ -43,112 +43,70 @@ public class ContinueController {
 		
 		List<Solution> selectedSolutions = new ArrayList<>();
 		
+		// Step 1: Separate the selected solutions
 		for(Solution sol : execution.getSolutions()) {
 			
 			if(sol.getProperties().containsKey("selected")) {
+				
 				selectedSolutions.add(sol);
 			}
 		}
 		
-		
-		
-		
-		double[] rankingForUserSelection = new double[objectiveKeys.size()];
+		// Step 2: Invert the objectives values
+		for (Solution sol : selectedSolutions) {
 
-		for (Solution selectedSolution : selectedSolutions) {
-			
-			for (int i = 0; i < selectedSolution.getObjectives().size(); i++) {
+			for (int i = 0; i < sol.getNumberOfObjectives(); i++) {
 				
-				double value = selectedSolution.getObjectives().get(i);
-
-				
-				rankingForUserSelection[i] += value;
+				sol.setObjective(i, 1.0 - sol.getObjective(i));
 			}
 		}
 		
-		//System.out.println(Arrays.toString(rankingForUserSelection));
+		// Step 3: Normalize the objectives between [1,10]
+		for (Solution sol : selectedSolutions) {
+			
+			for (int i = 0; i < sol.getNumberOfObjectives(); i++) {
+				
+				sol.setObjective(i, Normalizer.normalize(sol.getObjective(i), 1, 10, 0, 1));
+			}
+		}
 		
-		rankingForUserSelection = meanInverse(rankingForUserSelection, selectedSolutions.size());
-	//	System.out.println(Arrays.toString(rankingForUserSelection));
-		
-		rankingForUserSelection = NormalizerUtils.normalize(rankingForUserSelection, 1, 2, 0, 1);
-		
-		
-		model.addAttribute("rankingForUserSelection", Arrays.toString(rankingForUserSelection));
-		
-		
-		double[] rankingForUserFeedback = new double[objectiveKeys.size()];
-
-		for (Solution selectedSolution : selectedSolutions) {
+		// Step 4: Apply the user feedback
+		for (Solution sol : selectedSolutions) {
 
 			double feedback = 0.0;
 
-			if (selectedSolution.getProperties().containsKey("feedback")) {
-				feedback = Double.valueOf(selectedSolution.getProperties().get("feedback"));
-			}
-			
-			for (int i = 0; i < selectedSolution.getObjectives().size(); i++) {
+			if (sol.getProperties().containsKey("feedback")) {
 				
-				double value = selectedSolution.getObjectives().get(i);
+				feedback = Double.valueOf(sol.getProperties().get("feedback"));
+			}
 
-				value = NormalizerUtils.normalize(value, 1, 2, 0, 1);
-//				value = 1.0 - value;
-				rankingForUserFeedback[i] = value;
-						
-//				if(feedback < 0) {
-//					rankingForUserFeedback[i] += (value - feedback);
-//				}else {
-//					rankingForUserFeedback[i] += (value + feedback);
-//				rankingForUserFeedback[i] += (feedback);
-//				}
+			for (int i = 0; i < sol.getNumberOfObjectives(); i++) {
+				
+				sol.setObjective(i, sol.getObjective(i) + feedback * sol.getObjective(i));
 			}
 		}
 		
-		System.out.println(Arrays.toString(rankingForUserFeedback));
-		//rankingForUserFeedback = meanInverse(rankingForUserFeedback, selectedSolutions.size());
-		System.out.println(Arrays.toString(rankingForUserFeedback));
+		double[] ranking = new double[objectiveKeys.size()];
 		
-		
-		
-		rankingForUserFeedback = NormalizerUtils.normalize(rankingForUserFeedback, 0, 1, -1, 2);
-		
-		//
-//		System.out.println(Arrays.toString(rankingForUserFeedback));
-		
-		
-		model.addAttribute("rankingForUserFeedback", Arrays.toString(rankingForUserFeedback));
-		
-		
-		
-		
-		
-		
-		
-		
-		// --------------------
-		
-		
-		double[] rankings = new double[objectiveKeys.size()];
-		
-		double alpha = 0.0;
+		// Step 5: Sum the objective values
+		for (Solution s : selectedSolutions) {
 
-		for (int i = 0; i < rankings.length; i++) {
-			rankings[i] = alpha * rankingForUserSelection[i] + (1.0 - alpha) * rankingForUserFeedback[i];
+			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
+				
+				ranking[i] += s.getObjectives().get(i);
+			}
 		}
+		
+		model.addAttribute("ranking", Arrays.toString(ranking));
 		
 		
 		Map<String, Double> rankingMap = new HashMap<>();
 
-		for(int i=0;i<rankings.length;i++) {
-			rankingMap.put(objectiveKeys.get(i), rankings[i]);
+		for (int i = 0; i < ranking.length; i++) {
+			rankingMap.put(objectiveKeys.get(i), ranking[i]);
 		}
-		
+
 		rankingMap = sort(rankingMap);
-		
-		
-		
-		
-		
 		
 		
 		double sum = rankingMap.values().stream().reduce(Double::sum).get();

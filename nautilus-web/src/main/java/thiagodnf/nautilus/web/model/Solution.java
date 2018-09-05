@@ -59,6 +59,18 @@ public class Solution {
 	public String toString() {
 		return new Gson().toJson(this);
 	}
+	
+	public int getNumberOfObjectives() {
+		return getObjectives().size();
+	}
+	
+	public double getObjective(int index) {
+		return getObjectives().get(index);
+	}
+	
+	public void setObjective(int index, double value) {
+		getObjectives().set(index, value);
+	}
 
 	public Solution copy() {
 		return new Solution(this);

@@ -36,7 +36,6 @@ import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.service.WebSocketService;
 import thiagodnf.nautilus.web.util.Converter;
-import thiagodnf.nautilus.web.util.NormalizerUtils;
 
 @Controller
 public class OptimizeController {
@@ -150,7 +149,7 @@ public class OptimizeController {
 		   	
 		   	webSocketService.sendTitle(sessionId, "Normalizing the solutions...");
 		   	
-		   	List<thiagodnf.nautilus.web.model.Solution> normalizedSolutions = NormalizerUtils.normalize(solutions);
+		   	List<thiagodnf.nautilus.web.model.Solution> normalizedSolutions = solutions; //NormalizerUtils.normalize(solutions);
 		   	
 		   	webSocketService.sendTitle(sessionId, "Preparing the results...");
 			
