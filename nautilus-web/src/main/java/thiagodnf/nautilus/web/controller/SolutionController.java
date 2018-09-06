@@ -3,10 +3,12 @@ package thiagodnf.nautilus.web.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +61,9 @@ public class SolutionController {
 			objectivesMap.put(objectives.get(i).getName(), solution.getObjectives().get(i));
 		}
 		
+		System.out.println(solution);
+
+		
 		model.addAttribute("objectivesMap", objectivesMap);
 		model.addAttribute("solution", solution);
 		model.addAttribute("executionId", executionId);
@@ -67,10 +72,10 @@ public class SolutionController {
 	}
 	
 	@PostMapping("/solution/feedback/{executionId}/{solutionIndex}")
-	public String updateUserFeedback(Model model, 
-			@RequestParam("user-feedback") String userFeedback,
+	public String updateUserFeedback(ModelMap model,
 			@PathVariable("executionId") String executionId, 
-			@PathVariable("solutionIndex") int solutionIndex) {
+			@PathVariable("solutionIndex") int solutionIndex, 
+			@RequestParam Map<String,String> allRequestParams) {
 		
 		Execution execution = executionService.findById(executionId);
 
@@ -84,28 +89,28 @@ public class SolutionController {
 		
 		Solution solution = execution.getSolutions().get(solutionIndex);
 		
-		solution.getProperties().put("feedback", userFeedback);
+		double sum = 0.0;
 		
-		execution = executionService.save(execution);
-		
-		return "redirect:/execution/"+executionId;
-	}
-	
-	@GetMapping("/solution/clear/user-selection/{executionId}")
-	public String clearUserSelection(Model model, @PathVariable("executionId") String executionId) {
+		for(String key : allRequestParams.keySet()) {
 			
-		Execution execution = executionService.findById(executionId);
-
-		if (execution == null) {
-			throw new RuntimeException("The executionId was not found");
-		}
-
-		for (Solution solution : execution.getSolutions()) {
-			solution.getProperties().remove("selected");
+			if(key.startsWith("feedback-for-variable")) {
+				
+				String valueAsString = allRequestParams.get(key);
+				
+				sum += Double.valueOf(valueAsString);
+				
+				solution.getProperties().put(key, valueAsString);
+			}
 		}
 		
+		double feedback = (double) sum / (double) solution.getVariables().size();
+		
+		solution.getProperties().put("feedback", String.valueOf(feedback));
+		
+		System.out.println(solution);
+
 		execution = executionService.save(execution);
-			
+//		
 		return "redirect:/execution/"+executionId;
 	}
 	
@@ -119,7 +124,13 @@ public class SolutionController {
 		}
 
 		for (Solution solution : execution.getSolutions()) {
+
 			solution.getProperties().remove("feedback");
+			solution.getProperties().remove("selected");
+
+			for (int i = 0; i < solution.getVariables().size(); i++) {
+				solution.getProperties().remove("feedback-for-variable-" + i);
+			}
 		}
 		
 		execution = executionService.save(execution);

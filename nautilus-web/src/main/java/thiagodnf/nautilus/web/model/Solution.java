@@ -75,4 +75,15 @@ public class Solution {
 	public Solution copy() {
 		return new Solution(this);
 	}
+	
+	public double getUserFeeback() {
+
+		String feedback = getProperties().get("feedback");
+
+		if (feedback == null) {
+			return 0.0;
+		}
+
+		return Double.valueOf(feedback);
+	}
 }

@@ -108,21 +108,27 @@ public class OptimizeController {
         	String problemKey = parameters.getProblemKey();
         	int populationSize = parameters.getPopulationSize();
 			int maxEvaluations = parameters.getMaxEvaluations();
-			System.out.println("oi3");
-        	Path instance = fileService.getInstancesFile(problemKey, parameters.getFilename());
-        	System.out.println("oi4");
-        	List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, parameters.getObjectiveKeys());
-        	System.out.println("oi1");
-        	Problem problem = pluginService.getProblem(problemKey, instance, objectives);
-			System.out.println("oi2");
-        	List<?> initialPopulation = getInitialPopulation(problem, lastExecution);
+			
+			Path instance = fileService.getInstancesFile(problemKey, parameters.getFilename());
+        	
+			List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, parameters.getObjectiveKeys());
+        	
+			Problem problem = pluginService.getProblem(problemKey, instance, objectives);
+			
+			List<?> initialPopulation = getInitialPopulation(problem, lastExecution);
         	
         	CrossoverOperator<IntegerSolution> crossover = CrossoverFactory.<IntegerSolution>getCrossover("IntegerSBXCrossover", 0.9, 20.0);
 			
 			MutationOperator<IntegerSolution> mutation = MutationFactory.<IntegerSolution>getMutation("IntegerPolynomialMutation", 1.0 / problem.getNumberOfVariables(), 20.0);
 			
 		    NSGAII<? extends Solution<?>> algorithm = new NSGAII<IntegerSolution>(
-		    		problem, maxEvaluations, populationSize, crossover, mutation, initialPopulation);
+	    		problem, 
+	    		maxEvaluations, 
+	    		populationSize, 
+	    		crossover, 
+	    		mutation, 
+	    		initialPopulation
+		    );
 			
 		    algorithm.setOnProgressListener(new OnProgressListener() {
 				

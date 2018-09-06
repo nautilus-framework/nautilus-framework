@@ -10,7 +10,9 @@
 	<div class="container page-content">
 		<div class="row titlebar">
 			<div class="col-8">
-				<h5 class="title">Execution <span th:text="${execution.getId()}"></span></h5>
+				<h5 class="title">
+					<a th:href="@{/execution/}+${execution.getId()}" th:text="'Execution ' + ${execution.getId()}"></a> 
+				</h5>
 			</div>
 			<div class="col-4 float-right">
 			  <div class="dropdown">
@@ -57,14 +59,14 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="solution,i : ${execution.getSolutions()}">
-										<td th:text="${i.count}"/>
+									<tr th:each="solution,i : ${solutions}">
+										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i.count-1}" th:text="${i.count}"></a></td>
 										
-										<td th:each="value : ${solution.getObjectives()}" th:text="${value}"/>
+										<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,4)}"/>
 										
 											
 										<td th:text="${solution.getProperties().containsKey('selected')}"/>
-										<td th:text="${solution.getProperties().get('feedback')}"></td>	
+										<td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td>	
 										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i.count-1}">Open</a></td>						
 									</tr>
 								</tbody>

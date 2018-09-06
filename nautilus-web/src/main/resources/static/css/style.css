@@ -76,7 +76,13 @@ body {
 	border: 1px solid #c8e1ff;
 }
 
+.slider.slider-horizontal{
+	width: 100px;
+}
 
+.slider-on-tab{
+	margin-top: -40px;	
+}
 
 
 #modal-console textarea{
