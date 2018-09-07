@@ -8,7 +8,7 @@ class ScatterChart2D {
 	}
 	
 	addSerie(serie){
-		this.series.push(serie);
+		this.series = serie;
 	}
 	
 	setXAxisName(name){
@@ -26,29 +26,21 @@ class ScatterChart2D {
 	plot(el){
 		
 		var that = this;
-
-//		// we have to sort the data before plot it. As we
-//		// have a two-dimensional array, we sort it by first position
-//		$.each(that.series, function(i, serie){
-//			serie.data.sort(function(a, b){
-//				return a[0] - b[0]
-//			});
-//		});
-		
 		
 		Highcharts.chart(el, {
+			chart: {
+		        zoomType: 'xy',
+		    },
 			title: {
 				text: undefined
 			},		
 			subtitle: {
 				text: undefined
 			},
-			scrollbar: {
-//				enabled: true
-			},	
 			tooltip: {
 			    formatter: function() {
-			    	return '<b>Solution</b> ' + (this.point.index + 1) + '<br/> <b>Objectives</b><br/>' + this.point.options.x +", "+ this.point.options.y;
+			    	console.log(this.series.index)
+			    	return '<b>Solution</b> ' + (this.series.index) + '<br/> <b>Objectives</b><br/>' + this.point.options.x +", "+ this.point.options.y;
 			    }
 			},
 			plotOptions:{
@@ -58,17 +50,13 @@ class ScatterChart2D {
 			      events:{
 			    	  click: function(e){
 				        	if(that.onClickListener){
-				        		that.onClickListener(e.point.index)
+				        		that.onClickListener(this.series.index)
 				        	}
 				        }
 			      }
 			    }
 			  }
 			},
-			boost: {
-		        useGPUTranslations: true,
-		        usePreAllocated: true
-		    },
 			yAxis: {
 				title: {
 					text: that.yAxisName
