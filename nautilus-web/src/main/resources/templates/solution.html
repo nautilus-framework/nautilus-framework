@@ -22,37 +22,37 @@
 			</div>
 		</div>
 		<div class="row">
-			<form action="#" th:action="@{/solution/feedback/} + ${executionId} + '/' + ${solutionIndex}" method="post">
-				<div class="col-12">
-					<ul class="nav nav-tabs " role="tablist">
-						<li class="nav-item">
-							<a class="nav-link  active" href="#variables" role="tab" data-toggle="tab" aria-selected="true">Variables</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a>
-						</li>
-						<li class="nav-item ">
-							
-						</li>
-					</ul>
-					<div class="slider-on-tab float-right">
-						<input
-								type="text"
-								name="general-feedback"
-								class="slider-colorful"
-								id="general-feedback"
-								data-provide="slider"
-								data-slider-min="-1"
-								data-slider-max="1"
-								data-slider-step="0.1"
-								th:attr="data-slider-value=${solution.getProperties().get('feedback')}"
-								data-slider-tooltip="hide"
-							/>
-					</div>
+			<div class="col-12">
+				<ul class="nav nav-tabs " role="tablist">
+					<li class="nav-item">
+						<a class="nav-link  active" href="#variables" role="tab" data-toggle="tab" aria-selected="true">Variables</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a>
+					</li>
+					<li class="nav-item ">
+						
+					</li>
+				</ul>
+				<div class="slider-on-tab float-right">
+					<input
+							type="text"
+							name="general-feedback"
+							class="slider-colorful slider-master"
+							id="general-feedback"
+							data-provide="slider"
+							data-slider-min="-1"
+							data-slider-max="1"
+							data-slider-step="0.1"
+							th:attr="data-slider-value=${solution.getUserFeeback()}"
+							data-slider-tooltip="hide"
+						/>
+				</div>
+				<form action="#" th:action="@{/solution/feedback/} + ${executionId} + '/' + ${solutionIndex}" method="post">
 					<!-- Tab panes -->
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane active" id="variables">
-							<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
+							<table id="execution-table" class="table table-striped table-hover table-sm table-datatable" style="width:100%">
 								<thead>
 									<tr>
 										<th>Variable</th>
@@ -61,17 +61,17 @@
 								</thead>
 								<tbody>
 									<tr th:each="variable,i : ${solution.getVariables()}">
-									    <td width="100%" th:text="${variable}"></td>
+									    <td width="100%" th:text="${variable.getValue()}"></td>
 									    <td>
 									    	<input
 												type="text"
-												th:name="'feedback-for-variable-' + ${i.index}"
-												class="slider-colorful feedback-for-variable"
+												th:name="'variable-feedback-' + ${i.index}"
+												class="slider-colorful slider-slave variable-feedback"
 												data-provide="slider"
 												data-slider-min="-1"
 												data-slider-max="1"
 												data-slider-step="0.1"
-												th:attr="data-slider-value=${solution.getProperties().get('feedback-for-variable-'+i.index)}"
+												th:attr="data-slider-value=${variable.getUserFeeback()}"
 												data-slider-tooltip="hide"
 											/>
 									    
@@ -81,7 +81,7 @@
 							</table>
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="objectives">
-							<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
+							<table id="execution-table" class="table table-striped table-hover table-sm table-datatable" style="width:100%">
 								<thead>
 									<tr>
 										<th>Objective</th>
@@ -100,8 +100,8 @@
 					<hr/>
 					<button type="submit" class="btn btn-success btn-sm" id="btn-feedback" href="">Save</button>
 					<a class="btn btn-light btn-sm" th:href="@{/execution/} + ${executionId}">Back</a>
-				</div>
-			</form>
+				</form>
+			</div>
 		</div>
 	</div>
 

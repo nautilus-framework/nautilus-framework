@@ -7,6 +7,8 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.solution.impl.DefaultIntegerSolution;
 
+import thiagodnf.nautilus.web.model.Variable;
+
 public class Converter {
 	
 	public static List<thiagodnf.nautilus.web.model.Solution> toSolutions(List<? extends Solution<?>> population) {
@@ -22,7 +24,7 @@ public class Converter {
 			}
 
 			for (int i = 0; i < s.getNumberOfVariables(); i++) {
-				solution.getVariables().add(s.getVariableValueString(i));
+				solution.getVariables().add(new Variable(s.getVariableValueString(i)));
 			}
 
 			solutions.add(solution);
@@ -37,7 +39,7 @@ public class Converter {
 		
 		for (int i = 0; i < solution.getVariables().size(); i++) {
 			if(newSolution instanceof DefaultIntegerSolution) {
-				newSolution.setVariableValue(i, Integer.valueOf(solution.getVariables().get(i)));
+				newSolution.setVariableValue(i, Integer.valueOf(solution.getVariables().get(i).getValue()));
 			}
 		}
 		

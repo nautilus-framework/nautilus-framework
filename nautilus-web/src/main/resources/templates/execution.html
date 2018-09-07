@@ -60,14 +60,14 @@
 								</thead>
 								<tbody>
 									<tr th:each="solution,i : ${solutions}">
-										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i.count-1}" th:text="${i.count}"></a></td>
+										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i.index}" th:text="${i.index}"></a></td>
 										
 										<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,4)}"/>
 										
 											
 										<td th:text="${solution.getProperties().containsKey('selected')}"/>
 										<td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td>	
-										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i.count-1}">Open</a></td>						
+										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i.index}">Open</a></td>						
 									</tr>
 								</tbody>
 							</table>

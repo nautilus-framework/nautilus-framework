@@ -15,7 +15,7 @@ public class Solution {
 	private List<Double> objectives;
 	
 	@NotNull
-	private List<String> variables;
+	private List<Variable> variables;
 	
 	@NotNull
 	private Map<String, String> properties;
@@ -40,11 +40,11 @@ public class Solution {
 		this.objectives = objectives;
 	}
 
-	public List<String> getVariables() {
+	public List<Variable> getVariables() {
 		return variables;
 	}
 
-	public void setVariables(List<String> variables) {
+	public void setVariables(List<Variable> variables) {
 		this.variables = variables;
 	}
 	
@@ -74,6 +74,10 @@ public class Solution {
 
 	public Solution copy() {
 		return new Solution(this);
+	}
+	
+	public void setUserFeedback(double value) {
+		getProperties().put("feedback", String.valueOf(value));
 	}
 	
 	public double getUserFeeback() {

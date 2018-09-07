@@ -35,9 +35,6 @@ class ScatterChart4D {
 			subtitle: {
 				text: undefined
 			},
-			scrollbar: {
-//				enabled: true
-			},		
 			yAxis: {
 				title: {
 					text: that.yAxisName
@@ -49,25 +46,48 @@ class ScatterChart4D {
 			    	return '<b>Solution</b> ' + (this.series.index + 1) + '<br/> <b>Objectives</b><br/>' + this.series.yData.join(",  ");
 			    }
 			},
-			boost: {
-				useGPUTranslations: true,
-		        usePreAllocated: true
-		    },
 			plotOptions: {
 		        line: {
 		            dataLabels: {
 		                enabled: false
 		            },
+		            states: {
+			            hover: {
+			            	animation: {
+			            		duration: 0
+		            		},
+			                color: 'red'                                                           
+			            }
+			        },
 		        },
+		         
 				series:{
-					  allowPointSelect: true,
+					//stickyTracking: false,
+					color: '#7cb5ec',
+					animation: {
+		                duration: 0
+		            },
+					allowPointSelect: true,
 				    point:{
 				      events:{
 				        select: function(e){
 				        	if(that.onClickListener){
 				        		that.onClickListener(this.series.index)
 				        	}
-				        }
+				        },
+				        mouseOver: function () {
+				        	this.series.update({
+					            color: 'black'
+					        });
+					    },
+					    mouseOut: function () {
+					    	var self = this;
+                        setTimeout(function() {
+							self.series.update({
+					            color: '#7cb5ec'
+					        });	
+					        }, 12);				                              
+					     }
 				      }
 				    }
 				  }
@@ -75,6 +95,20 @@ class ScatterChart4D {
 		    xAxis: {
 				categories: that.xAxisName
 			},	
+			 responsive: {
+		        rules: [{
+		            condition: {
+		                maxWidth: 500
+		            },
+		            chartOptions: {
+		                legend: {
+		                    layout: 'horizontal',
+		                    align: 'center',
+		                    verticalAlign: 'bottom'
+		                }
+		            }
+		        }]
+		    },
 			series: that.series,
 		});
 	}

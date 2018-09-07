@@ -168,12 +168,9 @@ function plot4D(tableHeader, rows){
 				enabled: true,
 				radius: 4
 			},
-			tooltip: {
-				valueDecimals: 2
-			},
 			states: {
 				hover: {
-					lineWidthPlus: 2
+					lineWidthPlus: 3
 				}
 			},
 			data: row

@@ -3,7 +3,6 @@ package thiagodnf.nautilus.web.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,7 @@ import thiagodnf.nautilus.plugin.objective.AbstractObjective;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Solution;
+import thiagodnf.nautilus.web.model.Variable;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.PluginService;
 
@@ -31,7 +31,9 @@ public class SolutionController {
 	private PluginService pluginService;
 	
 	@GetMapping("/solution/{executionId}/{solutionIndex}")
-	public String view(Model model, @PathVariable("executionId") String executionId, @PathVariable("solutionIndex") int solutionIndex) {
+	public String view(Model model, 
+			@PathVariable("executionId") String executionId, 
+			@PathVariable("solutionIndex") int solutionIndex) {
 		
 		Execution execution = executionService.findById(executionId);
 
@@ -75,7 +77,7 @@ public class SolutionController {
 	public String updateUserFeedback(ModelMap model,
 			@PathVariable("executionId") String executionId, 
 			@PathVariable("solutionIndex") int solutionIndex, 
-			@RequestParam Map<String,String> allRequestParams) {
+			@RequestParam Map<String,String> parameters) {
 		
 		Execution execution = executionService.findById(executionId);
 
@@ -91,26 +93,26 @@ public class SolutionController {
 		
 		double sum = 0.0;
 		
-		for(String key : allRequestParams.keySet()) {
+		for(String key : parameters.keySet()) {
 			
-			if(key.startsWith("feedback-for-variable")) {
+			if(key.startsWith("variable-feedback")) {
 				
-				String valueAsString = allRequestParams.get(key);
+				double feedback = Double.valueOf(parameters.get(key));
 				
-				sum += Double.valueOf(valueAsString);
+				int index = Integer.valueOf(key.split("-")[2]);
 				
-				solution.getProperties().put(key, valueAsString);
+				sum += feedback;
+				
+				solution.getVariables().get(index).setUserFeedback(feedback);				
 			}
 		}
 		
 		double feedback = (double) sum / (double) solution.getVariables().size();
 		
-		solution.getProperties().put("feedback", String.valueOf(feedback));
+		solution.setUserFeedback(feedback);
 		
-		System.out.println(solution);
-
 		execution = executionService.save(execution);
-//		
+
 		return "redirect:/execution/"+executionId;
 	}
 	
@@ -128,8 +130,8 @@ public class SolutionController {
 			solution.getProperties().remove("feedback");
 			solution.getProperties().remove("selected");
 
-			for (int i = 0; i < solution.getVariables().size(); i++) {
-				solution.getProperties().remove("feedback-for-variable-" + i);
+			for (Variable variable : solution.getVariables()) {
+				variable.getProperties().remove("feedback");
 			}
 		}
 		

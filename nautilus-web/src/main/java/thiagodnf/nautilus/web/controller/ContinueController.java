@@ -97,9 +97,6 @@ public class ContinueController {
 			}
 		}
 		
-		model.addAttribute("ranking", Arrays.toString(ranking));
-		
-		
 		Map<String, Double> rankingMap = new HashMap<>();
 
 		for (int i = 0; i < ranking.length; i++) {
