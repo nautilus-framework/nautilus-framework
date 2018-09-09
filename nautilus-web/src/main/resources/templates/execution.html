@@ -25,7 +25,10 @@
 						<a class="nav-link  active" href="#scatter-chart" role="tab" data-toggle="tab" aria-selected="true">Scatter Chart</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#table" role="tab" data-toggle="tab">Table</a>
+						<a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#information" role="tab" data-toggle="tab">Information</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#settings" role="tab" data-toggle="tab">Settings</a>
@@ -37,7 +40,7 @@
 					<div role="tabpanel" class="tab-pane fade show active" id="scatter-chart">
 						<div id="execution-chart"></div>
 					</div>
-					<div role="tabpanel" class="tab-pane fade" id="table">
+					<div role="tabpanel" class="tab-pane fade" id="objectives">
 						<div class="table-responsive horizontal-scroll">
 							<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
 								<thead>
@@ -46,8 +49,7 @@
 										<th th:each="obj,i : ${objectives}" th:text="${obj.getName()}" class="objectives-names"></th>	
 										<th>Selected</th>
 										<th>Feedback</th>
-										<th>Distance</th>
-										<th></th>						
+										<th>Distance</th>		
 									</tr>
 								</thead>
 								<tbody>
@@ -59,19 +61,100 @@
 											
 										<td th:text="${solution.getProperties().containsKey('selected')}"/>
 										<td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td>	
-										<td th:text="${T(thiagodnf.nautilus.web.util.Distancer).getDistance(solution,solutions)}"></td>
-										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i.index}">Open</a></td>						
+										<td th:text="${solution.getProperties().get('distance')}"></td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
+					<div role="tabpanel" class="tab-pane fade" id="information">
+						<dl class="row">
+							<dt class="col-sm-2">Execution Id</dt>
+							<dd class="col-sm-10" th:text="${execution.getId()}"></dd>
+							<dt class="col-sm-2">Date</dt>
+							<dd class="col-sm-10" th:text="${execution.getDate()}"></dd>
+							<dt class="col-sm-2"># of Solutions</dt>
+							<dd class="col-sm-10" th:text="${execution.getSolutions().size()}"></dd>
+							<dt class="col-sm-2">Execution Time</dt>
+							<dd class="col-sm-10" th:text="${execution.getExecutionTime()/1000} + ' seconds'"></dd>
+							<dt class="col-sm-2">Parameters</dt>
+							<dd class="col-sm-10">
+								<textarea class="form-control" rows="6" th:text="${execution.getParameters()}"></textarea>
+							</dd>
+						</dl>
+					</div>
 					<div role="tabpanel" class="tab-pane fade" id="settings">
-						<address>
-							<strong>Clear User Preferences</strong><br/>
-							<p>Once you delete, there is no going back. Please be certain.</p>
-						</address>
-						<a class="btn btn-danger btn-sm" th:href="@{/solution/clear/user-feedback/} + ${execution.getId()}">Clear User Feedback</a>
+						
+						<div class="row">
+							<div class="col-12">
+								<div class="card border-default mb-3">
+									<div class="card-header bg-transparent border-default">Scatter Chart</div>
+									<form action="#" th:action="@{/execution/}+${execution.getId()} + '/settings'" method="post" th:object="${settings}">
+										<ul class="list-group list-group-flush">
+											<li class="list-group-item">
+									  			<div class="row margin-bottom-minus-20">
+													<div class="col-12">
+														<div class="form-check" >
+														    <input type="checkbox" class="form-check-input" th:field="*{colorize}" />
+														    <label class="form-check-label" for="colorize">
+														    	<strong>Colorize</strong>
+														   		<p><small>Colorize the closest solutions those ones you selected</small></p>
+														    </label>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li class="list-group-item">
+									  			<div class="row margin-bottom-minus-20">
+													<div class="col-12">
+														<div class="form-check">
+														    <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
+														    <label class="form-check-label" for="showLines">
+														    	<strong>Show Lines</strong>
+														   		<p><small>Connect the found solutions by using lines</small></p>
+														    </label>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li class="list-group-item">
+												<button type="submit" class="btn btn-outline-success btn-sm">Save</button>
+											</li>
+										</ul>
+									</form>
+								</div>
+								<div class="card border-danger mb-3">
+									<div class="card-header bg-transparent border-danger">Danger Zone</div>
+									<ul class="list-group list-group-flush">
+										<li class="list-group-item">
+								  			<div class="row margin-bottom-minus-20">
+												<div class="col-8">
+													<strong>Clear User Preferences</strong><br/>
+													<p><small>Clear the user feedback to provide the preferences again</small></p>
+													
+												</div>
+												<div class="col-4 text-right">
+													<a class="btn btn-outline-danger btn-sm" th:href="@{/solution/clear/user-feedback/} + ${execution.getId()}">Clear Feedback</a>
+												</div>	
+											</div>
+										</li>
+										<li class="list-group-item">
+								  			<div class="row margin-bottom-minus-20">
+												<div class="col-8">
+													<p><strong>Delete Execution</strong><br/>
+													<small>Once you delete, there is no going back. Please be certain.</small></p>
+												</div>
+												<div class="col-4 text-right">
+													<a class="btn btn-outline-danger btn-sm" th:href="@{/execution/delete/} + ${execution.getId()}">Delete Execution</a>
+												</div>	
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>			
+					
+						
 					</div>
 				</div>
 			</div>

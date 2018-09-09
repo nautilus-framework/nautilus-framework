@@ -39,13 +39,12 @@ class ScatterChart2D {
 			},
 			tooltip: {
 			    formatter: function() {
-			    	console.log(this.series.index)
 			    	return '<b>Solution</b> ' + (this.series.index) + '<br/> <b>Objectives</b><br/>' + this.point.options.x +", "+ this.point.options.y;
 			    }
 			},
 			plotOptions:{
 			  series:{
-				  allowPointSelect: true,
+				allowPointSelect: true,
 			    point:{
 			      events:{
 			    	  click: function(e){

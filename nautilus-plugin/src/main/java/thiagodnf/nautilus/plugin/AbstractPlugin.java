@@ -2,6 +2,7 @@ package thiagodnf.nautilus.plugin;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,4 +26,12 @@ public abstract class AbstractPlugin {
 	public abstract String getProblemName();
 	
 	public abstract String getDescription();
+	
+	public List<String> getCrossoverNames(){
+		return Arrays.asList();
+	}
+	
+	public List<String> getMutationNames(){
+		return Arrays.asList();
+	}
 }

@@ -49,6 +49,16 @@ public class MIPPlugin extends AbstractPlugin {
 	public Problem<?> getProblem(Path instance, List<AbstractObjective> objectives) throws IOException {
 		return new MaximumIntegerProblem(instance, objectives);
 	}
+	
+	@Override
+	public List<String> getCrossoverNames(){
+		return Arrays.asList("IntegerSBXCrossover");
+	}
+	
+	@Override
+	public List<String> getMutationNames(){
+		return Arrays.asList("IntegerPolynomialMutation");
+	}
 
 	@Override
 	public String getDescription() {

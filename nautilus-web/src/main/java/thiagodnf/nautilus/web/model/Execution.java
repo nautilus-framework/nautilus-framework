@@ -1,6 +1,7 @@
 package thiagodnf.nautilus.web.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -17,14 +18,22 @@ public class Execution {
 	private long executionTime;
 	
 	@NotNull
+	private Date date;
+	
+	@NotNull
 	private Parameters parameters;
 	
 	@NotNull
 	private List<Solution> solutions;
 	
+	@NotNull
+	private Settings settings;
+	
 	public Execution() {
 		this.parameters = new Parameters();
 		this.solutions = new ArrayList<>();
+		this.date  = new Date();
+		this.settings = new Settings();
 	}
 
 	public String getId() {
@@ -59,6 +68,22 @@ public class Execution {
 		this.solutions = solutions;
 	}
 	
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
+	public Settings getSettings() {
+		return settings;
+	}
+
+	public void setSettings(Settings settings) {
+		this.settings = settings;
+	}
+
 	public String toString() {
 		return new Gson().toJson(this);
 	}

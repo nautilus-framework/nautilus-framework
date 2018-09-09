@@ -1,10 +1,18 @@
- function isSafari(){
- 	return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
- }
+function isSafari(){
+	return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+}
 
+function sendPost(url, data){
+	
+}
+ 
 $(function(){
    
 	$('.table-datatable').DataTable();
+	
+	$('.table-datatable-no-paginaton').dataTable({
+	    "bPaginate": false
+	});
 	
 	if(!isSafari()){
         

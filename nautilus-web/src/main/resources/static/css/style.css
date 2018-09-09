@@ -85,6 +85,11 @@ body {
 }
 
 
+.margin-bottom-minus-20{
+	margin-bottom: -20px
+}
+
+
 #modal-console textarea{
 	font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; 
 }

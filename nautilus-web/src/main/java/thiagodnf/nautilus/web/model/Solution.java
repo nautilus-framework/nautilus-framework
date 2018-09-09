@@ -76,6 +76,10 @@ public class Solution {
 		return new Solution(this);
 	}
 	
+	public boolean isSelected() {
+		return getProperties().containsKey("selected");
+	}
+	
 	public void setUserFeedback(double value) {
 		getProperties().put("feedback", String.valueOf(value));
 	}

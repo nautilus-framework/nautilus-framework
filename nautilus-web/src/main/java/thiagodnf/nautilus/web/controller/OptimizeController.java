@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.AlgorithmRunner;
 
@@ -61,11 +60,14 @@ public class OptimizeController {
 		parameters.setFilename(filename);
 		
 		model.addAttribute("parameters", parameters);
+		model.addAttribute("crossoverNames", pluginService.getCrossoverNames(problemKey));
+		model.addAttribute("mutationNames", pluginService.getMutationNames(problemKey));
 		model.addAttribute("objectiveMap", pluginService.getObjectives(problemKey));
 		
 		return "optimize";
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<Solution> getInitialPopulation(Problem problem, Execution execution) {
 
 		if (execution == null) {
@@ -86,6 +88,7 @@ public class OptimizeController {
 		return initialPopulation;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Async
 	@MessageMapping("/hello.{sessionId}")
     public Future<?> execute(@Valid Parameters parameters, @DestinationVariable String sessionId) throws InterruptedException {
@@ -117,11 +120,11 @@ public class OptimizeController {
 			
 			List<?> initialPopulation = getInitialPopulation(problem, lastExecution);
         	
-        	CrossoverOperator<IntegerSolution> crossover = CrossoverFactory.<IntegerSolution>getCrossover("IntegerSBXCrossover", 0.9, 20.0);
+        	CrossoverOperator crossover = CrossoverFactory.getCrossover(parameters.getCrossoverName(), 0.9, 20.0);
 			
-			MutationOperator<IntegerSolution> mutation = MutationFactory.<IntegerSolution>getMutation("IntegerPolynomialMutation", 1.0 / problem.getNumberOfVariables(), 20.0);
+			MutationOperator mutation = MutationFactory.getMutation(parameters.getMutationName(), 1.0 / problem.getNumberOfVariables(), 20.0);
 			
-		    NSGAII<? extends Solution<?>> algorithm = new NSGAII<IntegerSolution>(
+		    NSGAII<? extends Solution<?>> algorithm = new NSGAII<>(
 	    		problem, 
 	    		maxEvaluations, 
 	    		populationSize, 

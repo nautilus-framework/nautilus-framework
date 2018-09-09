@@ -9,7 +9,7 @@ class ScatterChart3D {
 	}
 	
 	addSerie(serie){
-		this.series.push(serie);
+		this.series = serie;
 	}
 	
 	setXAxisName(name){
@@ -38,7 +38,6 @@ class ScatterChart3D {
 			},	
 			chart: {
 				renderTo: el,
-	            //margin: [150, 75, 75, 75],
 	            type: 'scatter',
 				options3d: {
 					enabled: true,
@@ -66,7 +65,7 @@ class ScatterChart3D {
 			},
 			tooltip: {
 			    formatter: function() {
-			    	return '<b>Solution</b> ' + (this.point.index + 1) + '<br/> <b>Objectives</b><br/>' + this.point.options.x +", "+ this.point.options.y +", "+ this.point.options.z;
+			    	return '<b>Solution</b> ' + (this.series.index) + '<br/> <b>Objectives</b><br/>' + this.point.options.x +", "+ this.point.options.y +", "+ this.point.options.z;
 			    }
 			},
 			plotOptions: {
@@ -81,7 +80,7 @@ class ScatterChart3D {
 				      events:{
 				        click: function(e){
 				        	if(that.onClickListener){
-				        		that.onClickListener(e.point.index)
+				        		that.onClickListener(this.series.index)
 				        	}
 				        }
 				      }

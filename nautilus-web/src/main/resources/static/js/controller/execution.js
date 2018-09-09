@@ -1,5 +1,13 @@
 var red = 0;
-var green = 120;
+var green = 100;
+
+function isColorize(){
+	return $("input[name='colorize']").is(":checked")
+}
+
+function showLines(){
+	return $("input[name='showLines']").is(":checked")
+}
 
 function normalize(value, a, b, min, max) {
 	return a + (((value - min) * (b - a)) / (max - min));
@@ -14,7 +22,11 @@ function getColor(percent, start, end) {
 	return 'hsl('+c+', 60%, 50%)';
 }
 
-function getColorForDistance(distance, distances, objectives){
+function getColorForDistance(distance, distances){
+	
+	if(!isColorize()){
+		return "#7cb5ec";
+	}
 	
 	var maxDistance = distances.reduce(function(a, b) {
 	    return Math.max(a.toFixed(5), b.toFixed(5));
@@ -29,21 +41,8 @@ function getColorForDistance(distance, distances, objectives){
 	
 	var normal = normalize(distance.toFixed(2), 0,100, minDistance, maxDistance) ;
 	
-	
 	return getColor(normal, green, red);
 }
-
-function getEuclideanDistance(s1, s2){
-	
-	var sum = 0.0;
-
-	for (var i = 0; i < s1.length; i++) {
-		sum += Math.pow(s1[i] - s2[i], 2);
-	}
-
-	return Math.sqrt(sum);
-}
-
 
 function getObjectivesNames(table){
 	
@@ -54,26 +53,6 @@ function getObjectivesNames(table){
 	});
 	
 	return header;
-}
-
-function getObjectivesValues(table){
-	
-	var data = [];
-	
-	$(table + " tbody tr").each(function (key, row) {
-		
-		var point = [];
-		
-		$(row).find(".objectives-values").each(function (key, val) {
-			point.push(parseFloat($(val).text()));
-		});
-		
-		data.push(point);
-	});
-	
-	console.log(data)
-	
-	return data;
 }
 
 function getData(rows){
@@ -97,9 +76,6 @@ function getData(rows){
 			if(index === (row.length - 3)){
 				return;
 			}
-			if(index === (row.length - 4)){
-				return;
-			}
 			point.push(parseFloat(col));
 		});
 		
@@ -117,7 +93,7 @@ function getDistances(rows){
 		
 		$.each(row, function(index, col){
 			
-			if(index === 5){
+			if(index === row.length - 1){
 			
 				distances.push(parseFloat(col));
 			}
@@ -127,8 +103,8 @@ function getDistances(rows){
 	return distances;
 }
 
-function plot2D(tableHeader, rows){
-
+function getSeries(rows, lineWidthPlus){
+	
 	var data = getData(rows);
 	var distances = getDistances(rows);
 	
@@ -146,19 +122,23 @@ function plot2D(tableHeader, rows){
 				symbol: "circle",
 				enabled: true,
 				radius: 4,
-				fillColor: getColorForDistance(distances[index],distances, row)
-			},
-			tooltip: {
-				valueDecimals: 2
+				fillColor: getColorForDistance(distances[index],distances)
 			},
 			states: {
 				hover: {
-					lineWidthPlus: 0
+					lineWidthPlus: lineWidthPlus
 				}
 			},
 			data: [row]
 		})
 	})
+	
+	return series
+}
+
+function plot2D(tableHeader, rows){
+
+	var series = getSeries(rows, 0);
 	
 	var chart = new ScatterChart2D()
 
@@ -174,30 +154,11 @@ function plot2D(tableHeader, rows){
 
 function plot3D(tableHeader, rows){
 
-	var data = getData(rows);
-	
-	var serie = {
-		name: ' ',
-        lineWidth: 0,
-        showInLegend: false,  
-		marker: {
-			enabled: true,
-			radius: 4
-		},
-		tooltip: {
-			valueDecimals: 2
-		},
-		states: {
-			hover: {
-				lineWidthPlus: 0
-			}
-		},
-		data: data
-	};
+	var series = getSeries(rows, 0);
 	
 	var chart = new ScatterChart3D()
 
-	chart.addSerie(serie)
+	chart.addSerie(series)
 	chart.setXAxisName(tableHeader[0]);
 	chart.setYAxisName(tableHeader[1]);
 	chart.setZAxisName(tableHeader[2]);
@@ -210,17 +171,28 @@ function plot3D(tableHeader, rows){
 
 function plot4D(tableHeader, rows){
 
+	var chart = new ScatterChart4D()
+	
 	var data = getData(rows);
+	var distances = getDistances(rows);
 	
 	var series = [];
 	
 	$.each(data, function(index, row){
+		
 		series.push({
 			name: ' ',
-	        showInLegend: false,  
+			lineWidth: showLines()? 1 : 0,
+	        showInLegend: false,
+	        animation: {
+                duration: 0
+            },
+            color: getColorForDistance(distances[index],distances),
 			marker: {
+				symbol: "circle",
 				enabled: true,
-				radius: 4
+				radius: 4,
+				fillColor: getColorForDistance(distances[index],distances)
 			},
 			states: {
 				hover: {
@@ -231,10 +203,8 @@ function plot4D(tableHeader, rows){
 		})
 	})
 	
-	var chart = new ScatterChart4D()
-	
-	chart.setSerie(series)
-	chart.setXAxisName(tableHeader);
+	chart.setSeries(series)
+	chart.setXAxisName(tableHeader)
 	chart.setOnClickListener(function(solutionIndex){
 		openSolution(solutionIndex);
 	})

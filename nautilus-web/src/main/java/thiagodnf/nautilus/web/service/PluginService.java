@@ -3,6 +3,7 @@ package thiagodnf.nautilus.web.service;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ import org.uma.jmetal.problem.Problem;
 import thiagodnf.nautilus.plugin.AbstractPlugin;
 import thiagodnf.nautilus.plugin.mip.MIPPlugin;
 import thiagodnf.nautilus.plugin.objective.AbstractObjective;
+import thiagodnf.nautilus.plugin.zdt1.ZDT1Plugin;
+import thiagodnf.nautilus.plugin.zdt3.ZDT3Plugin;
 
 @Service
 public class PluginService {
@@ -31,6 +34,8 @@ public class PluginService {
 	private void initIt() {
 		
 		add(new MIPPlugin());
+		add(new ZDT3Plugin());
+		add(new ZDT1Plugin());
 		
 		for (AbstractPlugin plugin : plugins.values()) {
 			fileService.createInstancesDirectory(plugin.getProblemKey());
@@ -38,7 +43,12 @@ public class PluginService {
 	}
 	
 	public List<AbstractPlugin> getAllPlugins() {
-		return plugins.values().stream().collect(Collectors.toList());
+
+		List<AbstractPlugin> all = plugins.values().stream().collect(Collectors.toList());
+
+		all.sort(Comparator.comparing(AbstractPlugin::getProblemName));
+
+		return all;
 	}
 	
 	public void add(AbstractPlugin plugin) {
@@ -75,4 +85,13 @@ public class PluginService {
 
 		return objectives;
 	}
+
+	public List<String> getCrossoverNames(String problemKey) {
+		return getPlugin(problemKey).getCrossoverNames();
+	}
+	
+	public List<String> getMutationNames(String problemKey) {
+		return getPlugin(problemKey).getMutationNames();
+	}
+	
 }

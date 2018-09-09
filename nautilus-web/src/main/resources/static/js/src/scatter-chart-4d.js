@@ -7,8 +7,8 @@ class ScatterChart4D {
 		this.series = []
 	}
 	
-	setSerie(serie){
-		this.series = serie;
+	setSeries(series){
+		this.series = series;
 	}
 	
 	setXAxisName(name){
@@ -23,11 +23,11 @@ class ScatterChart4D {
 		
 		var that = this;
 		
-		Highcharts.chart(el, {
+		this.highcharts = Highcharts.chart(el, {
 			chart: {
 		        type: 'line',
-		        zoomType: 'y',
-		        animation: false
+		        zoomType: 'xy',
+		        //height: '100%'
 		    },
 			title: {
 				text: undefined
@@ -43,30 +43,33 @@ class ScatterChart4D {
 			},
 			tooltip: {
 			    formatter: function() {
-			    	return '<b>Solution</b> ' + (this.series.index + 1) + '<br/> <b>Objectives</b><br/>' + this.series.yData.join(",  ");
+			    	return '<b>Solution</b> ' + (this.series.index) + '<br/> <b>Objectives</b><br/>' + this.series.yData.join(",  ");
 			    }
 			},
+			boost: {
+		        useGPUTranslations: true,
+		        usePreAllocated: true
+		    },
 			plotOptions: {
-		        line: {
-		            dataLabels: {
-		                enabled: false
-		            },
-		            states: {
-			            hover: {
-			            	animation: {
-			            		duration: 0
-		            		},
-			                color: 'red'                                                           
-			            }
-			        },
-		        },
+//		        line: {
+//		            dataLabels: {
+//		                enabled: false
+//		            },
+////		            states: {
+////			            hover: {
+////			            	animation: {
+////			            		duration: 0
+////		            		},
+////			                color: 'red'                                                           
+////			            }
+////			        },
+//		        },
 		         
 				series:{
-					//stickyTracking: false,
-					color: '#7cb5ec',
-					animation: {
-		                duration: 0
-		            },
+//					color: '#7cb5ec',
+//					animation: {
+//		                duration: 0
+//		            },
 					allowPointSelect: true,
 				    point:{
 				      events:{
@@ -75,19 +78,6 @@ class ScatterChart4D {
 				        		that.onClickListener(this.series.index)
 				        	}
 				        },
-				        mouseOver: function () {
-				        	this.series.update({
-					            color: 'black'
-					        });
-					    },
-					    mouseOut: function () {
-					    	var self = this;
-                        setTimeout(function() {
-							self.series.update({
-					            color: '#7cb5ec'
-					        });	
-					        }, 12);				                              
-					     }
 				      }
 				    }
 				  }
@@ -95,20 +85,7 @@ class ScatterChart4D {
 		    xAxis: {
 				categories: that.xAxisName
 			},	
-			 responsive: {
-		        rules: [{
-		            condition: {
-		                maxWidth: 500
-		            },
-		            chartOptions: {
-		                legend: {
-		                    layout: 'horizontal',
-		                    align: 'center',
-		                    verticalAlign: 'bottom'
-		                }
-		            }
-		        }]
-		    },
+			 
 			series: that.series,
 		});
 	}

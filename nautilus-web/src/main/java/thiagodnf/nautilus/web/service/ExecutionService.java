@@ -1,10 +1,13 @@
 package thiagodnf.nautilus.web.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.repository.ExecutionRepository;
+import thiagodnf.nautilus.web.repository.ExecutionRepository.IdsAndDatesOnly;
 
 @Service
 public class ExecutionService {
@@ -18,5 +21,17 @@ public class ExecutionService {
 	
 	public Execution findById(String executionId) {
 		return this.executionRepository.findOne(executionId);
+	}
+
+	public List<Execution> findAll(String problemKey) {
+		return this.executionRepository.findAll();
+	}
+
+	public List<IdsAndDatesOnly> findByProblemKey(String problemKey) {
+		return this.executionRepository.findByParametersProblemKey(problemKey);
+	}
+	
+	public void delete(String executionId) {
+		executionRepository.delete(executionId);
 	}
 }

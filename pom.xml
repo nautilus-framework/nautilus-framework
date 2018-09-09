@@ -13,6 +13,8 @@
 		<module>nautilus-plugin</module>
 		<module>nautilus-plugin-mip</module>
 		<module>nautilus-core</module>
+		<module>nautilus-plugin-zdt3</module>
+		<module>nautilus-plugin-zdt1</module>
 	</modules>
 	<properties>
 		<springframework.boot.version>1.5.9.RELEASE</springframework.boot.version>

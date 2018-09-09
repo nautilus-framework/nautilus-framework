@@ -2,6 +2,7 @@ package thiagodnf.nautilus.plugin.factory;
 
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.impl.crossover.IntegerSBXCrossover;
+import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
 import org.uma.jmetal.solution.Solution;
 
 public class CrossoverFactory {
@@ -11,6 +12,8 @@ public class CrossoverFactory {
 
 		if (name.equalsIgnoreCase("IntegerSBXCrossover")) {
 			return new IntegerSBXCrossover(probability, distributionIndex);
+		} else if (name.equalsIgnoreCase("SBXCrossover")) {
+			return new SBXCrossover(probability, distributionIndex);
 		} else {
 			throw new IllegalArgumentException("Invalid Crossover Name");
 		}

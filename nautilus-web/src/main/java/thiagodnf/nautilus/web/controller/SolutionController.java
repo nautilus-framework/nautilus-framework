@@ -63,9 +63,6 @@ public class SolutionController {
 			objectivesMap.put(objectives.get(i).getName(), solution.getObjectives().get(i));
 		}
 		
-		System.out.println(solution);
-
-		
 		model.addAttribute("objectivesMap", objectivesMap);
 		model.addAttribute("solution", solution);
 		model.addAttribute("executionId", executionId);

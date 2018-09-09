@@ -24,6 +24,10 @@ public class Parameters {
 	
 	private List<String> objectiveKeys;
 	
+	private String crossoverName;
+	
+	private String mutationName;
+	
 	private String lastExecutionId;
 
 	public Parameters() {
@@ -80,5 +84,21 @@ public class Parameters {
 
 	public void setLastExecutionId(String lastExecutionId) {
 		this.lastExecutionId = lastExecutionId;
+	}
+
+	public String getCrossoverName() {
+		return crossoverName;
+	}
+
+	public void setCrossoverName(String crossoverName) {
+		this.crossoverName = crossoverName;
+	}
+
+	public String getMutationName() {
+		return mutationName;
+	}
+
+	public void setMutationName(String mutationName) {
+		this.mutationName = mutationName;
 	}
 }

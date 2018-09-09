@@ -116,8 +116,18 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>thiagodnf.nautilus.plugin.ip</groupId>
+			<groupId>thiagodnf.nautilus.plugin.mip</groupId>
 			<artifactId>nautilus-plugin-mip</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>thiagodnf.nautilus.plugin.zdt1</groupId>
+			<artifactId>nautilus-plugin-zdt1</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>thiagodnf.nautilus.plugin.zdt3</groupId>
+			<artifactId>nautilus-plugin-zdt3</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
