@@ -133,6 +133,10 @@ public class Solutioner {
 		if (solutions.isEmpty()) {
 			return new ArrayList<>(solutions.size());
 		}
+
+		if (solutions.size() == 1) {
+			return new ArrayList<>(solutions);
+		}
 		
 		double[] minValues = getMinimumValues(solutions);
 		double[] maxValues = getMaximumValues(solutions);

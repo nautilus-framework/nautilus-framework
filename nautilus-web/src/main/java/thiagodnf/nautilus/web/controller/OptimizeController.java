@@ -191,15 +191,11 @@ public class OptimizeController {
 		   	
 		   	List<thiagodnf.nautilus.web.model.Solution> solutions = Converter.toSolutions(noRepeatedSolutions);
 		   	
-		   	webSocketService.sendTitle(sessionId, "Normalizing the solutions...");
-		   	
-		   	List<thiagodnf.nautilus.web.model.Solution> normalizedSolutions = solutions; //NormalizerUtils.normalize(solutions);
-		   	
 		   	webSocketService.sendTitle(sessionId, "Preparing the results...");
 			
 		   	Execution execution = new Execution();
 		   			
-			execution.setSolutions(normalizedSolutions);
+			execution.setSolutions(solutions);
 			execution.setExecutionTime(algorithmRunner.getComputingTime());
 			execution.setParameters(parameters);
 	

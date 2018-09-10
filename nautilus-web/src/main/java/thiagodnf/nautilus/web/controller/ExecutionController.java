@@ -49,7 +49,7 @@ public class ExecutionController {
 		if (objectives.size() != 1) {
 			solutions = Solutioner.normalize(solutions);
 		}
-
+		
 		solutions = Colorizer.execute(solutions);
 
 		model.addAttribute("objectives", objectives);
