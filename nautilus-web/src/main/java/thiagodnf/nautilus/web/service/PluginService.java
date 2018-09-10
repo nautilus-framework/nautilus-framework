@@ -56,6 +56,11 @@ public class PluginService {
 	}
 	
 	public AbstractPlugin getPlugin(String problemKey) {
+
+		if (!plugins.containsKey(problemKey)) {
+			throw new RuntimeException("The problemKey was not found");
+		}
+
 		return plugins.get(problemKey);
 	}
 	

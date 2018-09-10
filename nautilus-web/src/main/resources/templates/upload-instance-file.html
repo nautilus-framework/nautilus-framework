@@ -13,9 +13,9 @@
 				<h5 class="title">
 					<a th:href="@{/}">Home</a> 
 					<span class="path-divider">/</span>
-					<a th:href="@{/problem/}+${problemKey}" th:text="${problemName}"></a>
+					<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
 					<span class="path-divider">/</span>
-					<a th:href="@{/instance-file/}+${problemKey} + '/upload'">Upload Instance File</a>
+					<a th:href="@{/instance-file/}+${plugin.getProblemKey()} + '/upload'">Upload Instance File</a>
 				</h5>
 			</div>
 			<div class="col-4 float-right">

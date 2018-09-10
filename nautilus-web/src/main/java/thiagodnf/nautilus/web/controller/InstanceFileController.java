@@ -29,8 +29,7 @@ public class InstanceFileController {
 		Path path = fileService.getInstancesFile(problemKey, filename);
 		
 		model.addAttribute("filename", filename);
-		model.addAttribute("problemKey", problemKey);
-		model.addAttribute("problemName", pluginService.getPlugin(problemKey).getProblemName());
+		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
 		model.addAttribute("fileContent", FileUtils.readFileToString(path.toFile()));
 		
 		return "instance-file";
@@ -39,10 +38,9 @@ public class InstanceFileController {
 	@GetMapping("/instance-file/{problemKey}/upload")
 	public String uploadInstanceFile(Model model, @PathVariable("problemKey") String problemKey) {
 		
-		model.addAttribute("problemKey", problemKey);
 		model.addAttribute("uploadInstance", new UploadInstance(problemKey));
-		model.addAttribute("problemName", pluginService.getPlugin(problemKey).getProblemName());
-		
+		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
+			
 		return "upload-instance-file";
 	}
 }
