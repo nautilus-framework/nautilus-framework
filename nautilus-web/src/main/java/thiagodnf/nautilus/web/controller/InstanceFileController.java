@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import thiagodnf.nautilus.web.model.UploadInstance;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
@@ -33,5 +34,15 @@ public class InstanceFileController {
 		model.addAttribute("fileContent", FileUtils.readFileToString(path.toFile()));
 		
 		return "instance-file";
+	}
+	
+	@GetMapping("/instance-file/{problemKey}/upload")
+	public String uploadInstanceFile(Model model, @PathVariable("problemKey") String problemKey) {
+		
+		model.addAttribute("problemKey", problemKey);
+		model.addAttribute("uploadInstance", new UploadInstance(problemKey));
+		model.addAttribute("problemName", pluginService.getPlugin(problemKey).getProblemName());
+		
+		return "upload-instance-file";
 	}
 }

@@ -3,6 +3,7 @@ package thiagodnf.nautilus.web.service;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileService {
@@ -116,5 +118,33 @@ public class FileService {
 	
 	public Path getPath() {
 		return rootLocation;
+	}
+	
+	public void store(MultipartFile file, String filename) {
+		store(getPath(), file, filename);
+	}
+	
+	public void store(String problemKey, MultipartFile file, String filename) {
+		store(getInstancesLocation().resolve(problemKey), file, filename);
+	}
+	
+	public void store(Path path, MultipartFile file, String filename) {
+
+		createDirectories(path);
+
+		try {
+			if (file.isEmpty()) {
+				throw new Exception("File is empty");
+			}
+
+			// This is a security check
+			if (filename.contains("..")) {
+				throw new RuntimeException("StoreFileWithRelativePathException");
+			}
+
+			Files.copy(file.getInputStream(), load(path, filename), StandardCopyOption.REPLACE_EXISTING);
+		} catch (Exception ex) {
+			throw new RuntimeException("StoreFileIsNotPossibleException");
+		}
 	}
 }

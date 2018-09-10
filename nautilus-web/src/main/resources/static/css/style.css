@@ -22,6 +22,22 @@ body {
 	color: #586069;
 }
 
+.page-head-without-tabs{
+	height: 60px;
+	background-color: #fafbfc;
+	border-bottom: 1px solid #dee2e6;
+}
+
+.page-content-without-tabs{
+	margin-top: -42px;
+	margin-bottom: -49px;
+}
+
+.titlebar-without-tabs{
+	margin-bottom: 18px;
+	
+}
+
 .titlebar{
 	margin-bottom: 8px;
 	height: 39px;
