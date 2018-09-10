@@ -62,7 +62,7 @@ public class Colorizer {
 		double distance = 0.0;
 		
 		if(feedback == 0) {
-			distance = 0.0;
+			distance = minDistance;
 		}else if (feedback > 0) {
 			distance = Math.pow(minDistance, 1.0 / Math.abs(feedback));
 		}else {
