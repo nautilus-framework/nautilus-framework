@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.web.model.UploadInstance;
 import thiagodnf.nautilus.web.service.FileService;
+import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
 @RequestMapping("/upload-instance")
@@ -25,12 +26,19 @@ public class UploadInstanceController {
 	@Autowired
 	private FileService fileService;
 	
+	@Autowired
+	private PluginService pluginService;
+	
 	@PostMapping("/upload")
 	public String uploadWithPost(@Valid UploadInstance uploadInstance, BindingResult result, Model model, RedirectAttributes ra) {
 
 		LOGGER.info("Uploading the file: " + uploadInstance.getFile().getOriginalFilename());
 
 		if (result.hasErrors()) {
+			
+			model.addAttribute("problemKey", uploadInstance.getProblemKey());
+			model.addAttribute("problemName", pluginService.getPlugin(uploadInstance.getProblemKey()).getProblemName());
+			
 			return "upload-instance-file";
 		}
 		
@@ -41,6 +49,8 @@ public class UploadInstanceController {
 		LOGGER.info("Storing the instance");
 
 		fileService.store(uploadInstance.getProblemKey(), file, filename);
+		
+		LOGGER.info("Done");
 		
 		return "redirect:/";
 	}
