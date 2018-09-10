@@ -44,8 +44,12 @@ public class ExecutionController {
 		
 		List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, objectiveKeys);
 
-		List<Solution> solutions = Solutioner.normalize(execution.getSolutions());
-		
+		List<Solution> solutions = execution.getSolutions();
+
+		if (objectives.size() != 1) {
+			solutions = Solutioner.normalize(solutions);
+		}
+
 		solutions = Colorizer.execute(solutions);
 
 		model.addAttribute("objectives", objectives);

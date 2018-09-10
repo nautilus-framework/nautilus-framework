@@ -55,6 +55,11 @@ public class Colorizer {
 			}
 		}
 		
+		// For mono- objectives approach
+		if(closeSolution == null) {
+			return "0.0";
+		}
+		
 		minDistance = Normalizer.normalize(minDistance, 0, Math.sqrt(2));
 
 		double feedback = closeSolution.getUserFeeback();

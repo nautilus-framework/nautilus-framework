@@ -2,6 +2,7 @@ package thiagodnf.nautilus.web.controller;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -22,6 +23,7 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.AlgorithmRunner;
 
+import thiagodnf.nautilus.plugin.algorithm.GA;
 import thiagodnf.nautilus.plugin.algorithm.NSGAII;
 import thiagodnf.nautilus.plugin.factory.CrossoverFactory;
 import thiagodnf.nautilus.plugin.factory.MutationFactory;
@@ -124,31 +126,64 @@ public class OptimizeController {
 			
 			MutationOperator mutation = MutationFactory.getMutation(parameters.getMutationName(), 1.0 / problem.getNumberOfVariables(), 20.0);
 			
-		    NSGAII<? extends Solution<?>> algorithm = new NSGAII<>(
-	    		problem, 
-	    		maxEvaluations, 
-	    		populationSize, 
-	    		crossover, 
-	    		mutation, 
-	    		initialPopulation
-		    );
 			
-		    algorithm.setOnProgressListener(new OnProgressListener() {
+			
+			List<? extends Solution<?>> rawSolutions = null;
+			
+			AlgorithmRunner algorithmRunner = null;
+			
+			if(objectives.size() == 1) {
 				
-				@Override
-				public void onProgress(double progress) {
-					webSocketService.sendProgress(sessionId, progress);
-				}
-			});
+				GA<? extends Solution<?>> ga = new GA<>(
+		    		problem, 
+		    		maxEvaluations, 
+		    		populationSize, 
+		    		crossover, 
+		    		mutation, 
+		    		initialPopulation
+			    );
+				
+				ga.setOnProgressListener(new OnProgressListener() {
+					
+					@Override
+					public void onProgress(double progress) {
+						webSocketService.sendProgress(sessionId, progress);
+					}
+				});
+				
+				webSocketService.sendTitle(sessionId, "Optimizing...");
+				
+				algorithmRunner = new AlgorithmRunner.Executor(ga).execute() ;
+				
+				rawSolutions = Arrays.asList(ga.getResult());
+				
+			}else {
+			    
+				NSGAII<? extends Solution<?>> nsgaii = new NSGAII<>(
+		    		problem, 
+		    		maxEvaluations, 
+		    		populationSize, 
+		    		crossover, 
+		    		mutation, 
+		    		initialPopulation
+			    );
+			    
+			    nsgaii.setOnProgressListener(new OnProgressListener() {
+					
+					@Override
+					public void onProgress(double progress) {
+						webSocketService.sendProgress(sessionId, progress);
+					}
+				});
+			    
+			    webSocketService.sendTitle(sessionId, "Optimizing...");
+			    
+			    algorithmRunner = new AlgorithmRunner.Executor(nsgaii).execute() ;
+			    
+			    rawSolutions = nsgaii.getResult();
+			}
 		    
-		    webSocketService.sendTitle(sessionId, "Optimizing...");
-		    
-		   	AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
-				        .execute() ;
-		   	
 		   	webSocketService.sendTitle(sessionId, "Removing repeated solutions...");
-		   	
-		   	List<? extends Solution<?>> rawSolutions = algorithm.getResult();
 		   	
 		   	List<Solution<?>> noRepeatedSolutions = SolutionListUtils.removeRepeated(rawSolutions);
 		   	
@@ -175,6 +210,7 @@ public class OptimizeController {
 			webSocketService.sendTitle(sessionId, "Done. Redirecting...");
 			webSocketService.sendProgress(sessionId, 100);
 			webSocketService.sendDone(sessionId, execution.getId());
+			
 		} catch (Exception e) {
 			webSocketService.sendException(sessionId, e.getMessage());
 			throw new InterruptedException();

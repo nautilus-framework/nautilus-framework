@@ -20,12 +20,12 @@
 		</div>
 		<div class="row">
 			<div class="col-12">
-				<ul class="nav nav-tabs" role="tablist">
-					<li class="nav-item">
-						<a class="nav-link  active" href="#scatter-chart" role="tab" data-toggle="tab" aria-selected="true">Scatter Chart</a>
+				<ul id="execution-tabs" class="nav nav-tabs" role="tablist">
+					<li class="nav-item" th:if="${objectives.size() >= 2}">
+						<a class="nav-link" href="#scatter-chart" role="tab" data-toggle="tab" aria-selected="true">Scatter Chart</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a>
+						<a class="nav-link" href="#solutions" role="tab" data-toggle="tab">Solutions</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#information" role="tab" data-toggle="tab">Information</a>
@@ -37,10 +37,10 @@
 		
 				<!-- Tab panes -->
 				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane fade show active" id="scatter-chart">
+					<div role="tabpanel" class="tab-pane fade" id="scatter-chart" th:if="${objectives.size() >= 2}">
 						<div id="execution-chart"></div>
 					</div>
-					<div role="tabpanel" class="tab-pane fade" id="objectives">
+					<div role="tabpanel" class="tab-pane fade" id="solutions">
 						<div class="table-responsive horizontal-scroll">
 							<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
 								<thead>

@@ -49,6 +49,10 @@ function execute(array) {
 			obj[el.name] = el.value; 
 		}
 	})
+
+	if(!Array.isArray(obj["objectiveKeys"])){
+		obj["objectiveKeys"] = [obj["objectiveKeys"]];
+	}
 	
 	obj = JSON.stringify(obj);
 	
