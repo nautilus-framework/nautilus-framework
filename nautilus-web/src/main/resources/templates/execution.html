@@ -61,7 +61,7 @@
 											
 										<td th:text="${solution.getProperties().containsKey('selected')}"/>
 										<td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td>	
-										<td th:text="${solution.getProperties().get('distance')}"></td>
+										<td th:text="${#numbers.formatDecimal(solution.getProperties().get('distance'),1,4)}"></td>
 									</tr>
 								</tbody>
 							</table>

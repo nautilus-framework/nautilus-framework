@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 public class Parameters {
 	
 	@DecimalMin("10")
-	@DecimalMax("1000")
+	@DecimalMax("10000")
 	private int populationSize = 100;
 	
 	@DecimalMin("10")
@@ -26,7 +26,21 @@ public class Parameters {
 	
 	private String crossoverName;
 	
+	@DecimalMin("0.0")
+	@DecimalMax("1.0")
+	private Double crossoverProbability = 0.9;
+	
+	@DecimalMin("1.0")
+	private Double crossoverDistribution = 20.0;
+	
 	private String mutationName;
+	
+	@DecimalMin("0.0")
+	@DecimalMax("1.0")
+	private Double mutationProbability = 0.01;
+	
+	@DecimalMin("1.0")
+	private Double mutationDistribution = 20.0;
 	
 	private String lastExecutionId;
 
@@ -100,5 +114,37 @@ public class Parameters {
 
 	public void setMutationName(String mutationName) {
 		this.mutationName = mutationName;
+	}
+
+	public Double getCrossoverProbability() {
+		return crossoverProbability;
+	}
+
+	public void setCrossoverProbability(Double crossoverProbability) {
+		this.crossoverProbability = crossoverProbability;
+	}
+
+	public Double getCrossoverDistribution() {
+		return crossoverDistribution;
+	}
+
+	public void setCrossoverDistribution(Double crossoverDistribution) {
+		this.crossoverDistribution = crossoverDistribution;
+	}
+
+	public Double getMutationProbability() {
+		return mutationProbability;
+	}
+
+	public void setMutationProbability(Double mutationProbability) {
+		this.mutationProbability = mutationProbability;
+	}
+
+	public Double getMutationDistribution() {
+		return mutationDistribution;
+	}
+
+	public void setMutationDistribution(Double mutationDistribution) {
+		this.mutationDistribution = mutationDistribution;
 	}
 }

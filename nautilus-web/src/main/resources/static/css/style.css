@@ -15,7 +15,7 @@ body {
 	border-bottom: 1px solid #dee2e6;
 }
 
-.page-content .path-divider {
+.path-divider {
 	margin: 0 0.25em;
 	font-size: 18px;
 	line-height: 26px;
@@ -29,7 +29,7 @@ body {
 }
 
 .page-content-without-tabs{
-	margin-top: -42px;
+	margin-top: -43px;
 	margin-bottom: -49px;
 }
 

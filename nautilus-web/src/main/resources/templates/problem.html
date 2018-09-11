@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<head th:replace="fragments/head :: default(${problemName})"></head>
+<head th:replace="fragments/head :: default(${plugin.getProblemName()})"></head>
 
 <body>
 	<div th:replace="fragments/navbar :: default('home')"></div>
@@ -13,11 +13,10 @@
 				<h5 class="title">
 					<a th:href="@{/}">Home</a> 
 					<span class="path-divider">/</span>
-					<a th:href="@{/problem/}+${problemKey}" th:text="${problemName}"></a>
+					<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
 				</h5>
 			</div>
 			<div class="col-4 float-right">
-				<a class="btn btn-secondary btn-sm float-right" th:href="@{/instance-file/} + ${problemKey} + '/upload'">Upload Instance File</a>
 			</div>
 		</div>
 		<div class="row">
@@ -35,19 +34,26 @@
 				</ul>
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade show active" id="instances">
-						<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
+						<div class="d-none">
+							<div id="datatable-buttons" class="btn-outline-success btn-sm" th:href="@{/instance-file/} + ${plugin.getProblemKey()} + '/upload'">Upload Instance File</div>
+						</div>
+						<table id="instances-table" class="table table-striped table-hover table-sm">
 							<thead>
 								<tr>
 									<th width="50px">#</th>
-									<th>File</th>
+									<th width="50%">File</th>
+									<th>Size</th>
+									<th>Last Modified Time</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr th:each="instanceFile,i : ${instanceFiles}">
 									<td th:text="${i.count}"></td>
 									<td>
-										<a th:text="${instanceFile.getFileName()}" th:href="@{/instance-file/} + ${problemKey} + '/' + ${instanceFile.getFileName()}"></a>
+										<a th:text="${instanceFile.getFileName()}" th:href="@{/instance-file/} + ${plugin.getProblemKey()} + '/' + ${instanceFile.getFileName()}"></a>
 									</td>					
+									<td th:text="${T(java.nio.file.Files).size(instanceFile)} + ' bytes'"></td>
+									<td th:text="${#dates.format(T(java.nio.file.Files).getLastModifiedTime(instanceFile).toMillis(), 'YYYY-MM-dd HH:mm:ss')}"></td>
 								</tr>
 							</tbody>
 						</table>
@@ -67,12 +73,12 @@
 									<td>
 										<a th:text="${execution.getId()}" th:href="@{/execution/} + ${execution.getId()}"></a>
 									</td>		
-									<td th:text="${execution.getDate()}"></td>			
+									<td th:text="${#dates.format(execution.getDate(), 'YYYY-MM-dd HH:mm:ss')}"></td>			
 								</tr>
 							</tbody>
 						</table>
 					</div>
-					<div class="tab-pane fade" id="description" th:utext="${description}">
+					<div class="tab-pane fade" id="description" th:utext="${plugin.getDescription()}">
 						
 					</div>
 				</div>

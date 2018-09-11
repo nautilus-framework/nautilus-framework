@@ -122,9 +122,10 @@ public class OptimizeController {
 			
 			List<?> initialPopulation = getInitialPopulation(problem, lastExecution);
         	
-        	CrossoverOperator crossover = CrossoverFactory.getCrossover(parameters.getCrossoverName(), 0.9, 20.0);
 			
-			MutationOperator mutation = MutationFactory.getMutation(parameters.getMutationName(), 1.0 / problem.getNumberOfVariables(), 20.0);
+        	CrossoverOperator crossover = CrossoverFactory.getCrossover(parameters.getCrossoverName(), parameters.getCrossoverProbability(), parameters.getCrossoverDistribution());
+			
+			MutationOperator mutation = MutationFactory.getMutation(parameters.getMutationName(), parameters.getMutationProbability(), parameters.getMutationDistribution());
 			
 			
 			

@@ -36,8 +36,7 @@ public class UploadInstanceController {
 
 		if (result.hasErrors()) {
 			
-			model.addAttribute("problemKey", uploadInstance.getProblemKey());
-			model.addAttribute("problemName", pluginService.getPlugin(uploadInstance.getProblemKey()).getProblemName());
+			model.addAttribute("plugin", pluginService.getPlugin(uploadInstance.getProblemKey()));
 			
 			return "upload-instance-file";
 		}

@@ -128,23 +128,31 @@ public class FileService {
 		store(getInstancesLocation().resolve(problemKey), file, filename);
 	}
 	
+	public boolean exists(Path path, String filename) {
+		return Files.exists(path.resolve(filename));
+	}
+	
 	public void store(Path path, MultipartFile file, String filename) {
 
 		createDirectories(path);
 
+		if (file.isEmpty()) {
+			throw new RuntimeException("File is empty");
+		}
+		
+		// This is a security check
+		if (filename.contains("..")) {
+			throw new RuntimeException("StoreFileWithRelativePathException");
+		}
+		
+		if (exists(path, filename)) {
+			throw new RuntimeException("The file already exists. Please choose a different one");
+		}
+		
 		try {
-			if (file.isEmpty()) {
-				throw new Exception("File is empty");
-			}
-
-			// This is a security check
-			if (filename.contains("..")) {
-				throw new RuntimeException("StoreFileWithRelativePathException");
-			}
-
 			Files.copy(file.getInputStream(), load(path, filename), StandardCopyOption.REPLACE_EXISTING);
 		} catch (Exception ex) {
-			throw new RuntimeException("StoreFileIsNotPossibleException");
+			throw new RuntimeException("StoreFileIsNotPossibleException", ex);
 		}
 	}
 }
