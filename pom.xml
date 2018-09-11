@@ -17,11 +17,12 @@
 		<module>nautilus-plugin-zdt1</module>
 	</modules>
 	<properties>
-		<springframework.boot.version>1.5.9.RELEASE</springframework.boot.version>
+		<springframework.boot.version>2.0.3.RELEASE</springframework.boot.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<jmetal.version>5.5.3</jmetal.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
 		<sonar.test.exclusions>
 			src/test/**
 		</sonar.test.exclusions>

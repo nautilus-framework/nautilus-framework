@@ -20,7 +20,7 @@ public class ExecutionService {
 	}
 	
 	public Execution findById(String executionId) {
-		return this.executionRepository.findOne(executionId);
+		return this.executionRepository.findById(executionId).get();
 	}
 
 	public List<Execution> findAll(String problemKey) {
@@ -32,6 +32,6 @@ public class ExecutionService {
 	}
 	
 	public void delete(String executionId) {
-		executionRepository.delete(executionId);
+		executionRepository.deleteById(executionId);
 	}
 }
