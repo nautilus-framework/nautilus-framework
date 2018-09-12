@@ -24,24 +24,17 @@
 	<div class="container page-navbar">
 		<div class="row">
 			<div class="col-12">
-				<ul id="execution-tabs" class="nav nav-tabs" role="tablist">
-					<li class="nav-item" th:if="${objectives.size() >= 2 and solutions.size() >= 2}">
-						<a class="nav-link" href="#scatter-chart" role="tab" data-toggle="tab" aria-selected="true">Scatter Chart</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#solutions" role="tab" data-toggle="tab">Solutions</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#information" role="tab" data-toggle="tab">Information</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#settings" role="tab" data-toggle="tab">Settings</a>
-					</li>
-				</ul>
-		
+				<nav>
+					<div class="nav nav-tabs" id="nav-tab" role="tablist">
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}">Scatter Chart</a>
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#solutions" >Solutions</a>
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#information" >Information</a>
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" id="profile-tab" href="#settings" >Settings</a>
+					</div>
+				</nav>
 				<!-- Tab panes -->
 				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane fade" id="scatter-chart" th:if="${objectives.size() >= 2}">
+					<div role="tabpanel" class="tab-pane fade" id="scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}">
 						<div id="execution-chart"></div>
 					</div>
 					<div role="tabpanel" class="tab-pane fade" id="solutions">
@@ -61,7 +54,6 @@
 										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i.index}" th:text="${i.index}"></a></td>
 										
 										<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,4)}" class="objectives-values"/>
-										
 											
 										<td th:text="${solution.getProperties().containsKey('selected')}"/>
 										<td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td>	
@@ -127,6 +119,39 @@
 										</ul>
 									</form>
 								</div>
+								
+								<div class="card border-default mb-3">
+									<div class="card-header bg-transparent border-default">Export</div>
+									<ul class="list-group list-group-flush">
+										<li class="list-group-item">
+								  			<div class="row margin-bottom-minus-20">
+												<div class="col-8">
+													<strong>Nautilus</strong><br/>
+													<p><small>Export a json file with the execution information to Nautilus</small></p>
+												</div>
+												<div class="col-4 text-right">
+													<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/json'">Download Json</a>
+												</div>	
+											</div>
+										</li>
+										<li class="list-group-item">
+								  			<div class="row margin-bottom-minus-20">
+												<div class="col-6">
+													<p><strong>JMetal Framework</strong><br/>
+													<small>Export a fun and/or var files to jMetal Framework tool</small></p>
+												</div>
+												<div class="col-6 text-right">
+													<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/fun'">Download FUN File</a>
+													<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/var'">Download VAR File</a>
+												</div>	
+											</div>
+										</li>
+									</ul>
+								</div>
+								
+								
+								
+								
 								<div class="card border-danger mb-3">
 									<div class="card-header bg-transparent border-danger">Danger Zone</div>
 									<ul class="list-group list-group-flush">
@@ -155,6 +180,7 @@
 										</li>
 									</ul>
 								</div>
+								
 							</div>
 						</div>			
 					

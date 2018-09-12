@@ -223,8 +223,6 @@ function openSolution(solutionIndex){
 
 $(function(){
 	
-	$('.nav-link:first').tab('show');
-
 	var table = $('#execution-table').DataTable();
 	
 	var tableHeader = getObjectivesNames("#execution-table");
