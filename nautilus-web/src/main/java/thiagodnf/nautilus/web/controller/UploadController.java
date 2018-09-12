@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+
+import thiagodnf.nautilus.web.model.Execution;
+import thiagodnf.nautilus.web.model.UploadExecution;
 import thiagodnf.nautilus.web.model.UploadInstanceFile;
+import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
@@ -25,6 +30,9 @@ public class UploadController {
 	
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private ExecutionService executionService;
 	
 	@Autowired
 	private PluginService pluginService;
@@ -52,5 +60,44 @@ public class UploadController {
 		LOGGER.info("Done");
 		
 		return "redirect:/problem/" + problemKey;
+	}
+	
+	@PostMapping("/execution/{problemKey}")
+	public String uploadExecution(@PathVariable("problemKey") String problemKey, @Valid UploadExecution uploadExecution, BindingResult result, Model model) {
+
+		LOGGER.info("Uploading the file: " + uploadExecution.getFile().getOriginalFilename());
+
+		if (result.hasErrors()) {
+
+			model.addAttribute("plugin", pluginService.getPlugin(problemKey));
+
+			return "upload-execution";
+		}
+
+		try {
+
+			MultipartFile file = uploadExecution.getFile();
+
+			String content = new String(file.getBytes(), "UTF-8");
+
+			Execution execution = new Gson().fromJson(content, Execution.class);
+
+			if (executionService.existsById(execution.getId())) {
+				throw new RuntimeException("The execution id already exists");
+			}
+			
+			if (!execution.getParameters().getProblemKey().equalsIgnoreCase(problemKey)) {
+				throw new RuntimeException("This execution is for a different problem key");
+			}
+
+			executionService.save(execution);
+
+			LOGGER.info("Done");
+
+			return "redirect:/problem/" + problemKey + "#executions";
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

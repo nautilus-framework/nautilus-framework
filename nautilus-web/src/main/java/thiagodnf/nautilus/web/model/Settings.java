@@ -6,7 +6,9 @@ public class Settings {
 
 	private boolean showLines = true;
 	
-	private boolean colorize = true;
+	private int colorize = 1;
+	
+	private String name;
 
 	public boolean getShowLines() {
 		return showLines;
@@ -16,12 +18,20 @@ public class Settings {
 		this.showLines = showLines;
 	}
 
-	public boolean getColorize() {
+	public int getColorize() {
 		return colorize;
 	}
 
-	public void setColorize(boolean colorize) {
+	public void setColorize(int colorize) {
 		this.colorize = colorize;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String toString() {

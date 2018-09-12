@@ -213,10 +213,14 @@ function plot4D(tableHeader, rows){
 }
 
 function openSolution(solutionIndex){
+
+	var hash = window.location.hash;
 	
 	var url = window.location.href.split("/");
 	
 	var executionId = url[url.length-1]
+	
+	executionId = executionId.replace(hash,'');
 	
 	window.location.href = "/solution/" + executionId+ "/" + solutionIndex;
 }

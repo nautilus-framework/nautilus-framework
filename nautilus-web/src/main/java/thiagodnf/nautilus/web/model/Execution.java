@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
 
 import com.google.gson.Gson;
@@ -82,6 +83,17 @@ public class Execution {
 
 	public void setSettings(Settings settings) {
 		this.settings = settings;
+	}
+	
+	public String getTitle() {
+
+		String name = getSettings().getName();
+
+		if (StringUtils.isBlank(name)) {
+			return getId();
+		}
+
+		return name;
 	}
 
 	public String toString() {

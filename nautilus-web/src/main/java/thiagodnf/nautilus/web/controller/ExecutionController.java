@@ -67,7 +67,7 @@ public class ExecutionController {
 		return "redirect:/problem/" + execution.getParameters().getProblemKey();
 	}
 	
-	@PostMapping("/execution/{executionId}/settings")
+	@PostMapping("/execution/{executionId}/save/settings")
 	public String settings(Model model, @PathVariable("executionId") String executionId, Settings settings) {
 
 		Execution execution = executionService.findById(executionId);

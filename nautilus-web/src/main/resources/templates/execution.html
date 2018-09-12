@@ -11,7 +11,9 @@
 			<div class="row">
 				<div class="col-8">
 					<h5 class="title">
-						<a th:href="@{/execution/}+${execution.getId()}" th:text="'Execution ' + ${execution.getId()}"></a> 
+						<a th:href="@{/execution/}+${execution.getId()}">Execution</a> 
+						<span class="path-divider">/</span>
+						<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a> 
 					</h5>
 				</div>
 				<div class="col-4 float-right">
@@ -29,7 +31,7 @@
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}">Scatter Chart</a>
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#solutions" >Solutions</a>
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#information" >Information</a>
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" id="profile-tab" href="#settings" >Settings</a>
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings" >Settings</a>
 					</div>
 				</nav>
 				<!-- Tab panes -->
@@ -83,20 +85,38 @@
 						
 						<div class="row">
 							<div class="col-12">
+							
 								<div class="card border-default mb-3">
-									<div class="card-header bg-transparent border-default">Scatter Chart</div>
-									<form action="#" th:action="@{/execution/}+${execution.getId()} + '/settings'" method="post" th:object="${settings}">
+									<div class="card-header bg-transparent border-default">General</div>
+									<form action="#" th:action="@{/execution/}+${execution.getId()} + '/save/settings'" method="post" th:object="${settings}">
 										<ul class="list-group list-group-flush">
 											<li class="list-group-item">
 									  			<div class="row margin-bottom-minus-20">
 													<div class="col-12">
-														<div class="form-check" >
-														    <input type="checkbox" class="form-check-input" th:field="*{colorize}" />
-														    <label class="form-check-label" for="colorize">
-														    	<strong>Colorize</strong>
-														   		<p><small>Colorize the closest solutions those ones you selected</small></p>
+														<div class="form-group">
+															 <label class="form-check-label" for="name">
+														    	<strong>Name</strong>
+														   		<p><small>Define a own name for this execution</small></p>
 														    </label>
-														</div>
+														    <input type="text" class="form-control" th:field="*{name}"/>
+														 </div>
+													</div>
+												</div>
+											</li>
+											<li class="list-group-item">
+									  			<div class="row margin-bottom-minus-20">
+													<div class="col-12">
+														<div class="form-group">
+													    <label class="form-check-label" for="colorize">
+													    	<strong>Colorize</strong>
+													   		<p><small>Colorize the closest solutions those ones you selected</small></p>
+													    </label>
+													    <select class="form-control" th:field="*{colorize}">
+													      <option th:value="0" th:selected="${colorize==0}">No Color</option>
+													      <option th:value="1" th:selected="${colorize==1}">by Euclidean Distance</option>
+													      <option th:value="2" th:selected="${colorize==2}">by Jaccard Index</option>
+													    </select>
+													  </div>
 													</div>
 												</div>
 											</li>

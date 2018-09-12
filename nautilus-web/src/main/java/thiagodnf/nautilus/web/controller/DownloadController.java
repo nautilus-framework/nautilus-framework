@@ -39,7 +39,7 @@ public class DownloadController {
 		Resource file = new ByteArrayResource(content.getBytes());
 
 		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + executionId + "\"")
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + executionId + ".json\"")
 				.header(HttpHeaders.CONTENT_TYPE, "application/json")
 				.header(HttpHeaders.CONTENT_ENCODING, "UTF-8")
 				.body(file);

@@ -35,4 +35,8 @@ public class ExecutionService {
 	public void delete(Execution execution) {
 		executionRepository.delete(execution);
 	}
+	
+	public boolean existsById(String executionId) {
+		return executionRepository.existsById(executionId);
+	}
 }

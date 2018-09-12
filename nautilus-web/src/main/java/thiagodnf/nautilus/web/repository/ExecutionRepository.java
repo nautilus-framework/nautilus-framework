@@ -13,6 +13,8 @@ public interface ExecutionRepository extends MongoRepository<Execution, String> 
 
 		String getId();
 		
+		String getName();
+		
 		Date getDate();
 	}
 	
