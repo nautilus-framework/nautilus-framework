@@ -5,22 +5,24 @@
 
 <body>
 	<div th:replace="fragments/navbar :: default('home')"></div>
-	<div class="page-head-without-tabs"></div>
-
-	<div class="container page-content-without-tabs">
-		<div class="row titlebar-without-tabs">
-			<div class="col-8">
-				<h5 class="title">
-					<a th:href="@{/}">Home</a> 
-					<span class="path-divider">/</span>
-					<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
-					<span class="path-divider">/</span>
-					<a th:href="@{/instance-file/}+${plugin.getProblemKey()} + '/upload'">Upload Instance File</a>
-				</h5>
-			</div>
-			<div class="col-4 float-right">
+	
+	<div class="page-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<h5 class="title">
+						<a th:href="@{/}">Home</a> 
+						<span class="path-divider">/</span>
+						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
+						<span class="path-divider">/</span>
+						<a th:href="@{/instance-file/}+${plugin.getProblemKey()} + '/upload'">Upload Instance File</a>
+					</h5>
+				</div>
 			</div>
 		</div>
+	</div>
+	
+	<div class="container">
 		<div class="row">
 			<div class="col-12">
 				<form method="POST" action="#" th:action="@{/upload-instance/upload}" th:object="${uploadInstance}" enctype="multipart/form-data">

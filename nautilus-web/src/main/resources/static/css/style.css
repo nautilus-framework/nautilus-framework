@@ -6,13 +6,22 @@ body {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-.page-content{
-	margin-top: -89px;
-}
-.page-head{
-	height: 100px;
+.page-header{
+	height: 60px;
 	background-color: #fafbfc;
 	border-bottom: 1px solid #dee2e6;
+}
+
+.page-header-with-navbar{
+	height: 100px;
+}
+
+.page-header .row{
+	padding-top: 16px;
+}
+
+.page-navbar{
+	margin-top: -42px;
 }
 
 .path-divider {
@@ -22,34 +31,7 @@ body {
 	color: #586069;
 }
 
-.page-head-without-tabs{
-	height: 60px;
-	background-color: #fafbfc;
-	border-bottom: 1px solid #dee2e6;
-}
 
-.page-content-without-tabs{
-	margin-top: -43px;
-	margin-bottom: -49px;
-}
-
-.titlebar-without-tabs{
-	margin-bottom: 18px;
-	
-}
-
-.titlebar{
-	margin-bottom: 8px;
-	height: 39px;
-}
-
-.titlebar a{
-	margin-top: 3px;
-}
-
-.titlebar .title{
-	margin-top: 6px;
-}
 
 .gray{
 	background-color: #fafbfc;
@@ -110,9 +92,6 @@ body {
 	font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; 
 }
 
-#modal-feedback .modal-body{
-	
-}
 
 
 .center {

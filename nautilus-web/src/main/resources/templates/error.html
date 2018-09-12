@@ -5,18 +5,20 @@
 
 <body>
 	<div th:replace="fragments/navbar :: default('home')"></div>
-	<div class="page-head-without-tabs"></div>
-
-	<div class="container page-content-without-tabs">
-		<div class="row titlebar-without-tabs">
-			<div class="col-8">
-				<h5 class="title">
-					<a th:href="@{/}">Ooops...</a> 
-				</h5>
-			</div>
-			<div class="col-4 float-right">
+	
+	<div class="page-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<h5 class="title">
+						<a th:href="@{/}">Ooops...</a>
+					</h5>
+				</div>
 			</div>
 		</div>
+	</div>
+
+	<div class="container">
 		<div class="row">
 			<!-- 
 			 This default page is designed to support several defaults:

@@ -5,20 +5,22 @@
 
 <body>
 	<div th:replace="fragments/navbar :: default('home')"></div>
-	<div class="page-head"></div>
 	
-	<div class="container page-content">
-		<div class="row titlebar">
-			<div class="col-8">
-				<h5 class="title">
-					<a th:href="@{/}">Home</a> 
-					<span class="path-divider">/</span>
-					<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
-				</h5>
-			</div>
-			<div class="col-4 float-right">
+	<div class="page-header page-header-with-navbar">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<h5 class="title">
+						<a th:href="@{/}">Home</a> 
+						<span class="path-divider">/</span>
+						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
+					</h5>
+				</div>
 			</div>
 		</div>
+	</div>
+	
+	<div class="container page-navbar">
 		<div class="row">
 			<div class="col-12">
 				<ul class="nav nav-tabs" role="tablist">

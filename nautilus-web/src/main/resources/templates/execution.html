@@ -5,19 +5,23 @@
 
 <body>
 	<div th:replace="fragments/navbar :: default('home')"></div>
-	<div class="page-head"></div>
 	
-	<div class="container page-content">
-		<div class="row titlebar">
-			<div class="col-8">
-				<h5 class="title">
-					<a th:href="@{/execution/}+${execution.getId()}" th:text="'Execution ' + ${execution.getId()}"></a> 
-				</h5>
-			</div>
-			<div class="col-4 float-right">
-			  	<a class="btn btn-success btn-sm float-right" th:href="@{/continue/} + ${execution.getId()}">Continue</a>
+	<div class="page-header page-header-with-navbar">
+		<div class="container">
+			<div class="row">
+				<div class="col-8">
+					<h5 class="title">
+						<a th:href="@{/execution/}+${execution.getId()}" th:text="'Execution ' + ${execution.getId()}"></a> 
+					</h5>
+				</div>
+				<div class="col-4 float-right">
+				  	<a class="btn btn-success btn-sm float-right" th:href="@{/continue/} + ${execution.getId()}">Continue</a>
+				</div>
 			</div>
 		</div>
+	</div>
+	
+	<div class="container page-navbar">
 		<div class="row">
 			<div class="col-12">
 				<ul id="execution-tabs" class="nav nav-tabs" role="tablist">
