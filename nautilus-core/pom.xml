@@ -10,5 +10,5 @@
 	<groupId>thiagodnf.nautilus.core</groupId>
 	<artifactId>nautilus-core</artifactId>
 	<name>Nautilus Core</name>
-	<description>Nautilus Core</description>
+	<description>Common utilities classes</description>
 </project>

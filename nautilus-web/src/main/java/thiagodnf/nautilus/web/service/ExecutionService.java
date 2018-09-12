@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import thiagodnf.nautilus.core.exception.ExecutionNotFoundException;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.repository.ExecutionRepository;
 import thiagodnf.nautilus.web.repository.ExecutionRepository.IdsAndDatesOnly;
@@ -20,7 +21,7 @@ public class ExecutionService {
 	}
 	
 	public Execution findById(String executionId) {
-		return this.executionRepository.findById(executionId).get();
+		return this.executionRepository.findById(executionId).orElseThrow(ExecutionNotFoundException::new);
 	}
 
 	public List<Execution> findAll(String problemKey) {
@@ -31,7 +32,7 @@ public class ExecutionService {
 		return this.executionRepository.findByParametersProblemKey(problemKey);
 	}
 	
-	public void delete(String executionId) {
-		executionRepository.deleteById(executionId);
+	public void delete(Execution execution) {
+		executionRepository.delete(execution);
 	}
 }

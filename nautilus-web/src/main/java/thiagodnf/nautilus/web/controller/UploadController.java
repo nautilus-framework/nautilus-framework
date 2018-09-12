@@ -8,20 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import thiagodnf.nautilus.web.model.UploadInstance;
+import thiagodnf.nautilus.web.model.UploadInstanceFile;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
-@RequestMapping("/upload-instance")
-public class UploadInstanceController {
+@RequestMapping("/upload")
+public class UploadController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UploadInstanceController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UploadController.class);
 	
 	@Autowired
 	private FileService fileService;
@@ -29,28 +29,28 @@ public class UploadInstanceController {
 	@Autowired
 	private PluginService pluginService;
 	
-	@PostMapping("/upload")
-	public String uploadWithPost(@Valid UploadInstance uploadInstance, BindingResult result, Model model, RedirectAttributes ra) {
+	@PostMapping("/instance-file/{problemKey}")
+	public String uploadWithPost(@PathVariable("problemKey") String problemKey, @Valid UploadInstanceFile uploadInstanceFile, BindingResult result, Model model) {
 
-		LOGGER.info("Uploading the file: " + uploadInstance.getFile().getOriginalFilename());
+		LOGGER.info("Uploading the file: " + uploadInstanceFile.getFile().getOriginalFilename());
 
 		if (result.hasErrors()) {
 			
-			model.addAttribute("plugin", pluginService.getPlugin(uploadInstance.getProblemKey()));
+			model.addAttribute("plugin", pluginService.getPlugin(problemKey));
 			
 			return "upload-instance-file";
 		}
 		
-		MultipartFile file = uploadInstance.getFile();
+		MultipartFile file = uploadInstanceFile.getFile();
 		
 		String filename = file.getOriginalFilename();
 		
 		LOGGER.info("Storing the instance");
 
-		fileService.store(uploadInstance.getProblemKey(), file, filename);
+		fileService.store(problemKey, file, filename);
 		
 		LOGGER.info("Done");
 		
-		return "redirect:/";
+		return "redirect:/problem/" + problemKey;
 	}
 }

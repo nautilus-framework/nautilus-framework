@@ -25,16 +25,13 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
-				<form method="POST" action="#" th:action="@{/upload-instance/upload}" th:object="${uploadInstance}" enctype="multipart/form-data">
-				  <div class="form-group">
-					<label for="file">Select the instance file</label>
-				    <input id="file" type="file" name="file" class="form-control-file btn-sm"/>
-				    <span class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
-				  </div>
-				  <div class="form-group">
-					<input type="hidden" class="form-control" th:field="*{problemKey}" />
-				  </div>
-				  <button type="submit" class="btn btn-success btn-sm">Upload</button>
+				<form method="POST" action="#" th:action="@{/upload/instance-file/}+${plugin.getProblemKey()}" th:object="${uploadInstanceFile}" enctype="multipart/form-data">
+					<div class="form-group">
+						<label for="file">Select the instance file</label>
+					    <input id="file" type="file" name="file" class="form-control-file btn-sm"/>
+					    <span class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
+				 	</div>
+				  	<button type="submit" class="btn btn-success btn-sm">Upload</button>
 				</form>
 			</div>
 		</div>

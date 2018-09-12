@@ -33,13 +33,10 @@ public class ExecutionController {
 		
 		Execution execution = executionService.findById(executionId);
 
-		if (execution == null) {
-			throw new RuntimeException("The executionId was not found");
-		}
-		
 		Parameters parameters = execution.getParameters();
 		
 		String problemKey = parameters.getProblemKey();
+		
 		List<String> objectiveKeys = parameters.getObjectiveKeys();
 		
 		List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, objectiveKeys);
@@ -65,13 +62,9 @@ public class ExecutionController {
 
 		Execution execution = executionService.findById(executionId);
 
-		if (execution == null) {
-			throw new RuntimeException("The executionId was not found");
-		}
+		executionService.delete(execution);
 
-		executionService.delete(executionId);
-
-		return "redirect:/";
+		return "redirect:/problem/" + execution.getParameters().getProblemKey();
 	}
 	
 	@PostMapping("/execution/{executionId}/settings")
@@ -79,10 +72,6 @@ public class ExecutionController {
 
 		Execution execution = executionService.findById(executionId);
 
-		if (execution == null) {
-			throw new RuntimeException("The executionId was not found");
-		}
-		
 		execution.setSettings(settings);
 		
 		executionService.save(execution);

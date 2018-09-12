@@ -7,13 +7,15 @@ body {
 }
 
 .page-header{
-	height: 60px;
+	height: 55px;
 	background-color: #fafbfc;
 	border-bottom: 1px solid #dee2e6;
+	margin-bottom: 20px;
 }
 
 .page-header-with-navbar{
 	height: 100px;
+	margin-bottom: 0px;
 }
 
 .page-header .row{
@@ -96,6 +98,14 @@ body {
 
 .center {
   text-align:center
+}
+
+
+
+
+
+.tab-pane-toolbar{
+	margin-bottom: 15px;
 }
 
 
