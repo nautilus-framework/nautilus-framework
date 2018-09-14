@@ -34,9 +34,9 @@ class ScatterChart2D {
 			title: {
 				text: undefined
 			},		
-			subtitle: {
-				text: undefined
-			},
+			legend: {
+		        enabled: false
+		    },
 			tooltip: {
 			    formatter: function() {
 			    	return '<b>Solution</b> ' + (this.series.index) + '<br/> <b>Objectives</b><br/>' + this.point.options.x +", "+ this.point.options.y;
@@ -44,6 +44,11 @@ class ScatterChart2D {
 			},
 			plotOptions:{
 			  series:{
+			  	marker: {
+					symbol: "circle",
+					enabled: true,
+					radius: 4,
+				},
 				allowPointSelect: true,
 			    point:{
 			      events:{

@@ -19,14 +19,6 @@ class ScatterChart4D {
 		this.onClickListener = callback;
 	}
 	
-	appendSeries(serie){
-		this.highcharts.addSeries(serie, false);
-	}
-	
-	redraw(){
-		this.highcharts.redraw()
-	}
-	
 	plot(el){
 		
 		var that = this;
@@ -39,9 +31,9 @@ class ScatterChart4D {
 			title: {
 				text: undefined
 			},		
-			subtitle: {
-				text: undefined
-			},
+			legend: {
+		        enabled: false
+		    },
 			yAxis: {
 				title: {
 					text: that.yAxisName
@@ -53,31 +45,19 @@ class ScatterChart4D {
 			    	return '<b>Solution</b> ' + (this.series.index) + '<br/> <b>Objectives</b><br/>' + this.series.yData.join(",  ");
 			    }
 			},
-//			boost: {
-//		        useGPUTranslations: true,
-//		        usePreAllocated: true
-//		    },
 			plotOptions: {
-//		        line: {
-//		            dataLabels: {
-//		                enabled: false
-//		            },
-////		            states: {
-////			            hover: {
-////			            	animation: {
-////			            		duration: 0
-////		            		},
-////			                color: 'red'                                                           
-////			            }
-////			        },
-//		        },
-		         
 				series:{
-//					color: '#7cb5ec',
-//					animation: {
-//		                duration: 0
-//		            },
+					marker: {
+						symbol: "circle",
+						enabled: true,
+						radius: 4,
+					},
 					allowPointSelect: true,
+					states: {
+						hover: {
+							lineWidthPlus: 3
+						}
+					},
 				    point:{
 				      events:{
 				        select: function(e){

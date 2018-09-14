@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<head th:replace="fragments/head :: default(${filename} + ' - ' + ${problemName})"></head>
+<head th:replace="fragments/head :: default(${filename} + ' - ' + ${plugin.getProblemName()})"></head>
 
 <body>
 	<div th:replace="fragments/navbar :: default('home')"></div>
@@ -10,13 +10,13 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-8">
-					<h5 class="title">
+					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
 						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
 						<span class="path-divider">/</span>
 						<a th:href="@{/instance-file/}+${plugin.getProblemKey()}+@{/}+${filename}" th:text="${filename}"></a>
-					</h5>
+					</h6>
 				</div>
 				<div class="col-4 float-right">
 					<a class="btn btn-success btn-sm float-right" th:href="@{/optimize/} + ${plugin.getProblemKey()} + '/' + ${filename}">Optimize</a>

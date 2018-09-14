@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -129,7 +130,11 @@ public class FileService {
 	}
 	
 	public boolean exists(Path path, String filename) {
-		return Files.exists(path.resolve(filename));
+		return exists(path.resolve(filename));
+	}
+
+	public boolean exists(Path path) {
+		return Files.exists(path);
 	}
 	
 	public void store(Path path, MultipartFile file, String filename) {
@@ -153,6 +158,21 @@ public class FileService {
 			Files.copy(file.getInputStream(), load(path, filename), StandardCopyOption.REPLACE_EXISTING);
 		} catch (Exception ex) {
 			throw new RuntimeException("StoreFileIsNotPossibleException", ex);
+		}
+	}
+	
+	public String readFileToString(String problemKey, String filename) {
+
+		Path path = getInstancesFile(problemKey, filename);
+
+		if (!exists(path)) {
+			throw new RuntimeException("The file does not exist. Please choose a different one");
+		}
+
+		try {
+			return FileUtils.readFileToString(path.toFile());
+		} catch (Exception ex) {
+			throw new RuntimeException("There was an I/O error", ex);
 		}
 	}
 }

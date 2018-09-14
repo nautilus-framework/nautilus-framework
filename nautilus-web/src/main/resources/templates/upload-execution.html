@@ -10,13 +10,13 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
-					<h5 class="title">
+					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
 						<a th:href="@{/problem/}+${plugin.getProblemKey()} + '#executions'" th:text="${plugin.getProblemName()}"></a>
 						<span class="path-divider">/</span>
 						<a th:href="@{/problem/}+${plugin.getProblemKey()} + '/upload/execution/'">Upload Execution</a>
-					</h5>
+					</h6>
 				</div>
 			</div>
 		</div>

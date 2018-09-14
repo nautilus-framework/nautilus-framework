@@ -53,16 +53,9 @@ class ScatterChart3D {
 		            }
 	            }
 	        },
-	        boost: {
-	            useGPUTranslations: true,
-	            usePreAllocated: true
-	        },
-			subtitle: {
-				text: undefined
-			},
-			scrollbar: {
-				//enabled: true
-			},
+	        legend: {
+		        enabled: false
+		    },
 			tooltip: {
 			    formatter: function() {
 			    	return '<b>Solution</b> ' + (this.series.index) + '<br/> <b>Objectives</b><br/>' + this.point.options.x +", "+ this.point.options.y +", "+ this.point.options.z;
@@ -75,7 +68,12 @@ class ScatterChart3D {
 		            depth: 10
 		        },
 		        series:{
-					  allowPointSelect: true,
+		        	marker: {
+						symbol: "circle",
+						enabled: true,
+						radius: 4,
+					},
+					allowPointSelect: true,
 				    point:{
 				      events:{
 				        click: function(e){

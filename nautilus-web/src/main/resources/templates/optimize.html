@@ -10,7 +10,15 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
-					<h5 class="title"><a th:href="@{/}">Optimize</a></h5>
+					<h6 class="title">
+						<a th:href="@{/}">Home</a> 
+						<span class="path-divider">/</span>
+						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
+						<span class="path-divider">/</span>
+						<a th:href="@{/instance-file/}+${plugin.getProblemKey()}+@{/}+${filename}" th:text="${filename}"></a>
+						<span class="path-divider">/</span>
+						<a th:href="@{/optimize/} + ${plugin.getProblemKey()} + '/' + ${filename}">Optimize</a>
+					</h6>
 				</div>
 			</div>
 		</div>

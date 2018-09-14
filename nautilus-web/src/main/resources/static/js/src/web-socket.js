@@ -57,6 +57,7 @@ class WebSocket {
 	    		that.callbacks['onException'].forEach(function(callback) {
 		    		callback(response.body);
 		    	})
+		    	that.disconnect()
 	        });
 	    });
 	    

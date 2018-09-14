@@ -7,6 +7,10 @@ class ProgressBar {
 		
 		this.el= "#modal-progressbar";
 		
+		this.progressBar = $(this.el+" .progress-bar")
+		
+		this.lastProgress = -1;
+		
 		$(this.el + " #btn-cancel").click(function(){
 			if(that.onCloseListener){
 				that.onCloseListener()
@@ -32,10 +36,14 @@ class ProgressBar {
 		progress = parseFloat(progress)
 		
 		progress = progress.toFixed(1)
-	
-		$(this.el+" .progress-bar").text(progress+"%");
-		$(this.el+" .progress-bar").css("width", progress+"%");
-		$(this.el+" .progress-bar").attr("aria-valuenow", progress);
+		
+		if(progress > this.lastProgress){
+			this.progressBar.text(progress+"%");
+			this.progressBar.css("width", progress+"%");
+			this.progressBar.attr("aria-valuenow", progress);
+		}
+		
+		this.lastProgress = progress;		
 	}
 	
 	onCancelListener(callback){

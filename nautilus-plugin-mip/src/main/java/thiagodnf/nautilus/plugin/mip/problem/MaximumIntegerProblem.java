@@ -17,7 +17,7 @@ public class MaximumIntegerProblem extends AbstractIntegerProblem {
 
 	private int lowerBound = 1;
 	
-	private int upperBound = 50;
+	private int upperBound = 100;
 	
 	private List<AbstractObjective> objectives;
 

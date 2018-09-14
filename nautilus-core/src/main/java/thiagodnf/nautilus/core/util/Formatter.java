@@ -1,13 +1,18 @@
 package thiagodnf.nautilus.core.util;
 
-import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class Formatter {
 
-	public String format(double value) {
+	public static String date(Date date) {
 
-		DecimalFormat df2 = new DecimalFormat(".####");
+		LocalDateTime d = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 
-		return df2.format(value);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+		return d.format(formatter);
 	}
 }

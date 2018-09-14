@@ -15,14 +15,16 @@ function normalize(value, a, b, min, max) {
 
 function getColor(percent, start, end) {
   
+  	console.log()
+  
 	var a = percent / 100,
      	b = (end - start) * a,
      	c = b + start;
-
-	return 'hsl('+c+', 60%, 50%)';
+	
+	return tinycolor('hsl('+c+', 60, 50)').toHexString() ;
 }
 
-function getColorForDistance(distance, distances, minDistance, maxDistance){
+function getColorForDistance(distance, minDistance, maxDistance){
 	
 	if(getColorize() == 0){
 		return "#7cb5ec";
@@ -113,22 +115,9 @@ function getSeries(rows, lineWidthPlus){
 	
 	$.each(data, function(index, row){
 		series.push({
-			name: ' ',
-	        lineWidth: 0,
-	        showInLegend: false,
-	        animation: {
-                duration: 0
-            },
-			marker: {
-				symbol: "circle",
-				enabled: true,
-				radius: 4,
-				fillColor: getColorForDistance(distances[index],distances, minDistance, maxDistance)
-			},
-			states: {
-				hover: {
-					lineWidthPlus: lineWidthPlus
-				}
+			lineWidth: 0,
+	        marker: {
+				fillColor: getColorForDistance(distances[index], minDistance, maxDistance)
 			},
 			data: [row]
 		})
@@ -172,8 +161,6 @@ function plot3D(tableHeader, rows){
 
 function plot4D(tableHeader, rows){
 
-	var chart = new ScatterChart4D()
-	
 	var data = getData(rows);
 	
 	var distances = getDistances(rows);
@@ -187,45 +174,31 @@ function plot4D(tableHeader, rows){
 	
 	var series = [];
 	
+	$.each(data, function(index, row){
+		
+		var color = getColorForDistance(distances[index], minDistance, maxDistance);
+		
+		var serie = {
+			lineWidth: showLines()? 1 : 0,
+	        color: color,
+			marker: {
+				fillColor: color
+			},
+			data: row
+		}
+		
+		series.push(serie);
+	})
+	
+	var chart = new ScatterChart4D()
+	
 	chart.setXAxisName(tableHeader)
+	chart.setSeries(series)
 	chart.setOnClickListener(function(solutionIndex){
 		openSolution(solutionIndex);
 	})
 	
 	chart.plot("execution-chart");
-	
-	$.each(data, function(index, row){
-		
-		var serie = {
-			name: null,
-			lineWidth: showLines()? 1 : 0,
-	        showInLegend: false,
-	        animation: {
-                duration: 0
-            },
-	        color: getColorForDistance(distances[index],distances, minDistance, maxDistance),
-			marker: {
-				symbol: "circle",
-				enabled: true,
-				radius: 4,
-				fillColor: getColorForDistance(distances[index],distances, minDistance, maxDistance)
-			},
-			states: {
-				hover: {
-					lineWidthPlus: 3
-				}
-			},
-			dataGrouping: {
-                enabled: false
-            },
-			data: row
-		}
-		
-		chart.appendSeries(serie)
-		series.push(serie);
-	})
-	
-	chart.redraw();
 }
 
 function openSolution(solutionIndex){

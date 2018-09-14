@@ -1,16 +1,11 @@
 package thiagodnf.nautilus.web.controller;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import thiagodnf.nautilus.web.model.UploadInstanceFile;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
@@ -24,23 +19,14 @@ public class InstanceFileController {
 	private PluginService pluginService;
 	
 	@GetMapping("/instance-file/{problemKey}/{filename:.+}")
-	public String viewInstanceFile(Model model, @PathVariable("problemKey") String problemKey, @PathVariable("filename") String filename) throws IOException {
-		
-		Path path = fileService.getInstancesFile(problemKey, filename);
+	public String viewInstanceFile(Model model, 
+			@PathVariable("problemKey") String problemKey, 
+			@PathVariable("filename") String filename){
 		
 		model.addAttribute("filename", filename);
 		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
-		model.addAttribute("fileContent", FileUtils.readFileToString(path.toFile()));
+		model.addAttribute("fileContent", fileService.readFileToString(problemKey, filename));
 		
 		return "instance-file";
-	}
-	
-	@GetMapping("/instance-file/{problemKey}/upload")
-	public String uploadInstanceFile(Model model, @PathVariable("problemKey") String problemKey) {
-		
-		model.addAttribute("uploadInstanceFile", new UploadInstanceFile());
-		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
-			
-		return "upload-instance-file";
 	}
 }

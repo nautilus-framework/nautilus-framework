@@ -50,6 +50,7 @@ public class ExecutionController {
 		solutions = Colorizer.execute(solutions);
 
 		model.addAttribute("objectives", objectives);
+		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
 		model.addAttribute("solutions", solutions);
 		model.addAttribute("execution", execution);
 		model.addAttribute("settings", execution.getSettings());

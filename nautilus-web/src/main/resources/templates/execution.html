@@ -10,11 +10,13 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-8">
-					<h5 class="title">
-						<a th:href="@{/execution/}+${execution.getId()}">Execution</a> 
+					<h6 class="title">
+						<a th:href="@{/}">Home</a> 
+						<span class="path-divider">/</span>
+						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
 						<span class="path-divider">/</span>
 						<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a> 
-					</h5>
+					</h6>
 				</div>
 				<div class="col-4 float-right">
 				  	<a class="btn btn-success btn-sm float-right" th:href="@{/continue/} + ${execution.getId()}">Continue</a>
@@ -70,7 +72,7 @@
 							<dt class="col-sm-2">Execution Id</dt>
 							<dd class="col-sm-10" th:text="${execution.getId()}"></dd>
 							<dt class="col-sm-2">Date</dt>
-							<dd class="col-sm-10" th:text="${execution.getDate()}"></dd>
+							<dd class="col-sm-10" th:text="${T(thiagodnf.nautilus.core.util.Formatter).date(execution.getDate())}"></dd>
 							<dt class="col-sm-2"># of Solutions</dt>
 							<dd class="col-sm-10" th:text="${execution.getSolutions().size()}"></dd>
 							<dt class="col-sm-2">Execution Time</dt>

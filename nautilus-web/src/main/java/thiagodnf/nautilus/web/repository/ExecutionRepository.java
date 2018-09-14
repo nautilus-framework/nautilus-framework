@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import thiagodnf.nautilus.web.model.Execution;
+import thiagodnf.nautilus.web.model.Settings;
 
 public interface ExecutionRepository extends MongoRepository<Execution, String> {
 
@@ -13,9 +14,9 @@ public interface ExecutionRepository extends MongoRepository<Execution, String> 
 
 		String getId();
 		
-		String getName();
-		
 		Date getDate();
+		
+		Settings getSettings();
 	}
 	
 	List<IdsAndDatesOnly> findByParametersProblemKey(String problemKey);

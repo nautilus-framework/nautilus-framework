@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -62,6 +63,7 @@ public class OptimizeController {
 		parameters.setFilename(filename);
 		
 		model.addAttribute("parameters", parameters);
+		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
 		model.addAttribute("crossoverNames", pluginService.getCrossoverNames(problemKey));
 		model.addAttribute("mutationNames", pluginService.getMutationNames(problemKey));
 		model.addAttribute("objectiveMap", pluginService.getObjectives(problemKey));
@@ -214,5 +216,11 @@ public class OptimizeController {
 		}
         
         return new AsyncResult<>("Success");
+    }
+	
+	@MessageExceptionHandler
+	public void handleException(Throwable exception, @DestinationVariable String sessionId) {
+		System.out.println(sessionId);
+		webSocketService.sendException(sessionId, exception.getMessage());
     }
 }
