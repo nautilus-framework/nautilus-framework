@@ -49,26 +49,4 @@ public class ZDT1Plugin extends AbstractPlugin {
 	public List<String> getMutationNames(){
 		return Arrays.asList("PolynomialMutation");
 	}
-
-	@Override
-	public String getDescription() {
-		
-		StringBuffer buffer = new StringBuffer();
-		
-		buffer.append("<p>Fitness Function</p>");
-		
-		buffer.append("<ul style=\"list-style: none\">");
-		buffer.append("<li>Minimize \\(f_1(x) = x_1\\)</li>");
-		buffer.append("<li>Minimize \\( f_2(x) = \\begin{bmatrix} 1 - \\sqrt{\\frac{x_1}{g(x)}} \\end{bmatrix} \\)</li>");
-		buffer.append("</ul>");
-		
-		buffer.append("<p>where</p>");
-		
-		buffer.append("<ul style=\"list-style: none\">");
-		buffer.append("<li>\\( g(x) = 1 + 9 * \\begin{bmatrix} \\frac{\\sum_{i=2}^{n}x_i}{n-1} \\end{bmatrix} \\)</li>");
-		buffer.append("<li>\\( 0 \\leq x_i \\leq 1 \\) and \\( 1 \\leq i \\leq 30 \\)</li>");
-		buffer.append("</ul>");
-		
-		return buffer.toString();
-	}
 }

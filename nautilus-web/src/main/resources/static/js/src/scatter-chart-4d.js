@@ -19,6 +19,14 @@ class ScatterChart4D {
 		this.onClickListener = callback;
 	}
 	
+	appendSeries(serie){
+		this.highcharts.addSeries(serie, false);
+	}
+	
+	redraw(){
+		this.highcharts.redraw()
+	}
+	
 	plot(el){
 		
 		var that = this;
@@ -27,7 +35,6 @@ class ScatterChart4D {
 			chart: {
 		        type: 'line',
 		        zoomType: 'xy',
-		        //height: '100%'
 		    },
 			title: {
 				text: undefined
@@ -46,10 +53,10 @@ class ScatterChart4D {
 			    	return '<b>Solution</b> ' + (this.series.index) + '<br/> <b>Objectives</b><br/>' + this.series.yData.join(",  ");
 			    }
 			},
-			boost: {
-		        useGPUTranslations: true,
-		        usePreAllocated: true
-		    },
+//			boost: {
+//		        useGPUTranslations: true,
+//		        usePreAllocated: true
+//		    },
 			plotOptions: {
 //		        line: {
 //		            dataLabels: {

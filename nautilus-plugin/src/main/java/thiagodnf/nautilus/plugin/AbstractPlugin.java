@@ -25,8 +25,6 @@ public abstract class AbstractPlugin {
 	
 	public abstract String getProblemName();
 	
-	public abstract String getDescription();
-	
 	public List<String> getCrossoverNames(){
 		return Arrays.asList();
 	}

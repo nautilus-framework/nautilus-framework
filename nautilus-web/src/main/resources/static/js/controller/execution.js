@@ -1,8 +1,8 @@
 var red = 0;
 var green = 100;
 
-function isColorize(){
-	return $("input[name='colorize']").is(":checked")
+function getColorize(){
+	return $("#colorize").val();
 }
 
 function showLines(){
@@ -22,18 +22,11 @@ function getColor(percent, start, end) {
 	return 'hsl('+c+', 60%, 50%)';
 }
 
-function getColorForDistance(distance, distances){
+function getColorForDistance(distance, distances, minDistance, maxDistance){
 	
-	if(!isColorize()){
+	if(getColorize() == 0){
 		return "#7cb5ec";
 	}
-	
-	var maxDistance = distances.reduce(function(a, b) {
-	    return Math.max(a.toFixed(5), b.toFixed(5));
-	});
-	var minDistance = distances.reduce(function(a, b) {
-	    return Math.min(a.toFixed(5), b.toFixed(5));
-	});
 	
 	if(minDistance === maxDistance){
 		return "#7cb5ec";
@@ -106,7 +99,15 @@ function getDistances(rows){
 function getSeries(rows, lineWidthPlus){
 	
 	var data = getData(rows);
+	
 	var distances = getDistances(rows);
+	
+	var maxDistance = distances.reduce(function(a, b) {
+	    return Math.max(a.toFixed(5), b.toFixed(5));
+	});
+	var minDistance = distances.reduce(function(a, b) {
+	    return Math.min(a.toFixed(5), b.toFixed(5));
+	});
 	
 	var series = [];
 	
@@ -122,7 +123,7 @@ function getSeries(rows, lineWidthPlus){
 				symbol: "circle",
 				enabled: true,
 				radius: 4,
-				fillColor: getColorForDistance(distances[index],distances)
+				fillColor: getColorForDistance(distances[index],distances, minDistance, maxDistance)
 			},
 			states: {
 				hover: {
@@ -174,42 +175,57 @@ function plot4D(tableHeader, rows){
 	var chart = new ScatterChart4D()
 	
 	var data = getData(rows);
+	
 	var distances = getDistances(rows);
+	
+	var maxDistance = distances.reduce(function(a, b) {
+	    return Math.max(a.toFixed(5), b.toFixed(5));
+	});
+	var minDistance = distances.reduce(function(a, b) {
+	    return Math.min(a.toFixed(5), b.toFixed(5));
+	});
 	
 	var series = [];
 	
-	$.each(data, function(index, row){
-		
-		series.push({
-			name: ' ',
-			lineWidth: showLines()? 1 : 0,
-	        showInLegend: false,
-	        animation: {
-                duration: 0
-            },
-            color: getColorForDistance(distances[index],distances),
-			marker: {
-				symbol: "circle",
-				enabled: true,
-				radius: 4,
-				fillColor: getColorForDistance(distances[index],distances)
-			},
-			states: {
-				hover: {
-					lineWidthPlus: 3
-				}
-			},
-			data: row
-		})
-	})
-	
-	chart.setSeries(series)
 	chart.setXAxisName(tableHeader)
 	chart.setOnClickListener(function(solutionIndex){
 		openSolution(solutionIndex);
 	})
 	
 	chart.plot("execution-chart");
+	
+	$.each(data, function(index, row){
+		
+		var serie = {
+			name: null,
+			lineWidth: showLines()? 1 : 0,
+	        showInLegend: false,
+	        animation: {
+                duration: 0
+            },
+	        color: getColorForDistance(distances[index],distances, minDistance, maxDistance),
+			marker: {
+				symbol: "circle",
+				enabled: true,
+				radius: 4,
+				fillColor: getColorForDistance(distances[index],distances, minDistance, maxDistance)
+			},
+			states: {
+				hover: {
+					lineWidthPlus: 3
+				}
+			},
+			dataGrouping: {
+                enabled: false
+            },
+			data: row
+		}
+		
+		chart.appendSeries(serie)
+		series.push(serie);
+	})
+	
+	chart.redraw();
 }
 
 function openSolution(solutionIndex){

@@ -59,21 +59,4 @@ public class MIPPlugin extends AbstractPlugin {
 	public List<String> getMutationNames(){
 		return Arrays.asList("IntegerPolynomialMutation");
 	}
-
-	@Override
-	public String getDescription() {
-		
-		StringBuffer buffer = new StringBuffer();
-		
-		buffer.append("<p><b>Goal</b></p>");
-		buffer.append("<p>Optimize the number of integers inside the array</p>");
-		buffer.append("<p><b># of Objectives</b></p>");
-		buffer.append("<p>10 objectives</p>");
-		buffer.append("<p><b>Example</b></p>");
-		buffer.append("<p>[1, 2, 1, 3, 3, 1, 4, 5, 1, 1]</p>");
-		buffer.append("<p>The instance file contains the array size</p>");
-		buffer.append("<p>The range for every array's position is [1, 20] </p>");
-		
-		return buffer.toString();
-	}
 }

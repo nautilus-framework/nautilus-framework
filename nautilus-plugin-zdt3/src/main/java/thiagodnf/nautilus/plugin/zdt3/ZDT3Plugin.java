@@ -49,14 +49,4 @@ public class ZDT3Plugin extends AbstractPlugin {
 	public List<String> getMutationNames(){
 		return Arrays.asList("PolynomialMutation");
 	}
-
-	@Override
-	public String getDescription() {
-		
-		StringBuffer buffer = new StringBuffer();
-		
-		buffer.append("Unavailable");
-		
-		return buffer.toString();
-	}
 }
