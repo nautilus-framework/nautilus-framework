@@ -10,10 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Launcher {
 
-	@PostConstruct
-	public void initIt() {
-		TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo")); 
-	}
+//	@PostConstruct
+//	public void initIt() {
+//		TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo")); 
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(Launcher.class, args);
