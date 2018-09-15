@@ -9,12 +9,12 @@
 	</parent>
 	<groupId>thiagodnf.nautilus.plugin.zdt1</groupId>
 	<artifactId>nautilus-plugin-zdt1</artifactId>
-	<name>ZDT1 Problem</name>
+	<name>Nautilus Plugin :: ZDT1 Problem</name>
 	<description>ZDT1 Problem</description>
 	<dependencies>
 		<dependency>
-			<groupId>thiagodnf.nautilus.plugin</groupId>
-			<artifactId>nautilus-plugin</artifactId>
+			<groupId>thiagodnf.nautilus.core</groupId>
+			<artifactId>nautilus-core</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 	</dependencies>

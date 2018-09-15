@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.objective;
+package thiagodnf.nautilus.core.objective;
 
 public abstract class AbstractObjective {
 

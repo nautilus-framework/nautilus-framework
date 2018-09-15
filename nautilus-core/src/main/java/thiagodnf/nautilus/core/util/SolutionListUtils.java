@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.util;
+package thiagodnf.nautilus.core.util;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@ package thiagodnf.nautilus.plugin.zdt1.objective;
 
 import org.uma.jmetal.solution.DoubleSolution;
 
-import thiagodnf.nautilus.plugin.objective.AbstractObjective;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class F1Objective extends AbstractObjective {
 

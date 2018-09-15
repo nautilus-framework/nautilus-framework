@@ -1,2 +1,2 @@
 # Nautilus
-A preference-base objective reduction for SBSE
+A preference-base objective reduction for SBSE problems

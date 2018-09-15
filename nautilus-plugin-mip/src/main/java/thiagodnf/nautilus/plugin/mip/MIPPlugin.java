@@ -9,10 +9,10 @@ import java.util.Map;
 
 import org.uma.jmetal.problem.Problem;
 
-import thiagodnf.nautilus.plugin.AbstractPlugin;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.plugin.mip.objective.MaximumNumberObjective;
 import thiagodnf.nautilus.plugin.mip.problem.MaximumIntegerProblem;
-import thiagodnf.nautilus.plugin.objective.AbstractObjective;
 
 public class MIPPlugin extends AbstractPlugin {
 

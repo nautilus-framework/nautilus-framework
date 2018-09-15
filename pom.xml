@@ -7,14 +7,13 @@
 	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<name>Nautilus</name>
-	<description>A preference-base objective reduction for SBSE</description>
+	<description>A preference-base objective reduction for SBSE problems</description>
 	<modules>
-		<module>nautilus-web</module>
-		<module>nautilus-plugin</module>
-		<module>nautilus-plugin-mip</module>
 		<module>nautilus-core</module>
+		<module>nautilus-plugin-mip</module>
 		<module>nautilus-plugin-zdt3</module>
 		<module>nautilus-plugin-zdt1</module>
+		<module>nautilus-web</module>
 	</modules>
 	<properties>
 		<springframework.boot.version>2.0.3.RELEASE</springframework.boot.version>
@@ -81,18 +80,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!-- <plugin>
-				<groupId>com.heroku.sdk</groupId>
-				<artifactId>heroku-maven-plugin</artifactId>
-				<version>2.0.6</version>
-				<configuration>
-					<appName>sbse-nautilus</appName>
-					<processTypes>
-						<web>java $JAVA_OPTS -cp target/classes:target/dependency/* Main</web>
-					</processTypes>
-				</configuration>
-				
-			</plugin> -->
 		</plugins>
 	</build>
 </project>

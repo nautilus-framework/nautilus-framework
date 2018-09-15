@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.problem;
+package thiagodnf.nautilus.core.problem;
 
 public abstract class AbstractProblem {
 

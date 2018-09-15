@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.algorithm;
+package thiagodnf.nautilus.core.algorithm;
 
 import java.util.List;
 
@@ -8,12 +8,14 @@ import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.comparator.DominanceComparator;
+import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
-import thiagodnf.nautilus.plugin.listener.OnProgressListener;
+import thiagodnf.nautilus.core.listener.OnProgressListener;
 
 @SuppressWarnings("unchecked")
-public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.GenerationalGeneticAlgorithm<S>{
+public class NSGAII<S extends Solution<?>> extends org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAII<S>{
 
 	private static final long serialVersionUID = -3996332429840079517L;
 	
@@ -21,11 +23,7 @@ public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleob
 	
 	private List<?> initialPopulation;
 	
-	private double maxEvaluations;
-	
-	private int evaluations;
-	
-	public GA(Problem<S> problem, 
+	public NSGAII(Problem<S> problem, 
 			int maxEvaluations, 
 			int populationSize, 
 			CrossoverOperator<S> crossoverOperator,
@@ -36,13 +34,12 @@ public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleob
 			populationSize, 
 			crossoverOperator, 
 			mutationOperator, 
-			selectionOperator, 
+			selectionOperator,
+			new DominanceComparator<>(), 
 			new SequentialSolutionListEvaluator<S>());
-		
-		this.maxEvaluations = maxEvaluations;
 	}
 	
-	public GA(Problem<S> problem, 
+	public NSGAII(Problem<S> problem, 
 			int maxEvaluations, 
 			int populationSize, 
 			CrossoverOperator<S> crossoverOperator,
@@ -53,7 +50,7 @@ public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleob
 			populationSize, 
 			crossoverOperator, 
 			mutationOperator, 
-			new BinaryTournamentSelection<S>());
+			new BinaryTournamentSelection<S>(new RankingAndCrowdingDistanceComparator<S>()));
 		
 		this.initialPopulation = initialPopulation;
 	}
@@ -73,17 +70,7 @@ public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleob
 	}
 	
 	@Override
-	protected boolean isStoppingConditionReached() {
-		return (evaluations >= maxEvaluations);
-	}
-	
-	@Override
-	public void initProgress() {
-		evaluations = getMaxPopulationSize();
-	}
-
-	@Override
-	public void updateProgress() {
+	protected void updateProgress() {
 		
 		double progress = (((double) evaluations) / ((double) maxEvaluations)) * 100.0;
 		
@@ -91,7 +78,7 @@ public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleob
 			onProgressListener.onProgress(progress);
 		}
 		
-		evaluations += getMaxPopulationSize();
+		super.updateProgress();
 	}
 
 	public void setOnProgressListener(OnProgressListener onProgressListener) {

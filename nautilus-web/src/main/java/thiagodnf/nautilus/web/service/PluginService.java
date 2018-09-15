@@ -16,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.uma.jmetal.problem.Problem;
 
-import thiagodnf.nautilus.plugin.AbstractPlugin;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.plugin.mip.MIPPlugin;
-import thiagodnf.nautilus.plugin.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.zdt1.ZDT1Plugin;
 import thiagodnf.nautilus.plugin.zdt3.ZDT3Plugin;
 

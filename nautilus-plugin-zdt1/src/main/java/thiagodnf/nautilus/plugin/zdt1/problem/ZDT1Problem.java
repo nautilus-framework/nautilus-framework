@@ -8,7 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.uma.jmetal.problem.multiobjective.zdt.ZDT1;
 import org.uma.jmetal.solution.DoubleSolution;
 
-import thiagodnf.nautilus.plugin.objective.AbstractObjective;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class ZDT1Problem extends ZDT1 {
 

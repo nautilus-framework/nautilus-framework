@@ -2,7 +2,7 @@ package thiagodnf.nautilus.plugin.mip.objective;
 
 import org.uma.jmetal.solution.IntegerSolution;
 
-import thiagodnf.nautilus.plugin.objective.AbstractObjective;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class MaximumNumberObjective extends AbstractObjective {
 

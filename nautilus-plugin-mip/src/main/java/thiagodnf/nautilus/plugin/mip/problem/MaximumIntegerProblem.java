@@ -9,7 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.uma.jmetal.problem.impl.AbstractIntegerProblem;
 import org.uma.jmetal.solution.IntegerSolution;
 
-import thiagodnf.nautilus.plugin.objective.AbstractObjective;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class MaximumIntegerProblem extends AbstractIntegerProblem {
 

@@ -9,12 +9,12 @@
 	</parent>
 	<groupId>thiagodnf.nautilus.plugin.mip</groupId>
 	<artifactId>nautilus-plugin-mip</artifactId>
-	<name>Minimum Integer Problem</name>
+	<name>Nautilus Plugin :: Minimum Integer Problem</name>
 	<description>Minimum Integer Problem Plugin</description>
 	<dependencies>
 		<dependency>
-			<groupId>thiagodnf.nautilus.plugin</groupId>
-			<artifactId>nautilus-plugin</artifactId>
+			<groupId>thiagodnf.nautilus.core</groupId>
+			<artifactId>nautilus-core</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 	</dependencies>

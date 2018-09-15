@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.listener;
+package thiagodnf.nautilus.core.listener;
 
 public interface OnProgressListener {
 

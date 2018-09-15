@@ -139,11 +139,6 @@
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>thiagodnf.nautilus.plugin</groupId>
-			<artifactId>nautilus-plugin</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
 			<groupId>thiagodnf.nautilus.core</groupId>
 			<artifactId>nautilus-core</artifactId>
 			<version>1.0.0</version>

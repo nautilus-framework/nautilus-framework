@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin;
+package thiagodnf.nautilus.core.plugin;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.uma.jmetal.problem.Problem;
 
-import thiagodnf.nautilus.plugin.objective.AbstractObjective;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public abstract class AbstractPlugin {
 	

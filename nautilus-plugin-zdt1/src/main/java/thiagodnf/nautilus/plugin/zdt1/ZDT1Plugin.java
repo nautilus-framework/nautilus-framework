@@ -9,8 +9,8 @@ import java.util.Map;
 
 import org.uma.jmetal.problem.Problem;
 
-import thiagodnf.nautilus.plugin.AbstractPlugin;
-import thiagodnf.nautilus.plugin.objective.AbstractObjective;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.plugin.zdt1.objective.F0Objective;
 import thiagodnf.nautilus.plugin.zdt1.objective.F1Objective;
 import thiagodnf.nautilus.plugin.zdt1.problem.ZDT1Problem;

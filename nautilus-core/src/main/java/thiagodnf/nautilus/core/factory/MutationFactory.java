@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.factory;
+package thiagodnf.nautilus.core.factory;
 
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.impl.mutation.IntegerPolynomialMutation;
