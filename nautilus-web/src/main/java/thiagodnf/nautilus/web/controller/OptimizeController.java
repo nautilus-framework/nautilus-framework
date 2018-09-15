@@ -55,7 +55,9 @@ public class OptimizeController {
 	private WebSocketService webSocketService;
 	
 	@GetMapping("/optimize/{problemKey}/{filename:.+}")
-	public String optimize(Model model, @PathVariable("problemKey") String problemKey, @PathVariable("filename") String filename) {
+	public String optimize(Model model, 
+			@PathVariable("problemKey") String problemKey, 
+			@PathVariable("filename") String filename) {
 		
 		Parameters parameters = new Parameters();
 		
@@ -95,7 +97,10 @@ public class OptimizeController {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Async
 	@MessageMapping("/hello.{sessionId}")
-    public Future<?> execute(@Valid Parameters parameters, @DestinationVariable String sessionId) throws InterruptedException {
+    public Future<?> execute(
+    		@Valid Parameters parameters, 
+    		@DestinationVariable String sessionId) throws InterruptedException {
+		
         try {
 
         	System.out.println(parameters);
@@ -220,7 +225,6 @@ public class OptimizeController {
 	
 	@MessageExceptionHandler
 	public void handleException(Throwable exception, @DestinationVariable String sessionId) {
-		System.out.println(sessionId);
 		webSocketService.sendException(sessionId, exception.getMessage());
     }
 }

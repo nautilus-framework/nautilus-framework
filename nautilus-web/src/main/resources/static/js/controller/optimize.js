@@ -54,6 +54,8 @@ function execute(array) {
 		obj["objectiveKeys"] = [obj["objectiveKeys"]];
 	}
 	
+	console.log(obj)
+	
 	obj = JSON.stringify(obj);
 	
     webSocket.execute(obj);
@@ -76,7 +78,7 @@ $(function(){
 	$("#form-execute").on('submit', function (e) {
 		e.preventDefault();
 		
-		var form = $(this).serializeArray();
+		var data = $(this).serializeArray();
 		
 		var form = $(this)
 		
@@ -85,7 +87,7 @@ $(function(){
 			event.stopPropagation()
 	    }else{
 	    	webSocket.connect(function(){
-				execute(form);
+				execute(data);
 			});
 	    }
 		

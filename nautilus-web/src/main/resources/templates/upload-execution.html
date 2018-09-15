@@ -29,9 +29,10 @@
 					<div class="form-group">
 						<label for="file">Select the instance file</label>
 					    <input id="file" type="file" name="file" class="form-control-file btn-sm"/>
-					    <span class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
+					    <span class="invalid-feedback" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
 				 	</div>
 				  	<button type="submit" class="btn btn-success btn-sm">Upload</button>
+				  	<button class="btn btn-light btn-sm" th:href="@{/problem/}+${plugin.getProblemKey()} + '#executions'">Cancel</button>
 				</form>
 			</div>
 		</div>
