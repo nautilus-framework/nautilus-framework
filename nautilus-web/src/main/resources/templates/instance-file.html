@@ -28,14 +28,25 @@
 	<div class="container page-navbar">
 		<div class="row">
 			<div class="col-12">
-				<ul class="nav nav-tabs" role="tablist">
-					<li class="nav-item">
-						<a class="nav-link active" href="#content" role="tab" data-toggle="tab" aria-selected="true">Content</a>
-					</li>
-				</ul>
+				<nav>
+					<div class="nav nav-tabs" id="nav-tab" role="tablist">
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#content">Content</a>
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#information">Information</a>
+					</div>
+				</nav>
 				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane active" id="#content">
+					<div role="tabpanel" class="tab-pane fade" id="content">
 						<div th:text="${fileContent}"></div>
+					</div>
+					<div role="tabpanel" class="tab-pane fade" id="information">
+						<dl class="row">
+							<dt class="col-sm-3">Size</dt>
+							<dd class="col-sm-9" th:text="${#formatter.fileSize(T(java.nio.file.Files).size(file))}"></dd>
+							<dt class="col-sm-3">Last Modified Time</dt>
+							<dd class="col-sm-9" th:text="${#formatter.date(T(java.nio.file.Files).getLastModifiedTime(file).toMillis())}"></dd>
+						</dl>
+						<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/instance-file} + @{'/'} + ${plugin.getProblemKey()} + @{'/'} + ${filename}">Download</a>
+						<a class="btn btn-outline-danger btn-sm" th:href="@{/instance-file/delete/}+${plugin.getProblemKey()}+@{/}+${filename}">Delete</a>
 					</div>
 				</div>
 			</div>

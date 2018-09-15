@@ -41,7 +41,7 @@
 									<th width="50px">#</th>
 									<th>File</th>
 									<th width="80px">Size</th>
-									<th width="150px">Last Modified Time</th>
+									<th width="200px">Last Modified Time</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -50,8 +50,8 @@
 									<td>
 										<a th:text="${instanceFile.getFileName()}" th:href="@{/instance-file/} + ${plugin.getProblemKey()} + '/' + ${instanceFile.getFileName()}"></a>
 									</td>					
-									<td th:text="${T(org.apache.commons.io.FileUtils).byteCountToDisplaySize(T(java.nio.file.Files).size(instanceFile))}"></td>
-									<td th:text="${#dates.format(T(java.nio.file.Files).getLastModifiedTime(instanceFile).toMillis(), 'YYYY-MM-dd HH:mm:ss')}"></td>
+									<td th:text="${#formatter.fileSize(T(java.nio.file.Files).size(instanceFile))}"></td>
+									<td th:text="${#formatter.date(T(java.nio.file.Files).getLastModifiedTime(instanceFile).toMillis())}"></td>
 								</tr>
 							</tbody>
 						</table>
@@ -65,8 +65,8 @@
 								<tr>
 									<th width="50px">#</th>
 									<th>Id</th>
-									<th>Name</th>
-									<th width="150px">Date</th>
+									<th width="200px">Name</th>
+									<th width="200px">Date</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -77,7 +77,7 @@
 										<a th:text="${execution.getId()}" th:href="@{/execution/} + ${execution.getId()}"></a>
 									</td>
 									<td th:text="${execution.getSettings().getName()}"></td>		
-									<td th:text="${#dates.format(execution.getDate(), 'YYYY-MM-dd HH:mm:ss')}"></td>			
+									<td th:text="${#formatter.date(execution.getDate())}"></td>			
 								</tr>
 							</tbody>
 						</table>

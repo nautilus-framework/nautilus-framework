@@ -89,32 +89,36 @@ public class FileService {
 		}
 	}
 	
-	public Resource loadAsResource(String filename) {
+	public Resource loadAsResource(Path file) {
+		System.out.println(file);
 		try {
-			Path file = load(filename);
-
+			
 			Resource resource = new UrlResource(file.toUri());
 
-			if (resource.exists() || resource.isReadable()) {
-				return resource;
-			} else {
-				throw new RuntimeException();
+			if (!resource.exists()) {
+				throw new RuntimeException("The file does not exist. Please choose a different one");
 			}
+			
+			if (!resource.isReadable()) {
+				throw new RuntimeException("The file is not readable");
+			}
+					
+			return resource;
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
+	}
+	
+	public Resource loadInstanceFileAsResource(String problemKey, String filename) {
+		return loadAsResource(loadInstances(problemKey, filename));
 	}
 	
 	public Path load(Path root, String filename) {
 		return root.resolve(filename);
 	}
 
-	public Path load(String filename) {
-		return load(getPath(), filename);
-	}
-	
 	public Path loadInstances(String pluginKey, String filename) {
-		return load(getPath().resolve("instances").resolve(pluginKey), filename);
+		return load(getInstancesLocation().resolve(pluginKey), filename);
 	}
 	
 	public Path getPath() {
@@ -135,6 +139,27 @@ public class FileService {
 
 	public boolean exists(Path path) {
 		return Files.exists(path);
+	}
+	
+	public void deleteInstanceFile(String problemKey, String filename) {
+		delete(getInstancesFile(problemKey, filename));
+	}
+	
+	public void delete(Path path) {
+		
+		if (path.toFile().isDirectory()) {
+			throw new RuntimeException("The path is not a file");
+		}
+
+		if (!exists(path)) {
+			throw new RuntimeException("The file does not exist. Please choose a different one");
+		}
+		
+		try {
+			Files.delete(path);
+		} catch (Exception ex) {
+			throw new RuntimeException("Delete file is not possible");
+		}
 	}
 	
 	public void store(Path path, MultipartFile file, String filename) {

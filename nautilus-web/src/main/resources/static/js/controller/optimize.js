@@ -70,19 +70,30 @@ function executeAgain(nextParameters ) {
 }
 
 $(function(){
+	
+	$("form").validate();
    
-	$("form").on('submit', function (e) {
+	$("#form-execute").on('submit', function (e) {
 		e.preventDefault();
 		
 		var form = $(this).serializeArray();
 		
-		webSocket.connect(function(){
-			execute(form);
-		});
-	
+		var form = $(this)
+		
+		if (form[0].checkValidity() === false) {
+			event.preventDefault()
+			event.stopPropagation()
+	    }else{
+	    	webSocket.connect(function(){
+				execute(form);
+			});
+	    }
+		
+		form.addClass('was-validated');
+		
 		return false;
 	});
-	
+
 	$("#btn-continue").click(function(e){
 		e.preventDefault();
 		

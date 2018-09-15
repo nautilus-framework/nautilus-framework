@@ -3,6 +3,14 @@ function isSafari(){
 }
  
 $(function(){
+	
+	jQuery.validator.setDefaults({
+	    highlight: function(element) {
+	        jQuery(element).closest('.form-group').addClass('has-error');
+	    },
+	    errorElement: 'div',
+	    errorClass: 'invalid-feedback',
+	});
    
 	$('.table-datatable').DataTable();
 	

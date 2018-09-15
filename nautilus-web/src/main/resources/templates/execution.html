@@ -72,11 +72,11 @@
 							<dt class="col-sm-2">Execution Id</dt>
 							<dd class="col-sm-10" th:text="${execution.getId()}"></dd>
 							<dt class="col-sm-2">Date</dt>
-							<dd class="col-sm-10" th:text="${T(thiagodnf.nautilus.core.util.Formatter).date(execution.getDate())}"></dd>
+							<dd class="col-sm-10" th:text="${#formatter.date(execution.getDate())}"></dd>
 							<dt class="col-sm-2"># of Solutions</dt>
 							<dd class="col-sm-10" th:text="${execution.getSolutions().size()}"></dd>
 							<dt class="col-sm-2">Execution Time</dt>
-							<dd class="col-sm-10" th:text="${execution.getExecutionTime()/1000} + ' seconds'"></dd>
+							<dd class="col-sm-10" th:text="${#formatter.interval(execution.getExecutionTime())}"></dd>
 							<dt class="col-sm-2">Parameters</dt>
 							<dd class="col-sm-10">
 								<textarea class="form-control" rows="8" th:text="${execution.getParameters()}"></textarea>

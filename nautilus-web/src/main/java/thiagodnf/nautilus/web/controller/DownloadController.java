@@ -1,5 +1,9 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.io.IOException;
+import java.net.FileNameMap;
+import java.net.URLConnection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Solution;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.FileService;
 
 @Controller
 @RequestMapping("/download")
@@ -25,6 +30,9 @@ public class DownloadController {
 	
 	@Autowired
 	private ExecutionService executionService;
+	
+	@Autowired
+	private FileService fileService;
 	
 	@GetMapping("/execution/{executionId}/json")
 	@ResponseBody
@@ -110,6 +118,26 @@ public class DownloadController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + executionId + ".var\"")
 				.header(HttpHeaders.CONTENT_TYPE, "text/var")
 				.header(HttpHeaders.CONTENT_ENCODING, "UTF-8")
+				.body(file);
+	}
+	
+	@GetMapping("/instance-file/{problemKey}/{filename:.+}")
+	@ResponseBody
+	public ResponseEntity<Resource> downloadInstanceFile(
+			@PathVariable("problemKey") String problemKey,
+			@PathVariable("filename") String filename) throws IOException {
+
+		LOGGER.info("Downloading the instance file " + filename);
+
+		Resource file = fileService.loadInstanceFileAsResource(problemKey, filename);
+		
+		FileNameMap fileNameMap = URLConnection.getFileNameMap();
+		
+		String contentType = fileNameMap.getContentTypeFor(file.getFile().getName());
+		  
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilename())
+				.header(HttpHeaders.CONTENT_TYPE, contentType)
 				.body(file);
 	}
 }

@@ -25,8 +25,20 @@ public class InstanceFileController {
 		
 		model.addAttribute("filename", filename);
 		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
+		model.addAttribute("file", fileService.getInstancesFile(problemKey, filename));
 		model.addAttribute("fileContent", fileService.readFileToString(problemKey, filename));
 		
 		return "instance-file";
 	}
+	
+	@GetMapping("/instance-file/delete/{problemKey}/{filename:.+}")
+	public String deleteInstanceFile(Model model, 
+			@PathVariable("problemKey") String problemKey, 
+			@PathVariable("filename") String filename){
+		
+		fileService.deleteInstanceFile(problemKey, filename);
+		
+		return "redirect:/problem/" + problemKey;
+	}
+			
 }

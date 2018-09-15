@@ -5,13 +5,14 @@ import java.util.List;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotEmpty;
 
 import com.google.gson.Gson;
 
 public class Parameters {
 	
 	@DecimalMin("10")
-	@DecimalMax("10000")
+	@DecimalMax("1000")
 	private int populationSize = 100;
 	
 	@DecimalMin("10")
@@ -24,6 +25,7 @@ public class Parameters {
 	
 	private List<String> objectiveKeys;
 	
+	@NotEmpty
 	private String crossoverName;
 	
 	@DecimalMin("0.0")
@@ -31,8 +33,10 @@ public class Parameters {
 	private Double crossoverProbability = 0.9;
 	
 	@DecimalMin("1.0")
+	@DecimalMax("1000.0")
 	private Double crossoverDistribution = 20.0;
 	
+	@NotEmpty
 	private String mutationName;
 	
 	@DecimalMin("0.0")
@@ -40,6 +44,7 @@ public class Parameters {
 	private Double mutationProbability = 0.01;
 	
 	@DecimalMin("1.0")
+	@DecimalMax("1000.0")
 	private Double mutationDistribution = 20.0;
 	
 	private String lastExecutionId;

@@ -40,7 +40,7 @@
 					</li>
 				</ul>
 		
-				<form id="form-execute" action="#" th:action="@{/optimize}" th:object="${parameters}" method="post">
+				<form id="form-execute" class="needs-validation" th:object="${parameters}" novalidate>
 					<!-- Tab panes -->
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane fade show active" id="general">
@@ -48,11 +48,11 @@
 							<input type="hidden" class="form-control" th:field="*{filename}" />
 							<div class="form-group">
 								<label for="populationSize">Population Size</label>
-								<input type="number" class="form-control" th:field="*{populationSize}" />
+								<input type="number" class="form-control" th:field="*{populationSize}" min="10" max="1000" step="10" required/>
 							</div>
 							<div class="form-group">
 								<label for="maxEvaluations">Max Evaluations</label>
-								<input type="number" class="form-control" th:field="*{maxEvaluations}" />
+								<input type="number" class="form-control" th:field="*{maxEvaluations}" min="10" max="10000000" step="10" required/>
 							</div>
 						</div>
 						<div class="tab-pane fade" id="operators">
@@ -65,11 +65,11 @@
 								</div>
 								<div class="form-group col-4">
 									<label for="crossoverProbability">Probability</label>
-									<input type="number" class="form-control" th:field="*{crossoverProbability}" min="0.0" max="1.0" step="0.1"/>
+									<input type="number" class="form-control" th:field="*{crossoverProbability}" min="0.0" max="1.0" step="0.1" required/>
 								</div>
 								<div class="form-group col-4">
 									<label for="crossoverDistribution">Distribution</label>
-									<input type="number" class="form-control" th:field="*{crossoverDistribution}" min="1.0"/>
+									<input type="number" class="form-control" th:field="*{crossoverDistribution}" min="1.0" max="1000.0" step="0.1" required/>
 								</div>
 							</div>
 							<hr/>
@@ -82,11 +82,11 @@
 								</div>
 								<div class="form-group col-4">
 									<label for="mutationProbability">Probability</label>
-									<input type="number" class="form-control" th:field="*{mutationProbability}" min="0.0" max="1.0" step="0.01"/>
+									<input type="number" class="form-control" th:field="*{mutationProbability}" min="0.0" max="1.0" step="0.01" required/>
 								</div>
 								<div class="form-group col-4">
 									<label for="mutationDistribution">Distribution</label>
-									<input type="number" class="form-control" th:field="*{mutationDistribution}" min="1.0"/>
+									<input type="number" class="form-control" th:field="*{mutationDistribution}" min="1.0" max="1000.0" step="0.1" required/>
 								</div>
 							</div>
 						</div>
@@ -120,6 +120,8 @@
 					<hr/>
 					<button type="submit" id="btn-execute" class="btn btn-success btn-sm">Execute</button>
 					<button class="btn btn-light btn-sm" onclick="window.history.back()">Cancel</button>
+					
+					
 				</form>
 				<div class="console"></div>
 			</div>
