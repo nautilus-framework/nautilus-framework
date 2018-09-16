@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
@@ -22,6 +23,7 @@ import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.util.Solutioner;
 
 @Controller
+@RequestMapping("/execution")
 public class ExecutionController {
 	
 	@Autowired
@@ -30,7 +32,7 @@ public class ExecutionController {
 	@Autowired
 	private PluginService pluginService;
 	
-	@GetMapping("/execution/{executionId}")
+	@GetMapping("/{executionId}")
 	public String view(Model model, @PathVariable("executionId") String executionId) {
 		
 		Execution execution = executionService.findById(executionId);
@@ -67,7 +69,7 @@ public class ExecutionController {
 		return "execution";
 	}
 	
-	@GetMapping("/execution/{executionId}/delete")
+	@GetMapping("/{executionId}/delete")
 	public String delete(Model model, @PathVariable("executionId") String executionId) {
 
 		Execution execution = executionService.findById(executionId);
@@ -77,7 +79,7 @@ public class ExecutionController {
 		return "redirect:/problem/" + execution.getParameters().getProblemKey();
 	}
 	
-	@PostMapping("/execution/{executionId}/save/settings")
+	@PostMapping("/{executionId}/save/settings")
 	public String settings(Model model, @PathVariable("executionId") String executionId, Settings settings) {
 
 		Execution execution = executionService.findById(executionId);
