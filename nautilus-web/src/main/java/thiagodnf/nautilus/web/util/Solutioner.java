@@ -3,65 +3,11 @@ package thiagodnf.nautilus.web.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.primitives.Doubles;
-
 import thiagodnf.nautilus.core.util.Normalizer;
 import thiagodnf.nautilus.web.model.Solution;
 
 public class Solutioner {
 
-	/**
-	 * This method normalizes an array between [0:1] values. 
-	 * To do that, we capture the minimum and maximum values in the given
-	 * array
-	 * 
-	 * @param array an array to be normalized
-	 * @return an normalized array
-	 */
-	public static double[] normalize(double[] array) {
-		return normalize(array, Doubles.min(array), Doubles.max(array));
-	}
-	
-	/**
-	 * This method normalizes an array between [0:1] values given 
-	 * the minimum and maximum values
-	 * 
-	 * @param array an array to be normalized
-	 * @param min the minimum value
-	 * @param max the maximum value
-	 * @return an normalized array
-	 */
-	public static double[] normalize(double[] array, double min, double max) {
-
-		double[] result = new double[array.length];
-
-		for (int i = 0; i < array.length; i++) {
-			result[i] = Normalizer.normalize(array[i], min, max);
-		}
-
-		return result;
-	}
-	
-	/**
-	 * This method normalizes an array between [0:1] values given 
-	 * the minimum and maximum values
-	 * 
-	 * @param array an array to be normalized
-	 * @param min the minimum value
-	 * @param max the maximum value
-	 * @return an normalized array
-	 */
-	public static double[] normalize(double[] array, double a, double b, double min, double max) {
-
-		double[] result = new double[array.length];
-
-		for (int i = 0; i < array.length; i++) {
-			result[i] = Normalizer.normalize(array[i], a, b, min, max);
-		}
-
-		return result;
-	}
-	
 	/**
 	 * This method returns an array contains the minimum values 
 	 * for each objective

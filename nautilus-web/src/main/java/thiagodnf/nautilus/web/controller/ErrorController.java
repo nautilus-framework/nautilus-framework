@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class ErrorController {
 
 	@ExceptionHandler(RuntimeException.class)
-	public ModelAndView handleInvalidInstanceFileException(HttpServletRequest req, RuntimeException ex) {
+	public ModelAndView handleRuntimeException(HttpServletRequest req, RuntimeException ex) {
 
 		// If the exception is annotated with @ResponseStatus rethrow it and let
 		// the framework handle it - like the OrderNotFoundException example

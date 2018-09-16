@@ -196,7 +196,7 @@
 													<small>Once you delete, there is no going back. Please be certain.</small></p>
 												</div>
 												<div class="col-4 text-right">
-													<a class="btn btn-outline-danger btn-sm" th:href="@{/execution/delete/} + ${execution.getId()}">Delete Execution</a>
+													<a class="btn btn-outline-danger btn-sm" th:href="@{/execution/} + ${execution.getId()} + @{/delete}">Delete Execution</a>
 												</div>	
 											</div>
 										</li>

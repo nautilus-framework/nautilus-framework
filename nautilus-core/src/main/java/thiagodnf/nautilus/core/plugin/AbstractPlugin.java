@@ -17,13 +17,9 @@ public abstract class AbstractPlugin {
 		return new HashMap<>();
 	}
 	
-	public abstract Problem<?> getProblem(Path instance, List<AbstractObjective> objectives) throws IOException;
-	
 	public String getProblemKey() {
 		return getProblemName().replaceAll("\\s+", "-").toLowerCase();
 	}
-	
-	public abstract String getProblemName();
 	
 	public List<String> getCrossoverNames(){
 		return Arrays.asList();
@@ -32,4 +28,12 @@ public abstract class AbstractPlugin {
 	public List<String> getMutationNames(){
 		return Arrays.asList();
 	}
+	
+	public double getJaccardDistance(List<String> variables1, List<String> variables2) {
+		return 0.0;
+	}
+	
+	public abstract Problem<?> getProblem(Path instance, List<AbstractObjective> objectives) throws IOException;
+	
+	public abstract String getProblemName();
 }

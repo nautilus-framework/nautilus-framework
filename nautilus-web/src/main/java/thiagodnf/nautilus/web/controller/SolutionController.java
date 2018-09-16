@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Solution;
@@ -38,11 +39,11 @@ public class SolutionController {
 		Execution execution = executionService.findById(executionId);
 
 		if (execution == null) {
-			throw new RuntimeException("The executionId was not found");
+			throw new RuntimeException("The execution Id was not found");
 		}
 		
 		if (solutionIndex < 0 || solutionIndex >= execution.getSolutions().size()) {
-			throw new RuntimeException("The solutionIndex is invalid");
+			throw new RuntimeException("The solution Index is invalid");
 		}
 		
 		Solution solution = execution.getSolutions().get(solutionIndex);
@@ -52,6 +53,8 @@ public class SolutionController {
 		execution = executionService.save(execution);
 		
 		Parameters parameters = execution.getParameters();
+		
+		AbstractPlugin plugin = pluginService.getPlugin(execution.getParameters().getProblemKey());
 		
 		String problemKey = parameters.getProblemKey();
 		
@@ -65,7 +68,8 @@ public class SolutionController {
 		
 		model.addAttribute("objectivesMap", objectivesMap);
 		model.addAttribute("solution", solution);
-		model.addAttribute("executionId", executionId);
+		model.addAttribute("plugin", plugin);
+		model.addAttribute("execution", execution);
 		
 		return "solution";
 	}

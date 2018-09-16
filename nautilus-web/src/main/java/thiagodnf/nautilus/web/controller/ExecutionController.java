@@ -10,13 +10,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.plugin.AbstractPlugin;
+import thiagodnf.nautilus.web.colorize.ByEuclideanDistanceColorize;
+import thiagodnf.nautilus.web.colorize.ByJaccardDistanceColorize;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
 import thiagodnf.nautilus.web.model.Solution;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.PluginService;
-import thiagodnf.nautilus.web.util.Colorizer;
 import thiagodnf.nautilus.web.util.Solutioner;
 
 @Controller
@@ -39,6 +41,9 @@ public class ExecutionController {
 		
 		List<String> objectiveKeys = parameters.getObjectiveKeys();
 		
+		AbstractPlugin plugin = pluginService.getPlugin(problemKey);
+		
+		
 		List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, objectiveKeys);
 
 		List<Solution> solutions = execution.getSolutions();
@@ -47,10 +52,14 @@ public class ExecutionController {
 			solutions = Solutioner.normalize(solutions);
 		}
 		
-		solutions = Colorizer.execute(solutions);
+		if (execution.getSettings().getColorize() == 1) {
+			solutions = new ByEuclideanDistanceColorize(plugin).execute(solutions);
+		} else if (execution.getSettings().getColorize() == 2) {
+			solutions = new ByJaccardDistanceColorize(plugin).execute(solutions);
+		}
 
 		model.addAttribute("objectives", objectives);
-		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
+		model.addAttribute("plugin", plugin);
 		model.addAttribute("solutions", solutions);
 		model.addAttribute("execution", execution);
 		model.addAttribute("settings", execution.getSettings());
@@ -58,7 +67,7 @@ public class ExecutionController {
 		return "execution";
 	}
 	
-	@GetMapping("/execution/delete/{executionId}")
+	@GetMapping("/execution/{executionId}/delete")
 	public String delete(Model model, @PathVariable("executionId") String executionId) {
 
 		Execution execution = executionService.findById(executionId);
