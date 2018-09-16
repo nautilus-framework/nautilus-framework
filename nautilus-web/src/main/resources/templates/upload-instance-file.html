@@ -32,6 +32,7 @@
 					    <span class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
 				 	</div>
 				  	<button type="submit" class="btn btn-success btn-sm">Upload</button>
+				  	<a class="btn btn-light btn-sm" th:href="@{/problem/}+${plugin.getProblemKey()} + '#instances'">Cancel</a>
 				</form>
 			</div>
 		</div>
