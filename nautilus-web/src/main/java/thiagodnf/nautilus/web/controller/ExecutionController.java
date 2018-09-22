@@ -2,6 +2,8 @@ package thiagodnf.nautilus.web.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,8 @@ import thiagodnf.nautilus.web.service.PluginService;
 @Controller
 @RequestMapping("/execution")
 public class ExecutionController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionController.class);
 	
 	@Autowired
 	private ExecutionService executionService;
@@ -44,7 +48,7 @@ public class ExecutionController {
 		
 		List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, objectiveKeys);
 
-		// Apply the settings
+		LOGGER.info("Apply the settings to execution");
 		
 		List<Solution> solutions = execution.getSolutions();
 		

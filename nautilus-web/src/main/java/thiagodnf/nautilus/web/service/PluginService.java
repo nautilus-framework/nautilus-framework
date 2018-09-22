@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.uma.jmetal.problem.Problem;
 
-import thiagodnf.nautilus.core.colorize.Colorize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.plugin.mip.MIPPlugin;
@@ -30,8 +29,6 @@ public class PluginService {
 	private FileService fileService;
 
 	private Map<String, AbstractPlugin> plugins = new HashMap<>();
-	
-	private Map<String, Colorize> colorizes = new HashMap<>();
 	
 	@PostConstruct
 	private void initIt() {
