@@ -22,7 +22,8 @@ public class Formatter {
 
 		LocalDateTime d = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 
-		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME; //DateTimeFormatter.ofPattern("EE, dd MMM yyyy HH:mm:ss");
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EE, dd MMM yyyy HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssV");
 
 		return d.format(formatter);
 	}
