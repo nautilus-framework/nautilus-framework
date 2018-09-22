@@ -51,7 +51,7 @@
 										<a th:text="${instanceFile.getFileName()}" th:href="@{/instance-file/} + ${plugin.getProblemKey()} + '/' + ${instanceFile.getFileName()}"></a>
 									</td>					
 									<td th:text="${#formatter.fileSize(T(java.nio.file.Files).size(instanceFile))}"></td>
-									<td th:text="${#formatter.date(T(java.nio.file.Files).getLastModifiedTime(instanceFile).toMillis())}"></td>
+									<td class="dates" th:text="${#formatter.date(T(java.nio.file.Files).getLastModifiedTime(instanceFile).toMillis())}"></td>
 								</tr>
 							</tbody>
 						</table>
@@ -77,7 +77,7 @@
 										<a th:text="${execution.getId()}" th:href="@{/execution/} + ${execution.getId()}"></a>
 									</td>
 									<td th:text="${execution.getSettings().getName()}"></td>		
-									<td th:text="${#formatter.date(execution.getDate())}"></td>			
+									<td class="dates" th:text="${#formatter.date(execution.getDate())}"></td>			
 								</tr>
 							</tbody>
 						</table>

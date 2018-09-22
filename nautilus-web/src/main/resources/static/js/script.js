@@ -4,6 +4,12 @@ function isSafari(){
  
 $(function(){
 	
+	//Sat, 22 Sep 2018 17:49:50
+	
+	$(".dates").html(function(index, value) {
+		return moment(value).format("ddd, DD MMM YYYY HH:mm:ss");
+	});
+	
 	jQuery.validator.setDefaults({
 	    highlight: function(element) {
 	        jQuery(element).closest('.form-group').addClass('has-error');
