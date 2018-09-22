@@ -11,6 +11,8 @@ import org.springframework.data.annotation.Id;
 
 import com.google.gson.Gson;
 
+import thiagodnf.nautilus.core.model.Solution;
+
 public class Execution {
 
 	@Id

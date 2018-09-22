@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.web.model;
+package thiagodnf.nautilus.core.model;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,10 +45,6 @@ public class Variable {
 		this.properties = properties;
 	}
 
-	public String toString() {
-		return new Gson().toJson(this);
-	}
-	
 	public Variable copy() {
 		return new Variable(this);
 	}
@@ -66,5 +62,9 @@ public class Variable {
 
 	public void setUserFeedback(double value) {
 		getProperties().put("feedback", String.valueOf(value));
+	}
+	
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 }

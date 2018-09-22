@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.web.model.Execution;
-import thiagodnf.nautilus.web.model.Solution;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FileService;
 

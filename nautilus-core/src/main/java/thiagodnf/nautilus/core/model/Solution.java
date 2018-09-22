@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.web.model;
+package thiagodnf.nautilus.core.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

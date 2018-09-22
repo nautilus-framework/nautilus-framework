@@ -2,11 +2,16 @@ package thiagodnf.nautilus.web.model;
 
 import com.google.gson.Gson;
 
+import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
+import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
+
 public class Settings {
 
 	private boolean showLines = true;
 	
-	private int colorize = 1;
+	private String colorize = new ByEuclideanDistanceColorize().getKey();
+	
+	private String normalize = new ByParetoFrontValuesNormalize().getKey();
 	
 	private String name;
 
@@ -18,11 +23,11 @@ public class Settings {
 		this.showLines = showLines;
 	}
 
-	public int getColorize() {
+	public String getColorize() {
 		return colorize;
 	}
 
-	public void setColorize(int colorize) {
+	public void setColorize(String colorize) {
 		this.colorize = colorize;
 	}
 	
@@ -32,6 +37,14 @@ public class Settings {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getNormalize() {
+		return normalize;
+	}
+
+	public void setNormalize(String normalize) {
+		this.normalize = normalize;
 	}
 
 	public String toString() {

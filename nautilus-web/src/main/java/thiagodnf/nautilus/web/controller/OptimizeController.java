@@ -82,7 +82,7 @@ public class OptimizeController {
 
 		List<Solution> initialPopulation = new ArrayList<>();
 
-		for (thiagodnf.nautilus.web.model.Solution sol : execution.getSolutions()) {
+		for (thiagodnf.nautilus.core.model.Solution sol : execution.getSolutions()) {
 			
 			Solution s = Converter.toSolutionWithOutObjectives(problem, sol);
 			
@@ -197,7 +197,7 @@ public class OptimizeController {
 		   	
 		   	webSocketService.sendTitle(sessionId, "Converting the solutions...");
 		   	
-		   	List<thiagodnf.nautilus.web.model.Solution> solutions = Converter.toSolutions(noRepeatedSolutions);
+		   	List<thiagodnf.nautilus.core.model.Solution> solutions = Converter.toSolutions(noRepeatedSolutions);
 		   	
 		   	webSocketService.sendTitle(sessionId, "Preparing the results...");
 			

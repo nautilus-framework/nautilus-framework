@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:replace="fragments/head :: default(${'Done'})"></head>
+<body>
+	<div th:replace="fragments/navbar :: default('Home')"></div>
+	
+	<div class="page-header page-header-with-navbar">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<h6 class="title">
+						<a th:href="@{/}">Home</a> 
+						<span class="path-divider">/</span>
+						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
+						<span class="path-divider">/</span>
+						<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a> 
+						<span class="path-divider">/</span>
+						<a th:href="@{/done/}+${execution.getId()}">Done</a> 
+					</h6>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container page-navbar">
+		<div class="row">
+			<div class="col-12">
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link" href="#quality-indicators" role="tab" data-toggle="tab">Quality Indicators</a>
+					</li>
+				</ul>
+				<div class="tab-content" id="myTabContent">
+					<div class="tab-pane fade" id="quality-indicators">
+						
+						
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+
+</html>

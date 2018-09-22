@@ -16,10 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.util.Normalizer;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
-import thiagodnf.nautilus.web.model.Solution;
 import thiagodnf.nautilus.web.service.ExecutionService;
 
 @Controller

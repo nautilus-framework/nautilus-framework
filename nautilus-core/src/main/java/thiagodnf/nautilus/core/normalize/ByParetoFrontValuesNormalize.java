@@ -1,12 +1,11 @@
-package thiagodnf.nautilus.web.util;
+package thiagodnf.nautilus.core.normalize;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import thiagodnf.nautilus.core.model.Solution;
-import thiagodnf.nautilus.core.util.Normalizer;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 
-public class Solutioner {
+public class ByParetoFrontValuesNormalize extends Normalize {
 
 	/**
 	 * This method returns an array contains the minimum values 
@@ -27,7 +26,7 @@ public class Solutioner {
 
 			for (Solution solution : solutions) {
 
-				if (solution.getObjectives().get(i) < minValue) {
+				if (solution.getObjective(i) < minValue) {
 					minValue = solution.getObjectives().get(i);
 				}
 			}
@@ -57,7 +56,7 @@ public class Solutioner {
 			
 			for (Solution solution : solutions) {
 
-				if (solution.getObjectives().get(i) > maxValue) {
+				if (solution.getObjective(i) > maxValue) {
 					maxValue = solution.getObjectives().get(i);
 				}
 			}
@@ -69,39 +68,22 @@ public class Solutioner {
 	}
 	
 	/**
-	 * This method returns a copy of a given list of solutions with normalized objective values.
+	 * This method returns a copy of a given list of solutions with normalized
+	 * objective values.
 	 * 
 	 * @param solutions a list of solutions
 	 * @return a copy of a given list of solutions with normalized objective values
 	 */
-	public static List<Solution> normalize(List<Solution> solutions){
-		
-		if (solutions.isEmpty()) {
-			return new ArrayList<>(solutions.size());
-		}
+	public List<Solution> normalize(List<AbstractObjective> objectives, List<Solution> solutions) {
 
-		if (solutions.size() == 1) {
-			return new ArrayList<>(solutions);
-		}
-		
 		double[] minValues = getMinimumValues(solutions);
 		double[] maxValues = getMaximumValues(solutions);
-		
-		List<Solution> normalizedSolutions = new ArrayList<>(solutions.size());
 
-		int numberOfObjectives = solutions.get(0).getObjectives().size();
-		
-		for (int i = 0; i < solutions.size(); i++) {
-			
-			Solution copy = solutions.get(i).copy();
-			
-			for (int j = 0; j < numberOfObjectives; j++) {
-				copy.getObjectives().set(j, Normalizer.normalize(solutions.get(i).getObjectives().get(j), minValues[j], maxValues[j]));
-			}
-			
-			normalizedSolutions.add(copy);
-		}
-		
-		return normalizedSolutions;
+		return normalize(solutions, minValues, maxValues);
+	}
+
+	@Override
+	public String getName() {
+		return "by Pareto-front Values";
 	}
 }

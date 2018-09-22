@@ -8,17 +8,17 @@ import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
 import org.uma.jmetal.solution.impl.DefaultIntegerSolution;
 
-import thiagodnf.nautilus.web.model.Variable;
+import thiagodnf.nautilus.core.model.Variable;
 
 public class Converter {
 	
-	public static List<thiagodnf.nautilus.web.model.Solution> toSolutions(List<? extends Solution<?>> population) {
+	public static List<thiagodnf.nautilus.core.model.Solution> toSolutions(List<? extends Solution<?>> population) {
 
-		List<thiagodnf.nautilus.web.model.Solution> solutions = new ArrayList<>();
+		List<thiagodnf.nautilus.core.model.Solution> solutions = new ArrayList<>();
 
 		for (Solution<?> s : population) {
 
-			thiagodnf.nautilus.web.model.Solution solution = new thiagodnf.nautilus.web.model.Solution();
+			thiagodnf.nautilus.core.model.Solution solution = new thiagodnf.nautilus.core.model.Solution();
 
 			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
 				solution.getObjectives().add(s.getObjective(i));
@@ -35,7 +35,7 @@ public class Converter {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Solution toSolutionWithOutObjectives(Problem problem, thiagodnf.nautilus.web.model.Solution solution) {
+	public static Solution toSolutionWithOutObjectives(Problem problem, thiagodnf.nautilus.core.model.Solution solution) {
 		
 		Solution newSolution = (Solution) problem.createSolution();
 		

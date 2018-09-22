@@ -18,6 +18,10 @@ body {
 	margin-bottom: 0px;
 }
 
+.page-header-with-navbar .btn-sm:first-child{
+	margin-left: 10px;
+}
+
 .page-header .row{
 	padding-top: 15px;
 }
@@ -89,6 +93,10 @@ body {
 	margin-bottom: -20px
 }
 
+.margin-bottom-minus-10{
+	margin-bottom: -10px
+}
+
 
 #modal-console textarea{
 	font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; 
@@ -107,5 +115,4 @@ body {
 .tab-pane-toolbar{
 	margin-bottom: 15px;
 }
-
 

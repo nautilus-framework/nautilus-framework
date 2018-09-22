@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import thiagodnf.nautilus.core.model.Solution;
+import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
-import thiagodnf.nautilus.web.model.Solution;
-import thiagodnf.nautilus.web.model.Variable;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.PluginService;
 
@@ -38,17 +38,11 @@ public class SolutionController {
 		
 		Execution execution = executionService.findById(executionId);
 
-		if (execution == null) {
-			throw new RuntimeException("The execution Id was not found");
-		}
-		
 		if (solutionIndex < 0 || solutionIndex >= execution.getSolutions().size()) {
 			throw new RuntimeException("The solution Index is invalid");
 		}
 		
 		Solution solution = execution.getSolutions().get(solutionIndex);
-		
-		solution.getProperties().put("selected", "1");
 		
 		execution = executionService.save(execution);
 		
@@ -91,6 +85,8 @@ public class SolutionController {
 		}
 		
 		Solution solution = execution.getSolutions().get(solutionIndex);
+		
+		solution.getProperties().put("selected", "1");
 		
 		double sum = 0.0;
 		

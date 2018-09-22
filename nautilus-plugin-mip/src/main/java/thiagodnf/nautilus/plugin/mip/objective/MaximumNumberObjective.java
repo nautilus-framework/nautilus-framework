@@ -25,21 +25,22 @@ public class MaximumNumberObjective extends AbstractObjective {
 				numbers++;
 			}
 		}
-		
-//		if(searchFor == 1) {
-//			for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-//
-//				if (solution.getVariableValue(i) == 10) {
-//					numbers++;
-//				}
-//			}
-//		}
 
 		double value = (double) numbers / (double) solution.getNumberOfVariables();
 
 		return maximize(value);
 	}
-
+	
+	@Override
+	public double getMinimumValue() {
+		return -1.0;
+	}
+	
+	@Override
+	public double getMaximumValue() {
+		return 0.0;
+	}
+	
 	@Override
 	public String getName() {
 		return "Number of " + this.searchFor + "s";

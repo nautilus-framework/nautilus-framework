@@ -10,6 +10,14 @@ public abstract class AbstractObjective {
 		return value;
 	}
 	
+	public double getMinimumValue() {
+		return 0.0;
+	}
+	
+	public double getMaximumValue() {
+		return 1.0;
+	}
+	
 	public abstract double evaluate(Object solution);
 	
 	public String getKey() {

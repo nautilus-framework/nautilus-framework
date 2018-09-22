@@ -19,7 +19,9 @@
 					</h6>
 				</div>
 				<div class="col-4 float-right">
-				  	<a class="btn btn-success btn-sm float-right" th:href="@{/continue/} + ${execution.getId()}">Continue</a>
+					<a class="btn btn-success btn-sm float-right" th:href="@{/done/} + ${execution.getId()}">Done</a>
+					<a class="btn btn-outline-secondary btn-sm float-right" th:href="@{/continue/} + ${execution.getId()}">Continue</a>
+				  	
 				</div>
 			</div>
 		</div>
@@ -93,7 +95,7 @@
 									<form action="#" th:action="@{/execution/}+${execution.getId()} + '/save/settings'" method="post" th:object="${settings}">
 										<ul class="list-group list-group-flush">
 											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-20">
+									  			<div class="row margin-bottom-minus-10">
 													<div class="col-12">
 														<div class="form-group">
 															 <label class="form-check-label" for="name">
@@ -106,7 +108,25 @@
 												</div>
 											</li>
 											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-20">
+									  			<div class="row margin-bottom-minus-10">
+													<div class="col-12">
+														<div class="form-group">
+													    <label class="form-check-label" for="normalize">
+													    	<strong>Normalize</strong>
+													   		<p><small>Normalize the objective's values between 0 and 1</small></p>
+													    </label>
+													    <select class="form-control" th:field="*{normalize}">
+													      <option th:each="normalize : ${plugin.getNormalizes()}" 
+													    		th:value="${normalize.key}"
+													    		th:text="${normalize.value}" 
+												    		/>
+													    </select>
+													  </div>
+													</div>
+												</div>
+											</li>
+											<li class="list-group-item">
+									  			<div class="row margin-bottom-minus-10">
 													<div class="col-12">
 														<div class="form-group">
 													    <label class="form-check-label" for="colorize">
@@ -114,9 +134,10 @@
 													   		<p><small>Colorize the closest solutions those ones you selected</small></p>
 													    </label>
 													    <select class="form-control" th:field="*{colorize}">
-													      <option th:value="0" th:selected="${colorize==0}">No Color</option>
-													      <option th:value="1" th:selected="${colorize==1}">by Euclidean Distance</option>
-													      <option th:value="2" th:selected="${colorize==2}">by Jaccard Index</option>
+													    	<option th:each="colorize : ${plugin.getColorizes()}" 
+													    		th:value="${colorize.key}"
+													    		th:text="${colorize.value}" 
+												    		/>
 													    </select>
 													  </div>
 													</div>

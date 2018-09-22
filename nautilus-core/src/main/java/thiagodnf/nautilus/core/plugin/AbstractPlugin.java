@@ -9,9 +9,54 @@ import java.util.Map;
 
 import org.uma.jmetal.problem.Problem;
 
+import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
+import thiagodnf.nautilus.core.colorize.BySimilarityColorize;
+import thiagodnf.nautilus.core.colorize.Colorize;
+import thiagodnf.nautilus.core.colorize.NoColorColorize;
+import thiagodnf.nautilus.core.normalize.Normalize;
+import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
+import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public abstract class AbstractPlugin {
+	
+	protected Map<String, Colorize> colorizes = new HashMap<>();
+	
+	protected Map<String, Normalize> normalizes = new HashMap<>();
+	
+	public void initIt() {
+		
+		addColorize(new NoColorColorize());
+		addColorize(new ByEuclideanDistanceColorize());
+		addColorize(new BySimilarityColorize());
+		
+		addNormalize(new ByMaxAndMinValuesNormalize());
+		addNormalize(new ByParetoFrontValuesNormalize());
+	}
+	
+	public void addColorize(Colorize colorize) {
+		this.colorizes.put(colorize.getKey(), colorize);
+	}
+	
+	public Map<String, Colorize> getColorizes(){
+		return colorizes;
+	}
+	
+	public Colorize getColorize(String key) {
+		return getColorizes().get(key);
+	}
+	
+	public void addNormalize(Normalize normalize) {
+		this.normalizes.put(normalize.getKey(), normalize);
+	}
+	
+	public Map<String, Normalize> getNormalizes(){
+		return normalizes;
+	}
+	
+	public Normalize getNormalize(String key) {
+		return getNormalizes().get(key);
+	}
 	
 	public Map<String, List<AbstractObjective>> getObjectives() {
 		return new HashMap<>();

@@ -10,17 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
-import thiagodnf.nautilus.web.colorize.ByEuclideanDistanceColorize;
-import thiagodnf.nautilus.web.colorize.ByJaccardDistanceColorize;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
-import thiagodnf.nautilus.web.model.Solution;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.PluginService;
-import thiagodnf.nautilus.web.util.Solutioner;
 
 @Controller
 @RequestMapping("/execution")
@@ -45,21 +42,22 @@ public class ExecutionController {
 		
 		AbstractPlugin plugin = pluginService.getPlugin(problemKey);
 		
-		
 		List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, objectiveKeys);
 
+		// Apply the settings
+		
 		List<Solution> solutions = execution.getSolutions();
+		
+		Settings settings = execution.getSettings();
 
 		if (objectives.size() != 1) {
-			solutions = Solutioner.normalize(solutions);
-		}
-		
-		if (execution.getSettings().getColorize() == 1) {
-			solutions = new ByEuclideanDistanceColorize(plugin).execute(solutions);
-		} else if (execution.getSettings().getColorize() == 2) {
-			solutions = new ByJaccardDistanceColorize(plugin).execute(solutions);
+			solutions = plugin.getNormalize(settings.getNormalize()).normalize(objectives, solutions);
 		}
 
+		solutions = plugin.getColorize(settings.getColorize()).execute(plugin, solutions);
+		
+		// Send the objectives to view
+		
 		model.addAttribute("objectives", objectives);
 		model.addAttribute("plugin", plugin);
 		model.addAttribute("solutions", solutions);
