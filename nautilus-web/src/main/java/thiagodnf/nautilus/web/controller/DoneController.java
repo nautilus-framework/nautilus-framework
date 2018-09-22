@@ -1,26 +1,17 @@
 package thiagodnf.nautilus.web.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
-import thiagodnf.nautilus.core.colorize.BySimilarityColorize;
-import thiagodnf.nautilus.core.model.Solution;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
-import thiagodnf.nautilus.web.model.Settings;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.PluginService;
-import thiagodnf.nautilus.web.util.Solutioner;
 
 @Controller
 @RequestMapping("/done")
