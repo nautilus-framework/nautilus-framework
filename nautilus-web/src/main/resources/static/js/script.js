@@ -14,6 +14,8 @@ $(function(){
 		
 		var tz = moment.tz.guess();
 		
+		console.log(tz)
+		
 		return moment(value).tz(tz).format("ddd, DD MMM YYYY HH:mm:ss");
 	});
 	
