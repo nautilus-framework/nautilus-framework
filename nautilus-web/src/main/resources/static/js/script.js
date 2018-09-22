@@ -10,12 +10,11 @@ $(function(){
 //	console.log(timedifference);
 	//Sat, 22 Sep 2018 17:49:50
 	
+	var tz = moment.tz.guess();
+	
+	moment.tz.setDefault(tz);
+	
 	$(".dates").html(function(index, value) {
-		
-		var tz = moment.tz.guess();
-		
-		console.log(tz)
-		
 		return moment(value).tz(tz).format("ddd, DD MMM YYYY HH:mm:ss");
 	});
 	
