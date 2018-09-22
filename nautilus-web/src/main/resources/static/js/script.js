@@ -4,9 +4,16 @@ function isSafari(){
  
 $(function(){
 	
+	
+	//console.log(tz)
+//	var timedifference = new Date().getTimezoneOffset();
+//	console.log(timedifference);
 	//Sat, 22 Sep 2018 17:49:50
 	
 	$(".dates").html(function(index, value) {
+		
+		var tz = moment.tz.guess();
+		
 		return moment(value).format("ddd, DD MMM YYYY HH:mm:ss");
 	});
 	
