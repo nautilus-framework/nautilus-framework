@@ -14,7 +14,7 @@ $(function(){
 		
 		var tz = moment.tz.guess();
 		
-		return moment(value).format("ddd, DD MMM YYYY HH:mm:ss");
+		return moment(value).tz(tz).format("ddd, DD MMM YYYY HH:mm:ss");
 	});
 	
 	jQuery.validator.setDefaults({
