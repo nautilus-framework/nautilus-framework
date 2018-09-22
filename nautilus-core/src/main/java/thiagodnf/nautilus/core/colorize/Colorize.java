@@ -5,12 +5,13 @@ import java.util.List;
 
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
+import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.Normalizer;
 
 public abstract class Colorize {
 	
 	public String getKey() {
-		return getName().replaceAll("\\s+","-").toLowerCase();
+		return Converter.toKey(getName());
 	}
 	
 	public List<Solution> execute(AbstractPlugin plugin, List<Solution> solutions) {

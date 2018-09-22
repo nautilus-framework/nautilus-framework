@@ -30,6 +30,7 @@ import thiagodnf.nautilus.core.factory.CrossoverFactory;
 import thiagodnf.nautilus.core.factory.MutationFactory;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
@@ -37,7 +38,6 @@ import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.service.WebSocketService;
-import thiagodnf.nautilus.web.util.Converter;
 
 @Controller
 public class OptimizeController {

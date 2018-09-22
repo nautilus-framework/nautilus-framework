@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.web.util;
+package thiagodnf.nautilus.core.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,10 @@ import org.uma.jmetal.solution.impl.DefaultIntegerSolution;
 import thiagodnf.nautilus.core.model.Variable;
 
 public class Converter {
+	
+	public static String toKey(String text) {
+		return text.replaceAll("[^A-Za-z0-9\\s]", "-").toLowerCase();
+	}
 	
 	public static List<thiagodnf.nautilus.core.model.Solution> toSolutions(List<? extends Solution<?>> population) {
 

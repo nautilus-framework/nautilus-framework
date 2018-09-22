@@ -5,12 +5,13 @@ import java.util.List;
 
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.Normalizer;
 
 public abstract class Normalize {
 
 	public String getKey() {
-		return getName().replaceAll("\\s+","-").toLowerCase();
+		return Converter.toKey(getName());
 	}
 	
 	protected List<Solution> normalize(List<Solution> solutions, double[] minValues, double[] maxValues) {
