@@ -23,6 +23,8 @@ public class ErrorController {
 
 		ResponseStatus status = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);
 
+		ex.printStackTrace();
+		
 		if (status != null) {
 			throw ex;
 		}
