@@ -14,9 +14,9 @@ $(function(){
 	
 	moment.tz.setDefault(tz);
 	
-//	$(".dates").html(function(index, value) {
-//		return moment(value).tz(tz).format("ddd, DD MMM YYYY HH:mm:ss");
-//	});
+	$(".dates").html(function(index, value) {
+		return moment(value).tz(tz).format("ddd, DD MMM YYYY HH:mm:ss");
+	});
 	
 	jQuery.validator.setDefaults({
 	    highlight: function(element) {
