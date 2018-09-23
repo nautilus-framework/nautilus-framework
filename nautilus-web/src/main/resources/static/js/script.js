@@ -4,12 +4,6 @@ function isSafari(){
  
 $(function(){
 	
-	
-	//console.log(tz)
-//	var timedifference = new Date().getTimezoneOffset();
-//	console.log(timedifference);
-	//Sat, 22 Sep 2018 17:49:50
-	
 	var tz = moment.tz.guess();
 	
 	moment.tz.setDefault(tz);

@@ -1,6 +1,5 @@
 package thiagodnf.nautilus.core.util;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,11 +20,7 @@ public class Formatter {
 
 	public static String date(Date date) {
 
-		 ZonedDateTime d = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EE, dd MMM yyyy HH:mm:ss");
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss Z");
+		ZonedDateTime d = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
 
