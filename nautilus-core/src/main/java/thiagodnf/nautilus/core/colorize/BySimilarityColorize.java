@@ -21,7 +21,7 @@ public class BySimilarityColorize extends Colorize {
 				.map(e -> e.getValue())
 				.collect(Collectors.toList());
 		
-		return 1.0 - plugin.getJaccardDistance(variables1, variables2);		
+		return 1.0 - plugin.getSimilarityDistance(variables1, variables2);		
 	}
 
 	@Override

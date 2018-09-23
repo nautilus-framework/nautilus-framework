@@ -74,7 +74,7 @@ public abstract class AbstractPlugin {
 		return Arrays.asList();
 	}
 	
-	public double getJaccardDistance(List<String> variables1, List<String> variables2) {
+	public double getSimilarityDistance(List<String> variables1, List<String> variables2) {
 		return 0.0;
 	}
 	

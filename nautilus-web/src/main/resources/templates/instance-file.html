@@ -31,7 +31,7 @@
 				<nav>
 					<div class="nav nav-tabs" id="nav-tab" role="tablist">
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#content">Content</a>
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings">Settings</a>
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings"><i class="far fa-cog"></i> Settings</a>
 					</div>
 				</nav>
 				<div class="tab-content">
@@ -47,14 +47,13 @@
 							  			<div class="row margin-bottom-minus-20">
 											<div class="col-8">
 												<strong>Original File</strong><br/>
-												<p><small>Save the original instance file in you hard drive</small></p>
+												<p><small>Save the original instance file in your hard drive</small></p>
 											</div>
 											<div class="col-4 text-right">
 												<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/instance-file} + @{'/'} + ${plugin.getProblemKey()} + @{'/'} + ${filename}">Download</a>
 											</div>	
 										</div>
 									</li>
-									
 								</ul>
 							</div>
 						

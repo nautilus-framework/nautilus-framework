@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.uma.jmetal.problem.Problem;
 
+import thiagodnf.nautilus.core.distance.JaccardDistance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.plugin.mip.objective.MaximumNumberObjective;
@@ -62,29 +61,8 @@ public class MIPPlugin extends AbstractPlugin {
 		return Arrays.asList("IntegerPolynomialMutation");
 	}
 	
-	public double getJaccardDistance(List<String> variables1, List<String> variables2) {
-
-		if (variables1.isEmpty() && variables2.isEmpty()) {
-			return 1.0;
-		}
-
-		final Set<String> intersection = new HashSet<>();
-		final Set<String> union = new HashSet<>();
-
-		for (String var1 : variables1) {
-
-			union.add(var1);
-
-			for (String var2 : variables2) {
-
-				union.add(var2);
-				
-				if (var1.equalsIgnoreCase(var2)) {
-					intersection.add(var1);
-				}
-			}
-		}
-		
-		return Double.valueOf(intersection.size()) / Double.valueOf(union.size());
+	@Override
+	public double getSimilarityDistance(List<String> variables1, List<String> variables2) {
+		return JaccardDistance.calculate(variables1, variables2);
 	}
 }
