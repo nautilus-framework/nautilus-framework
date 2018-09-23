@@ -31,22 +31,51 @@
 				<nav>
 					<div class="nav nav-tabs" id="nav-tab" role="tablist">
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#content">Content</a>
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#information">Information</a>
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings">Settings</a>
 					</div>
 				</nav>
 				<div class="tab-content">
 					<div role="tabpanel" class="tab-pane fade" id="content">
 						<div th:text="${fileContent}"></div>
 					</div>
-					<div role="tabpanel" class="tab-pane fade" id="information">
-						<dl class="row">
-							<dt class="col-sm-3">Size</dt>
-							<dd class="col-sm-9" th:text="${#formatter.fileSize(T(java.nio.file.Files).size(file))}"></dd>
-							<dt class="col-sm-3">Last Modified Time</dt>
-							<dd class="col-sm-9" th:text="${#formatter.date(T(java.nio.file.Files).getLastModifiedTime(file).toMillis())}"></dd>
-						</dl>
-						<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/instance-file} + @{'/'} + ${plugin.getProblemKey()} + @{'/'} + ${filename}">Download</a>
-						<a class="btn btn-outline-danger btn-sm" th:href="@{/instance-file/delete/}+${plugin.getProblemKey()}+@{/}+${filename}">Delete</a>
+					<div role="tabpanel" class="tab-pane fade" id="settings">
+						
+							<div class="card border-default mb-3">
+								<div class="card-header bg-transparent border-default">Download</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+							  			<div class="row margin-bottom-minus-20">
+											<div class="col-8">
+												<strong>Original File</strong><br/>
+												<p><small>Save the original instance file in you hard drive</small></p>
+											</div>
+											<div class="col-4 text-right">
+												<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/instance-file} + @{'/'} + ${plugin.getProblemKey()} + @{'/'} + ${filename}">Download</a>
+											</div>	
+										</div>
+									</li>
+									
+								</ul>
+							</div>
+						
+							<div class="card border-danger mb-3">
+								<div class="card-header bg-transparent border-danger">Danger Zone</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+							  			<div class="row margin-bottom-minus-20">
+											<div class="col-8">
+												<p><strong>Delete Instance File</strong><br/>
+												<small>Once you delete, there is no going back. Please be certain.</small></p>
+											</div>
+											<div class="col-4 text-right">
+												<a class="btn btn-outline-danger btn-sm" th:href="@{/instance-file/delete/}+${plugin.getProblemKey()}+@{/}+${filename}">Delete Instance File</a>
+											</div>	
+										</div>
+									</li>
+								</ul>
+							</div>
+						
+						
 					</div>
 				</div>
 			</div>
