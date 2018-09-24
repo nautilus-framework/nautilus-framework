@@ -7,7 +7,6 @@
 		<artifactId>nautilus</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<groupId>thiagodnf.nautilus.web</groupId>
 	<artifactId>nautilus-web</artifactId>
 	<name>Nautilus Server</name>
 	<description>A spring boot application</description>
@@ -126,22 +125,22 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>thiagodnf.nautilus.plugin.mip</groupId>
+			<groupId>thiagodnf.nautilus</groupId>
 			<artifactId>nautilus-plugin-mip</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>thiagodnf.nautilus.plugin.zdt1</groupId>
+			<groupId>thiagodnf.nautilus</groupId>
 			<artifactId>nautilus-plugin-zdt1</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>thiagodnf.nautilus.plugin.zdt3</groupId>
+			<groupId>thiagodnf.nautilus</groupId>
 			<artifactId>nautilus-plugin-zdt3</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>thiagodnf.nautilus.core</groupId>
+			<groupId>thiagodnf.nautilus</groupId>
 			<artifactId>nautilus-core</artifactId>
 			<version>1.0.0</version>
 		</dependency>

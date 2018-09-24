@@ -7,13 +7,12 @@
 		<artifactId>nautilus</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<groupId>thiagodnf.nautilus.plugin.zdt1</groupId>
 	<artifactId>nautilus-plugin-zdt1</artifactId>
 	<name>Nautilus Plugin :: ZDT1 Problem</name>
 	<description>ZDT1 Problem</description>
 	<dependencies>
 		<dependency>
-			<groupId>thiagodnf.nautilus.core</groupId>
+			<groupId>thiagodnf.nautilus</groupId>
 			<artifactId>nautilus-core</artifactId>
 			<version>1.0.0</version>
 		</dependency>

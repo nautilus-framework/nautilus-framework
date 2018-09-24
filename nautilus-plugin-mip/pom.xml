@@ -7,13 +7,12 @@
 		<artifactId>nautilus</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<groupId>thiagodnf.nautilus.plugin.mip</groupId>
 	<artifactId>nautilus-plugin-mip</artifactId>
 	<name>Nautilus Plugin :: Maximum Integer Problem</name>
 	<description>Maximum Integer Problem Plugin</description>
 	<dependencies>
 		<dependency>
-			<groupId>thiagodnf.nautilus.core</groupId>
+			<groupId>thiagodnf.nautilus</groupId>
 			<artifactId>nautilus-core</artifactId>
 			<version>1.0.0</version>
 		</dependency>
