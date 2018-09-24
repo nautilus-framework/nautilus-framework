@@ -182,5 +182,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+jMetal.log.lck
+jMetal.log
+
 
 # End of https://www.gitignore.io/api/java,maven,macos,linux,eclipse,windows,netbeans
