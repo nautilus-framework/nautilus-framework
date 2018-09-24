@@ -48,7 +48,7 @@ public class SolutionController {
 		
 		Parameters parameters = execution.getParameters();
 		
-		AbstractPlugin plugin = pluginService.getPlugin(execution.getParameters().getProblemKey());
+		AbstractPlugin plugin = pluginService.getPlugin(parameters.getProblemKey());
 		
 		String problemKey = parameters.getProblemKey();
 		

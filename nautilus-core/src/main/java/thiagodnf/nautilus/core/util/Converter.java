@@ -54,4 +54,34 @@ public class Converter {
 		
 		return newSolution;
 	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List<? extends Solution<?>> toJMetalSolutions(Problem problem, List<thiagodnf.nautilus.core.model.Solution> population) {
+
+		List solutions = new ArrayList<>();
+
+		for (thiagodnf.nautilus.core.model.Solution solution : population) {
+
+			Solution newSolution = (Solution) problem.createSolution();
+			
+			// Copy Objective values
+			for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
+				newSolution.setObjective(i, solution.getObjective(i));
+			}
+
+			// Copy Variables values
+			for (int i = 0; i < solution.getVariables().size(); i++) {
+
+				if (newSolution instanceof DefaultIntegerSolution) {
+					newSolution.setVariableValue(i, Integer.valueOf(solution.getVariables().get(i).getValue()));
+				} else if (newSolution instanceof DefaultDoubleSolution) {
+					newSolution.setVariableValue(i, Double.valueOf(solution.getVariables().get(i).getValue()));
+				}
+			}
+			
+			solutions.add(newSolution);
+		}
+
+		return solutions;
+	}
 }

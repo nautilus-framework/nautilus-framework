@@ -41,35 +41,39 @@ public class Console {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void main(String[] args) throws IOException {
 		
-		
 		LOGGER.info("Starting....");
 		
 		Parameters parameters = new Parameters();
 		
-		Path path = Paths.get("src/main/resources/instances/mip/050.txt");
-		
-		List<AbstractObjective> objectives = Arrays.asList(
-			new MaximumNumberObjective(1),
-			new MaximumNumberObjective(2),
-			new MaximumNumberObjective(3),
-			new MaximumNumberObjective(4),
-			new MaximumNumberObjective(5)
-		);		
-		
-		Problem problem = new MaximumIntegerProblem(path, objectives);
-		
+		parameters.setFilename("100.txt");
 		parameters.setCrossoverDistribution(20.0);
 		parameters.setCrossoverName("IntegerSBXCrossover");
 		parameters.setCrossoverProbability(0.9);
 		
 		parameters.setMutationDistribution(20.0);
 		parameters.setMutationName("IntegerPolynomialMutation");
-		parameters.setMutationProbability(0.001);
+		parameters.setMutationProbability(0.005);
 		
-		parameters.setPopulationSize(1000);
-		parameters.setMaxEvaluations(10000);
+		parameters.setPopulationSize(100);
+		parameters.setMaxEvaluations(500000);
 		parameters.setProblemKey(new MIPPlugin().getProblemKey());
 		
+		Path path = Paths.get("src/main/resources/instances/mip/" + parameters.getFilename());
+		
+		List<AbstractObjective> objectives = Arrays.asList(
+			new MaximumNumberObjective(1),
+			new MaximumNumberObjective(2)
+//			new MaximumNumberObjective(3),
+//			new MaximumNumberObjective(4),
+//			new MaximumNumberObjective(5),
+//			new MaximumNumberObjective(6),
+//			new MaximumNumberObjective(7),
+//			new MaximumNumberObjective(8),
+//			new MaximumNumberObjective(9),
+//			new MaximumNumberObjective(10)
+		);		
+		
+		Problem problem = new MaximumIntegerProblem(path, objectives);
 		
 		CrossoverOperator<?> crossover = new IntegerSBXCrossover(parameters.getCrossoverProbability(), parameters.getCrossoverDistribution());
 		MutationOperator<?> mutation = new IntegerPolynomialMutation(parameters.getMutationProbability(), parameters.getMutationDistribution());
@@ -77,13 +81,21 @@ public class Console {
 
 		List<Double> referencePoint = new ArrayList<>();
 
-		referencePoint.add(-0.9);
-		referencePoint.add(-0.1);
-		referencePoint.add(0.0);
-		referencePoint.add(0.0);
-		referencePoint.add(0.0);
+		referencePoint.add(-0.8);
+		referencePoint.add(-0.2);
 		
-		double epsilon = 0.01;
+//		referencePoint.add(-0.5);
+//		referencePoint.add(0.0);
+//		referencePoint.add(0.0);
+//		referencePoint.add(0.0);
+//		referencePoint.add(0.0);
+//		referencePoint.add(0.0);
+//		referencePoint.add(0.0);
+//		referencePoint.add(0.0);
+//		referencePoint.add(0.0);
+//		referencePoint.add(-0.5);
+		
+		double epsilon = 0.001;
 
 		LOGGER.info("Optimizing...");
 		
@@ -111,13 +123,13 @@ public class Console {
 		
 		Execution execution = new Execution();
 		
-		execution.setId("output5o");
+		execution.setId("75BIksd2CR2");
 		execution.setParameters(parameters);
 		execution.setSolutions(solutions);
 		execution.setExecutionTime(algorithmRunner.getComputingTime());
 		execution.getSettings().setNormalize(new ByMaxAndMinValuesNormalize().getKey());
 		
-		FileUtils.writeStringToFile(new File("output5o.json"), execution.toString());
+		FileUtils.writeStringToFile(new File("output.json"), execution.toString());
 		
 		LOGGER.info("Done");
 	}

@@ -17,7 +17,7 @@ public class Parameters {
 	
 	@DecimalMin("10")
 	@DecimalMax("10000000")
-	private int maxEvaluations = 100000;
+	private int maxEvaluations = 500000;
 	
 	private String problemKey;
 	
@@ -41,7 +41,7 @@ public class Parameters {
 	
 	@DecimalMin("0.0")
 	@DecimalMax("1.0")
-	private Double mutationProbability = 0.01;
+	private Double mutationProbability = 0.005;
 	
 	@DecimalMin("1.0")
 	@DecimalMax("1000.0")

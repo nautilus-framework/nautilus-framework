@@ -1,7 +1,12 @@
 package thiagodnf.nautilus.core.distance;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.uma.jmetal.util.front.Front;
+import org.uma.jmetal.util.point.Point;
 
 public class EuclideanDistance {
 
@@ -18,5 +23,29 @@ public class EuclideanDistance {
 		}
 
 		return Math.sqrt(sum);
+	}
+	
+	public static double calculate(Front normalizedReferenceFront, Front normalizedFront) {
+
+		double distance = 0.0;
+
+		for (int i = 0; i < normalizedFront.getNumberOfPoints(); i++) {
+
+			Point p1 = normalizedFront.getPoint(i);
+
+			for (int j = 0; j < normalizedReferenceFront.getNumberOfPoints(); j++) {
+
+				Point ref = normalizedReferenceFront.getPoint(j);
+
+				List<Double> point1 = Arrays.stream(p1.getValues()).boxed().collect(Collectors.toList());
+				List<Double> point2 = Arrays.stream(ref.getValues()).boxed().collect(Collectors.toList());
+
+				distance += calculate(point1, point2);
+			}
+		}
+
+		double total = normalizedReferenceFront.getNumberOfPoints() * normalizedFront.getNumberOfPoints();
+		
+		return (double) distance / (double) total;
 	}
 }
