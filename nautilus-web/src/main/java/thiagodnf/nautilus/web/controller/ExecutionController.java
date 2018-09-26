@@ -1,7 +1,9 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,41 @@ public class ExecutionController {
 		model.addAttribute("solutions", solutions);
 		model.addAttribute("execution", execution);
 		model.addAttribute("settings", execution.getSettings());
+		
+		
+		int variables = 2;
+		
+
+		for (int i = 0; i < variables; i++) {
+
+			double[] x = new double[solutions.size()];
+			double[] y = new double[solutions.size()];
+			
+			for (int j = 0; j < solutions.size(); j++) {
+				
+				Solution s = solutions.get(j);
+				
+				for (int k = 0; k < solutions.size(); k++) {
+					
+					x[j] = s.getObjective(0);
+					y[j] = Double.valueOf(s.getVariables().get(i).getValue());
+				}
+			}
+			
+			System.out.println(Arrays.toString(x));
+			System.out.println(Arrays.toString(y));
+			System.out.println("-------");
+			
+			PearsonsCorrelation pc = new PearsonsCorrelation();
+			
+			double cc = pc.correlation(x, y);
+
+			System.out.println(cc);
+		}
+			
+		
+		
+		
 		
 		return "execution";
 	}
