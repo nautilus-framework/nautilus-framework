@@ -71,7 +71,7 @@ public class ExecutionController {
 		model.addAttribute("settings", execution.getSettings());
 		
 		
-		int variables = 2;
+		int variables = 10;
 		
 
 		for (int i = 0; i < variables; i++) {
