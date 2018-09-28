@@ -102,6 +102,18 @@ public class ExecutionController {
 		}
 			
 		
+		// Objective 1
+		double[] obj1 = new double[] {0.0, 0.1};
+		double[] obj2 = new double[] {1.0, 0.9};
+		
+		double[] feedback = new double[] {-1,-1};
+		
+		
+		PearsonsCorrelation pc = new PearsonsCorrelation();
+		
+		System.out.println(pc.correlation(obj1, feedback));
+		System.out.println(pc.correlation(obj2, feedback));
+		
 		
 		
 		
