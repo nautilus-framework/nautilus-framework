@@ -24,6 +24,10 @@ public class MaximumNumberObjective extends AbstractObjective {
 			if (solution.getVariableValue(i) == searchFor) {
 				numbers++;
 			}
+			
+			if (searchFor == 1 && solution.getVariableValue(i) == 10) {
+				numbers++;
+			}
 		}
 
 		double value = (double) numbers / (double) solution.getNumberOfVariables();

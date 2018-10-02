@@ -26,6 +26,7 @@ import org.uma.jmetal.util.point.PointSolution;
 import org.uma.jmetal.util.point.impl.ArrayPoint;
 
 import thiagodnf.nautilus.core.distance.EuclideanDistance;
+import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.core.util.Converter;
@@ -102,6 +103,47 @@ public class DoneController {
 	    
 	    List<PointSolution> normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront) ;	
 	
+	    
+	    double number1 = 0.0;
+	    double number2 = 0.0;
+	    double number3 = 0.0;
+	    double number4 = 0.0;
+	    int variables = 0;
+	    
+	    for(thiagodnf.nautilus.core.model.Solution s : execution.getSolutions()) {
+	    	
+	    	for(Variable v : s.getVariables()) {
+	    		
+	    		if(v.getValue().equalsIgnoreCase("1")) {
+	    			number1++;
+	    		}
+	    		if(v.getValue().equalsIgnoreCase("2")) {
+	    			number2++;
+	    		}
+	    		if(v.getValue().equalsIgnoreCase("3")) {
+	    			number3++;
+	    		}
+	    		if(v.getValue().equalsIgnoreCase("4")) {
+	    			number4++;
+	    		}
+	    		
+	    		variables++;
+	    	}
+	    }
+	    
+	    number1 = (double) number1 / (double) variables;
+	    number2 = (double) number2 / (double) variables;
+	    number3 = (double) number3 / (double) variables;
+	    number4 = (double) number4 / (double) variables;
+	    
+	   
+	    model.addAttribute("number1", number1);
+	    model.addAttribute("number2", number2);
+	    model.addAttribute("number3", number3);
+	    model.addAttribute("number4", number4);
+	    
+	   
+	    
 	    //
 	    
 	    model.addAttribute("objectives", objectives);

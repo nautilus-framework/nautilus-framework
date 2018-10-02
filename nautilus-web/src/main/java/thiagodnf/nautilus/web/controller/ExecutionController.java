@@ -1,9 +1,9 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +14,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import thiagodnf.nautilus.core.distance.EuclideanDistance;
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
+import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.core.util.Normalizer;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
@@ -31,6 +35,9 @@ public class ExecutionController {
 	
 	@Autowired
 	private ExecutionService executionService;
+	
+	@Autowired
+	private FileService fileService;
 	
 	@Autowired
 	private PluginService pluginService;
@@ -71,49 +78,37 @@ public class ExecutionController {
 		model.addAttribute("settings", execution.getSettings());
 		
 		
-		int variables = 10;
 		
+		Solution rep = new Solution();
+		
+		rep.getObjectives().add(-0.20);
+		rep.getObjectives().add(-0.90);
+//		rep.getObjectives().add(-0.25);
+//		rep.getObjectives().add(-0.25);
+		
+		List<Solution> rps = new ArrayList<>();
+		
+		rps.add(rep);
+		
+		System.out.println("--------------");
+		System.out.println(rps);
+		
+		rps = plugin.getNormalize(settings.getNormalize()).normalize(objectives, rps);
+		
+		//System.out.println(rps);
+		
+//		List<Double> normalized = plugin.getNormalize(settings.getNormalize()).normalize(objectives, solutions)
+		
+		double sum = 0.0;
+		
+//		for (Solution s : solutions) {
+//			sum += EuclideanDistance.calculate(rps.get(0).getObjectives(), s.getObjectives());
+//		}
 
-		for (int i = 0; i < variables; i++) {
+		double distance = (double) sum / (double) solutions.size();
+//		double distance = sum;
 
-			double[] x = new double[solutions.size()];
-			double[] y = new double[solutions.size()];
-			
-			for (int j = 0; j < solutions.size(); j++) {
-				
-				Solution s = solutions.get(j);
-				
-				for (int k = 0; k < solutions.size(); k++) {
-					
-					x[j] = s.getObjective(0);
-					y[j] = Double.valueOf(s.getVariables().get(i).getValue());
-				}
-			}
-			
-			System.out.println(Arrays.toString(x));
-			System.out.println(Arrays.toString(y));
-			System.out.println("-------");
-			
-			PearsonsCorrelation pc = new PearsonsCorrelation();
-			
-			double cc = pc.correlation(x, y);
-
-			System.out.println(cc);
-		}
-			
-		
-		// Objective 1
-		double[] obj1 = new double[] {0.0, 0.1};
-		double[] obj2 = new double[] {1.0, 0.9};
-		
-		double[] feedback = new double[] {-1,-1};
-		
-		
-		PearsonsCorrelation pc = new PearsonsCorrelation();
-		
-		System.out.println(pc.correlation(obj1, feedback));
-		System.out.println(pc.correlation(obj2, feedback));
-		
+		System.out.println(distance);
 		
 		
 		

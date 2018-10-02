@@ -1,7 +1,9 @@
 package thiagodnf.nautilus.core.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
@@ -11,6 +13,14 @@ import org.uma.jmetal.solution.impl.DefaultIntegerSolution;
 import thiagodnf.nautilus.core.model.Variable;
 
 public class Converter {
+	
+	public static double[] toDoubleArray(List<Double> list) {
+		return list.stream().mapToDouble(x -> x).toArray();
+	}
+	
+	public static List<Double> toDoubleList(double[] array) {
+		return Arrays.stream(array).boxed().collect(Collectors.toList());
+	}
 	
 	public static String toKey(String text) {
 		return text.replaceAll("[^A-Za-z0-9]", "-").toLowerCase();

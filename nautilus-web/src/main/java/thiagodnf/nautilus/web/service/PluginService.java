@@ -82,12 +82,15 @@ public class PluginService {
 
 		List<AbstractObjective> objectives = new ArrayList<>();
 
-		for (Entry<String, List<AbstractObjective>> entry : objectiveMap.entrySet()) {
-			
-			for (AbstractObjective objetive : entry.getValue()) {
+		for(String objectiveKey : objectiveKeys) {
+		
+			for (Entry<String, List<AbstractObjective>> entry : objectiveMap.entrySet()) {
 				
-				if (objectiveKeys.contains(objetive.getKey())) {
-					objectives.add(objetive);
+				for (AbstractObjective objective : entry.getValue()) {
+					
+					if(objective.getKey().equalsIgnoreCase(objectiveKey)) {
+						objectives.add(objective);
+					}
 				}
 			}
 		}

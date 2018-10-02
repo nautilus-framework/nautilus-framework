@@ -20,9 +20,9 @@ public abstract class Normalize {
 			return new ArrayList<>(solutions.size());
 		}
 
-		if (solutions.size() == 1) {
-			return new ArrayList<>(solutions);
-		}
+//		if (solutions.size() == 1) {
+//			return new ArrayList<>(solutions);
+//		}
 
 		List<Solution> normalizedSolutions = new ArrayList<>(solutions.size());
 
