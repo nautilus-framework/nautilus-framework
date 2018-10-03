@@ -54,7 +54,7 @@ public class OptimizeController {
 	@Autowired
 	private WebSocketService webSocketService;
 	
-	@GetMapping("/optimize/{problemKey}/{filename:.+}")
+	@GetMapping("/optimize/{problemKey:.+}/{filename:.+}")
 	public String optimize(Model model, 
 			@PathVariable("problemKey") String problemKey, 
 			@PathVariable("filename") String filename) {
@@ -68,7 +68,8 @@ public class OptimizeController {
 		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
 		model.addAttribute("crossoverNames", pluginService.getCrossoverNames(problemKey));
 		model.addAttribute("mutationNames", pluginService.getMutationNames(problemKey));
-		model.addAttribute("objectiveMap", pluginService.getObjectives(problemKey));
+		
+		model.addAttribute("objectiveAdapter", pluginService.getObjectiveAdapter(problemKey));
 		
 		return "optimize";
 	}

@@ -19,6 +19,60 @@ $(function(){
 	    errorElement: 'div',
 	    errorClass: 'invalid-feedback',
 	});
+	
+	
+	$(".checkbox-select-all").each(function(index, value){
+		
+		var targets = $(this).parent().parent().find(".card-body input[type='checkbox']");
+		
+		var counter = 0;
+		
+		targets.each(function(index, target){
+			if($(target).is(':checked')){
+				counter++;
+			}
+		});
+		
+		if(counter == targets.length){
+			$(this).prop("checked", true);
+		}else{
+			$(this).prop("checked", false);
+		}
+	});
+	
+	$(".checkbox-select-all").click(function(e){
+		
+		var that = this;
+		
+		var targets = $(this).parent().parent().find(".card-body input[type='checkbox']");
+		
+		targets.each(function(index, value){
+			$(value).prop("checked", $(that).is(':checked'));
+		});
+	});
+	
+	$(".objectiveKeys").click(function(e){
+		
+		var parent = $(this).parent().parent().parent().parent().parent();
+		
+		var targets = parent.find("input[type='checkbox']");
+		
+		var counter = 0;
+		
+		targets.each(function(index, value){
+			if($(value).is(':checked')){
+				counter++;
+			}
+		});
+		
+		if(counter == targets.length){
+			parent.parent().find(".checkbox-select-all").prop("checked", true);
+		}else{
+			parent.parent().find(".checkbox-select-all").prop("checked", false);
+		}
+	})
+	
+	
    
 	$('.table-datatable').DataTable();
 	

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.uma.jmetal.problem.Problem;
 
+import thiagodnf.nautilus.core.adapter.ObjectiveAdapter;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.plugin.mip.MIPPlugin;
@@ -72,13 +73,25 @@ public class PluginService {
 		return getPlugin(problemKey).getProblem(instance, objectives);
 	}
 	
-	public Map<String, List<AbstractObjective>> getObjectives(String problemKey){
-		return getPlugin(problemKey).getObjectives();
+	
+	public ObjectiveAdapter getObjectiveAdapter(String problemKey) {
+
+		ObjectiveAdapter adapter = getPlugin(problemKey).getObjectiveAdapter();
+
+		if (adapter == null) {
+			throw new RuntimeException("The objective adapter should not be null");
+		}
+
+		if (adapter.isEmpty()) {
+			throw new RuntimeException("There are no objectives defined. Please contact the developer");
+		}
+
+		return adapter;
 	}
 	
 	public List<AbstractObjective> getObjectives(String problemKey, List<String> objectiveKeys){
 		
-		Map<String, List<AbstractObjective>> objectiveMap = getObjectives(problemKey);
+		Map<String, List<AbstractObjective>> objectiveMap = getObjectiveAdapter(problemKey).getGroups();
 
 		List<AbstractObjective> objectives = new ArrayList<>();
 

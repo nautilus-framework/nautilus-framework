@@ -3,12 +3,11 @@ package thiagodnf.nautilus.plugin.zdt3;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.uma.jmetal.problem.Problem;
 
+import thiagodnf.nautilus.core.adapter.ObjectiveAdapter;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.plugin.zdt3.objective.F0Objective;
@@ -18,18 +17,16 @@ import thiagodnf.nautilus.plugin.zdt3.problem.ZDT3Problem;
 public class ZDT3Plugin extends AbstractPlugin {
 
 	@Override
-	public Map<String, List<AbstractObjective>> getObjectives() {
+	public ObjectiveAdapter getObjectiveAdapter() {
 		
-		Map<String, List<AbstractObjective>> groups = new HashMap<>();
+		ObjectiveAdapter adapter = new ObjectiveAdapter();
 		
-		groups.put("General", Arrays.asList(
-			new F0Objective(),
-			new F1Objective()
-		));
+		adapter.add(new F0Objective());
+		adapter.add(new F1Objective());
 		
-		return groups;
+		return adapter;
 	}
-
+	
 	@Override
 	public String getProblemName() {
 		return "ZDT3 Problem";

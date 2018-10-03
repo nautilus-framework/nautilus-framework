@@ -4,6 +4,8 @@ import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractObjective {
 
+	private boolean isChecked = true;
+	
 	public double maximize(double value) {
 		return -1.0 * value;
 	}
@@ -27,7 +29,20 @@ public abstract class AbstractObjective {
 	public String toString() {
 		return getKey();
 	}
+	
+	/**
+	 * It returns if this objective is going to be  'selected' in the screen
+	 * 
+	 * @return True is checked, otherwise
+	 */
+	public boolean isChecked() {
+		return isChecked;
+	}
 
+	public void setChecked(boolean status) {
+		this.isChecked = status;
+	}
+	
 	public abstract double evaluate(Object solution);
 
 	public abstract String getName();

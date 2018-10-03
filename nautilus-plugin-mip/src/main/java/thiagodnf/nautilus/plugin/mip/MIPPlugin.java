@@ -3,12 +3,11 @@ package thiagodnf.nautilus.plugin.mip;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.uma.jmetal.problem.Problem;
 
+import thiagodnf.nautilus.core.adapter.ObjectiveAdapter;
 import thiagodnf.nautilus.core.distance.JaccardDistance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
@@ -18,27 +17,23 @@ import thiagodnf.nautilus.plugin.mip.problem.MaximumIntegerProblem;
 public class MIPPlugin extends AbstractPlugin {
 
 	@Override
-	public Map<String, List<AbstractObjective>> getObjectives() {
-		
-		Map<String, List<AbstractObjective>> groups = new HashMap<>();
-		
-		groups.put("Odd Numbers", Arrays.asList(
-			new MaximumNumberObjective(1),
-			new MaximumNumberObjective(3),
-			new MaximumNumberObjective(5),
-			new MaximumNumberObjective(7),
-			new MaximumNumberObjective(9)
-		));
-		
-		groups.put("Even Numbers", Arrays.asList(
-			new MaximumNumberObjective(2),
-			new MaximumNumberObjective(4),
-			new MaximumNumberObjective(6),
-			new MaximumNumberObjective(8),
-			new MaximumNumberObjective(10)
-		));
-		
-		return groups;
+	public ObjectiveAdapter getObjectiveAdapter() {
+
+		ObjectiveAdapter adapter = new ObjectiveAdapter();
+
+		adapter.add("Odd Numbers", new MaximumNumberObjective(1));
+		adapter.add("Odd Numbers", new MaximumNumberObjective(3));
+		adapter.add("Odd Numbers", new MaximumNumberObjective(5));
+		adapter.add("Odd Numbers", new MaximumNumberObjective(7));
+		adapter.add("Odd Numbers", new MaximumNumberObjective(9));
+
+		adapter.add("Even Numbers", new MaximumNumberObjective(2));
+		adapter.add("Even Numbers", new MaximumNumberObjective(4));
+		adapter.add("Even Numbers", new MaximumNumberObjective(6));
+		adapter.add("Even Numbers", new MaximumNumberObjective(8));
+		adapter.add("Even Numbers", new MaximumNumberObjective(10));
+
+		return adapter;
 	}
 
 	@Override

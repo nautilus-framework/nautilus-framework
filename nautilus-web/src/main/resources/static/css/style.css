@@ -116,3 +116,7 @@ body {
 	margin-bottom: 15px;
 }
 
+.card .card-header input[type=checkbox]{
+	margin-top: 5px;	
+}
+

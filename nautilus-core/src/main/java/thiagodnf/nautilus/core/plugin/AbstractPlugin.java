@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.uma.jmetal.problem.Problem;
 
+import thiagodnf.nautilus.core.adapter.ObjectiveAdapter;
 import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
 import thiagodnf.nautilus.core.colorize.BySimilarityColorize;
 import thiagodnf.nautilus.core.colorize.Colorize;
@@ -58,10 +59,6 @@ public abstract class AbstractPlugin {
 		return getNormalizes().get(key);
 	}
 	
-	public Map<String, List<AbstractObjective>> getObjectives() {
-		return new HashMap<>();
-	}
-	
 	public String getProblemKey() {
 		return getProblemName().replaceAll("\\s+", "-").toLowerCase();
 	}
@@ -77,6 +74,12 @@ public abstract class AbstractPlugin {
 	public double getSimilarityDistance(List<String> variables1, List<String> variables2) {
 		return 0.0;
 	}
+	
+	
+	public ObjectiveAdapter getObjectiveAdapter() {
+		return new ObjectiveAdapter();
+	}
+	
 	
 	public abstract Problem<?> getProblem(Path instance, List<AbstractObjective> objectives) throws IOException;
 	

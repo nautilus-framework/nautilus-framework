@@ -30,7 +30,7 @@
 
 				<ul class="nav nav-tabs" role="tablist">
 					<li class="nav-item">
-						<a class="nav-link active" href="#general" role="tab" data-toggle="tab" aria-selected="true">General</a>
+						<a class="nav-link" href="#general" role="tab" data-toggle="tab" aria-selected="true">General</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#operators" role="tab" data-toggle="tab">Operators</a>
@@ -43,7 +43,7 @@
 				<form id="form-execute" class="needs-validation" th:object="${parameters}" novalidate>
 					<!-- Tab panes -->
 					<div class="tab-content">
-						<div role="tabpanel" class="tab-pane fade show active" id="general">
+						<div role="tabpanel" class="tab-pane" id="general">
 							<input type="hidden" class="form-control" th:field="*{problemKey}" />
 							<input type="hidden" class="form-control" th:field="*{filename}" />
 							<div class="form-group">
@@ -90,20 +90,26 @@
 								</div>
 							</div>
 						</div>
-						<div class="tab-pane fade" id="objectives">
-							<div class="row" th:with="size=${12/objectiveMap.keySet().size()}">
-								<div th:class="'col-' + ${size}" th:each="obj,i : ${objectiveMap}">
+						<div class="tab-pane fade" id="objectives" th:with="groups = ${objectiveAdapter.getGroups()}">
+							<div class="row" th:with="size = ${12/objectiveAdapter.getNumberOfGroups()}">
+								<div th:class="'col-' + ${size}" th:each="group,i : ${groups}">
 									<div class="card" >
-										<div class="card-header" th:text="${obj.key}"></div>
+										<div class="card-header" >
+											<span th:text="${group.key}"></span>
+											<input type="checkbox" 
+												class="float-right checkbox-select-all"
+												name="objectivesName"	 
+											/>
+										</div>
 										<div class="card-body">
-											<div th:each="objective : ${obj.value}">
+											<div th:each="objective : ${group.value}">
 												<div class="form-group">
 													<div class="checkbox">
 														<label class="no-select">
 															<input type="checkbox" 
 																class="objectiveKeys"
 																name="objectiveKeys" 
-																checked="checked"
+																th:checked="${objective.isChecked()}"
 																th:value="${objective.getKey()}" 
 																th:text="${objective.getName()}"
 															/>
