@@ -37,16 +37,6 @@ public class SPLPlugin extends AbstractPlugin {
 	}
 	
 	@Override
-	public List<String> getCrossoverNames(){
-		return Arrays.asList("IntegerSBXCrossover");
-	}
-	
-	@Override
-	public List<String> getMutationNames(){
-		return Arrays.asList("IntegerPolynomialMutation");
-	}
-	
-	@Override
 	public double getSimilarityDistance(List<String> variables1, List<String> variables2) {
 		return JaccardDistance.calculate(variables1, variables2);
 	}

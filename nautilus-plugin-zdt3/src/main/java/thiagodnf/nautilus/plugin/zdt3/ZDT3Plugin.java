@@ -37,13 +37,13 @@ public class ZDT3Plugin extends AbstractPlugin {
 		return new ZDT3Problem(instance, objectives);
 	}
 	
-	@Override
-	public List<String> getCrossoverNames(){
-		return Arrays.asList("SBXCrossover");
-	}
-	
-	@Override
-	public List<String> getMutationNames(){
-		return Arrays.asList("PolynomialMutation");
-	}
+//	@Override
+//	public List<String> getCrossoverNames(){
+//		return Arrays.asList("SBXCrossover");
+//	}
+//	
+//	@Override
+//	public List<String> getMutationNames(){
+//		return Arrays.asList("PolynomialMutation");
+//	}
 }

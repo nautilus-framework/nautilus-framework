@@ -36,14 +36,14 @@ public class ZDT1Plugin extends AbstractPlugin {
 	public Problem<?> getProblem(Path instance, List<AbstractObjective> objectives) throws IOException {
 		return new ZDT1Problem(instance, objectives);
 	}
-	
-	@Override
-	public List<String> getCrossoverNames(){
-		return Arrays.asList("SBXCrossover");
-	}
-	
-	@Override
-	public List<String> getMutationNames(){
-		return Arrays.asList("PolynomialMutation");
-	}
+//	
+//	@Override
+//	public List<String> getCrossoverNames(){
+//		return Arrays.asList("SBXCrossover");
+//	}
+//	
+//	@Override
+//	public List<String> getMutationNames(){
+//		return Arrays.asList("PolynomialMutation");
+//	}
 }
