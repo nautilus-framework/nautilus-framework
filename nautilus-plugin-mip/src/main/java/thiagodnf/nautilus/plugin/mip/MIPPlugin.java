@@ -2,12 +2,14 @@ package thiagodnf.nautilus.plugin.mip;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 
+import org.uma.jmetal.operator.impl.crossover.IntegerSBXCrossover;
+import org.uma.jmetal.operator.impl.mutation.IntegerPolynomialMutation;
 import org.uma.jmetal.problem.Problem;
 
 import thiagodnf.nautilus.core.adapter.ObjectiveAdapter;
+import thiagodnf.nautilus.core.adapter.OperatorAdapter;
 import thiagodnf.nautilus.core.distance.JaccardDistance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
@@ -35,7 +37,19 @@ public class MIPPlugin extends AbstractPlugin {
 
 		return adapter;
 	}
-
+	
+	@Override
+	public OperatorAdapter getOperatorAdapter() {
+		
+		OperatorAdapter adapter = new OperatorAdapter();
+		
+		adapter.addCrossover("Integer SBX Crossover", new IntegerSBXCrossover(1.0, 20));
+		
+		adapter.addMutation("Integer Polynomial Mutation", new IntegerPolynomialMutation());
+		
+		return adapter;
+	}
+	
 	@Override
 	public String getProblemName() {
 		return "Maximum Integer Problem";
@@ -44,16 +58,6 @@ public class MIPPlugin extends AbstractPlugin {
 	@Override
 	public Problem<?> getProblem(Path instance, List<AbstractObjective> objectives) throws IOException {
 		return new MaximumIntegerProblem(instance, objectives);
-	}
-	
-	@Override
-	public List<String> getCrossoverNames(){
-		return Arrays.asList("IntegerSBXCrossover");
-	}
-	
-	@Override
-	public List<String> getMutationNames(){
-		return Arrays.asList("IntegerPolynomialMutation");
 	}
 	
 	@Override

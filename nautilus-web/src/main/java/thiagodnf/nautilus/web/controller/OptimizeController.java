@@ -30,6 +30,7 @@ import thiagodnf.nautilus.core.factory.CrossoverFactory;
 import thiagodnf.nautilus.core.factory.MutationFactory;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.web.model.Execution;
@@ -66,10 +67,9 @@ public class OptimizeController {
 		
 		model.addAttribute("parameters", parameters);
 		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
-		model.addAttribute("crossoverNames", pluginService.getCrossoverNames(problemKey));
-		model.addAttribute("mutationNames", pluginService.getMutationNames(problemKey));
 		
 		model.addAttribute("objectiveAdapter", pluginService.getObjectiveAdapter(problemKey));
+		model.addAttribute("operatorAdapter", pluginService.getOperatorAdapter(problemKey));
 		
 		return "optimize";
 	}
@@ -130,8 +130,10 @@ public class OptimizeController {
 			
 			List<?> initialPopulation = getInitialPopulation(problem, lastExecution);
         	
+			AbstractPlugin plugin = pluginService.getPlugin(problemKey);
 			
-        	CrossoverOperator crossover = CrossoverFactory.getCrossover(parameters.getCrossoverName(), parameters.getCrossoverProbability(), parameters.getCrossoverDistribution());
+			CrossoverOperator crossover = plugin.getOperatorAdapter().getCrossover(parameters.getCrossoverName());
+			
 			
 			MutationOperator mutation = MutationFactory.getMutation(parameters.getMutationName(), parameters.getMutationProbability(), parameters.getMutationDistribution());
 			

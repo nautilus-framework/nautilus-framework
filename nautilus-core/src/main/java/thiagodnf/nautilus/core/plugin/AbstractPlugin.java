@@ -2,7 +2,6 @@ package thiagodnf.nautilus.core.plugin;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,13 +9,14 @@ import java.util.Map;
 import org.uma.jmetal.problem.Problem;
 
 import thiagodnf.nautilus.core.adapter.ObjectiveAdapter;
+import thiagodnf.nautilus.core.adapter.OperatorAdapter;
 import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
 import thiagodnf.nautilus.core.colorize.BySimilarityColorize;
 import thiagodnf.nautilus.core.colorize.Colorize;
 import thiagodnf.nautilus.core.colorize.NoColorColorize;
-import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
+import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public abstract class AbstractPlugin {
@@ -63,14 +63,6 @@ public abstract class AbstractPlugin {
 		return getProblemName().replaceAll("\\s+", "-").toLowerCase();
 	}
 	
-	public List<String> getCrossoverNames(){
-		return Arrays.asList();
-	}
-	
-	public List<String> getMutationNames(){
-		return Arrays.asList();
-	}
-	
 	public double getSimilarityDistance(List<String> variables1, List<String> variables2) {
 		return 0.0;
 	}
@@ -80,6 +72,9 @@ public abstract class AbstractPlugin {
 		return new ObjectiveAdapter();
 	}
 	
+	public OperatorAdapter getOperatorAdapter() {
+		return new OperatorAdapter();
+	}
 	
 	public abstract Problem<?> getProblem(Path instance, List<AbstractObjective> objectives) throws IOException;
 	

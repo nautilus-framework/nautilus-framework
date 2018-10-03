@@ -11,10 +11,10 @@
 	<modules>
 		<module>nautilus-core</module>
 		<module>nautilus-plugin-mip</module>
+		<module>nautilus-plugin-spl</module>
 		<module>nautilus-plugin-zdt3</module>
 		<module>nautilus-plugin-zdt1</module>
 		<module>nautilus-web</module>
-		<module>nautilus-plugin-spl</module>
 	</modules>
 	<properties>
 		<springframework.boot.version>2.0.3.RELEASE</springframework.boot.version>

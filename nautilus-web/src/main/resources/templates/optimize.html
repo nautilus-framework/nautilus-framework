@@ -59,8 +59,11 @@
 							<div class="row">
 								<div class="form-group col-4">
 									<label for="crossoverName">Crossover</label>
-									<select class="form-control" th:field="*{crossoverName}" th:each="crossover : ${crossoverNames}">
-									    <option th:value="${crossover}" th:text="${crossover}"></option>
+									<select class="form-control" th:field="*{crossoverName}">
+										<option th:each="crossover : ${operatorAdapter.getCrossoverNames()}" 
+								    		th:value="${crossover.key}"
+								    		th:text="${crossover.value}" 
+							    		/>
 									</select>
 								</div>
 								<div class="form-group col-4">
@@ -76,8 +79,12 @@
 							<div class="row">
 								<div class="form-group col-4">
 									<label for="mutationName">Mutation</label>
-									<select class="form-control" th:field="*{mutationName}" th:each="mutation : ${mutationNames}">
-									    <option th:value="${mutation}" th:text="${mutation}"></option>
+									<select class="form-control" th:field="*{mutationName}">
+										<option th:each="mutation : ${operatorAdapter.getMutationNames()}" 
+								    		th:value="${mutation.key}"
+								    		th:text="${mutation.value}" 
+							    		/>
+									    
 							  		</select>
 								</div>
 								<div class="form-group col-4">

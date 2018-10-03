@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.uma.jmetal.problem.Problem;
 
+import thiagodnf.nautilus.core.adapter.OperatorAdapter;
 import thiagodnf.nautilus.core.adapter.ObjectiveAdapter;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
@@ -89,6 +90,25 @@ public class PluginService {
 		return adapter;
 	}
 	
+	public OperatorAdapter getOperatorAdapter(String problemKey) {
+
+		OperatorAdapter adapter = getPlugin(problemKey).getOperatorAdapter();
+
+		if (adapter == null) {
+			throw new RuntimeException("The operator adapter should not be null");
+		}
+
+		if (adapter.getCrossoverNames().isEmpty()) {
+			throw new RuntimeException("There is no crossover defined. Please contact the developer");
+		}
+
+		if (adapter.getMutationNames().isEmpty()) {
+			throw new RuntimeException("There is no mutation defined. Please contact the developer");
+		}
+
+		return adapter;
+	}
+	
 	public List<AbstractObjective> getObjectives(String problemKey, List<String> objectiveKeys){
 		
 		Map<String, List<AbstractObjective>> objectiveMap = getObjectiveAdapter(problemKey).getGroups();
@@ -110,13 +130,4 @@ public class PluginService {
 
 		return objectives;
 	}
-
-	public List<String> getCrossoverNames(String problemKey) {
-		return getPlugin(problemKey).getCrossoverNames();
-	}
-	
-	public List<String> getMutationNames(String problemKey) {
-		return getPlugin(problemKey).getMutationNames();
-	}
-	
 }
