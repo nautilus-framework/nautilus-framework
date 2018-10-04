@@ -18,6 +18,7 @@ import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractPlugin {
 	
@@ -60,7 +61,7 @@ public abstract class AbstractPlugin {
 	}
 	
 	public String getProblemKey() {
-		return getProblemName().replaceAll("\\s+", "-").toLowerCase();
+		return Converter.toKey(getProblemName());
 	}
 	
 	public double getSimilarityDistance(List<String> variables1, List<String> variables2) {

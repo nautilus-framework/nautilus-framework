@@ -28,7 +28,7 @@ public class ProblemController {
 	@Autowired
 	private ExecutionService executionService;
 	
-	@GetMapping("/{problemKey}")
+	@GetMapping("/{problemKey:.+}")
 	public String viewProblem(Model model, @PathVariable("problemKey") String problemKey) throws IOException {
 		
 		model.addAttribute("plugin", pluginService.getPlugin(problemKey));

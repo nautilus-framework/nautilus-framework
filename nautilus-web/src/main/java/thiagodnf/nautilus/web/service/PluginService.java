@@ -1,7 +1,5 @@
 package thiagodnf.nautilus.web.service;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,10 +12,9 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.uma.jmetal.problem.Problem;
 
-import thiagodnf.nautilus.core.adapter.OperatorAdapter;
 import thiagodnf.nautilus.core.adapter.ObjectiveAdapter;
+import thiagodnf.nautilus.core.adapter.OperatorAdapter;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.plugin.mip.MIPPlugin;
@@ -53,10 +50,7 @@ public class PluginService {
 		
 		plugins.put(plugin.getProblemKey(), plugin);
 		
-		
 		plugin.initIt();
-		
-		// Creating directory
 		
 		fileService.createInstancesDirectory(plugin.getProblemKey());
 	}
@@ -69,11 +63,6 @@ public class PluginService {
 
 		return plugins.get(problemKey);
 	}
-	
-	public Problem<?> getProblem(String problemKey, Path instance, List<AbstractObjective> objectives) throws IOException {
-		return getPlugin(problemKey).getProblem(instance, objectives);
-	}
-	
 	
 	public ObjectiveAdapter getObjectiveAdapter(String problemKey) {
 
@@ -98,12 +87,16 @@ public class PluginService {
 			throw new RuntimeException("The operator adapter should not be null");
 		}
 
-		if (adapter.getCrossoverNames().isEmpty()) {
-			throw new RuntimeException("There is no crossover defined. Please contact the developer");
+		if (adapter.getCrossovers().isEmpty()) {
+			throw new RuntimeException("There is no crossover operator defined. Please contact the developer");
 		}
 
-		if (adapter.getMutationNames().isEmpty()) {
-			throw new RuntimeException("There is no mutation defined. Please contact the developer");
+		if (adapter.getMutations().isEmpty()) {
+			throw new RuntimeException("There is no mutation operator defined. Please contact the developer");
+		}
+		
+		if (adapter.getSelections().isEmpty()) {
+			throw new RuntimeException("There is no selection operator defined. Please contact the developer");
 		}
 
 		return adapter;

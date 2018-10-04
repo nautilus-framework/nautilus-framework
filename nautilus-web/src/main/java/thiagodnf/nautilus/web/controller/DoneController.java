@@ -72,7 +72,7 @@ public class DoneController {
 		
 		Path instance = fileService.getInstancesFile(problemKey, parameters.getFilename());
     	
-		Problem problem = pluginService.getProblem(problemKey, instance, objectives);
+		Problem problem = plugin.getProblem(instance, objectives);
 		
 		List<? extends Solution<?>> solutions = Converter.toJMetalSolutions(problem, execution.getSolutions());
 		

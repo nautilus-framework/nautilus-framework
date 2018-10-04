@@ -5,7 +5,6 @@ import java.util.List;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
-import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
@@ -30,7 +29,8 @@ public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleob
 			int populationSize, 
 			CrossoverOperator<S> crossoverOperator,
 			MutationOperator<S> mutationOperator, 
-			SelectionOperator<List<S>, S> selectionOperator) {
+			SelectionOperator<List<S>, S> selectionOperator,
+			List<?> initialPopulation) {
 		super(problem, 
 			maxEvaluations, 
 			populationSize, 
@@ -39,23 +39,8 @@ public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleob
 			selectionOperator, 
 			new SequentialSolutionListEvaluator<S>());
 		
-		this.maxEvaluations = maxEvaluations;
-	}
-	
-	public GA(Problem<S> problem, 
-			int maxEvaluations, 
-			int populationSize, 
-			CrossoverOperator<S> crossoverOperator,
-			MutationOperator<S> mutationOperator,
-			List<?> initialPopulation) {
-		this(problem, 
-			maxEvaluations, 
-			populationSize, 
-			crossoverOperator, 
-			mutationOperator, 
-			new BinaryTournamentSelection<S>());
-		
 		this.initialPopulation = initialPopulation;
+		this.maxEvaluations = maxEvaluations;
 	}
 	
 	@Override

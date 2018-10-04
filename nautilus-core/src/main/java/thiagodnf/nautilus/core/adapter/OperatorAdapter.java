@@ -5,65 +5,69 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.uma.jmetal.operator.CrossoverOperator;
-import org.uma.jmetal.operator.MutationOperator;
-
-import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.core.operator.crossover.Crossover;
+import thiagodnf.nautilus.core.operator.mutation.Mutation;
+import thiagodnf.nautilus.core.operator.selection.Selection;
 
 public class OperatorAdapter {
 
-	private Map<String, CrossoverOperator<?>> crossovers;
-
-	private Map<String, String> crossoverNames;
+	private Map<String, Selection<?>> selections;
 	
-	private Map<String, MutationOperator<?>> mutations;
+	private Map<String, Crossover<?>> crossovers;
 
-	private Map<String, String> mutationNames;
-
+	private Map<String, Mutation<?>> mutations;
+	
 	/**
 	 * Constructor
 	 */
 	public OperatorAdapter() {
+		this.selections = new HashMap<>();
 		this.crossovers = new HashMap<>();
-		this.crossoverNames = new HashMap<>();
-		
 		this.mutations = new HashMap<>();
-		this.mutationNames = new HashMap<>();
 	}
 
-	public void addMutation(String name, MutationOperator<?> mutation) {
+	public void addSelection(Selection<?> selection) {
 
-		checkNotNull(mutation, "The mutation instance should not be null");
-		
-		String key = Converter.toKey(name);
+		checkNotNull(selection, "The selection instance should not be null");
 
-		this.mutations.put(key, mutation);
-		this.mutationNames.put(key, name);
-	}
-
-	public void addCrossover(String name, CrossoverOperator<?> crossover) {
-
-		checkNotNull(crossover, "The crossover instance should not be null");
-		
-		String key = Converter.toKey(name);
-
-		this.crossovers.put(key, crossover);
-		this.crossoverNames.put(key, name);
-	}
-
-	public Map<String, String> getMutationNames() {
-		return this.mutationNames;
+		this.selections.put(selection.getKey(), selection);
 	}
 	
-	public Map<String, String> getCrossoverNames() {
-		return this.crossoverNames;
+	public void addMutation(Mutation<?> mutation) {
+
+		checkNotNull(mutation, "The mutation instance should not be null");
+
+		this.mutations.put(mutation.getKey(), mutation);
 	}
 
-	public CrossoverOperator<?> getCrossover(String key) {
-		return this.crossovers.get(key);
+	public void addCrossover(Crossover<?> crossover) {
+
+		checkNotNull(crossover, "The crossover instance should not be null");
+
+		this.crossovers.put(crossover.getKey(), crossover);
+	}
+	
+	public Map<String, Selection<?>> getSelections() {
+		return this.selections;
+	}
+	
+	public Map<String, Mutation<?>> getMutations() {
+		return this.mutations;
+	}
+	
+	public Map<String, Crossover<?>> getCrossovers() {
+		return this.crossovers;
 	}
 
-	public MutationOperator<?> getMutation(String key) {
-		return this.mutations.get(key);
+	public Selection<?> getSelection(String key) {
+		return getSelections().get(key);
+	}
+	
+	public Crossover<?> getCrossover(String key) {
+		return getCrossovers().get(key);
+	}
+
+	public Mutation<?> getMutation(String key) {
+		return getMutations().get(key);
 	}
 }

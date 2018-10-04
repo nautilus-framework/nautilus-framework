@@ -39,6 +39,9 @@ public class Parameters {
 	@NotEmpty
 	private String mutationName;
 	
+	@NotEmpty
+	private String selectionName;
+	
 	@DecimalMin("0.0")
 	@DecimalMax("1.0")
 	private Double mutationProbability = 0.005;
@@ -105,6 +108,10 @@ public class Parameters {
 		this.lastExecutionId = lastExecutionId;
 	}
 
+	public String getSelectionName() {
+		return selectionName;
+	}
+	
 	public String getCrossoverName() {
 		return crossoverName;
 	}

@@ -18,18 +18,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.uma.jmetal.operator.CrossoverOperator;
-import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.AlgorithmRunner;
 
 import thiagodnf.nautilus.core.algorithm.GA;
 import thiagodnf.nautilus.core.algorithm.NSGAII;
-import thiagodnf.nautilus.core.factory.CrossoverFactory;
-import thiagodnf.nautilus.core.factory.MutationFactory;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.operator.crossover.Crossover;
+import thiagodnf.nautilus.core.operator.mutation.Mutation;
+import thiagodnf.nautilus.core.operator.selection.Selection;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
@@ -126,18 +125,27 @@ public class OptimizeController {
         	
 			List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, parameters.getObjectiveKeys());
         	
-			Problem problem = pluginService.getProblem(problemKey, instance, objectives);
+			AbstractPlugin plugin = pluginService.getPlugin(problemKey);
+			
+			Problem problem = plugin.getProblem(instance, objectives);
 			
 			List<?> initialPopulation = getInitialPopulation(problem, lastExecution);
         	
-			AbstractPlugin plugin = pluginService.getPlugin(problemKey);
-			
-			CrossoverOperator crossover = plugin.getOperatorAdapter().getCrossover(parameters.getCrossoverName());
 			
 			
-			MutationOperator mutation = MutationFactory.getMutation(parameters.getMutationName(), parameters.getMutationProbability(), parameters.getMutationDistribution());
+			// Operators
 			
+			Selection selection = plugin.getOperatorAdapter().getSelection(parameters.getSelectionName());
 			
+			Crossover crossover = plugin.getOperatorAdapter().getCrossover(parameters.getCrossoverName());
+			crossover.setDistributionIndex(parameters.getCrossoverDistribution());
+			crossover.setProbability(parameters.getCrossoverProbability());
+
+			Mutation mutation = plugin.getOperatorAdapter().getMutation(parameters.getMutationName());
+			mutation.setDistributionIndex(parameters.getMutationDistribution());
+			mutation.setProbability(parameters.getMutationProbability());
+			
+			// Algorithm
 			
 			List<? extends Solution<?>> rawSolutions = null;
 			
@@ -151,6 +159,7 @@ public class OptimizeController {
 		    		populationSize, 
 		    		crossover, 
 		    		mutation, 
+		    		selection,
 		    		initialPopulation
 			    );
 				
@@ -176,6 +185,7 @@ public class OptimizeController {
 		    		populationSize, 
 		    		crossover, 
 		    		mutation, 
+		    		selection,
 		    		initialPopulation
 			    );
 			    

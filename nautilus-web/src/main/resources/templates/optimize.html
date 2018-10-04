@@ -57,12 +57,24 @@
 						</div>
 						<div class="tab-pane fade" id="operators">
 							<div class="row">
+								<div class="form-group col-12">
+									<label for="selectionName">Selection</label>
+									<select class="form-control" th:field="*{selectionName}">
+										<option th:each="selection : ${operatorAdapter.getSelections()}" 
+								    		th:value="${selection.key}"
+								    		th:text="${selection.value.name}" 
+							    		/>
+									</select>
+								</div>
+							</div>
+							<hr/>
+							<div class="row">
 								<div class="form-group col-4">
 									<label for="crossoverName">Crossover</label>
 									<select class="form-control" th:field="*{crossoverName}">
-										<option th:each="crossover : ${operatorAdapter.getCrossoverNames()}" 
+										<option th:each="crossover : ${operatorAdapter.getCrossovers()}" 
 								    		th:value="${crossover.key}"
-								    		th:text="${crossover.value}" 
+								    		th:text="${crossover.value.name}" 
 							    		/>
 									</select>
 								</div>
@@ -80,9 +92,9 @@
 								<div class="form-group col-4">
 									<label for="mutationName">Mutation</label>
 									<select class="form-control" th:field="*{mutationName}">
-										<option th:each="mutation : ${operatorAdapter.getMutationNames()}" 
+										<option th:each="mutation : ${operatorAdapter.getMutations()}" 
 								    		th:value="${mutation.key}"
-								    		th:text="${mutation.value}" 
+								    		th:text="${mutation.value.name}" 
 							    		/>
 									    
 							  		</select>
