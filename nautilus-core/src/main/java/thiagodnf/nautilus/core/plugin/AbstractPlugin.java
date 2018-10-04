@@ -20,6 +20,7 @@ import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 
+@PluginBinding
 public abstract class AbstractPlugin {
 	
 	protected Map<String, Colorize> colorizes = new HashMap<>();

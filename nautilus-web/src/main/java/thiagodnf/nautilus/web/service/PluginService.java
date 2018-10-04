@@ -1,5 +1,11 @@
 package thiagodnf.nautilus.web.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -10,19 +16,28 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.reflections.Reflections;
+import org.reflections.util.ConfigurationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import thiagodnf.nautilus.core.adapter.ObjectiveAdapter;
 import thiagodnf.nautilus.core.adapter.OperatorAdapter;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
+import thiagodnf.nautilus.core.plugin.PluginBinding;
 import thiagodnf.nautilus.plugin.mip.MIPPlugin;
 import thiagodnf.nautilus.plugin.zdt1.ZDT1Plugin;
 import thiagodnf.nautilus.plugin.zdt3.ZDT3Plugin;
+import thiagodnf.nautilus.web.controller.UploadController;
 
 @Service
 public class PluginService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(PluginService.class);
 	
 	@Autowired
 	private FileService fileService;
@@ -32,14 +47,41 @@ public class PluginService {
 	@PostConstruct
 	private void initIt() {
 		
-		add(new MIPPlugin());
-		add(new ZDT3Plugin());
+		LOGGER.info("Loading plugins from project");
+		
+		//add(new MIPPlugin());
 		add(new ZDT1Plugin());
+		add(new ZDT3Plugin());
+		
+		
+		LOGGER.info("Done. Loading plugins from .jar file");
+		
+		List<Path> paths = fileService.getPlugins();
+
+		try {
+			for (Path path : paths) {
+
+				URL[] urls = new URL[] { path.toFile().toURI().toURL() };
+
+				Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(urls));
+
+				for (Class<?> cls : reflections.getTypesAnnotatedWith(PluginBinding.class)) {
+					
+					add((AbstractPlugin) cls.newInstance());
+				}
+			}
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+		
+		LOGGER.info("Done");
 	}
 	
 	public List<AbstractPlugin> getAllPlugins() {
 
-		List<AbstractPlugin> all = plugins.values().stream().collect(Collectors.toList());
+		List<AbstractPlugin> all = plugins.values()
+				.stream()
+				.collect(Collectors.toList());
 
 		all.sort(Comparator.comparing(AbstractPlugin::getProblemName));
 
@@ -47,6 +89,12 @@ public class PluginService {
 	}
 	
 	public void add(AbstractPlugin plugin) {
+		
+		LOGGER.info("Adding plugin: " + plugin.getProblemKey());
+		
+		if (plugins.containsKey(plugin.getProblemKey())) {
+			throw new RuntimeException("Plugin " + plugin.getProblemKey() + " already added");
+		}
 		
 		plugins.put(plugin.getProblemKey(), plugin);
 		
@@ -122,5 +170,9 @@ public class PluginService {
 		}
 
 		return objectives;
+	}
+	
+	public void store(String filename, MultipartFile file) {
+		fileService.storePlugin(filename, file);
 	}
 }

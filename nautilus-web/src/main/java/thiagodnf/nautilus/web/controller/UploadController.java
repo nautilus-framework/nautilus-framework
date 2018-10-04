@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.UploadExecution;
 import thiagodnf.nautilus.web.model.UploadInstanceFile;
+import thiagodnf.nautilus.web.model.UploadPlugin;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
@@ -101,27 +102,26 @@ public class UploadController {
 		}
 	}
 	
-	@PostMapping("/extension/")
-	public String uploadExtension(@Valid UploadInstanceFile uploadInstanceFile, BindingResult result, Model model) {
+	@PostMapping("/plugin/")
+	public String uploadExtension(@Valid UploadPlugin uploadPlugin, BindingResult result, Model model) {
 
-		LOGGER.info("Uploading the file: " + uploadInstanceFile.getFile().getOriginalFilename());
+		LOGGER.info("Uploading the file: " + uploadPlugin.getFile().getOriginalFilename());
 
-//		if (result.hasErrors()) {
-//			
-//			model.addAttribute("plugin", pluginService.getPlugin(problemKey));
-//			
-//			return "upload-instance-file";
-//		}
-//		
-//		MultipartFile file = uploadInstanceFile.getFile();
-//		
-//		String filename = file.getOriginalFilename();
-//		
-//		LOGGER.info("Storing the instance");
-//
-//		fileService.store(problemKey, file, filename);
-//		
-//		LOGGER.info("Done");
+		if (result.hasErrors()) {
+			return "upload-plugin";
+		}
+		
+		MultipartFile file = uploadPlugin.getFile();
+		
+		String filename = file.getOriginalFilename();
+		
+		LOGGER.info("Storing the plugin file");
+		
+		System.out.println(filename);
+
+		pluginService.store(filename, file);
+		
+		LOGGER.info("Done");
 		
 		return "redirect:/";
 	}

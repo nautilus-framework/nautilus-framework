@@ -15,6 +15,7 @@ import thiagodnf.nautilus.core.operator.crossover.SBXForIntegerCrossover;
 import thiagodnf.nautilus.core.operator.mutation.PolynomialForIntegerMutation;
 import thiagodnf.nautilus.core.operator.selection.BinaryTournamentWithRankingAndCrowdingDistanceSelection;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
+import thiagodnf.nautilus.core.plugin.PluginBinding;
 import thiagodnf.nautilus.plugin.mip.objective.MaximumNumberObjective;
 import thiagodnf.nautilus.plugin.mip.problem.MaximumIntegerProblem;
 

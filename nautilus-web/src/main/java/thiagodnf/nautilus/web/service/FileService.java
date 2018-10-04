@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.service;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,6 +35,23 @@ public class FileService {
 	
 	public Path getInstancesLocation() {
 		return getRootLocation().resolve("instances");
+	}
+	
+	public Path getPluginsLocation() {
+		return getRootLocation().resolve("plugins");
+	}
+	
+	public List<Path> getPlugins() {
+		try {
+			return Files.walk(getPluginsLocation(), 1)
+				.filter(path -> !path.toFile().isDirectory())
+				.filter(path -> path.toFile().getAbsolutePath().endsWith(".jar"))
+				.filter(p -> !p.endsWith(".DS_Store"))
+				.map(path -> path)
+				.collect(Collectors.toList());
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 	
 	public List<Path> getProblems(){
@@ -131,6 +149,10 @@ public class FileService {
 	
 	public void store(String problemKey, MultipartFile file, String filename) {
 		store(getInstancesLocation().resolve(problemKey), file, filename);
+	}
+	
+	public void storePlugin(String filename, MultipartFile file) {
+		store(getPluginsLocation(), file, filename);
 	}
 	
 	public boolean exists(Path path, String filename) {
