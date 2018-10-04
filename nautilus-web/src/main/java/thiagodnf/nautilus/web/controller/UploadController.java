@@ -100,4 +100,29 @@ public class UploadController {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	@PostMapping("/extension/")
+	public String uploadExtension(@Valid UploadInstanceFile uploadInstanceFile, BindingResult result, Model model) {
+
+		LOGGER.info("Uploading the file: " + uploadInstanceFile.getFile().getOriginalFilename());
+
+//		if (result.hasErrors()) {
+//			
+//			model.addAttribute("plugin", pluginService.getPlugin(problemKey));
+//			
+//			return "upload-instance-file";
+//		}
+//		
+//		MultipartFile file = uploadInstanceFile.getFile();
+//		
+//		String filename = file.getOriginalFilename();
+//		
+//		LOGGER.info("Storing the instance");
+//
+//		fileService.store(problemKey, file, filename);
+//		
+//		LOGGER.info("Done");
+		
+		return "redirect:/";
+	}
 }
