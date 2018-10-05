@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>nautilus-plugin</artifactId>
 	<name>Nautilus Plugin</name>
+	<packaging>jar</packaging>
 	<description>Extend the Nautilus Skills</description>
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -25,15 +26,22 @@
 			<artifactId>nautilus-core</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.pf4j</groupId>
+			<artifactId>pf4j</artifactId>
+			<version>2.4.0</version>
+			<!-- !!! VERY IMPORTANT -->
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

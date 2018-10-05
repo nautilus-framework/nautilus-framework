@@ -41,13 +41,13 @@ public class FileService {
 		return getRootLocation().resolve("plugins");
 	}
 	
-	public List<Path> getPlugins() {
+	public List<String> getJarPlugins() {
 		try {
 			return Files.walk(getPluginsLocation(), 1)
 				.filter(path -> !path.toFile().isDirectory())
 				.filter(path -> path.toFile().getAbsolutePath().endsWith(".jar"))
 				.filter(p -> !p.endsWith(".DS_Store"))
-				.map(path -> path)
+				.map(path -> path.toFile().getAbsolutePath())
 				.collect(Collectors.toList());
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);

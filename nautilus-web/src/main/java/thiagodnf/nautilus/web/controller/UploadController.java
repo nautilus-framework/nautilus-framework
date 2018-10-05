@@ -121,6 +121,8 @@ public class UploadController {
 
 		pluginService.store(filename, file);
 		
+		pluginService.reload();
+		
 		LOGGER.info("Done");
 		
 		return "redirect:/";
