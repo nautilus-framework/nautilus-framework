@@ -43,8 +43,10 @@ public class PluginService {
 		
 		LOGGER.info("Loading plugins from project");
 		
+		//add(new MIPPlugin());
 		add(new ZDT1Plugin());
 		add(new ZDT3Plugin());
+		
 		
 		LOGGER.info("Done. Loading plugins from .jar file");
 		
