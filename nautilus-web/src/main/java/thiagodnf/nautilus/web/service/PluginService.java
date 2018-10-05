@@ -1,6 +1,5 @@
 package thiagodnf.nautilus.web.service;
 
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,8 +11,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.reflections.Reflections;
-import org.reflections.util.ConfigurationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +21,6 @@ import thiagodnf.nautilus.core.adapter.ObjectiveAdapter;
 import thiagodnf.nautilus.core.adapter.OperatorAdapter;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
-import thiagodnf.nautilus.core.plugin.PluginBinding;
 import thiagodnf.nautilus.plugin.zdt1.ZDT1Plugin;
 import thiagodnf.nautilus.plugin.zdt3.ZDT3Plugin;
 
@@ -52,21 +48,21 @@ public class PluginService {
 		
 		List<Path> paths = fileService.getPlugins();
 
-		try {
-			for (Path path : paths) {
-
-				URL[] urls = new URL[] { path.toFile().toURI().toURL() };
-
-				Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(urls));
-
-				for (Class<?> cls : reflections.getTypesAnnotatedWith(PluginBinding.class)) {
-					
-					add((AbstractPlugin) cls.newInstance());
-				}
-			}
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+//		try {
+//			for (Path path : paths) {
+//
+//				URL[] urls = new URL[] { path.toFile().toURI().toURL() };
+//
+//				Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(urls));
+//
+//				for (Class<?> cls : reflections.getTypesAnnotatedWith(PluginBinding.class)) {
+//					
+//					add((AbstractPlugin) cls.newInstance());
+//				}
+//			}
+//		} catch (Exception ex) {
+//			throw new RuntimeException(ex);
+//		}
 		
 		LOGGER.info("Done");
 	}

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
@@ -46,7 +46,7 @@ public class ObjectiveAdapter {
 	 */
 	public void add(String groupName, AbstractObjective objective) {
 
-		checkArgument(!Strings.isBlank(groupName), "The group name should not be null or empty");
+		checkArgument(!StringUtils.isBlank(groupName), "The group name should not be null or empty");
 		checkNotNull(objective, "The objective instance should not be null");
 		
 		if (!groups.containsKey(groupName)) {

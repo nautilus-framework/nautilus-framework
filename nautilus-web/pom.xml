@@ -10,7 +10,23 @@
 	<artifactId>nautilus-web</artifactId>
 	<name>Nautilus Server</name>
 	<description>A spring boot application</description>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<!-- Import dependency management from Spring Boot -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${springframework.boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 		<!-- Spring MVC Framework -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -37,6 +53,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
+        <!-- Mongo DB -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
          <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>sockjs-client</artifactId>
@@ -47,11 +68,6 @@
             <artifactId>stomp-websocket</artifactId>
             <version>2.3.3-1</version>
         </dependency>
-		<!-- Mongo DB -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-mongodb</artifactId>
-		</dependency>
 		<!-- Logger -->
 		<dependency>
 	        <groupId>ch.qos.logback</groupId>
@@ -71,7 +87,6 @@
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
-			<!-- <version>3.3.7</version> -->
 			<version>4.1.3</version>
 		</dependency>
 		<!-- Bootstrap Slider -->
@@ -139,12 +154,6 @@
 			<artifactId>nautilus-core</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-		<dependency>
-		    <groupId>org.reflections</groupId>
-		    <artifactId>reflections</artifactId>
-		    <version>0.9.11</version>
-		</dependency>
-
 	</dependencies>
 	<build>
 		<plugins>

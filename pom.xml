@@ -14,6 +14,7 @@
 		<module>nautilus-plugin-zdt3</module>
 		<module>nautilus-plugin-zdt1</module>
 		<module>nautilus-web</module>
+		<module>nautilus-plugin</module>
 	</modules>
 	<properties>
 		<springframework.boot.version>2.0.3.RELEASE</springframework.boot.version>
@@ -35,23 +36,7 @@
 		<name>Thiago Ferreira</name>
 		<url>http://github.com/thiagodnf</url>
 	</organization>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<!-- Import dependency management from Spring Boot -->
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-dependencies</artifactId>
-				<version>${springframework.boot.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
 		<!-- JMetal -->
 		<dependency>
 			<groupId>org.uma.jmetal</groupId>
@@ -83,12 +68,13 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
+			<version>2.8.5</version>
 		</dependency>
 		<!-- Google Guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>22.0</version>
+			<version>21.0</version>
 		</dependency>
 	</dependencies>
 	<build>

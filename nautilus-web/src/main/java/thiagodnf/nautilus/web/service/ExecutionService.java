@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import thiagodnf.nautilus.core.exception.ExecutionNotFoundException;
+import thiagodnf.nautilus.web.exception.ExecutionNotFoundException;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.repository.ExecutionRepository;
 import thiagodnf.nautilus.web.repository.ExecutionRepository.IdsAndDatesOnly;

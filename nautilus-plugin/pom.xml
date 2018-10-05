@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>thiagodnf.nautilus</groupId>
+		<artifactId>nautilus</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	<artifactId>nautilus-plugin</artifactId>
+	<name>Nautilus Plugin</name>
+	<description>Extend the Nautilus Skills</description>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<sonar.test.exclusions>
+			src/test/**
+		</sonar.test.exclusions>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>thiagodnf.nautilus</groupId>
+			<artifactId>nautilus-core</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<!-- PF4J -->
+		<dependency>
+            <groupId>org.pf4j</groupId>
+            <artifactId>pf4j</artifactId>
+            <version>2.4.0</version>
+            <!-- !!! VERY IMPORTANT -->
+            <scope>provided</scope>
+        </dependency>
+	</dependencies>
+	<build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
