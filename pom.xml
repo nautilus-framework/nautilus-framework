@@ -10,7 +10,6 @@
 	<description>A preference-base objective reduction for SBSE problems</description>
 	<modules>
 		<module>nautilus-core</module>
-		<module>nautilus-plugin-mip</module>
 		<module>nautilus-plugin-spl</module>
 		<module>nautilus-plugin-zdt3</module>
 		<module>nautilus-plugin-zdt1</module>

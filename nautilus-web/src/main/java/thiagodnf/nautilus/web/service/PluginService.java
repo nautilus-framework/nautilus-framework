@@ -1,10 +1,6 @@
 package thiagodnf.nautilus.web.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,10 +25,8 @@ import thiagodnf.nautilus.core.adapter.OperatorAdapter;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.core.plugin.PluginBinding;
-import thiagodnf.nautilus.plugin.mip.MIPPlugin;
 import thiagodnf.nautilus.plugin.zdt1.ZDT1Plugin;
 import thiagodnf.nautilus.plugin.zdt3.ZDT3Plugin;
-import thiagodnf.nautilus.web.controller.UploadController;
 
 @Service
 public class PluginService {
@@ -49,10 +43,8 @@ public class PluginService {
 		
 		LOGGER.info("Loading plugins from project");
 		
-		//add(new MIPPlugin());
 		add(new ZDT1Plugin());
 		add(new ZDT3Plugin());
-		
 		
 		LOGGER.info("Done. Loading plugins from .jar file");
 		

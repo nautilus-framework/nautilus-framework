@@ -1,6 +1,5 @@
 package thiagodnf.nautilus.web.service;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,6 +26,7 @@ public class FileService {
 	private void initIt() {
 		createDirectories(getRootLocation());
 		createDirectories(getInstancesLocation());
+		createDirectories(getPluginsLocation());
 	}
 	
 	public Path getRootLocation() {
