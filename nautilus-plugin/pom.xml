@@ -25,14 +25,6 @@
 			<artifactId>nautilus-core</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-		<!-- PF4J -->
-		<dependency>
-            <groupId>org.pf4j</groupId>
-            <artifactId>pf4j</artifactId>
-            <version>2.4.0</version>
-            <!-- !!! VERY IMPORTANT -->
-            <scope>provided</scope>
-        </dependency>
 	</dependencies>
 	<build>
         <plugins>

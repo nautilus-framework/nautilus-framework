@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.pf4j.DefaultPluginManager;
+import org.pf4j.PluginManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ public class PluginService {
 	private FileService fileService;
 
 	private Map<String, AbstractPlugin> plugins = new HashMap<>();
+	
+	final PluginManager pluginManager = new DefaultPluginManager(); 
 	
 	@PostConstruct
 	private void initIt() {

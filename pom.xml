@@ -10,7 +10,6 @@
 	<description>A preference-base objective reduction for SBSE problems</description>
 	<modules>
 		<module>nautilus-core</module>
-		<module>nautilus-plugin-spl</module>
 		<module>nautilus-plugin-zdt3</module>
 		<module>nautilus-plugin-zdt1</module>
 		<module>nautilus-web</module>
@@ -74,8 +73,16 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>21.0</version>
+			<version>22.0</version>
 		</dependency>
+		<!-- PF4J -->
+		<dependency>
+            <groupId>org.pf4j</groupId>
+            <artifactId>pf4j</artifactId>
+            <version>2.4.0</version>
+            <!-- !!! VERY IMPORTANT -->
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 	<build>
 		<plugins>
