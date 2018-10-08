@@ -4,6 +4,17 @@ function isSafari(){
  
 $(function(){
 	
+	$(".dropdown-submit").click(function(){
+		$(this).parent().submit();
+	});
+	
+	// Hide the alert when it is available
+	window.setTimeout(function() {
+		$(".alert").fadeTo(500, 0).slideUp(500, function(){
+	        $(this).remove(); 
+	    });
+	}, 4000);
+	
 	var tz = moment.tz.guess();
 	
 	moment.tz.setDefault(tz);
@@ -78,6 +89,13 @@ $(function(){
 	
 	$('.table-datatable-no-paginaton').dataTable({
 	    "bPaginate": false
+	});
+	
+	$('.table-datatable-with-option').dataTable({
+		"columnDefs": [ {
+			"targets": $('.table-datatable-with-option tr td').length-1,
+			"orderable": false
+		}]
 	});
 	
 	$('a[data-toggle="tab"]').click(function(e) {

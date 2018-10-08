@@ -1,7 +1,7 @@
 package thiagodnf.nautilus.web.controller;
 
-import java.io.IOException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +16,10 @@ import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
-@RequestMapping("/problem")
+@RequestMapping("/problem/{pluginId:.+}/{problemId:.+}")
 public class ProblemController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProblemController.class);
 	
 	@Autowired
 	private FileService fileService;
@@ -28,31 +30,42 @@ public class ProblemController {
 	@Autowired
 	private ExecutionService executionService;
 	
-	@GetMapping("/{problemKey:.+}")
-	public String viewProblem(Model model, @PathVariable("problemKey") String problemKey) throws IOException {
+	@GetMapping("")
+	public String view(Model model,
+			@PathVariable("pluginId") String pluginId,
+			@PathVariable("problemId") String problemId){
 		
-		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
-		model.addAttribute("executions", executionService.findByProblemKey(problemKey));
-		model.addAttribute("instanceFiles", fileService.getInstanceFiles(problemKey));
+		LOGGER.info("Displaying '{}/{}'", pluginId, problemId);
 		
+		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
+		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
+		model.addAttribute("instanceFiles", fileService.getInstanceFiles(pluginId, problemId));
+		model.addAttribute("executions", executionService.findByPluginIdAndProblemKey(pluginId, problemId));
+
 		return "problem";
 	}
 	
-	@GetMapping("/{problemKey}/upload/execution/")
-	public String uploadExecution(Model model, @PathVariable("problemKey") String problemKey) {
+	@GetMapping("/upload/instance-file/")
+	public String uploadInstanceFile(Model model, 
+			@PathVariable("pluginId") String pluginId,
+			@PathVariable("problemId") String problemId){
 		
-		model.addAttribute("uploadExecution", new UploadExecution());
-		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
-			
-		return "upload-execution";
-	}
-	
-	@GetMapping("/{problemKey}/upload/instance-file/")
-	public String uploadInstanceFile(Model model, @PathVariable("problemKey") String problemKey) {
-		
+		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
+		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 		model.addAttribute("uploadInstanceFile", new UploadInstanceFile());
-		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
 			
 		return "upload-instance-file";
+	}
+	
+	@GetMapping("/upload/execution/")
+	public String uploadExecution(Model model, 
+			@PathVariable("pluginId") String pluginId,
+			@PathVariable("problemId") String problemId){
+		
+		model.addAttribute("uploadExecution", new UploadExecution());
+		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
+		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
+			
+		return "upload-execution";
 	}
 }

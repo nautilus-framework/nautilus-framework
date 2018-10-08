@@ -13,8 +13,6 @@
 					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
-						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
-						<span class="path-divider">/</span>
 						<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a> 
 					</h6>
 				</div>
@@ -100,7 +98,7 @@
 														<div class="form-group">
 															 <label class="form-check-label" for="name">
 														    	<strong>Name</strong>
-														   		<p><small>Define a own name for this execution</small></p>
+														   		<p><small>Define an own name for this execution</small></p>
 														    </label>
 														    <input type="text" class="form-control" th:field="*{name}"/>
 														 </div>
@@ -112,11 +110,11 @@
 													<div class="col-12">
 														<div class="form-group">
 													    <label class="form-check-label" for="normalize">
-													    	<strong>Normalize</strong>
+													    	<strong>Normalizer</strong>
 													   		<p><small>Normalize the objective's values between 0 and 1</small></p>
 													    </label>
 													    <select class="form-control" th:field="*{normalize}">
-													      <option th:each="normalize : ${plugin.getNormalizes()}" 
+													      <option th:each="normalize : ${normalizers}" 
 													    		th:value="${normalize.key}"
 													    		th:text="${normalize.value}" 
 												    		/>
@@ -130,11 +128,11 @@
 													<div class="col-12">
 														<div class="form-group">
 													    <label class="form-check-label" for="colorize">
-													    	<strong>Colorize</strong>
+													    	<strong>Colorizer</strong>
 													   		<p><small>Colorize the closest solutions those ones you selected</small></p>
 													    </label>
 													    <select class="form-control" th:field="*{colorize}">
-													    	<option th:each="colorize : ${plugin.getColorizes()}" 
+													    	<option th:each="colorize : ${colorizers}" 
 													    		th:value="${colorize.key}"
 													    		th:text="${colorize.value}" 
 												    		/>
@@ -206,7 +204,7 @@
 													
 												</div>
 												<div class="col-4 text-right">
-													<a class="btn btn-outline-danger btn-sm" th:href="@{/solution/clear/user-feedback/} + ${execution.getId()}">Clear Feedback</a>
+													<a class="btn btn-outline-danger btn-sm" th:href="@{/execution/} + ${execution.getId()} + @{/clear/user-feedback}">Clear Feedback</a>
 												</div>	
 											</div>
 										</li>

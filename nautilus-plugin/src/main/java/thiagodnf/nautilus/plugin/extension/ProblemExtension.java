@@ -11,4 +11,8 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 public interface ProblemExtension extends ExtensionPoint {
 
 	public Problem<?> createProblem(Path path, List<AbstractObjective> objectives);
+	
+	public String getName();
+	
+	public String getId();
 }

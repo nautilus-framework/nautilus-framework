@@ -19,7 +19,9 @@ public class Parameters {
 	@DecimalMax("10000000")
 	private int maxEvaluations = 500000;
 	
-	private String problemKey;
+	private String pluginId;
+	
+	private String problemId;
 	
 	private String filename;
 	
@@ -84,12 +86,20 @@ public class Parameters {
 		return new Gson().toJson(this);
 	}
 
-	public String getProblemKey() {
-		return problemKey;
+	public String getPluginId() {
+		return pluginId;
 	}
 
-	public void setProblemKey(String problemKey) {
-		this.problemKey = problemKey;
+	public void setPluginId(String pluginId) {
+		this.pluginId = pluginId;
+	}
+	
+	public String getProblemId() {
+		return problemId;
+	}
+
+	public void setProblemId(String problemId) {
+		this.problemId = problemId;
 	}
 
 	public String getFilename() {

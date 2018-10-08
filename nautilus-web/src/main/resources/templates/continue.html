@@ -13,8 +13,6 @@
 					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
-						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
-						<span class="path-divider">/</span>
 						<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a>
 						<span class="path-divider">/</span>
 						<a th:href="@{/continue/}+${executionId}">Continue</a> 

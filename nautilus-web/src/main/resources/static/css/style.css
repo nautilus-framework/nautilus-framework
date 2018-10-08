@@ -109,7 +109,14 @@ body {
 }
 
 
-
+.table .dropdown .btn-sm{
+	width: 25px;
+	
+	text-align: center;
+	height: 25px !important;
+	padding: .0rem .4rem;
+	padding-left: 4px !important; 
+}
 
 
 .tab-pane-toolbar{

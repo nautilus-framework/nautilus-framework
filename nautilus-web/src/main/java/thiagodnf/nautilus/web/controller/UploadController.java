@@ -38,14 +38,20 @@ public class UploadController {
 	@Autowired
 	private PluginService pluginService;
 	
-	@PostMapping("/instance-file/{problemKey}")
-	public String uploadWithPost(@PathVariable("problemKey") String problemKey, @Valid UploadInstanceFile uploadInstanceFile, BindingResult result, Model model) {
+	@PostMapping("/instance-file/{pluginId:.+}/{problemId:.+}")
+	public String uploadWithPost(
+			@PathVariable("pluginId") String pluginId,
+			@PathVariable("problemId") String problemId,
+			@Valid UploadInstanceFile uploadInstanceFile, 
+			BindingResult result, 
+			Model model) {
 
 		LOGGER.info("Uploading the file: " + uploadInstanceFile.getFile().getOriginalFilename());
 
 		if (result.hasErrors()) {
 			
-			model.addAttribute("plugin", pluginService.getPlugin(problemKey));
+			model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
+			model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 			
 			return "upload-instance-file";
 		}
@@ -56,21 +62,27 @@ public class UploadController {
 		
 		LOGGER.info("Storing the instance");
 
-		fileService.store(problemKey, file, filename);
+		fileService.storeInstanceFile(pluginId, problemId, filename, file);
 		
 		LOGGER.info("Done");
 		
-		return "redirect:/problem/" + problemKey;
+		return "redirect:/problem/" + pluginId + "/" + problemId;
 	}
 	
-	@PostMapping("/execution/{problemKey}")
-	public String uploadExecution(@PathVariable("problemKey") String problemKey, @Valid UploadExecution uploadExecution, BindingResult result, Model model) {
+	@PostMapping("/execution/{pluginId:.+}/{problemId:.+}")
+	public String uploadExecution(
+			@PathVariable("pluginId") String pluginId,
+			@PathVariable("problemId") String problemId,
+			@Valid UploadExecution uploadExecution, 
+			BindingResult result, 
+			Model model) {
 
 		LOGGER.info("Uploading the file: " + uploadExecution.getFile().getOriginalFilename());
 
 		if (result.hasErrors()) {
 
-			model.addAttribute("plugin", pluginService.getPlugin(problemKey));
+			model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
+			model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 
 			return "upload-execution";
 		}
@@ -87,15 +99,19 @@ public class UploadController {
 				throw new RuntimeException("The execution id already exists");
 			}
 			
-			if (!execution.getParameters().getProblemKey().equalsIgnoreCase(problemKey)) {
-				throw new RuntimeException("This execution is for a different problem key");
+			if (!execution.getParameters().getPluginId().equalsIgnoreCase(pluginId)) {
+				throw new RuntimeException("This execution is for a different plugin");
+			}
+
+			if (!execution.getParameters().getProblemId().equalsIgnoreCase(problemId)) {
+				throw new RuntimeException("This execution is for a different problem");
 			}
 
 			executionService.save(execution);
 
-			LOGGER.info("Done");
+			LOGGER.info("Saved");
 
-			return "redirect:/problem/" + problemKey + "#executions";
+			return "redirect:/problem/" + pluginId + "/" + problemId + "#executions";
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);

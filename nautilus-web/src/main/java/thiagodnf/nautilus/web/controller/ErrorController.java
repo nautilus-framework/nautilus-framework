@@ -3,18 +3,43 @@ package thiagodnf.nautilus.web.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import thiagodnf.nautilus.web.exception.PageException;
+import thiagodnf.nautilus.web.exception.RedirectException;
+import thiagodnf.nautilus.web.service.FlashMessageService;
 
 @ControllerAdvice
 public class ErrorController {
 
-	@ExceptionHandler(RuntimeException.class)
-	public ModelAndView handleRuntimeException(HttpServletRequest req, RuntimeException ex) {
+	@Autowired
+	private FlashMessageService flashMessageService;
+	
+	@ExceptionHandler(RedirectException.class)
+	public String handleRedirectException(HttpServletRequest req, RedirectException ex, RedirectAttributes ra) {
+		
+		ResponseStatus status = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);
+
+		String reason = "exception.NoMessage";
+
+		if (status != null) {
+			reason = status.reason();
+		}
+
+		flashMessageService.error(ra, reason);
+		
+		return "redirect:/";
+	}
+	
+	@ExceptionHandler(PageException.class)
+	public ModelAndView handlePageException(HttpServletRequest req, PageException ex) {
 
 		// If the exception is annotated with @ResponseStatus rethrow it and let
 		// the framework handle it - like the OrderNotFoundException example

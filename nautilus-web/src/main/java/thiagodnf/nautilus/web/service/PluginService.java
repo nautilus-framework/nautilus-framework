@@ -2,12 +2,9 @@ package thiagodnf.nautilus.web.service;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -21,13 +18,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import thiagodnf.nautilus.core.adapter.ObjectiveAdapter;
-import thiagodnf.nautilus.core.adapter.OperatorAdapter;
+import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
+import thiagodnf.nautilus.core.colorize.BySimilarityColorize;
+import thiagodnf.nautilus.core.colorize.Colorize;
+import thiagodnf.nautilus.core.colorize.NoColorColorize;
+import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
+import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
+import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.plugin.AbstractPlugin;
+import thiagodnf.nautilus.core.operator.crossover.Crossover;
+import thiagodnf.nautilus.core.operator.mutation.Mutation;
+import thiagodnf.nautilus.core.operator.selection.Selection;
+import thiagodnf.nautilus.plugin.extension.FormatterExtension;
+import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
+import thiagodnf.nautilus.plugin.extension.OperatorExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
-import thiagodnf.nautilus.plugin.zdt1.ZDT1Plugin;
-import thiagodnf.nautilus.plugin.zdt3.ZDT3Plugin;
+import thiagodnf.nautilus.web.exception.PluginNotFoundException;
+import thiagodnf.nautilus.web.exception.ProblemNotFoundException;
 
 @Service
 public class PluginService {
@@ -37,215 +44,253 @@ public class PluginService {
 	@Autowired
 	private FileService fileService;
 
-	private Map<String, AbstractPlugin> plugins = new HashMap<>();
-	
 	private final PluginManager pluginManager = new DefaultPluginManager(); 
+	
+	private Map<String, Normalize> normalizers = new HashMap<>();
+	
+	private Map<String, Colorize> colorizers = new HashMap<>();
 	
 	@PostConstruct
 	private void initIt() {
-		
+
+		LOGGER.info("Loading plugins");
+
 		reload();
-		
-		LOGGER.info("Loading plugins from project");
-		
-		//add(new MIPPlugin());
-		add(new ZDT1Plugin());
-		add(new ZDT3Plugin());
-		
-		
-        
-        
-        
-        
-//		try {
-//			for (Path path : paths) {
-//
-//				URL[] urls = new URL[] { path.toFile().toURI().toURL() };
-//
-//				Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(urls));
-//
-//				for (Class<?> cls : reflections.getTypesAnnotatedWith(PluginBinding.class)) {
-//					
-//					add((AbstractPlugin) cls.newInstance());
-//				}
-//			}
-//		} catch (Exception ex) {
-//			throw new RuntimeException(ex);
-//		}
+
+		LOGGER.info("Done. Adding Colorizers");
+
+		addColorizer(new NoColorColorize());
+		addColorizer(new ByEuclideanDistanceColorize());
+		addColorizer(new BySimilarityColorize());
+
+		LOGGER.info("Done. Adding Normalizers");
+
+		addNormalizer(new ByMaxAndMinValuesNormalize());
+		addNormalizer(new ByParetoFrontValuesNormalize());
 		
 		LOGGER.info("Done");
 	}
 	
 	public void reload() {
 		
-		LOGGER.info("Reloading the plugins ");
-		
+		LOGGER.info("Stopping the plugins before load all of them");
+
 		pluginManager.stopPlugins();
+
+		LOGGER.info("Done. Loading plugins from directory");
 		
 		List<String> files = fileService.getJarPlugins();
 
-		LOGGER.info("Found {} .jar files", files.size());
+		LOGGER.info("Done. It was found {} .jar files. Loading all of them", files.size());
 
 		for (String file : files) {
 			pluginManager.loadPlugin(Paths.get(file));
 		}
 
-		LOGGER.info("Loaded {} plugins. Starting all of them", pluginManager.getPlugins().size());
+		LOGGER.info("Done. Starting the loaded plugins");
 
 		pluginManager.startPlugins();
 		
-		List<ProblemExtension> greetings = pluginManager.getExtensions(ProblemExtension.class);
-		
-		
-        System.out.println(String.format("Found %d extensions for extension point '%s'", greetings.size(), ProblemExtension.class.getName()));
-        for (ProblemExtension greeting : greetings) {
-        	System.out.println(greeting);
-            //System.out.println(">>> " + greeting.getGreeting());
-        }
-        
-        List<PluginWrapper> startedPlugins = pluginManager.getStartedPlugins();
-		 
-		 System.out.println("Extensions added by classpath:");
-	        Set<String> extensionClassNames = pluginManager.getExtensionClassNames(null);
-	        for (String extension : extensionClassNames) {
-	            System.out.println("   " + extension);
-	        }
-		 
-		 for (PluginWrapper plugin : startedPlugins) {
-	            String pluginId = plugin.getDescriptor().getPluginId();
-	            System.out.println(String.format("Extensions added by plugin '%s':", pluginId));
-	            extensionClassNames = pluginManager.getExtensionClassNames(pluginId);
-	            for (String extension : extensionClassNames) {
-	                System.out.println("   " + extension);
-	            }
-	        }
-		 
-		for (PluginWrapper plugin : startedPlugins) {
-           String pluginId = plugin.getDescriptor().getPluginId();
-
-           System.out.println(plugin);
-           
-           List<ProblemExtension> extensions = pluginManager.getExtensions(ProblemExtension.class, pluginId);
-           
-           
-           System.out.println(extensions);
-		}
-		
-		  // print the extensions instances for Greeting extension point for each started plugin
-		System.out.println(" oi");
-        for (PluginWrapper plugin : startedPlugins) {
-            String pluginId = plugin.getDescriptor().getPluginId();
-            System.out.println(String.format("Extensions instances added by plugin '%s' for extension point '%s':", pluginId, ProblemExtension.class.getName()));
-            List<ProblemExtension> extensions = pluginManager.getExtensions(ProblemExtension.class, pluginId);
-            for (Object extension : extensions) {
-                System.out.println("   " + extension);
-            }
-        }
-		
-		
-		
-		
-		
-		
-		pluginManager.stopPlugins();
+		LOGGER.info("Done. It was started {} plugins", pluginManager.getStartedPlugins().size());
 	}
 	
-	public List<AbstractPlugin> getAllPlugins() {
+	private void addColorizer(Colorize colorize) {
 
-		List<AbstractPlugin> all = plugins.values()
+		this.colorizers.put(colorize.getKey(), colorize);
+		
+		LOGGER.info("Added '{}' colorizer", colorize.getKey());
+	}
+
+	private void addNormalizer(Normalize normalize) {
+
+		this.normalizers.put(normalize.getKey(), normalize);
+		
+		LOGGER.info("Added '{}' normalizer", normalize.getKey());
+	}
+	
+	public Map<String, Normalize> getNormalizers() {
+		return normalizers;
+	}
+
+	public Map<String, Colorize> getColorizers() {
+		return colorizers;
+	}
+	
+	public List<PluginWrapper> getStartedPlugins() {
+		return pluginManager.getStartedPlugins();
+	}
+	
+	public PluginWrapper getPluginWrapper(String pluginId) {
+
+		PluginWrapper plugin = pluginManager.getPlugin(pluginId);
+
+		if (plugin == null) {
+			throw new PluginNotFoundException();
+		}
+
+		return plugin;
+	}
+	
+	public List<ProblemExtension> getProblemExtensions(String pluginId) {
+		return pluginManager.getExtensions(ProblemExtension.class, pluginId);
+	}
+	
+	public ProblemExtension getProblemExtension(String pluginId, String problemId) {
+		return getProblemExtensions(pluginId)
 				.stream()
-				.collect(Collectors.toList());
-
-		all.sort(Comparator.comparing(AbstractPlugin::getProblemName));
-
-		return all;
+				.filter(p -> p.getId().equalsIgnoreCase(problemId))
+				.findFirst()
+				.orElseThrow(ProblemNotFoundException::new);
 	}
 	
-	public void add(AbstractPlugin plugin) {
-		
-		LOGGER.info("Adding plugin: " + plugin.getProblemKey());
-		
-		if (plugins.containsKey(plugin.getProblemKey())) {
-			throw new RuntimeException("Plugin " + plugin.getProblemKey() + " already added");
-		}
-		
-		plugins.put(plugin.getProblemKey(), plugin);
-		
-		plugin.initIt();
-		
-		fileService.createInstancesDirectory(plugin.getProblemKey());
+	public ObjectiveExtension getObjectiveExtension(String pluginId) {
+		return getObjectiveExtensions(pluginId)
+				.stream()
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("The objective was not found"));
 	}
 	
-	public AbstractPlugin getPlugin(String problemKey) {
-
-		if (!plugins.containsKey(problemKey)) {
-			throw new RuntimeException("The problem key was not found");
-		}
-
-		return plugins.get(problemKey);
+	public OperatorExtension getOperatorExtension(String pluginId) {
+		return getOperatorExtensions(pluginId)
+				.stream()
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("The operator extension was not found"));
 	}
 	
-	public ObjectiveAdapter getObjectiveAdapter(String problemKey) {
+	public List<ObjectiveExtension> getObjectiveExtensions(String pluginId) {
+		return pluginManager.getExtensions(ObjectiveExtension.class, pluginId);
+	}
 
-		ObjectiveAdapter adapter = getPlugin(problemKey).getObjectiveAdapter();
-
-		if (adapter == null) {
-			throw new RuntimeException("The objective adapter should not be null");
-		}
-
-		if (adapter.isEmpty()) {
-			throw new RuntimeException("There are no objectives defined. Please contact the developer");
-		}
-
-		return adapter;
+	public List<OperatorExtension> getOperatorExtensions(String pluginId) {
+		return pluginManager.getExtensions(OperatorExtension.class, pluginId);
 	}
 	
-	public OperatorAdapter getOperatorAdapter(String problemKey) {
-
-		OperatorAdapter adapter = getPlugin(problemKey).getOperatorAdapter();
-
-		if (adapter == null) {
-			throw new RuntimeException("The operator adapter should not be null");
-		}
-
-		if (adapter.getCrossovers().isEmpty()) {
-			throw new RuntimeException("There is no crossover operator defined. Please contact the developer");
-		}
-
-		if (adapter.getMutations().isEmpty()) {
-			throw new RuntimeException("There is no mutation operator defined. Please contact the developer");
-		}
-		
-		if (adapter.getSelections().isEmpty()) {
-			throw new RuntimeException("There is no selection operator defined. Please contact the developer");
-		}
-
-		return adapter;
+	public List<FormatterExtension> getFormatters(String pluginId) {
+		return pluginManager.getExtensions(FormatterExtension.class, pluginId);
 	}
 	
-	public List<AbstractObjective> getObjectives(String problemKey, List<String> objectiveKeys){
-		
-		Map<String, List<AbstractObjective>> objectiveMap = getObjectiveAdapter(problemKey).getGroups();
+	public Map<String, List<AbstractObjective>> getObjectivesByGroups(String pluginId, String problemId) {
 
-		List<AbstractObjective> objectives = new ArrayList<>();
+		Map<String, List<AbstractObjective>> map = new HashMap<>();
 
-		for(String objectiveKey : objectiveKeys) {
+		ObjectiveExtension extension = getObjectiveExtension(pluginId);
 		
-			for (Entry<String, List<AbstractObjective>> entry : objectiveMap.entrySet()) {
-				
-				for (AbstractObjective objective : entry.getValue()) {
-					
-					if(objective.getKey().equalsIgnoreCase(objectiveKey)) {
-						objectives.add(objective);
-					}
-				}
+		if (extension == null) {
+			throw new RuntimeException("The problemId was not found");
+		}
+
+		for (AbstractObjective objective : extension.getObjectives(problemId)) {
+
+			if (!map.containsKey(objective.getGroupName())) {
+				map.put(objective.getGroupName(), new ArrayList<>());
 			}
+
+			map.get(objective.getGroupName()).add(objective);
 		}
 
-		return objectives;
+		return map;
+	}
+	
+	
+	
+	public String formatInstanceFile(String pluginId, String problemId, String content) {
+
+		List<FormatterExtension> formatters = getFormatters(pluginId);
+
+		if (formatters.isEmpty()) {
+			return "The formatter was not defined";
+		}
+
+		return formatters.get(0).formatInstanceFile(problemId, content);
+	}
+	
+	public List<AbstractObjective> getObjectivesByIds(String pluginId, String problemId, List<String> objectiveIds){
+		
+		ObjectiveExtension extension = getObjectiveExtension(pluginId);
+
+		if (extension == null) {
+			throw new RuntimeException("The plugin id was not found");
+		}
+
+		return extension.getObjectives(problemId)
+				.stream()
+				.filter(o -> objectiveIds.contains(o.getId()))
+				.collect(Collectors.toList());
 	}
 	
 	public void store(String filename, MultipartFile file) {
 		fileService.storePlugin(filename, file);
 	}
+	
+	public Crossover<?> getCrossoversById(String pluginId, String problemId, String crossoverId){
+		
+		OperatorExtension extension = getOperatorExtension(pluginId);
+
+		return extension.getCrossoverOperators(problemId)
+				.stream()
+				.filter(p -> p.getId().equalsIgnoreCase(crossoverId))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("The crossoverId was not found"));			
+	}
+
+	public List<Crossover<?>> getCrossovers(String pluginId, String problemId) {
+		
+		OperatorExtension extension = getOperatorExtension(pluginId);
+		
+		if(extension == null) {
+			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
+		}
+		
+		return extension.getCrossoverOperators(problemId);
+	}
+	
+	public Selection<?> getSelectionsById(String pluginId, String problemId, String selectionId){
+		
+		OperatorExtension extension = getOperatorExtension(pluginId);
+
+		return extension.getSelectionOperators(problemId)
+				.stream()
+				.filter(p -> p.getId().equalsIgnoreCase(selectionId))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("The selectionId was not found"));			
+	}
+	
+	public List<Selection<?>> getSelections(String pluginId, String problemId) {
+		
+		OperatorExtension extension = getOperatorExtension(pluginId);
+		
+		if(extension == null) {
+			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
+		}
+		
+		return extension.getSelectionOperators(problemId);
+	}
+	
+	public Mutation<?> getMutationsById(String pluginId, String problemId, String mutationId){
+		
+		OperatorExtension extension = getOperatorExtension(pluginId);
+
+		return extension.getMutationOperators(problemId)
+				.stream()
+				.filter(p -> p.getId().equalsIgnoreCase(mutationId))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("The mutationId was not found"));			
+	}
+	
+	public List<Mutation<?>> getMutations(String pluginId, String problemId) {
+		
+		OperatorExtension extension = getOperatorExtension(pluginId);
+		
+		if(extension == null) {
+			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
+		}
+		
+		return extension.getMutationOperators(problemId);
+	}
+
+	public void stopAndUnload(String pluginId) {
+		this.pluginManager.stopPlugin(pluginId);
+		this.pluginManager.unloadPlugin(pluginId);
+	}
+	
 }

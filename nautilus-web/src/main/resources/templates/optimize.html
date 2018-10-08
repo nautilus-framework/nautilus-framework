@@ -3,7 +3,8 @@
 
 <head th:replace="fragments/head :: default(Optimize)"></head>
 
-<body>
+<body th:with="pluginId=${plugin.getDescriptor().getPluginId()} , problemId=${problem.getId()}">
+
 	<div th:replace="fragments/navbar :: default('home')"></div>
 	
 	<div class="page-header page-header-with-navbar">
@@ -13,11 +14,13 @@
 					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
-						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
+						<a th:href="@{/plugin/} + ${pluginId}"	th:text="${plugin.getDescriptor().getPluginDescription()}"/>
 						<span class="path-divider">/</span>
-						<a th:href="@{/instance-file/}+${plugin.getProblemKey()}+@{/}+${filename}" th:text="${filename}"></a>
+						<a th:href="@{/problem} + @{/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.getName()}"/>
 						<span class="path-divider">/</span>
-						<a th:href="@{/optimize/} + ${plugin.getProblemKey()} + '/' + ${filename}">Optimize</a>
+						<a th:href="@{/instance-file} + @{/} + ${pluginId} + @{/} + ${problemId} +@{/}+${filename}"th:text="${filename}"></a>
+						<span class="path-divider">/</span>
+						<a th:href="@{/optimize/} + @{/} + ${pluginId} + @{/} + ${problemId} + @{/} + ${filename}">Optimize</a>
 					</h6>
 				</div>
 			</div>
@@ -30,7 +33,7 @@
 
 				<ul class="nav nav-tabs" role="tablist">
 					<li class="nav-item">
-						<a class="nav-link" href="#general" role="tab" data-toggle="tab" aria-selected="true">General</a>
+						<a class="nav-link" href="#general" role="tab" data-toggle="tab">General</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#operators" role="tab" data-toggle="tab">Operators</a>
@@ -44,7 +47,8 @@
 					<!-- Tab panes -->
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane" id="general">
-							<input type="hidden" class="form-control" th:field="*{problemKey}" />
+							<input type="hidden" class="form-control" th:field="*{pluginId}" />
+							<input type="hidden" class="form-control" th:field="*{problemId}" />
 							<input type="hidden" class="form-control" th:field="*{filename}" />
 							<div class="form-group">
 								<label for="populationSize">Population Size</label>
@@ -60,9 +64,9 @@
 								<div class="form-group col-12">
 									<label for="selectionName">Selection</label>
 									<select class="form-control" th:field="*{selectionName}">
-										<option th:each="selection : ${operatorAdapter.getSelections()}" 
-								    		th:value="${selection.key}"
-								    		th:text="${selection.value.name}" 
+										<option th:each="selection : ${selections}" 
+								    		th:value="${selection.id}"
+								    		th:text="${selection.name}" 
 							    		/>
 									</select>
 								</div>
@@ -72,9 +76,9 @@
 								<div class="form-group col-4">
 									<label for="crossoverName">Crossover</label>
 									<select class="form-control" th:field="*{crossoverName}">
-										<option th:each="crossover : ${operatorAdapter.getCrossovers()}" 
-								    		th:value="${crossover.key}"
-								    		th:text="${crossover.value.name}" 
+										<option th:each="crossover : ${crossovers}" 
+								    		th:value="${crossover.id}"
+								    		th:text="${crossover.name}" 
 							    		/>
 									</select>
 								</div>
@@ -92,11 +96,10 @@
 								<div class="form-group col-4">
 									<label for="mutationName">Mutation</label>
 									<select class="form-control" th:field="*{mutationName}">
-										<option th:each="mutation : ${operatorAdapter.getMutations()}" 
-								    		th:value="${mutation.key}"
-								    		th:text="${mutation.value.name}" 
+										<option th:each="mutation : ${mutations}" 
+								    		th:value="${mutation.id}"
+								    		th:text="${mutation.name}" 
 							    		/>
-									    
 							  		</select>
 								</div>
 								<div class="form-group col-4">
@@ -109,9 +112,9 @@
 								</div>
 							</div>
 						</div>
-						<div class="tab-pane fade" id="objectives" th:with="groups = ${objectiveAdapter.getGroups()}">
-							<div class="row" th:with="size = ${12/objectiveAdapter.getNumberOfGroups()}">
-								<div th:class="'col-' + ${size}" th:each="group,i : ${groups}">
+						<div class="tab-pane fade" id="objectives">
+							<div class="row" th:with="size = ${12/objectiveGroups.size()}">
+								<div th:class="'col-' + ${size}" th:each="group,i : ${objectiveGroups}">
 									<div class="card" >
 										<div class="card-header" >
 											<span th:text="${group.key}"></span>
@@ -129,7 +132,7 @@
 																class="objectiveKeys"
 																name="objectiveKeys" 
 																th:checked="${objective.isChecked()}"
-																th:value="${objective.getKey()}" 
+																th:value="${objective.getId()}" 
 																th:text="${objective.getName()}"
 															/>
 														</label>

@@ -21,8 +21,6 @@ import thiagodnf.nautilus.core.model.Correlation;
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.plugin.AbstractPlugin;
-import thiagodnf.nautilus.core.util.Normalizer;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
@@ -43,21 +41,18 @@ public class ContinueController {
 		
 		Execution execution = executionService.findById(executionId);
 
-		if (execution == null) {
-			throw new RuntimeException("The executionId was not found");
-		}
-		
 		Parameters parameters = execution.getParameters();
 		
 		Settings settings = execution.getSettings();
 		
+		String pluginId = parameters.getPluginId();
+		String problemId = parameters.getProblemId();
+		
 		List<String> objectiveKeys = parameters.getObjectiveKeys();
 		
-		String problemKey = parameters.getProblemKey();
-
-		AbstractPlugin plugin = pluginService.getPlugin(problemKey);
+//		AbstractPlugin plugin = pluginService.getPlugin(problemId);
 		
-		List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, objectiveKeys);
+		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		
 		List<Solution> selectedSolutions = new ArrayList<>();
 		
@@ -70,7 +65,7 @@ public class ContinueController {
 			}
 		}
 		
-		model.addAttribute("plugin", plugin);
+		//model.addAttribute("plugin", plugin);
 		
 //		// Step 2: Invert the objectives values
 //		for (Solution sol : selectedSolutions) {
@@ -174,7 +169,7 @@ public class ContinueController {
 		List<Solution> solutions = execution.getSolutions();
 		
 		if (objectives.size() != 1) {
-			solutions = plugin.getNormalize(settings.getNormalize()).normalize(objectives, solutions);
+			solutions = pluginService.getNormalizers().get(settings.getNormalize()).normalize(objectives, solutions);
 		}
 		
 		System.out.println(solutions);

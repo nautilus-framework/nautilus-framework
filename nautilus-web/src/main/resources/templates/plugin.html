@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-	<head th:replace="fragments/head :: default(${plugin.getPluginName()})"></head>
+	<head th:replace="fragments/head :: default(${plugin.getDescriptor().getPluginDescription()})"></head>
 <body>
 	<div th:replace="fragments/navbar :: default('Home')"></div>
 	
@@ -11,7 +11,7 @@
 					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
-						<a th:href="@{/problem/}+${plugin.getPluginKey()}" th:text="${plugin.getPluginName()}"></a>
+						<a th:href="@{/plugin/} + ${plugin.getDescriptor().getPluginId()}"	th:text="${plugin.getDescriptor().getPluginDescription()}"/>
 					</h6>
 				</div>
 			</div>
@@ -36,9 +36,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="problem,i : ${problemAdapter.getProblems()}">
+								<tr th:each="problem,i : ${problems}">
 									<td th:text="${i.count}"></td>
-									<td><a th:text="${problem}" th:href="@{/problem/} + ${problem}"></a></td>				
+									<td><a th:href="@{/problem/} + ${plugin.getDescriptor().getPluginId()} + @{/} + ${problem.getId()}" th:text="${problem.getName()}" ></a></td>				
 								</tr>
 							</tbody>
 						</table>

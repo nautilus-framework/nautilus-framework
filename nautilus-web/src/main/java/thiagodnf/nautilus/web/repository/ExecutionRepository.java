@@ -19,5 +19,7 @@ public interface ExecutionRepository extends MongoRepository<Execution, String> 
 		Settings getSettings();
 	}
 	
-	List<IdsAndDatesOnly> findByParametersProblemKey(String problemKey);
+	List<IdsAndDatesOnly> findByParametersProblemId(String problemId);
+	
+	List<IdsAndDatesOnly> findByParametersPluginIdAndParametersProblemId(String pluginId, String problemId);
 }

@@ -22,12 +22,12 @@ public abstract class AbstractObjective {
 		return 1.0;
 	}
 
-	public String getKey() {
+	public String getId() {
 		return Converter.toKey(getName());
 	}
 
 	public String toString() {
-		return getKey();
+		return getId();
 	}
 	
 	/**
@@ -46,4 +46,6 @@ public abstract class AbstractObjective {
 	public abstract double evaluate(Object solution);
 
 	public abstract String getName();
+	
+	public abstract String getGroupName();
 }

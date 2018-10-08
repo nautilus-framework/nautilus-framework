@@ -5,11 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
+@RequestMapping("/instance-file/{pluginId:.+}/{problemId:.+}/{filename:.+}")
 public class InstanceFileController {
 	
 	@Autowired
@@ -18,27 +20,31 @@ public class InstanceFileController {
 	@Autowired
 	private PluginService pluginService;
 	
-	@GetMapping("/instance-file/{problemKey}/{filename:.+}")
-	public String viewInstanceFile(Model model, 
-			@PathVariable("problemKey") String problemKey, 
+	@GetMapping("")
+	public String view(Model model, 
+			@PathVariable("pluginId") String pluginId, 
+			@PathVariable("problemId") String problemId, 
 			@PathVariable("filename") String filename){
 		
+		String content = fileService.readFileToString(pluginId, problemId, filename);
+
 		model.addAttribute("filename", filename);
-		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
-		model.addAttribute("file", fileService.getInstancesFile(problemKey, filename));
-		model.addAttribute("fileContent", fileService.readFileToString(problemKey, filename));
+		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
+		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
+		model.addAttribute("content", pluginService.formatInstanceFile(pluginId, problemId, content));
 		
 		return "instance-file";
 	}
 	
-	@GetMapping("/instance-file/delete/{problemKey}/{filename:.+}")
-	public String deleteInstanceFile(Model model, 
-			@PathVariable("problemKey") String problemKey, 
+	@GetMapping("/delete")
+	public String delete(Model model, 
+			@PathVariable("pluginId") String pluginId, 
+			@PathVariable("problemId") String problemId, 
 			@PathVariable("filename") String filename){
 		
-		fileService.deleteInstanceFile(problemKey, filename);
+		fileService.deleteInstanceFile(pluginId, problemId, filename);
 		
-		return "redirect:/problem/" + problemKey;
+		return "redirect:/problem/" + pluginId + "/" + problemId;
 	}
 			
 }

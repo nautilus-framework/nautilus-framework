@@ -24,7 +24,7 @@ public abstract class Operator {
 		this.probability = probability;
 	}
 	
-	public String getKey() {
+	public String getId() {
 		return Converter.toKey(getName());
 	}
 	

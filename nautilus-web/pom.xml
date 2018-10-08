@@ -13,7 +13,6 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<!-- Import dependency management from Spring Boot -->
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
 				<version>${springframework.boot.version}</version>
@@ -27,12 +26,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		
 		<!-- Spring MVC Framework -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -119,6 +119,18 @@
 		    <artifactId>uuid.js</artifactId>
 		    <version>3.6.1</version>
 		</dependency>
+		<!-- Popper.js -->
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>popper.js</artifactId>
+			<version>1.14.3</version>
+		</dependency>
+		<!-- Font Awesome -->
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>fontawesome</artifactId>
+		    <version>4.7.0</version>
+		</dependency>
 		
 		<!-- tinycolor -->
 		<dependency>
@@ -164,9 +176,7 @@
             <groupId>org.pf4j</groupId>
             <artifactId>pf4j</artifactId>
             <version>2.4.0</version>
-            <!-- !!! VERY IMPORTANT -->
-            <scope>provided</scope>
-        </dependency>
+        </dependency>  
 	</dependencies>
 	<build>
 		<plugins>

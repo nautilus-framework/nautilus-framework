@@ -1,7 +1,5 @@
 package thiagodnf.nautilus.web.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,21 +12,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import thiagodnf.nautilus.core.distance.EuclideanDistance;
 import thiagodnf.nautilus.core.model.Solution;
+import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.plugin.AbstractPlugin;
-import thiagodnf.nautilus.core.util.Converter;
-import thiagodnf.nautilus.core.util.Normalizer;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
 import thiagodnf.nautilus.web.service.ExecutionService;
-import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
-@RequestMapping("/execution")
+@RequestMapping("/execution/{executionId:.+}")
 public class ExecutionController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionController.class);
@@ -37,102 +31,89 @@ public class ExecutionController {
 	private ExecutionService executionService;
 	
 	@Autowired
-	private FileService fileService;
-	
-	@Autowired
 	private PluginService pluginService;
 	
-	@GetMapping("/{executionId}")
-	public String view(Model model, @PathVariable("executionId") String executionId) {
+	@GetMapping("")
+	public String view(Model model, 
+			@PathVariable("executionId") String executionId) {
+		
+		LOGGER.info("Displaying '{}'", executionId);
 		
 		Execution execution = executionService.findById(executionId);
 
 		Parameters parameters = execution.getParameters();
 		
-		String problemKey = parameters.getProblemKey();
+		Settings settings = execution.getSettings();
 		
-		List<String> objectiveKeys = parameters.getObjectiveKeys();
+		String pluginId = parameters.getPluginId();
+		String problemId = parameters.getProblemId();
 		
-		AbstractPlugin plugin = pluginService.getPlugin(problemKey);
-		
-		List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, objectiveKeys);
-
-		LOGGER.info("Apply the settings to execution");
+		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		
 		List<Solution> solutions = execution.getSolutions();
-		
-		Settings settings = execution.getSettings();
 
 		if (objectives.size() != 1) {
-			solutions = plugin.getNormalize(settings.getNormalize()).normalize(objectives, solutions);
+			solutions =  pluginService.getNormalizers().get(settings.getNormalize()).normalize(objectives, solutions);
 		}
 
-		solutions = plugin.getColorize(settings.getColorize()).execute(plugin, solutions);
+		solutions = pluginService.getColorizers().get(settings.getColorize()).execute(solutions);
 		
-		// Send the objectives to view
-		
+		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
+		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 		model.addAttribute("objectives", objectives);
-		model.addAttribute("plugin", plugin);
 		model.addAttribute("solutions", solutions);
 		model.addAttribute("execution", execution);
+		model.addAttribute("normalizers", pluginService.getNormalizers());
+		model.addAttribute("colorizers", pluginService.getColorizers());
 		model.addAttribute("settings", execution.getSettings());
-		
-		
-		
-		Solution rep = new Solution();
-		
-		rep.getObjectives().add(-0.20);
-		rep.getObjectives().add(-0.90);
-//		rep.getObjectives().add(-0.25);
-//		rep.getObjectives().add(-0.25);
-		
-		List<Solution> rps = new ArrayList<>();
-		
-		rps.add(rep);
-		
-		System.out.println("--------------");
-		System.out.println(rps);
-		
-		rps = plugin.getNormalize(settings.getNormalize()).normalize(objectives, rps);
-		
-		//System.out.println(rps);
-		
-//		List<Double> normalized = plugin.getNormalize(settings.getNormalize()).normalize(objectives, solutions)
-		
-		double sum = 0.0;
-		
-//		for (Solution s : solutions) {
-//			sum += EuclideanDistance.calculate(rps.get(0).getObjectives(), s.getObjectives());
-//		}
-
-		double distance = (double) sum / (double) solutions.size();
-//		double distance = sum;
-
-		System.out.println(distance);
-		
-		
 		
 		return "execution";
 	}
 	
-	@GetMapping("/{executionId}/delete")
-	public String delete(Model model, @PathVariable("executionId") String executionId) {
+	@GetMapping("/delete")
+	public String delete(Model model, 
+			@PathVariable("executionId") String executionId) {
 
 		Execution execution = executionService.findById(executionId);
 
 		executionService.delete(execution);
 
-		return "redirect:/problem/" + execution.getParameters().getProblemKey();
+		Parameters parameters = execution.getParameters();
+
+		return "redirect:/problem/" + parameters.getPluginId() + "/" + parameters.getProblemId();
 	}
 	
-	@PostMapping("/{executionId}/save/settings")
-	public String settings(Model model, @PathVariable("executionId") String executionId, Settings settings) {
+	@PostMapping("/save/settings")
+	public String saveSettings(Model model, 
+			@PathVariable("executionId") String executionId, 
+			Settings settings) {
 
 		Execution execution = executionService.findById(executionId);
 
 		execution.setSettings(settings);
 		
 		executionService.save(execution);
+
+		return "redirect:/execution/" + executionId;
+	}
+	
+	@GetMapping("/clear/user-feedback")
+	public String clearUserFeedback(Model model, 
+			@PathVariable("executionId") String executionId) {
+			
+		Execution execution = executionService.findById(executionId);
+
+		for (Solution solution : execution.getSolutions()) {
+
+			solution.getProperties().remove("feedback");
+			solution.getProperties().remove("selected");
+
+			for (Variable variable : solution.getVariables()) {
+				variable.getProperties().remove("feedback");
+			}
+		}
+
+		execution = executionService.save(execution);
 
 		return "redirect:/execution/" + executionId;
 	}

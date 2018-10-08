@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.AlgorithmRunner;
@@ -29,7 +30,6 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.operator.crossover.Crossover;
 import thiagodnf.nautilus.core.operator.mutation.Mutation;
 import thiagodnf.nautilus.core.operator.selection.Selection;
-import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.web.model.Execution;
@@ -40,6 +40,7 @@ import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.service.WebSocketService;
 
 @Controller
+@RequestMapping("/optimize/{pluginId:.+}/{problemId:.+}/{filename:.+}")
 public class OptimizeController {
 	
 	@Autowired
@@ -54,21 +55,27 @@ public class OptimizeController {
 	@Autowired
 	private WebSocketService webSocketService;
 	
-	@GetMapping("/optimize/{problemKey:.+}/{filename:.+}")
+	@GetMapping("")
 	public String optimize(Model model, 
-			@PathVariable("problemKey") String problemKey, 
-			@PathVariable("filename") String filename) {
+			@PathVariable("pluginId") String pluginId, 
+			@PathVariable("problemId") String problemId, 
+			@PathVariable("filename") String filename){
 		
 		Parameters parameters = new Parameters();
 		
-		parameters.setProblemKey(problemKey);
+		parameters.setPluginId(pluginId);
+		parameters.setProblemId(problemId);
 		parameters.setFilename(filename);
 		
 		model.addAttribute("parameters", parameters);
-		model.addAttribute("plugin", pluginService.getPlugin(problemKey));
+		model.addAttribute("filename", filename);
+		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
+		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 		
-		model.addAttribute("objectiveAdapter", pluginService.getObjectiveAdapter(problemKey));
-		model.addAttribute("operatorAdapter", pluginService.getOperatorAdapter(problemKey));
+		model.addAttribute("selections", pluginService.getSelections(pluginId, problemId));
+		model.addAttribute("crossovers", pluginService.getCrossovers(pluginId, problemId));
+		model.addAttribute("mutations", pluginService.getMutations(pluginId, problemId));
+		model.addAttribute("objectiveGroups", pluginService.getObjectivesByGroups(pluginId, problemId));
 		
 		return "optimize";
 	}
@@ -117,31 +124,28 @@ public class OptimizeController {
         	
         	Thread.currentThread().setName("optimizing-" + sessionId);
         	
-        	String problemKey = parameters.getProblemKey();
-        	int populationSize = parameters.getPopulationSize();
+			String pluginId = parameters.getPluginId();
+			String problemId = parameters.getProblemId();
+			int populationSize = parameters.getPopulationSize();
 			int maxEvaluations = parameters.getMaxEvaluations();
 			
-			Path instance = fileService.getInstancesFile(problemKey, parameters.getFilename());
-        	
-			List<AbstractObjective> objectives = pluginService.getObjectives(problemKey, parameters.getObjectiveKeys());
-        	
-			AbstractPlugin plugin = pluginService.getPlugin(problemKey);
+			Path instance = fileService.getInstanceFile(pluginId, problemId, parameters.getFilename());
 			
-			Problem problem = plugin.getProblem(instance, objectives);
-			
+			List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
+        	
+			Problem problem = pluginService.getProblemExtension(pluginId, problemId).createProblem(instance, objectives);
+						
 			List<?> initialPopulation = getInitialPopulation(problem, lastExecution);
         	
-			
-			
 			// Operators
 			
-			Selection selection = plugin.getOperatorAdapter().getSelection(parameters.getSelectionName());
+			Selection selection = pluginService.getSelectionsById(pluginId, problemId, parameters.getSelectionName());
 			
-			Crossover crossover = plugin.getOperatorAdapter().getCrossover(parameters.getCrossoverName());
+			Crossover crossover = pluginService.getCrossoversById(pluginId, problemId, parameters.getCrossoverName());
 			crossover.setDistributionIndex(parameters.getCrossoverDistribution());
 			crossover.setProbability(parameters.getCrossoverProbability());
 
-			Mutation mutation = plugin.getOperatorAdapter().getMutation(parameters.getMutationName());
+			Mutation mutation = pluginService.getMutationsById(pluginId, problemId, parameters.getMutationName());
 			mutation.setDistributionIndex(parameters.getMutationDistribution());
 			mutation.setProbability(parameters.getMutationProbability());
 			

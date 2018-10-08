@@ -26,11 +26,11 @@
 			src/test/**
 		</sonar.test.exclusions>
 	</properties>
-	<developers>
-		<developer>
-			<name>Thiago Ferreira</name>
-		</developer>
-	</developers>
+	<!-- <parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.3.RELEASE</version>
+	</parent> -->
 	<organization>
 		<name>Thiago Ferreira</name>
 		<url>http://github.com/thiagodnf</url>

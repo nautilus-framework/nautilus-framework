@@ -3,7 +3,9 @@ package thiagodnf.nautilus.web.controller;
 import java.io.IOException;
 import java.net.FileNameMap;
 import java.net.URLConnection;
+import java.nio.file.Path;
 
+import org.pf4j.PluginWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FileService;
+import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
 @RequestMapping("/download")
@@ -34,9 +37,13 @@ public class DownloadController {
 	@Autowired
 	private FileService fileService;
 	
-	@GetMapping("/execution/{executionId}/json")
+	@Autowired
+	private PluginService pluginService;
+	
+	@GetMapping("/execution/{executionId:.+}/json")
 	@ResponseBody
-	public ResponseEntity<Resource> downloadExecutionAsJsonFile(@PathVariable("executionId") String executionId) {
+	public ResponseEntity<Resource> downloadExecutionAsJsonFile(
+			@PathVariable("executionId") String executionId) {
 
 		LOGGER.info("Downloading as json file the execution id " + executionId);
 
@@ -53,9 +60,10 @@ public class DownloadController {
 				.body(file);
 	}
 	
-	@GetMapping("/execution/{executionId}/fun")
+	@GetMapping("/execution/{executionId:.+}/fun")
 	@ResponseBody
-	public ResponseEntity<Resource> downloadExecutionAsFunFile(@PathVariable("executionId") String executionId) {
+	public ResponseEntity<Resource> downloadExecutionAsFunFile(
+			@PathVariable("executionId") String executionId) {
 
 		LOGGER.info("Downloading as fun file the execution id " + executionId);
 
@@ -87,9 +95,10 @@ public class DownloadController {
 				.body(file);
 	}
 	
-	@GetMapping("/execution/{executionId}/var")
+	@GetMapping("/execution/{executionId:.+}/var")
 	@ResponseBody
-	public ResponseEntity<Resource> downloadExecutionAsVarFile(@PathVariable("executionId") String executionId) {
+	public ResponseEntity<Resource> downloadExecutionAsVarFile(
+			@PathVariable("executionId") String executionId) {
 
 		LOGGER.info("Downloading as json file the execution id " + executionId);
 
@@ -138,6 +147,25 @@ public class DownloadController {
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilename())
 				.header(HttpHeaders.CONTENT_TYPE, contentType)
+				.body(file);
+	}
+	
+	@GetMapping("/plugin/{pluginId:.+}")
+	@ResponseBody
+	public ResponseEntity<Resource> downloadPlugin(
+			@PathVariable("pluginId") String pluginId){
+
+		LOGGER.info("Downloading the plugin {}", pluginId);
+		
+		PluginWrapper plugin = pluginService.getPluginWrapper(pluginId);
+
+		Path path = plugin.getPluginPath();
+		
+		Resource file = fileService.loadAsResource(path);
+		
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilename())
+				.header(HttpHeaders.CONTENT_TYPE, "application/java-archive")
 				.body(file);
 	}
 }

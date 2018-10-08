@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<head th:replace="fragments/head :: default(${filename} + ' - ' + ${plugin.getProblemName()})"></head>
+<head th:replace="fragments/head :: default(${filename})"></head>
 
-<body>
+<body th:with="pluginId=${plugin.getDescriptor().getPluginId()} , problemId=${problem.getId()}">
+
 	<div th:replace="fragments/navbar :: default('home')"></div>
 	
 	<div class="page-header page-header-with-navbar">
@@ -13,13 +14,15 @@
 					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
-						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
+						<a th:href="@{/plugin/} + ${pluginId}"	th:text="${plugin.getDescriptor().getPluginDescription()}"/>
 						<span class="path-divider">/</span>
-						<a th:href="@{/instance-file/}+${plugin.getProblemKey()}+@{/}+${filename}" th:text="${filename}"></a>
+						<a th:href="@{/problem} + @{/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.getName()}"/>
+						<span class="path-divider">/</span>
+						<a th:href="@{/instance-file} + @{/} + ${pluginId} + @{/} + ${problemId} +@{/}+${filename}"th:text="${filename}"></a>
 					</h6>
 				</div>
 				<div class="col-4 float-right">
-					<a class="btn btn-success btn-sm float-right" th:href="@{/optimize/} + ${plugin.getProblemKey()} + '/' + ${filename}">Optimize</a>
+					<a class="btn btn-success btn-sm float-right" th:href="@{/optimize} + @{/} + ${pluginId} + @{/} + ${problemId} +@{/}+${filename}">Optimize</a>
 				</div>
 			</div>
 		</div>
@@ -36,7 +39,7 @@
 				</nav>
 				<div class="tab-content">
 					<div role="tabpanel" class="tab-pane fade" id="content">
-						<div th:text="${fileContent}"></div>
+						<div th:utext="${content}"></div>
 					</div>
 					<div role="tabpanel" class="tab-pane fade" id="settings">
 						
@@ -50,7 +53,7 @@
 												<p><small>Save the original instance file in your hard drive</small></p>
 											</div>
 											<div class="col-4 text-right">
-												<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/instance-file} + @{'/'} + ${plugin.getProblemKey()} + @{'/'} + ${filename}">Download</a>
+												<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/instance-file} + @{'/'} + ${problemId} + @{'/'} + ${filename}">Download</a>
 											</div>	
 										</div>
 									</li>
@@ -67,7 +70,7 @@
 												<small>Once you delete, there is no going back. Please be certain.</small></p>
 											</div>
 											<div class="col-4 text-right">
-												<a class="btn btn-outline-danger btn-sm" th:href="@{/instance-file/delete/}+${plugin.getProblemKey()}+@{/}+${filename}">Delete Instance File</a>
+												<a class="btn btn-outline-danger btn-sm" th:href="@{/instance-file/delete/}+${problemId}+@{/}+${filename}">Delete Instance File</a>
 											</div>	
 										</div>
 									</li>

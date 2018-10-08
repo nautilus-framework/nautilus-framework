@@ -66,7 +66,11 @@ public class FileService {
 			.collect(Collectors.toList());
 	}
 	
-	
+	public List<Path> getInstanceFiles(String pluginId, String problemId) {
+		return findAll(getInstancesLocation().resolve(pluginId).resolve(problemId))
+				.sorted()
+				.collect(Collectors.toList());
+	}
 	
 	public void createInstancesDirectory(String pluginKey) {
 		createDirectories(getInstancesLocation().resolve(pluginKey));
@@ -91,8 +95,8 @@ public class FileService {
 		return files;
 	}
 	
-	public Path getInstancesFile(String problemKey, String filename) {
-		return getInstancesLocation().resolve(problemKey).resolve(filename);
+	public Path getInstanceFile(String pluginId, String problemId, String filename) {
+		return getInstancesLocation().resolve(pluginId).resolve(problemId).resolve(filename);
 	}
 	
 	public Stream<Path> findAll(Path path) {
@@ -144,15 +148,19 @@ public class FileService {
 	}
 	
 	public void store(MultipartFile file, String filename) {
-		store(getPath(), file, filename);
+		store(getPath(), filename, file);
 	}
 	
 	public void store(String problemKey, MultipartFile file, String filename) {
-		store(getInstancesLocation().resolve(problemKey), file, filename);
+		store(getInstancesLocation().resolve(problemKey), filename, file);
+	}
+	
+	public void storeInstanceFile(String pluginId, String problemId, String filename, MultipartFile file) {
+		store(getInstancesLocation().resolve(pluginId).resolve(problemId), filename, file);
 	}
 	
 	public void storePlugin(String filename, MultipartFile file) {
-		store(getPluginsLocation(), file, filename);
+		store(getPluginsLocation(), filename, file);
 	}
 	
 	public boolean exists(Path path, String filename) {
@@ -163,8 +171,8 @@ public class FileService {
 		return Files.exists(path);
 	}
 	
-	public void deleteInstanceFile(String problemKey, String filename) {
-		delete(getInstancesFile(problemKey, filename));
+	public void deleteInstanceFile(String pluginId, String problemId, String filename) {
+		delete(getInstanceFile(pluginId, problemId, filename));
 	}
 	
 	public void delete(Path path) {
@@ -184,7 +192,7 @@ public class FileService {
 		}
 	}
 	
-	public void store(Path path, MultipartFile file, String filename) {
+	public void store(Path path, String filename, MultipartFile file) {
 
 		createDirectories(path);
 
@@ -208,9 +216,9 @@ public class FileService {
 		}
 	}
 	
-	public String readFileToString(String problemKey, String filename) {
+	public String readFileToString(String pluginId, String problemId, String filename) {
 
-		Path path = getInstancesFile(problemKey, filename);
+		Path path = getInstanceFile(pluginId, problemId, filename);
 
 		if (!exists(path)) {
 			throw new RuntimeException("The file does not exist. Please choose a different one");

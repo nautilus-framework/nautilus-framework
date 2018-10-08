@@ -15,8 +15,6 @@
 					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
-						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
-						<span class="path-divider">/</span>
 						<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a>
 						<span class="path-divider">/</span>
 						<a th:href="@{/solution/}+${executionId}+@{/}+${solutionIndex}" th:text="'Solution '+${solutionIndex}"></a> 
@@ -45,7 +43,7 @@
 						data-slider-tooltip="hide" />
 				</div>
 				<form action="#"
-					th:action="@{/solution/feedback/} + ${executionId} + '/' + ${solutionIndex}"
+					th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/save/feedback}"
 					method="post">
 					<!-- Tab panes -->
 					<div class="tab-content">

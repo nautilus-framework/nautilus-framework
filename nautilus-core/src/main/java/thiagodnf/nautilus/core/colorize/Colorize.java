@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thiagodnf.nautilus.core.model.Solution;
-import thiagodnf.nautilus.core.plugin.AbstractPlugin;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.Normalizer;
 
@@ -14,12 +13,12 @@ public abstract class Colorize {
 		return Converter.toKey(getName());
 	}
 	
-	public List<Solution> execute(AbstractPlugin plugin, List<Solution> solutions) {
+	public List<Solution> execute(List<Solution> solutions) {
 		
 		List<Solution> selectedSolutions = getSelectedSolutions(solutions);
 		
 		for (Solution solution : solutions) {
-			solution.getProperties().put("distance", calculate(plugin, solution, selectedSolutions));
+			solution.getProperties().put("distance", calculate(solution, selectedSolutions));
 		}
 		
 		return solutions;
@@ -40,7 +39,7 @@ public abstract class Colorize {
 		return selectedSolutions;
 	}
 	
-	public String calculate(AbstractPlugin plugin, Solution s, List<Solution> selectedSolutions) {
+	public String calculate(Solution s, List<Solution> selectedSolutions) {
 		
 		if (selectedSolutions.isEmpty()) {
 			return "0.0";
@@ -52,7 +51,7 @@ public abstract class Colorize {
 
 		for (Solution selected : selectedSolutions) {
 
-			double distance = getDistance(plugin, s, selected);
+			double distance = getDistance(s, selected);
 
 			if (distance < minDistance) {
 				minDistance = distance;
@@ -81,7 +80,7 @@ public abstract class Colorize {
 		return getName();
 	}
 	
-	public abstract double getDistance(AbstractPlugin plugin, Solution s, Solution selectedSolutions) ;
+	public abstract double getDistance(Solution s, Solution selectedSolutions) ;
 	
 	public abstract String getName() ;
 }

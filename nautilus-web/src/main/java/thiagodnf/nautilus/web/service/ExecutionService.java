@@ -21,7 +21,8 @@ public class ExecutionService {
 	}
 	
 	public Execution findById(String executionId) {
-		return this.executionRepository.findById(executionId).orElseThrow(ExecutionNotFoundException::new);
+		return this.executionRepository.findById(executionId)
+				.orElseThrow(ExecutionNotFoundException::new);
 	}
 
 	public List<Execution> findAll(String problemKey) {
@@ -29,7 +30,7 @@ public class ExecutionService {
 	}
 
 	public List<IdsAndDatesOnly> findByProblemKey(String problemKey) {
-		return this.executionRepository.findByParametersProblemKey(problemKey);
+		return this.executionRepository.findByParametersProblemId(problemKey);
 	}
 	
 	public void delete(Execution execution) {
@@ -38,5 +39,9 @@ public class ExecutionService {
 	
 	public boolean existsById(String executionId) {
 		return executionRepository.existsById(executionId);
+	}
+
+	public List<IdsAndDatesOnly> findByPluginIdAndProblemKey(String pluginId, String problemId) {
+		return this.executionRepository.findByParametersPluginIdAndParametersProblemId(pluginId, problemId);
 	}
 }

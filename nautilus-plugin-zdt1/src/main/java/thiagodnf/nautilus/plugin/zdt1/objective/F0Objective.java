@@ -53,4 +53,10 @@ public class F0Objective extends AbstractObjective {
 	public String getName() {
 		return "F0";
 	}
+
+	@Override
+	public String getGroupName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -16,7 +16,7 @@ public class IndexController {
 	@GetMapping("/")
 	public String index(Model model) {
 		
-		model.addAttribute("plugins", pluginService.getAllPlugins());
+		model.addAttribute("startedPlugins", pluginService.getStartedPlugins());
 		
 		return "index";
 	}
