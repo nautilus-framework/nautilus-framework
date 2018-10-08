@@ -94,4 +94,14 @@ public class Converter {
 
 		return solutions;
 	}
+
+	public static double[][] toDoubleMatrix(String[][] readLines) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static int[][] toIntegerMatrix(String[][] readLines) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

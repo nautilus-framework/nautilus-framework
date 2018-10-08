@@ -1,5 +1,7 @@
 package thiagodnf.nautilus.web.service;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +93,16 @@ public class PluginService {
 
 		pluginManager.startPlugins();
 		
-		LOGGER.info("Done. It was started {} plugins", pluginManager.getStartedPlugins().size());
+		LOGGER.info("Done. It was started {} plugins. Creating the file", pluginManager.getStartedPlugins().size());
+
+		for (PluginWrapper plugin : getStartedPlugins()) {
+
+			for (ProblemExtension extension : getProblemExtensions(plugin.getPluginId())) {
+				fileService.createPluginDirectory(plugin.getPluginId(),extension.getId());
+			}
+		}
+		
+		LOGGER.info("Done.");
 	}
 	
 	private void addColorizer(Colorize colorize) {

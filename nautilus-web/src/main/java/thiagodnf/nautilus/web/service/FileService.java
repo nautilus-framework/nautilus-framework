@@ -76,7 +76,11 @@ public class FileService {
 		createDirectories(getInstancesLocation().resolve(pluginKey));
 	}
 	
-	private void createDirectories(Path directory) {
+	public void createPluginDirectory(String pluginId, String problemId) {
+		createDirectories(getInstancesLocation().resolve(pluginId).resolve(problemId));
+	}
+	
+	public void createDirectories(Path directory) {
 		try {
 			Files.createDirectories(directory);
 		} catch (Exception ex) {
