@@ -95,13 +95,45 @@ public class Converter {
 		return solutions;
 	}
 
-	public static double[][] toDoubleMatrix(String[][] readLines) {
-		// TODO Auto-generated method stub
-		return null;
+	public static double[][] toDoubleMatrix(String[][] matrix) {
+		
+		double[][] result = new double[matrix.length][];
+
+		for (int i = 0; i < matrix.length; i++) {
+			
+			result[i] = new double[matrix[i].length];
+
+			for (int j = 0; j < matrix[i].length; j++) {				
+
+				if (matrix[i][j] == null || matrix[i][j].isEmpty()) {
+					result[i][j] = 0.0;
+				} else {
+					result[i][j] = Double.valueOf(matrix[i][j].trim());
+				}
+			}
+		}
+
+		return result;
 	}
 
-	public static int[][] toIntegerMatrix(String[][] readLines) {
-		// TODO Auto-generated method stub
-		return null;
+	public static int[][] toIntegerMatrix(String[][] matrix) {
+		
+		int[][] result = new int[matrix.length][];
+
+		for (int i = 0; i < matrix.length; i++) {
+			
+			result[i] = new int[matrix[i].length];
+
+			for (int j = 0; j < matrix[i].length; j++) {				
+
+				if (matrix[i][j] == null || matrix[i][j].isEmpty()) {
+					result[i][j] = 0;
+				} else {
+					result[i][j] = Integer.valueOf(matrix[i][j].trim());
+				}
+			}
+		}
+
+		return result;
 	}
 }

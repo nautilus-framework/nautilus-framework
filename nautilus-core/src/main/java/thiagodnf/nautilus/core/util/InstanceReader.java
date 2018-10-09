@@ -1,47 +1,42 @@
 package thiagodnf.nautilus.core.util;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Preconditions;
-import com.google.common.io.Files;
+import org.apache.commons.io.FileUtils;
 
 public class InstanceReader {
 
 	protected FileReader reader;
 	
-	protected BufferedReader buffer;
-	
 	protected File filename;
 	
-	protected String fileContent;
+	protected String content;
 	
 	protected String[] lines;
 	
-	protected String separator = " ";
+	protected String separator = ",";
 	
 	protected int index = 0;
 	
 	/**
 	 * Constructor 
 	 * 
-	 * @param filename  the file to read from
-	 * @throws IOException if an I/O error occurs
+	 * @param path  the file should be read
 	 */
-	public InstanceReader(File filename) throws IOException{
-		
-		Preconditions.checkNotNull(filename, "The filename cannot be null");
-		Preconditions.checkArgument(filename.exists(), "The file does not exist");
-		Preconditions.checkArgument(filename.isFile(), "The filename cannot be a directory");
-		
-		// Read the file
-		this.fileContent = Files.toString(filename, Charsets.UTF_8);
-		
-		// Separete the file into lines
-		this.lines = this.fileContent.split("\n");
+	public InstanceReader(Path path) {
+
+		try {
+			this.content = FileUtils.readFileToString(path.toFile());
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		}
+
+		this.lines = this.content.split("\n");
 	}
 	
 	/**
@@ -71,67 +66,95 @@ public class InstanceReader {
 		return this.separator;
 	}
 	
-	/**
-	 * Read an integer number
-	 * 
-	 * @return an integer value
-	 */
-	public int readIntegerValue(){
-		return readIntegerArray()[0];
+	public int getInteger(){
+		return getIntegerHorizontalArray()[0];
 	}
 	
-	/**
-	 * Read an integer array
-	 * 
-	 * @return an integer array
-	 */
-	public int[] readIntegerArray() {		
-		return readIntegerMatrix(1)[0];
+	public int[][] getIntegerMatrix(int numberOfLines) {
+		return Converter.toIntegerMatrix(getStringMatrix(numberOfLines));
 	}
 	
-	/**
-	 * Read an integer matrix
-	 * 
-	 * @param lines the number of lines that will be read
-	 * @return an integer matrix
-	 */
-	public int[][] readIntegerMatrix(int lines) {
-		return Converter.toIntegerMatrix(readLines(lines));
+	public int[] getIntegerHorizontalArray() {
+		return getIntegerMatrix(1)[0];
+	}
+
+	public int[] getIntegerVerticalArray(int numberOfLines) {
+
+		int[] array = new int[numberOfLines];
+
+		int[][] matrix = getIntegerMatrix(numberOfLines);
+
+		for (int i = 0; i < numberOfLines; i++) {
+			array[i] = matrix[i][0];
+		}
+
+		return array;
 	}
 	
-	/**
-	 * Read a double number
-	 * 
-	 * @return a double value
-	 */
-	public double readDoubleValue(){
-		return readDoubleArray()[0];
+	
+	
+	public double getDouble(){
+		return getDoubleHorizontalArray()[0];
 	}
 	
-	/**
-	 * Read a double matrix
-	 * 
-	 * @param lines the number of lines that will be read
-	 * @return a double matrix
-	 */
-	public double[][] readDoubleMatrix(int lines) {
-		return Converter.toDoubleMatrix(readLines(lines));
+	public double[][] getDoubleMatrix(int numberOfLines) {
+		return Converter.toDoubleMatrix(getStringMatrix(numberOfLines));
 	}
 	
-	/**
-	 * Read a double array
-	 * 
-	 * @return a double array
-	 */
-	public double[] readDoubleArray() {		
-		return readDoubleMatrix(1)[0];
+	public double[] getDoubleHorizontalArray() {
+		return getDoubleMatrix(1)[0];
 	}
 	
-	/**
-	 * Read a line of the file
-	 * 
-	 * @return A line read 
-	 */
+	public double[] getDoubleVerticalArray(int numberOfLines) {
+
+		double[] array = new double[numberOfLines];
+
+		double[][] matrix = getDoubleMatrix(numberOfLines);
+
+		for (int i = 0; i < numberOfLines; i++) {
+			array[i] = matrix[i][0];
+		}
+
+		return array;
+	}
+	
+	
+	
+	
+	public String getString(){
+		return getStringHorizontalArray()[0];
+	}
+	
+	public String[] getStringHorizontalArray() {
+		return getStringMatrix(1)[0];
+	}
+	
+	public String[] getStringVerticalArray(int numberOfLines) {
+
+		String[] array = new String[numberOfLines];
+
+		String[][] matrix = getStringMatrix(numberOfLines);
+
+		for (int i = 0; i < numberOfLines; i++) {
+			array[i] = matrix[i][0];
+		}
+
+		return array;
+	}
+	
+	public String[][] getStringMatrix(int numberOfLines) {
+
+		String[][] matrix = new String[numberOfLines][];
+
+		List<String> lines = readLines(numberOfLines);
+
+		for (int i = 0; i < lines.size(); i++) {
+			matrix[i] = lines.get(i).split(separator);
+		}
+
+		return matrix;
+	}
+	
 	public String readLine() {
 		
 		if(index >= getNumberOfLines()){
@@ -141,44 +164,14 @@ public class InstanceReader {
 		return this.lines[index++].trim();
 	}
 	
-	/**
-	 * Read a string matrix
-	 * 
-	 * @param lines the number of lines read
-	 * @return a string matrix
-	 */
-	public String[][] readLines(int lines) {
+	public List<String> readLines(int numberOfLines) {
 
-		Preconditions.checkArgument(lines >= 1, "The lines should be >= 1");
+		List<String> lines = new ArrayList<>();
 
-		String[][] result = new String[lines][];
-
-		for (int i = 0; i < lines; i++) {
-
-			String line = readLine();
-
-			if (line != null) {
-				result[i] = line.split(separator);
-			} else {
-				result[i] = new String[] {};
-			}
+		for (int i = 0; i < numberOfLines; i++) {
+			lines.add(readLine());
 		}
 
-		// Verify the number of columns
-
-		int columns = -1;
-
-		for (int i = 0; i < lines; i++) {
-
-			if (columns == -1) {
-				columns = result[i].length;
-			}
-
-			if (result[i].length != columns) {
-				throw new IllegalStateException("There is line with different number os columns");
-			}
-		}
-
-		return result;
+		return lines;
 	}
 }
