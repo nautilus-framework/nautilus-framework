@@ -32,52 +32,20 @@
 		<div class="row">
 			<div class="col-12">
 				<nav>
-					<div class="nav nav-tabs" id="nav-tab" role="tablist">
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#content">Content</a>
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings">Settings</a>
+					<div class="nav nav-tabs" id="nav-tab" role="tablist" >
+						<a th:each="tab,i : ${tabs}" 
+							class="nav-item nav-link" 
+							role="tab" data-toggle="tab" 
+							th:href="'#'+${tab.getId()}" 
+							th:text="${tab.getName()}"/>
 					</div>
 				</nav>
 				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane fade" id="content">
-						<div th:utext="${content}"></div>
-					</div>
-					<div role="tabpanel" class="tab-pane fade" id="settings">
-						
-							<div class="card border-default mb-3">
-								<div class="card-header bg-transparent border-default">Download</div>
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item">
-							  			<div class="row margin-bottom-minus-20">
-											<div class="col-8">
-												<strong>Original File</strong><br/>
-												<p><small>Save the original instance file in your hard drive</small></p>
-											</div>
-											<div class="col-4 text-right">
-												<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/instance-file} + @{'/'} + ${problemId} + @{'/'} + ${filename}">Download</a>
-											</div>	
-										</div>
-									</li>
-								</ul>
-							</div>
-						
-							<div class="card border-danger mb-3">
-								<div class="card-header bg-transparent border-danger">Danger Zone</div>
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item">
-							  			<div class="row margin-bottom-minus-20">
-											<div class="col-8">
-												<p><strong>Delete Instance File</strong><br/>
-												<small>Once you delete, there is no going back. Please be certain.</small></p>
-											</div>
-											<div class="col-4 text-right">
-												<a class="btn btn-outline-danger btn-sm" th:href="@{/instance-file/delete/}+${problemId}+@{/}+${filename}">Delete Instance File</a>
-											</div>	
-										</div>
-									</li>
-								</ul>
-							</div>
-						
-						
+					<div th:each="tab,i : ${tabs}" 
+						role="tabpanel" 
+						class="tab-pane fade" 
+						th:id="${tab.getId()}"  
+						th:utext="${tab.getTabContent().getHTML()}"/>
 					</div>
 				</div>
 			</div>

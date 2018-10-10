@@ -58,8 +58,9 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="variable,i : ${solution.getVariables()}">
-										<td width="100%" th:text="${variable.getValue()}"></td>
+									<tr th:each="variable,i : ${solution.getVariables()}" th:if="${extension.isShown(problem, solution, variable)}">
+										<td width="100%" th:text="${extension.getDisplayName(problem, solution, variable)}"></td>
+										
 										<td><input type="text"
 											th:name="'variable-feedback-' + ${i.index}"
 											class="slider-colorful slider-slave variable-feedback"

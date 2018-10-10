@@ -1,9 +1,13 @@
 package thiagodnf.nautilus.core.objective;
 
+import org.uma.jmetal.problem.Problem;
+
 import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractObjective {
 
+	protected Problem<?> problem;
+	
 	private boolean isChecked = true;
 	
 	public double maximize(double value) {
@@ -43,9 +47,15 @@ public abstract class AbstractObjective {
 		this.isChecked = status;
 	}
 	
+	public void setProblem(Problem<?> problem) {
+		this.problem = problem;
+	}
+	
 	public abstract double evaluate(Object solution);
 
 	public abstract String getName();
 	
 	public abstract String getGroupName();
+
+	
 }

@@ -135,8 +135,8 @@ public class FileService {
 		}
 	}
 	
-	public Resource loadInstanceFileAsResource(String problemKey, String filename) {
-		return loadAsResource(loadInstances(problemKey, filename));
+	public Resource getInstanceFileAsResource(String pluginId, String problemId, String filename) {
+		return loadAsResource(getInstanceFile(pluginId, problemId, filename));
 	}
 	
 	public Path load(Path root, String filename) {

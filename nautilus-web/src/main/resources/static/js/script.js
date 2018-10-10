@@ -93,7 +93,7 @@ $(function(){
 	
 	$('.table-datatable-with-option').dataTable({
 		"columnDefs": [ {
-			"targets": $('.table-datatable-with-option tr td:first').length-1,
+			"targets": $('.table-datatable-with-option tr:first').find("th").length-1,
 			"orderable": false
 		}]
 	});

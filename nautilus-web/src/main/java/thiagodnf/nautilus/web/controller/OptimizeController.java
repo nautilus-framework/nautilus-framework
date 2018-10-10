@@ -26,12 +26,14 @@ import org.uma.jmetal.util.AlgorithmRunner;
 import thiagodnf.nautilus.core.algorithm.GA;
 import thiagodnf.nautilus.core.algorithm.NSGAII;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
+import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.operator.crossover.Crossover;
 import thiagodnf.nautilus.core.operator.mutation.Mutation;
 import thiagodnf.nautilus.core.operator.selection.Selection;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
+import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.service.ExecutionService;
@@ -133,7 +135,11 @@ public class OptimizeController {
 			
 			List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
         	
-			Problem problem = pluginService.getProblemExtension(pluginId, problemId).createProblem(instance, objectives);
+			ProblemExtension problemExtension = pluginService.getProblemExtension(pluginId, problemId);
+			
+			InstanceData data = problemExtension.readInstanceData(instance);
+			
+			Problem problem = problemExtension.createProblem(data, objectives);
 						
 			List<?> initialPopulation = getInitialPopulation(problem, lastExecution);
         	

@@ -130,15 +130,16 @@ public class DownloadController {
 				.body(file);
 	}
 	
-	@GetMapping("/instance-file/{problemKey}/{filename:.+}")
+	@GetMapping("/instance-file/{pluginId:.+}/{problemId:.+}/{filename:.+}")
 	@ResponseBody
 	public ResponseEntity<Resource> downloadInstanceFile(
-			@PathVariable("problemKey") String problemKey,
+			@PathVariable("pluginId") String pluginId,
+			@PathVariable("problemId") String problemId,
 			@PathVariable("filename") String filename) throws IOException {
 
 		LOGGER.info("Downloading the instance file " + filename);
 
-		Resource file = fileService.loadInstanceFileAsResource(problemKey, filename);
+		Resource file = fileService.getInstanceFileAsResource(pluginId, problemId, filename);
 		
 		FileNameMap fileNameMap = URLConnection.getFileNameMap();
 		

@@ -3,11 +3,14 @@ package thiagodnf.nautilus.core.util;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+
+import com.google.common.base.Preconditions;
 
 public class InstanceReader {
 
@@ -29,6 +32,9 @@ public class InstanceReader {
 	 * @param path  the file should be read
 	 */
 	public InstanceReader(Path path) {
+		
+		Preconditions.checkNotNull(path, "The path should not be null");
+		Preconditions.checkArgument(Files.exists(path), "The path does not exists");
 
 		try {
 			this.content = FileUtils.readFileToString(path.toFile());

@@ -30,9 +30,11 @@ import thiagodnf.nautilus.core.operator.crossover.Crossover;
 import thiagodnf.nautilus.core.operator.mutation.Mutation;
 import thiagodnf.nautilus.core.operator.selection.Selection;
 import thiagodnf.nautilus.plugin.extension.FormatterExtension;
+import thiagodnf.nautilus.plugin.extension.GUIExtension;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
 import thiagodnf.nautilus.plugin.extension.OperatorExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.plugin.extension.VariableExtension;
 import thiagodnf.nautilus.web.exception.PluginNotFoundException;
 import thiagodnf.nautilus.web.exception.ProblemNotFoundException;
 
@@ -143,8 +145,23 @@ public class PluginService {
 		return plugin;
 	}
 	
+	public List<GUIExtension> getGUIExtensions(String pluginId) {
+		return pluginManager.getExtensions(GUIExtension.class, pluginId);
+	}
+	
+	public List<VariableExtension> getVariableExtensions(String pluginId) {
+		return pluginManager.getExtensions(VariableExtension.class, pluginId);
+	}
+	
 	public List<ProblemExtension> getProblemExtensions(String pluginId) {
 		return pluginManager.getExtensions(ProblemExtension.class, pluginId);
+	}
+	
+	public GUIExtension getGUIExtension(String pluginId) {
+		return getGUIExtensions(pluginId)
+				.stream()
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("The gui extension was not found"));
 	}
 	
 	public ProblemExtension getProblemExtension(String pluginId, String problemId) {
@@ -153,6 +170,13 @@ public class PluginService {
 				.filter(p -> p.getId().equalsIgnoreCase(problemId))
 				.findFirst()
 				.orElseThrow(ProblemNotFoundException::new);
+	}
+	
+	public VariableExtension getVariableExtension(String pluginId) {
+		return getVariableExtensions(pluginId)
+				.stream()
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("The variable extension was not found"));
 	}
 	
 	public ObjectiveExtension getObjectiveExtension(String pluginId) {

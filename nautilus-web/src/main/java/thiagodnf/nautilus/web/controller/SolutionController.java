@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +16,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.uma.jmetal.problem.Problem;
 
+import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.plugin.extension.VariableExtension;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
@@ -34,6 +39,9 @@ public class SolutionController {
 	
 	@Autowired
 	private PluginService pluginService;
+	
+	@Autowired
+	private FileService fileService;
 	
 	@GetMapping("")
 	public String view(Model model, 
@@ -59,6 +67,16 @@ public class SolutionController {
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		
+		Path instance = fileService.getInstanceFile(pluginId, problemId, parameters.getFilename());
+		
+		InstanceData data = pluginService.getProblemExtension(pluginId, problemId).readInstanceData(instance);
+		
+		Problem problem = pluginService.getProblemExtension(pluginId, problemId).createProblem(data, objectives);
+		
+		VariableExtension extension = pluginService.getVariableExtension(pluginId);
+		
+		
+		
 		Map<String, Double> objectivesMap = new HashMap<>();
 
 		for (int i = 0; i < objectives.size(); i++) {
@@ -68,6 +86,9 @@ public class SolutionController {
 		model.addAttribute("objectivesMap", objectivesMap);
 		model.addAttribute("solution", solution);
 		model.addAttribute("execution", execution);
+		
+		model.addAttribute("extension", extension);
+		model.addAttribute("problem", problem);
 		
 		return "solution";
 	}

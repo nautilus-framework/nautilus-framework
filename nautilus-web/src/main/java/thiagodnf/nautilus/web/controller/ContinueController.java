@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -15,16 +16,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.uma.jmetal.problem.Problem;
 
 import thiagodnf.nautilus.core.correlation.PearsonCorrelation;
 import thiagodnf.nautilus.core.model.Correlation;
+import thiagodnf.nautilus.core.model.CorrelationItem;
+import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.plugin.extension.VariableExtension;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
@@ -35,6 +41,9 @@ public class ContinueController {
 	
 	@Autowired
 	private PluginService pluginService;
+	
+	@Autowired
+	private FileService fileService;
 	
 	@GetMapping("/continue/{executionId}")
 	public String view(Model model, @PathVariable("executionId") String executionId) {
@@ -50,9 +59,16 @@ public class ContinueController {
 		
 		List<String> objectiveKeys = parameters.getObjectiveKeys();
 		
-//		AbstractPlugin plugin = pluginService.getPlugin(problemId);
-		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
+		
+		Path instance = fileService.getInstanceFile(pluginId, problemId, parameters.getFilename());
+		
+		InstanceData data = pluginService.getProblemExtension(pluginId, problemId).readInstanceData(instance); 
+		
+		Problem problem = pluginService.getProblemExtension(pluginId, problemId).createProblem(data, objectives);
+		
+		VariableExtension extension = pluginService.getVariableExtension(pluginId);
+		
 		
 		List<Solution> selectedSolutions = new ArrayList<>();
 		
@@ -66,6 +82,12 @@ public class ContinueController {
 		}
 		
 		//model.addAttribute("plugin", plugin);
+		
+		
+		
+		
+		
+		
 		
 //		// Step 2: Invert the objectives values
 //		for (Solution sol : selectedSolutions) {
@@ -172,9 +194,49 @@ public class ContinueController {
 			solutions = pluginService.getNormalizers().get(settings.getNormalize()).normalize(objectives, solutions);
 		}
 		
-		System.out.println(solutions);
 		
-		List<Correlation> correlations = p.calculate(objectiveKeys.size(), solutions);
+		int index = 1;
+
+		Map<String, Integer> map = new HashMap<>();
+
+		List<CorrelationItem> values = new ArrayList<>();
+		
+		for (Solution s : solutions) {
+
+			CorrelationItem item = new CorrelationItem();//List<String> valid = new ArrayList<>();
+
+			for (Variable v : s.getVariables()) {
+
+				if (extension.isValidForCorrelation(problem, s, v)) {
+
+					String value = extension.getValueForCorrelation(problem, s, v);
+
+					item.getVariables().add(value);
+					
+					if (!map.containsKey(value)) {
+						map.put(value, index++);
+					}
+				}
+			}
+			
+			item.setObjectives(s.getObjectives());
+
+			values.add(item);
+		}
+		
+		System.out.println(map);
+		
+		System.out.println(values);
+		
+		System.out.println("-----");
+		
+		
+		
+		
+		
+		//System.out.println(solutions);
+		
+		List<Correlation> correlations = p.calculate(map, values, objectiveKeys.size(), solutions);
 		
 		
 		double[] r = new double[objectives.size()];
@@ -185,38 +247,41 @@ public class ContinueController {
 			
 			for (Variable v : s.getVariables()) {
 
-				String value = v.getValue();
+				if (extension.isValidForCorrelation(problem, s, v)) {
 
-				double feedback = v.getUserFeeback();
-				
-				for (Correlation c : correlations) {
-
-					if (c.getVariable().equalsIgnoreCase(value)) {
-
-						for (int i = 0; i < r.length; i++) {
-
-							double distance = 0.0;
-							double minDistance = c.getValues().get(i);
-							
-							if (feedback == 0) {
-								distance = minDistance;
-							} else if (feedback > 0) {
-								distance = Math.pow(minDistance, 1.0 / Math.abs(feedback));
-							} else {
-								distance = Math.pow(1.0 - minDistance, 1.0 / Math.abs(feedback));
+					String value = extension.getValueForCorrelation(problem, s, v);
+					
+					double feedback = v.getUserFeeback();
+					
+					for (Correlation c : correlations) {
+	
+						if (c.getVariable().equalsIgnoreCase(value)) {
+	
+							for (int i = 0; i < r.length; i++) {
+	
+								double distance = 0.0;
+								double minDistance = c.getValues().get(i);
+								
+								if (feedback == 0) {
+									distance = minDistance;
+								} else if (feedback > 0) {
+									distance = Math.pow(minDistance, 1.0 / Math.abs(feedback));
+								} else {
+									distance = Math.pow(1.0 - minDistance, 1.0 / Math.abs(feedback));
+								}
+								
+								if (Double.isNaN(distance)) {
+									distance = minDistance;
+								}
+								
+								
+								r[i] += distance;
+								//System.out.println(r[i]);
+	//							r[i] += c.getValues().get(i) + c.getValues().get(i) * v.getUserFeeback();
 							}
 							
-							if (Double.isNaN(distance)) {
-								distance = minDistance;
-							}
-							
-							
-							r[i] += distance;
-							//System.out.println(r[i]);
-//							r[i] += c.getValues().get(i) + c.getValues().get(i) * v.getUserFeeback();
+							System.out.println(Arrays.toString(r));
 						}
-						
-						System.out.println(Arrays.toString(r));
 					}
 				}
 			}
@@ -337,4 +402,5 @@ public class ContinueController {
 
 		return newArray;
 	}
+	
 }
