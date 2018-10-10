@@ -22,6 +22,8 @@ import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
 import thiagodnf.nautilus.core.colorize.BySimilarityColorize;
 import thiagodnf.nautilus.core.colorize.Colorize;
 import thiagodnf.nautilus.core.colorize.NoColorColorize;
+import thiagodnf.nautilus.core.correlation.Correlation;
+import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.normalize.Normalize;
@@ -52,6 +54,8 @@ public class PluginService {
 	
 	private Map<String, Colorize> colorizers = new HashMap<>();
 	
+	private Map<String, Correlation> correlationers = new HashMap<>();
+	
 	@PostConstruct
 	private void initIt() {
 
@@ -70,6 +74,10 @@ public class PluginService {
 		addNormalizer(new ByMaxAndMinValuesNormalize());
 		addNormalizer(new ByParetoFrontValuesNormalize());
 		
+		LOGGER.info("Done. Adding Correlationers");
+
+		addCorrelationer(new SpearmanCorrelation());
+
 		LOGGER.info("Done");
 	}
 	
@@ -122,12 +130,23 @@ public class PluginService {
 		LOGGER.info("Added '{}' normalizer", normalize.getKey());
 	}
 	
+	private void addCorrelationer(Correlation correlation) {
+
+		this.correlationers.put(correlation.getKey(), correlation);
+		
+		LOGGER.info("Added '{}' correlationer", correlation.getKey());
+	}
+	
 	public Map<String, Normalize> getNormalizers() {
 		return normalizers;
 	}
 
 	public Map<String, Colorize> getColorizers() {
 		return colorizers;
+	}
+	
+	public Map<String, Correlation> getCorrelationers() {
+		return correlationers;
 	}
 	
 	public List<PluginWrapper> getStartedPlugins() {

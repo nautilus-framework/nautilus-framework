@@ -65,7 +65,9 @@ public class ExecutionController {
 		model.addAttribute("execution", execution);
 		model.addAttribute("normalizers", pluginService.getNormalizers());
 		model.addAttribute("colorizers", pluginService.getColorizers());
+		model.addAttribute("correlationers", pluginService.getCorrelationers());
 		model.addAttribute("settings", execution.getSettings());
+		model.addAttribute("correlations", pluginService.getCorrelationers().get(settings.getCorrelation()).correlateObjectives(objectives, solutions));
 		
 		return "execution";
 	}

@@ -3,6 +3,7 @@ package thiagodnf.nautilus.web.model;
 import com.google.gson.Gson;
 
 import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
+import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 
 public class Settings {
@@ -12,6 +13,8 @@ public class Settings {
 	private String colorize = new ByEuclideanDistanceColorize().getKey();
 	
 	private String normalize = new ByParetoFrontValuesNormalize().getKey();
+	
+	private String correlation = new SpearmanCorrelation().getKey();
 	
 	private String name;
 
@@ -45,6 +48,14 @@ public class Settings {
 
 	public void setNormalize(String normalize) {
 		this.normalize = normalize;
+	}
+	
+	public String getCorrelation() {
+		return correlation;
+	}
+
+	public void setCorrelation(String correlation) {
+		this.correlation = correlation;
 	}
 
 	public String toString() {
