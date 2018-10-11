@@ -59,7 +59,7 @@ public class PluginController {
 		
 		pluginService.stopAndUnload(pluginId);
 		
-		fileService.delete(path);
+		//fileService.delete(path);
 		
 		flashMessageService.success(ra, "msg.delete.plugin.success", plugin.getDescriptor().getPluginDescription());
 		

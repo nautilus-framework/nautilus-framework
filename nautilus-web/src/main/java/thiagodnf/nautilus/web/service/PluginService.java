@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.service;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,9 +63,7 @@ public class PluginService {
 	@PostConstruct
 	private void initIt() {
 
-		LOGGER.info("Loading plugins");
-
-		reload();
+		loadPluginsFromDirectory();
 
 		LOGGER.info("Done. Adding Colorizers");
 
@@ -85,17 +84,9 @@ public class PluginService {
 		LOGGER.info("Done");
 	}
 	
-	public void reload() {
+	public void loadPluginsFromDirectory() {
 		
-		LOGGER.info("Stopping and unloading the plugins before load all of them");
-
-		pluginManager.stopPlugins();
-		
-//		for (PluginWrapper plugin : pluginManager.getResolvedPlugins()) {
-//			pluginManager.unloadPlugin(plugin.getDescriptor().getPluginId());
-//		}
-		
-		LOGGER.info("Done. Loading plugins from directory");
+		LOGGER.info("Loading plugins from directory");
 		
 		List<String> files = fileService.getJarPlugins();
 
@@ -120,6 +111,8 @@ public class PluginService {
 				fileService.createPluginDirectory(plugin.getPluginId(), extension.getId());
 			}
 		}
+		
+		LOGGER.info("Done. All plugins were loaded and started");
 	}
 	
 	private void addColorizer(Colorize colorize) {
@@ -350,12 +343,19 @@ public class PluginService {
 	}
 
 	public void stopAndUnload(String pluginId) {
-		this.pluginManager.stopPlugin(pluginId);
-		this.pluginManager.unloadPlugin(pluginId);
+		this.pluginManager.deletePlugin(pluginId);
 	}
 
 	public List<Variable> getVariables(String pluginId, String problemId, InstanceData data) {
 		return getProblemExtension(pluginId, problemId).getVariables(data);
+	}
+
+	public void load(String filename) {
+		
+		Path path = fileService.getPluginsLocation().resolve(filename); 
+		
+		pluginManager.loadPlugin(path);
+		
 	}
 	
 }

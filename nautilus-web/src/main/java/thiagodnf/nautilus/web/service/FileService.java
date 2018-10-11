@@ -192,7 +192,7 @@ public class FileService {
 		try {
 			Files.delete(path);
 		} catch (Exception ex) {
-			throw new RuntimeException("Delete file is not possible");
+			throw new RuntimeException("Delete file is not possible", ex);
 		}
 	}
 	

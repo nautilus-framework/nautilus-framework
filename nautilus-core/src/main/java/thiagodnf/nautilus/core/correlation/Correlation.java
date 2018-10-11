@@ -106,33 +106,9 @@ public abstract class Correlation {
 				List<Double> xs = new ArrayList<>();
 				List<Double> ys = new ArrayList<>();
 
-				double index = 0;
-				
-				for (Solution solution : solutions) {
-					
-					Solution copy = solution.copy();
-					
-					copy.getVariables().add(variable);
-					
-					double x = objectives.get(i).evaluate(data, solution);
-					double y = objectives.get(i).evaluate(data, copy);
-					//x = index++;
-					
-					
-					x = Normalizer.normalize(x, objectives.get(i).getMinimumValue(), objectives.get(i).getMaximumValue());
-					y = Normalizer.normalize(y, objectives.get(i).getMinimumValue(), objectives.get(i).getMaximumValue());
-					
-					y = x - y;
-					
-					xs.add(index++);
-					ys.add(y);
-				}
-				
-				if(variable.getValue().equalsIgnoreCase("1")) {
-					System.out.println(objectives.get(i).getName()+" - "+variable.getValue());
-					System.out.println(xs);
-					System.out.println(ys);
-					System.out.println("-------");
+				for (int j = 1; j <= 10; j++) {
+					xs.add(Double.valueOf(j));
+					ys.add(teste(objectives.get(i),data,solutions, variable, j));
 				}
 				
 				double[] x = Converter.toDoubleArray(xs);
@@ -147,24 +123,25 @@ public abstract class Correlation {
 		return items;
 	}
 	
-	public Set<String> mapToVariabless(List<Solution> solutions) {
+	public double teste(AbstractObjective objective, InstanceData data, List<Solution> solutions, Variable variable, int size) {
+		
+		double sum = 0.0;
 
-		Set<String> map = new HashSet<>();
+		for (Solution solution : solutions) {
 
-		for (Solution s : solutions) {
+			Solution copy = solution.copy();
 
-			for (Variable v : s.getVariables()) {
-
-//				if (!map.containsKey(v.getValue())) {
-//					map.put(v.getValue(), index++);
-//				}
+			for (int i = 0; i < size; i++) {
+				copy.getVariables().add(variable);
 			}
+			
+			double value = objective.evaluate(data, copy);
+
+			sum += Normalizer.normalize(value, objective.getMinimumValue(), objective.getMaximumValue());
 		}
 
-		return map;
+		return sum;
 	}
 	
-	
-
 	public abstract List<String> correlatVariables(List<AbstractObjective> objectives, List<Solution> solutions);
 }

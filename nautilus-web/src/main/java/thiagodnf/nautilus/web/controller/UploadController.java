@@ -121,7 +121,7 @@ public class UploadController {
 	@PostMapping("/plugin/")
 	public String uploadExtension(@Valid UploadPlugin uploadPlugin, BindingResult result, Model model) {
 
-		LOGGER.info("Uploading the file: " + uploadPlugin.getFile().getOriginalFilename());
+		LOGGER.info("Uploading the file: {} ", uploadPlugin.getFile().getOriginalFilename());
 
 		if (result.hasErrors()) {
 			return "upload-plugin";
@@ -131,13 +131,11 @@ public class UploadController {
 		
 		String filename = file.getOriginalFilename();
 		
-		LOGGER.info("Storing the plugin file");
+		LOGGER.info("No error found. Storing the plugin file on directory");
 		
-		System.out.println(filename);
-
-		pluginService.store(filename, file);
+		fileService.storePlugin(filename, file);
 		
-		pluginService.reload();
+		pluginService.load(filename);
 		
 		LOGGER.info("Done");
 		
