@@ -23,7 +23,10 @@ import thiagodnf.nautilus.core.colorize.BySimilarityColorize;
 import thiagodnf.nautilus.core.colorize.Colorize;
 import thiagodnf.nautilus.core.colorize.NoColorColorize;
 import thiagodnf.nautilus.core.correlation.Correlation;
+import thiagodnf.nautilus.core.correlation.PearsonCorrelation;
 import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
+import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.normalize.Normalize;
@@ -77,16 +80,21 @@ public class PluginService {
 		LOGGER.info("Done. Adding Correlationers");
 
 		addCorrelationer(new SpearmanCorrelation());
+		addCorrelationer(new PearsonCorrelation());
 
 		LOGGER.info("Done");
 	}
 	
 	public void reload() {
 		
-		LOGGER.info("Stopping the plugins before load all of them");
+		LOGGER.info("Stopping and unloading the plugins before load all of them");
 
 		pluginManager.stopPlugins();
-
+		
+//		for (PluginWrapper plugin : pluginManager.getResolvedPlugins()) {
+//			pluginManager.unloadPlugin(plugin.getDescriptor().getPluginId());
+//		}
+		
 		LOGGER.info("Done. Loading plugins from directory");
 		
 		List<String> files = fileService.getJarPlugins();
@@ -112,8 +120,6 @@ public class PluginService {
 				fileService.createPluginDirectory(plugin.getPluginId(), extension.getId());
 			}
 		}
-		
-		LOGGER.info("Done.");
 	}
 	
 	private void addColorizer(Colorize colorize) {
@@ -346,6 +352,10 @@ public class PluginService {
 	public void stopAndUnload(String pluginId) {
 		this.pluginManager.stopPlugin(pluginId);
 		this.pluginManager.unloadPlugin(pluginId);
+	}
+
+	public List<Variable> getVariables(String pluginId, String problemId, InstanceData data) {
+		return getProblemExtension(pluginId, problemId).getVariables(data);
 	}
 	
 }

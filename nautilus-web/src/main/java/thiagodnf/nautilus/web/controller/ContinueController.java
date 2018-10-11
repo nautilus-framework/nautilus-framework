@@ -236,58 +236,60 @@ public class ContinueController {
 		
 		//System.out.println(solutions);
 		
-		List<Correlation> correlations = p.calculate(map, values, objectiveKeys.size(), solutions);
+		// Descomentar
 		
-		
+//		List<Correlation> correlations = p.calculate(map, values, objectiveKeys.size(), solutions);
+//		
+//		
 		double[] r = new double[objectives.size()];
-		
-		for(Solution s : selectedSolutions) {
-			
-			System.out.println(s);
-			
-			for (Variable v : s.getVariables()) {
-
-				if (extension.isValidForCorrelation(problem, s, v)) {
-
-					String value = extension.getValueForCorrelation(problem, s, v);
-					
-					double feedback = v.getUserFeeback();
-					
-					for (Correlation c : correlations) {
-	
-						if (c.getVariable().equalsIgnoreCase(value)) {
-	
-							for (int i = 0; i < r.length; i++) {
-	
-								double distance = 0.0;
-								double minDistance = c.getValues().get(i);
-								
-								if (feedback == 0) {
-									distance = minDistance;
-								} else if (feedback > 0) {
-									distance = Math.pow(minDistance, 1.0 / Math.abs(feedback));
-								} else {
-									distance = Math.pow(1.0 - minDistance, 1.0 / Math.abs(feedback));
-								}
-								
-								if (Double.isNaN(distance)) {
-									distance = minDistance;
-								}
-								
-								
-								r[i] += distance;
-								//System.out.println(r[i]);
-	//							r[i] += c.getValues().get(i) + c.getValues().get(i) * v.getUserFeeback();
-							}
-							
-							System.out.println(Arrays.toString(r));
-						}
-					}
-				}
-			}
-			
-			
-		}
+//		
+//		for(Solution s : selectedSolutions) {
+//			
+//			System.out.println(s);
+//			
+//			for (Variable v : s.getVariables()) {
+//
+//				if (extension.isValidForCorrelation(problem, s, v)) {
+//
+//					String value = extension.getValueForCorrelation(problem, s, v);
+//					
+//					double feedback = v.getUserFeeback();
+//					
+//					for (Correlation c : correlations) {
+//	
+//						if (c.getVariable().equalsIgnoreCase(value)) {
+//	
+//							for (int i = 0; i < r.length; i++) {
+//	
+//								double distance = 0.0;
+//								double minDistance = c.getValues().get(i);
+//								
+//								if (feedback == 0) {
+//									distance = minDistance;
+//								} else if (feedback > 0) {
+//									distance = Math.pow(minDistance, 1.0 / Math.abs(feedback));
+//								} else {
+//									distance = Math.pow(1.0 - minDistance, 1.0 / Math.abs(feedback));
+//								}
+//								
+//								if (Double.isNaN(distance)) {
+//									distance = minDistance;
+//								}
+//								
+//								
+//								r[i] += distance;
+//								//System.out.println(r[i]);
+//	//							r[i] += c.getValues().get(i) + c.getValues().get(i) * v.getUserFeeback();
+//							}
+//							
+//							System.out.println(Arrays.toString(r));
+//						}
+//					}
+//				}
+//			}
+//			
+//			
+//		}
 		
 		System.out.println(Arrays.toString(r));
 		
@@ -308,19 +310,6 @@ public class ContinueController {
 		
 		for(Entry<String, Double> entry : rankingMap.entrySet()) {
 			
-//			if(selectedMap.isEmpty()) {
-//				selectedMap.put(entry.getKey(), entry.getValue());
-//				lastValue = entry.getValue();
-//			}else {
-//				
-//				if((entry.getValue() - lastValue) < epsilon) {
-//					selectedMap.put(entry.getKey(), entry.getValue());
-//					lastValue = entry.getValue();
-//				}
-//			}
-//			
-//			
-//			
 			double value = entry.getValue();
 			
 			if(value <= average) {
@@ -351,7 +340,7 @@ public class ContinueController {
 		
 		
 		
-		model.addAttribute("correlations", correlations);
+		//model.addAttribute("correlations", correlations);
 		model.addAttribute("objectiveKeys", objectiveKeys);
 		
 		model.addAttribute("rankingMap", rankingMap);

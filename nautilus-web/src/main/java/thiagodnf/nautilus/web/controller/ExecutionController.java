@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,13 +13,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import thiagodnf.nautilus.core.colorize.Colorize;
+import thiagodnf.nautilus.core.correlation.Correlation;
+import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.model.Variable;
+import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
@@ -33,6 +39,9 @@ public class ExecutionController {
 	@Autowired
 	private PluginService pluginService;
 	
+	@Autowired
+	private FileService fileService;
+	
 	@GetMapping("")
 	public String view(Model model, 
 			@PathVariable("executionId") String executionId) {
@@ -40,23 +49,35 @@ public class ExecutionController {
 		LOGGER.info("Displaying '{}'", executionId);
 		
 		Execution execution = executionService.findById(executionId);
-
 		Parameters parameters = execution.getParameters();
-		
 		Settings settings = execution.getSettings();
 		
 		String pluginId = parameters.getPluginId();
 		String problemId = parameters.getProblemId();
 		
+		Path instance = fileService.getInstanceFile(pluginId, problemId, parameters.getFilename());
+		
+		InstanceData data = pluginService.getProblemExtension(pluginId, problemId).readInstanceData(instance);
+		
+		List<Variable> variables = pluginService.getVariables(pluginId, problemId, data);
+		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		
 		List<Solution> solutions = execution.getSolutions();
 
+		Correlation correlation = pluginService.getCorrelationers().get(settings.getCorrelation());
+		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalize());
+		Colorize colorize = pluginService.getColorizers().get(settings.getColorize());
+
 		if (objectives.size() != 1) {
-			solutions =  pluginService.getNormalizers().get(settings.getNormalize()).normalize(objectives, solutions);
+			solutions = normalizer.normalize(objectives, solutions);
 		}
 
-		solutions = pluginService.getColorizers().get(settings.getColorize()).execute(solutions);
+		solutions = colorize.execute(solutions);
+		
+		
+		
+		//System.out.println(variables);
 		
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
@@ -67,7 +88,8 @@ public class ExecutionController {
 		model.addAttribute("colorizers", pluginService.getColorizers());
 		model.addAttribute("correlationers", pluginService.getCorrelationers());
 		model.addAttribute("settings", execution.getSettings());
-		model.addAttribute("correlations", pluginService.getCorrelationers().get(settings.getCorrelation()).correlateObjectives(objectives, solutions));
+		model.addAttribute("correlationsForObjectives", correlation.correlateObjectives(objectives, solutions));
+		model.addAttribute("correlationsForVariables", correlation.correlateVariables(normalizer, data, variables, objectives, solutions));
 		
 		return "execution";
 	}

@@ -11,8 +11,6 @@
 	<modules>
 		<module>nautilus-core</module>
 		<module>nautilus-plugin</module>
-		<module>nautilus-plugin-zdt3</module>
-		<module>nautilus-plugin-zdt1</module>
 		<module>nautilus-web</module>
 	</modules>
 	<properties>

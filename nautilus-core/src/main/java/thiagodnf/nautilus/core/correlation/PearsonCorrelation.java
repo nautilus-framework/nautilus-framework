@@ -9,12 +9,12 @@ import java.util.Map.Entry;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 
-import thiagodnf.nautilus.core.model.Correlation;
 import thiagodnf.nautilus.core.model.CorrelationItem;
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.model.Variable;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 
-public class PearsonCorrelation {
+public class PearsonCorrelation extends Correlation{
 	
 	public Map<String, Integer> mapToVariables(List<Solution> solutions) {
 
@@ -52,14 +52,14 @@ public class PearsonCorrelation {
 	public double count(CorrelationItem item, String searchFor) {
 
 		double counter = 0;
-
-		for (String v : item.getVariables()) {
-
-			if (v.equalsIgnoreCase(searchFor)) {
-				counter++;
-			}
-		}
-
+//
+//		for (String v : item.getVariables()) {
+//
+//			if (v.equalsIgnoreCase(searchFor)) {
+//				counter++;
+//			}
+//		}
+//
 		return counter;
 	}
 	
@@ -67,48 +67,67 @@ public class PearsonCorrelation {
 		
 		List<Correlation> correlations = new ArrayList<>();
 		
-		//Map<String, Integer> map = mapToVariables(solutions);
-		
-		
-		for(Entry<String, Integer> entry : map.entrySet()) {
-			
-			Correlation c = new Correlation();
-			
-			c.setVariable(entry.getKey());
-			
-			System.out.println(entry.getKey());
-			for (int i = 0; i < numberOfObjectives; i++) {
-
-				List<Double> xValues = new ArrayList<>();
-				List<Double> yValues = new ArrayList<>();
-
-				String v = entry.getKey();
-
-				for (CorrelationItem item : items) {
-					
-					xValues.add(item.getObjectives().get(i));
-					yValues.add(count(item, v));
-				}
-				
-				System.out.println(xValues);
-				System.out.println(yValues);
-				System.out.println("-------");
-
-				double[] x = xValues.stream().mapToDouble(el -> el).toArray();
-				double[] y = yValues.stream().mapToDouble(el -> el).toArray();
-
-//				PearsonsCorrelation pc = new PearsonsCorrelation();
-				SpearmansCorrelation pc = new SpearmansCorrelation();
-				
-				double result = pc.correlation(x, y);
-				
-				c.getValues().add(result);
-				System.out.println(result);
-			}
-			
-			correlations.add(c);
-		}
-		
+//		//Map<String, Integer> map = mapToVariables(solutions);
+//		
+//		
+//		for(Entry<String, Integer> entry : map.entrySet()) {
+//			
+//			Correlation c = new Correlation();
+//			
+//			c.setVariable(entry.getKey());
+//			
+//			System.out.println(entry.getKey());
+//			for (int i = 0; i < numberOfObjectives; i++) {
+//
+//				List<Double> xValues = new ArrayList<>();
+//				List<Double> yValues = new ArrayList<>();
+//
+//				String v = entry.getKey();
+//
+//				for (CorrelationItem item : items) {
+//					
+//					xValues.add(item.getObjectives().get(i));
+//					yValues.add(count(item, v));
+//				}
+//				
+//				System.out.println(xValues);
+//				System.out.println(yValues);
+//				System.out.println("-------");
+//
+//				double[] x = xValues.stream().mapToDouble(el -> el).toArray();
+//				double[] y = yValues.stream().mapToDouble(el -> el).toArray();
+//
+////				PearsonsCorrelation pc = new PearsonsCorrelation();
+//				SpearmansCorrelation pc = new SpearmansCorrelation();
+//				
+//				double result = pc.correlation(x, y);
+//				
+//				c.getValues().add(result);
+//				System.out.println(result);
+//			}
+//			
+//			correlations.add(c);
+//		}
+//		
 		return correlations;
+	}
+
+	@Override
+	public String getName() {
+		return "Pearson's Correlation";
+	}
+
+	@Override
+	public double getCorrelation(double[] x, double[] y) {
+
+		PearsonsCorrelation correlation = new PearsonsCorrelation();
+
+		return correlation.correlation(x, y);
+	}
+
+	@Override
+	public List<String> correlatVariables(List<AbstractObjective> objectives, List<Solution> solutions) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

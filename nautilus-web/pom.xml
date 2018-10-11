@@ -153,16 +153,6 @@
 		
 		<dependency>
 			<groupId>thiagodnf.nautilus</groupId>
-			<artifactId>nautilus-plugin-zdt1</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>thiagodnf.nautilus</groupId>
-			<artifactId>nautilus-plugin-zdt3</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>thiagodnf.nautilus</groupId>
 			<artifactId>nautilus-core</artifactId>
 			<version>1.0.0</version>
 		</dependency>

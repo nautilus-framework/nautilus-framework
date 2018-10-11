@@ -10,9 +10,9 @@ public interface VariableExtension extends ExtensionPoint {
 
 	public boolean isValidForCorrelation(Problem<?> problem, Solution solution, Variable variable);
 	
+	public String getValueForCorrelation(Problem<?> problem, Solution solution, Variable variable);
+	
 	public boolean isShown(Problem<?> problem, Solution solution, Variable variable);
 
 	public String getDisplayName(Problem<?> problem, Solution solution, Variable variable);
-	
-	public String getValueForCorrelation(Problem<?> problem, Solution solution, Variable variable);
 }
