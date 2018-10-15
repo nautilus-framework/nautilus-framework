@@ -11,6 +11,8 @@ import com.google.gson.Gson;
 
 public class Solution {
 	
+	private String type;
+	
 	@NotNull
 	private List<Double> objectives;
 	
@@ -27,6 +29,7 @@ public class Solution {
 	}
 	
 	public Solution(Solution solution) {
+		this.type = new String(solution.getType());
 		this.objectives = new ArrayList<>(solution.getObjectives());
 		this.variables = new ArrayList<>(solution.getVariables());
 		this.properties = new HashMap<>(solution.getProperties());
@@ -70,6 +73,14 @@ public class Solution {
 	
 	public void setObjective(int index, double value) {
 		getObjectives().set(index, value);
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public Solution copy() {

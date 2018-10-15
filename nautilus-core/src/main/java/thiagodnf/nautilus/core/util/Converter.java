@@ -3,14 +3,19 @@ package thiagodnf.nautilus.core.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.solution.impl.DefaultDoubleSolution;
 import org.uma.jmetal.solution.impl.DefaultIntegerSolution;
+import org.uma.jmetal.util.binarySet.BinarySet;
 
 import thiagodnf.nautilus.core.model.Variable;
+import thiagodnf.nautilus.core.problem.IntegerProblem.FakeIntegerProblem;
+import thiagodnf.nautilus.core.solution.BinarySolution;
+import thiagodnf.nautilus.core.solution.IntegerSolution;
 
 public class Converter {
 	
@@ -39,8 +44,24 @@ public class Converter {
 			}
 
 			for (int i = 0; i < s.getNumberOfVariables(); i++) {
-				solution.getVariables().add(new Variable(s.getVariableValueString(i)));
+
+				if (s instanceof IntegerSolution) {
+					solution.getVariables().add(new Variable(s.getVariableValueString(i)));
+				} else if (s instanceof BinarySolution) {
+
+					BinarySet binarySet = (BinarySet) s.getVariableValue(i);
+
+					for (int j = 0; j < binarySet.getBinarySetLength(); j++) {
+						solution.getVariables().add(new Variable(binarySet.get(j)));
+					}
+
+					solution.getProperties().put("binaryset-size-for-variable_" + i, String.valueOf(binarySet.getBinarySetLength()));
+				}
 			}
+			
+			solution.getProperties().put("number-of-variables", String.valueOf(s.getNumberOfVariables()));
+
+			solution.setType(s.getClass().getName());
 
 			solutions.add(solution);
 		}
@@ -49,19 +70,54 @@ public class Converter {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Solution toSolutionWithOutObjectives(Problem problem, thiagodnf.nautilus.core.model.Solution solution) {
-		
-		Solution newSolution = (Solution) problem.createSolution();
-		
-		for (int i = 0; i < solution.getVariables().size(); i++) {
+	public static Solution<?> toJMetalSolution(thiagodnf.nautilus.core.model.Solution solution) {
 
-			if (newSolution instanceof DefaultIntegerSolution) {
-				newSolution.setVariableValue(i, Integer.valueOf(solution.getVariables().get(i).getValue()));
-			} else if (newSolution instanceof DefaultDoubleSolution) {
-				newSolution.setVariableValue(i, Double.valueOf(solution.getVariables().get(i).getValue()));
-			}
+		Solution newSolution = null;
+
+		if (solution.getType().equalsIgnoreCase(IntegerSolution.class.getName())) {
+			newSolution = new IntegerSolution(solution.getNumberOfObjectives(), solution.getVariables().size());
+		} else if (solution.getType().equalsIgnoreCase(BinarySolution.class.getName())) {
+			
+			int numberOfVariables = Integer.valueOf(solution.getProperties().get("number-of-variables"));
+			
+			newSolution = new BinarySolution(solution.getNumberOfObjectives(), numberOfVariables);
 		}
 		
+		// Copy Objective Values
+		for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
+			newSolution.setObjective(i, solution.getObjective(i));
+		}
+
+		// Copy Variables Values
+		if (newSolution instanceof IntegerSolution) {
+			for (int i = 0; i < solution.getVariables().size(); i++) {
+				newSolution.setVariableValue(i, Integer.valueOf(solution.getVariables().get(i).getValue()));
+			}
+		} else if (newSolution instanceof BinarySolution) {
+			
+			int numberOfVariables = Integer.valueOf(solution.getProperties().get("number-of-variables"));
+
+			int index = 0;
+			
+			for (int i = 0; i < numberOfVariables; i++) {
+
+				int nbits = Integer.valueOf(solution.getProperties().get("binaryset-size-for-variable_" + i));
+				
+				BinarySet binarySet = new BinarySet(nbits);
+
+				for (int j = 0; j < nbits; j++) {
+					binarySet.set(j, Boolean.valueOf(solution.getVariables().get(index++).getValue()));
+				}
+				
+				newSolution.setVariableValue(i, binarySet);
+			}
+		}
+
+		// Copy Properties Values
+		for (Entry<String, String> entry : solution.getProperties().entrySet()) {
+			newSolution.setAttribute(entry.getKey(), entry.getValue());
+		}
+
 		return newSolution;
 	}
 	
@@ -71,25 +127,7 @@ public class Converter {
 		List solutions = new ArrayList<>();
 
 		for (thiagodnf.nautilus.core.model.Solution solution : population) {
-
-			Solution newSolution = (Solution) problem.createSolution();
-			
-			// Copy Objective values
-			for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
-				newSolution.setObjective(i, solution.getObjective(i));
-			}
-
-			// Copy Variables values
-			for (int i = 0; i < solution.getVariables().size(); i++) {
-
-				if (newSolution instanceof DefaultIntegerSolution) {
-					newSolution.setVariableValue(i, Integer.valueOf(solution.getVariables().get(i).getValue()));
-				} else if (newSolution instanceof DefaultDoubleSolution) {
-					newSolution.setVariableValue(i, Double.valueOf(solution.getVariables().get(i).getValue()));
-				}
-			}
-			
-			solutions.add(newSolution);
+			solutions.add(toJMetalSolution(solution));
 		}
 
 		return solutions;

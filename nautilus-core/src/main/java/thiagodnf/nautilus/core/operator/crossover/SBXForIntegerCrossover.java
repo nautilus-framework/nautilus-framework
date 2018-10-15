@@ -3,10 +3,11 @@ package thiagodnf.nautilus.core.operator.crossover;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 import org.uma.jmetal.util.pseudorandom.RandomGenerator;
+
+import thiagodnf.nautilus.core.solution.IntegerSolution;
 
 public class SBXForIntegerCrossover extends Crossover<IntegerSolution> {
 

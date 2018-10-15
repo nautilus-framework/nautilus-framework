@@ -245,8 +245,6 @@ public class PluginService {
 		return map;
 	}
 	
-	
-	
 	public String formatInstanceFile(String pluginId, String problemId, String content) {
 
 		List<FormatterExtension> formatters = getFormatters(pluginId);
@@ -342,7 +340,7 @@ public class PluginService {
 		return extension.getMutationOperators(problemId);
 	}
 
-	public void stopAndUnload(String pluginId) {
+	public void deletePlugin(String pluginId) {
 		this.pluginManager.deletePlugin(pluginId);
 	}
 
@@ -350,12 +348,23 @@ public class PluginService {
 		return getProblemExtension(pluginId, problemId).getVariables(data);
 	}
 
-	public void load(String filename) {
+	public void loadPlugin(String filename) {
 		
 		Path path = fileService.getPluginsLocation().resolve(filename); 
 		
-		pluginManager.loadPlugin(path);
+		pluginManager.loadPlugin(Paths.get(path.toFile().getAbsolutePath()));
 		
+		pluginManager.startPlugins();
+		
+		for(PluginWrapper plugin : getStartedPlugins()) {
+			
+			for (ProblemExtension extension : getProblemExtensions(plugin.getPluginId())) {
+
+				LOGGER.info("Creating folder for {} / {}", plugin.getPluginId(), extension.getId());
+
+				fileService.createPluginDirectory(plugin.getPluginId(), extension.getId());
+			}
+		}
 	}
 	
 }

@@ -93,7 +93,7 @@ public class OptimizeController {
 
 		for (thiagodnf.nautilus.core.model.Solution sol : execution.getSolutions()) {
 			
-			Solution s = Converter.toSolutionWithOutObjectives(problem, sol);
+			Solution s = Converter.toJMetalSolution(sol);
 			
 			problem.evaluate(s);
 			

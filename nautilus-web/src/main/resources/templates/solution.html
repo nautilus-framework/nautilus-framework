@@ -58,8 +58,11 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="variable,i : ${solution.getVariables()}" th:if="${extension.isShown(problem, solution, variable)}">
-										<td width="100%" th:text="${extension.getDisplayName(problem, solution, variable)}"></td>
+									<tr th:each="variable,i : ${solution.getVariables()}" 
+										th:if="${solutionType == 1 || (solutionType == 2 && variable.getValue().equalsIgnoreCase('true'))}">
+										
+										<td width="100%" th:if="${solutionType == 1}" th:text="${variable.getValue()}"/>
+										<td width="100%" th:if="${solutionType == 2}" th:text="${i.index}"/>
 										
 										<td><input type="text"
 											th:name="'variable-feedback-' + ${i.index}"

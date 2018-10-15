@@ -19,9 +19,21 @@ public class Variable {
 		this("");
 	}
 	
+	public Variable(int value) {
+		this(String.valueOf(value));
+	}
+
+	public Variable(boolean value) {
+		this(String.valueOf(value));
+	}
+
 	public Variable(String value) {
+		this(value, new HashMap<>());
+	}
+
+	public Variable(String value, Map<String, String> properties) {
 		this.value = value;
-		this.properties = new HashMap<>();
+		this.properties = properties;
 	}
 	
 	public Variable(Variable solution) {

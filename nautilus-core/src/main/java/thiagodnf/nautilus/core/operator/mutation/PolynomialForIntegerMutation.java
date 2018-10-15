@@ -1,12 +1,13 @@
 package thiagodnf.nautilus.core.operator.mutation;
 
-import org.uma.jmetal.problem.IntegerProblem;
-import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.util.RepairDoubleSolution;
 import org.uma.jmetal.solution.util.RepairDoubleSolutionAtBounds;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 import org.uma.jmetal.util.pseudorandom.RandomGenerator;
+
+import thiagodnf.nautilus.core.problem.IntegerProblem;
+import thiagodnf.nautilus.core.solution.IntegerSolution;
 
 public class PolynomialForIntegerMutation extends Mutation<IntegerSolution> {
 

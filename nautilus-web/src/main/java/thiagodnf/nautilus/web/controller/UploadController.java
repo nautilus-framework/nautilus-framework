@@ -135,7 +135,7 @@ public class UploadController {
 		
 		fileService.storePlugin(filename, file);
 		
-		pluginService.load(filename);
+		pluginService.loadPlugin(filename);
 		
 		LOGGER.info("Done");
 		

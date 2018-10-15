@@ -16,19 +16,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.uma.jmetal.problem.Problem;
 
-import thiagodnf.nautilus.core.correlation.PearsonCorrelation;
-import thiagodnf.nautilus.core.model.Correlation;
-import thiagodnf.nautilus.core.model.CorrelationItem;
+import thiagodnf.nautilus.core.colorize.Colorize;
+import thiagodnf.nautilus.core.correlation.Correlation;
+import thiagodnf.nautilus.core.correlation.Correlation.CorrelationItem;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.model.Variable;
+import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.problem.AbstractProblem;
+import thiagodnf.nautilus.core.solution.BinarySolution;
 import thiagodnf.nautilus.plugin.extension.VariableExtension;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
+import thiagodnf.nautilus.web.service.CorrelationService;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
@@ -45,6 +48,9 @@ public class ContinueController {
 	@Autowired
 	private FileService fileService;
 	
+	@Autowired
+	private CorrelationService correlationService;
+	
 	@GetMapping("/continue/{executionId}")
 	public String view(Model model, @PathVariable("executionId") String executionId) {
 		
@@ -57,29 +63,207 @@ public class ContinueController {
 		String pluginId = parameters.getPluginId();
 		String problemId = parameters.getProblemId();
 		
-		List<String> objectiveKeys = parameters.getObjectiveKeys();
+		List<Solution> solutions = execution.getSolutions();
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
+		
+//		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalize());
+		
+//		if (objectives.size() != 1) {
+//			solutions = normalizer.normalize(objectives, solutions);
+//		}
+		
+		List<String> objectiveKeys = parameters.getObjectiveKeys();
+		
+		
 		
 		Path instance = fileService.getInstanceFile(pluginId, problemId, parameters.getFilename());
 		
 		InstanceData data = pluginService.getProblemExtension(pluginId, problemId).readInstanceData(instance); 
 		
-		Problem problem = pluginService.getProblemExtension(pluginId, problemId).createProblem(data, objectives);
+		AbstractProblem problem = pluginService.getProblemExtension(pluginId, problemId).createProblem(data, objectives);
 		
-		VariableExtension extension = pluginService.getVariableExtension(pluginId);
+		Correlation correlation = pluginService.getCorrelationers().get(settings.getCorrelation());
 		
+		List<CorrelationItem> correlationItems = correlationService.correlateVariables(problem, data, objectives, solutions);
+		
+		for(CorrelationItem correlationItem : correlationItems) {
+			System.out.println(correlationItem);
+		}
+		
+		
+		
+		model.addAttribute("objectives", objectives);
+		model.addAttribute("correlationsForObjectives", correlationService.correlateObjectives(correlation, objectives, solutions));
+		model.addAttribute("correlationsForVariables", correlationItems);
+		
+		
+		System.out.println("--------");
+
+		List<CorrelationItem> normalized = correlationService.normalize(correlationItems);
+		model.addAttribute("correlationsForVariables", normalized);
+		
+		for(CorrelationItem correlationItem : normalized) {
+			System.out.println(correlationItem);
+		}
+		System.out.println("--------");
+		
+		
+		
+		
+		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalize());
+		
+		if (objectives.size() != 1) {
+			solutions = normalizer.normalize(objectives, solutions);
+		}
 		
 		List<Solution> selectedSolutions = new ArrayList<>();
 		
 		// Step 1: Separate the selected solutions
 		for(Solution sol : execution.getSolutions()) {
-			
 			if(sol.getProperties().containsKey("selected")) {
-				
 				selectedSolutions.add(sol);
 			}
 		}
+		
+		double r[] = new double[objectives.size()];
+		
+		// First option
+		
+//		for(Solution s : selectedSolutions) {
+//		
+//			System.out.println(s);
+//			
+//			for (int i = 0; i < s.getVariables().size(); i++) {
+//
+//				Variable v = s.getVariables().get(i);
+//	
+//				double feedback = v.getUserFeeback();
+//				
+//				String value = v.getValue();
+//				
+//				if (s.getType().equalsIgnoreCase(BinarySolution.class.getName())) {
+//					value = String.valueOf(i);
+//					
+//					if(v.getValue().equalsIgnoreCase("false")) {
+//						continue;
+//					}
+//				}
+//				
+//				CorrelationItem item = null;
+//				
+//				for (CorrelationItem c : correlationItems) {
+//					if(c.getName().equalsIgnoreCase(value)) {
+//						item = c;
+//						break;
+//					}
+//				}
+//				
+//				for (int j = 0; j < r.length; j++) {
+//
+//					double distance = 0.0;
+//					double minDistance = item.getValues().get(j);
+//					
+//					if (feedback == 0) {
+//						distance = minDistance;
+//					} else if (feedback > 0) {
+//						distance = Math.pow(minDistance, 1.0 / Math.abs(feedback));
+//					} else {
+//						distance = Math.pow(1.0 - minDistance, 1.0 / Math.abs(feedback));
+//					}
+//					
+//					if (Double.isNaN(distance)) {
+//						distance = minDistance;
+//					}
+//					
+//					
+//					r[j] += distance;
+//				}
+//				
+//				System.out.println(Arrays.toString(r));
+//
+//			}
+//		}
+		
+		
+		for(Solution s : selectedSolutions) {
+			
+			System.out.println(s);
+			
+			for (int i = 0; i < s.getVariables().size(); i++) {
+
+				Variable v = s.getVariables().get(i);
+	
+				double feedback = v.getUserFeeback();
+				
+				String value = v.getValue();
+				
+				if (s.getType().equalsIgnoreCase(BinarySolution.class.getName())) {
+					value = String.valueOf(i);
+					
+					if(v.getValue().equalsIgnoreCase("false")) {
+						continue;
+					}
+				}
+				
+				CorrelationItem item = null;
+				
+				for (CorrelationItem c : normalized) {
+					if(c.getName().equalsIgnoreCase(value)) {
+						item = c;
+						break;
+					}
+				}
+				
+				for (int j = 0; j < r.length; j++) {
+
+					double distance = 0.0;
+					double minDistance = item.getValues().get(j);
+					
+					if (feedback == 0) {
+						distance = minDistance;
+					} else if (feedback > 0) {
+						distance = Math.pow(minDistance, 1.0 / Math.abs(feedback));
+					} else {
+						distance = Math.pow(1.0 - minDistance, 1.0 / Math.abs(feedback));
+					}
+					
+					if (Double.isNaN(distance)) {
+						distance = minDistance;
+					}
+					
+					
+					r[j] += distance;
+				}
+				
+				//
+
+			}
+		}
+		
+		
+		
+		
+		System.out.println(Arrays.toString(r));
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		//model.addAttribute("plugin", plugin);
 		
@@ -186,49 +370,48 @@ public class ContinueController {
 		
 		
 		
-		PearsonCorrelation p = new PearsonCorrelation();
-		
-		List<Solution> solutions = execution.getSolutions();
-		
-		if (objectives.size() != 1) {
-			solutions = pluginService.getNormalizers().get(settings.getNormalize()).normalize(objectives, solutions);
-		}
-		
-		
-		int index = 1;
-
-		Map<String, Integer> map = new HashMap<>();
-
-		List<CorrelationItem> values = new ArrayList<>();
-		
-		for (Solution s : solutions) {
-
-			CorrelationItem item = new CorrelationItem();//List<String> valid = new ArrayList<>();
-
-			for (Variable v : s.getVariables()) {
-
-				if (extension.isValidForCorrelation(problem, s, v)) {
-
-					String value = extension.getValueForCorrelation(problem, s, v);
-
-					item.getVariables().add(value);
-					
-					if (!map.containsKey(value)) {
-						map.put(value, index++);
-					}
-				}
-			}
-			
-			item.setObjectives(s.getObjectives());
-
-			values.add(item);
-		}
-		
-		System.out.println(map);
-		
-		System.out.println(values);
-		
-		System.out.println("-----");
+//		PearsonCorrelation p = new PearsonCorrelation();
+//		
+//		
+//		if (objectives.size() != 1) {
+//			solutions = pluginService.getNormalizers().get(settings.getNormalize()).normalize(objectives, solutions);
+//		}
+//		
+//		
+//		int index = 1;
+//
+//		Map<String, Integer> map = new HashMap<>();
+//
+//		List<CorrelationItem> values = new ArrayList<>();
+//		
+//		for (Solution s : solutions) {
+//
+//			CorrelationItem item = new CorrelationItem();//List<String> valid = new ArrayList<>();
+//
+//			for (Variable v : s.getVariables()) {
+//
+//				if (extension.isValidForCorrelation(problem, s, v)) {
+//
+//					String value = extension.getValueForCorrelation(problem, s, v);
+//
+//					item.getVariables().add(value);
+//					
+//					if (!map.containsKey(value)) {
+//						map.put(value, index++);
+//					}
+//				}
+//			}
+//			
+//			item.setObjectives(s.getObjectives());
+//
+//			values.add(item);
+//		}
+//		
+//		System.out.println(map);
+//		
+//		System.out.println(values);
+//		
+//		System.out.println("-----");
 		
 		
 		
@@ -241,7 +424,7 @@ public class ContinueController {
 //		List<Correlation> correlations = p.calculate(map, values, objectiveKeys.size(), solutions);
 //		
 //		
-		double[] r = new double[objectives.size()];
+		//double[] r = new double[objectives.size()];
 //		
 //		for(Solution s : selectedSolutions) {
 //			
@@ -297,7 +480,7 @@ public class ContinueController {
 			rankingMap.put(objectiveKeys.get(i), r[i]);
 		}
 		
-		rankingMap = sortDescedent(rankingMap);
+		rankingMap = sort(rankingMap);
 		
 //		
 		double sum = rankingMap.values().stream().reduce(Double::sum).get();
@@ -312,7 +495,7 @@ public class ContinueController {
 			
 			double value = entry.getValue();
 			
-			if(value <= average) {
+			if(value >= average) {
 				selectedMap.put(entry.getKey(), entry.getValue());
 			}
 		}
@@ -321,7 +504,7 @@ public class ContinueController {
 			selectedMap.putAll(rankingMap);
 		}
 		
-		selectedMap = sortDescedent(selectedMap);
+		selectedMap = sort(selectedMap);
 		
 		
 		List<String> selectedObjectives = selectedMap

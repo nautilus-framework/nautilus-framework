@@ -55,11 +55,7 @@ public class PluginController {
 		
 		PluginWrapper plugin = pluginService.getPluginWrapper(pluginId);
 
-		Path path = plugin.getPluginPath();
-		
-		pluginService.stopAndUnload(pluginId);
-		
-		//fileService.delete(path);
+		pluginService.deletePlugin(pluginId);
 		
 		flashMessageService.success(ra, "msg.delete.plugin.success", plugin.getDescriptor().getPluginDescription());
 		

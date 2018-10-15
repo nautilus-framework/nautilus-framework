@@ -228,3 +228,5 @@ CongressManagement
 1
 1
 1
+#mandatory-features
+JAMES UserManagement Modules GUI Core
