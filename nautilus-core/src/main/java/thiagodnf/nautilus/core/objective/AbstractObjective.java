@@ -10,6 +10,10 @@ public abstract class AbstractObjective {
 
 	private boolean isChecked = true;
 	
+	public boolean isMaximize() {
+		return false;
+	}
+	
 	public double maximize(double value) {
 		return -1.0 * value;
 	}

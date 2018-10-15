@@ -48,10 +48,10 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="obj,i : ${selectedMap}">
+								<tr th:each="item,i : ${rankingSelectedItems}">
 									<td th:text="${i.count}"></td>
-								    <td th:text="${obj.key}"></td>
-								    <td th:text="${obj.value}"></td>
+								    <td th:text="${item.getName()}"></td>
+								    <td th:text="${item.getValue()}"></td>
 								</tr>
 							</tbody>
 						</table>
@@ -66,10 +66,10 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="obj,i : ${rankingMap}">
+								<tr th:each="item,i : ${rankingItems}">
 									<td th:text="${i.count}"></td>
-								    <td th:text="${obj.key}"></td>
-								    <td th:text="${obj.value}"></td>
+								    <td th:text="${item.getName()}"></td>
+								    <td th:text="${item.getValue()}"></td>
 								</tr>
 							</tbody>
 						</table>

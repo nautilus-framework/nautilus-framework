@@ -192,7 +192,7 @@ public class CorrelationService {
 		return (double) sum / (double) solutions.size();
 	}
 	
-	public List<CorrelationItem> normalize(List<CorrelationItem> correlationItems){
+	public List<CorrelationItem> normalize(List<CorrelationItem> correlationItems, List<AbstractObjective> objectives){
 		
 		List<CorrelationItem> normalized = new ArrayList<>();
 
@@ -200,9 +200,7 @@ public class CorrelationService {
 			normalized.add(item.copy());
 		}
 		
-		int size = normalized.get(0).getValues().size();
-
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < objectives.size(); i++) {
 			
 			double minValue = Double.MAX_VALUE;
 			double maxValue = Double.MIN_VALUE;
@@ -223,7 +221,11 @@ public class CorrelationService {
 				
 				double value = item.getValues().get(i);
 				
-				item.getValues().set(i, Normalizer.normalize(value, maxValue, minValue));
+				if(objectives.get(i).isMaximize()) {
+					item.getValues().set(i, Normalizer.normalize(value, minValue, maxValue));
+				}else {
+					item.getValues().set(i, Normalizer.normalize(value, maxValue, minValue));
+				}				
 			}
 		}
 		

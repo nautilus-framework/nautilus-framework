@@ -3,6 +3,7 @@ package thiagodnf.nautilus.web.controller;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import thiagodnf.nautilus.core.colorize.Colorize;
 import thiagodnf.nautilus.core.correlation.Correlation;
 import thiagodnf.nautilus.core.correlation.Correlation.CorrelationItem;
 import thiagodnf.nautilus.core.model.InstanceData;
@@ -26,8 +27,9 @@ import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.problem.AbstractProblem;
+import thiagodnf.nautilus.core.ranking.RankingComparator;
+import thiagodnf.nautilus.core.ranking.RankingItem;
 import thiagodnf.nautilus.core.solution.BinarySolution;
-import thiagodnf.nautilus.plugin.extension.VariableExtension;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
@@ -73,7 +75,7 @@ public class ContinueController {
 //			solutions = normalizer.normalize(objectives, solutions);
 //		}
 		
-		List<String> objectiveKeys = parameters.getObjectiveKeys();
+		//List<String> objectiveKeys = parameters.getObjectiveKeys();
 		
 		
 		
@@ -100,8 +102,8 @@ public class ContinueController {
 		
 		System.out.println("--------");
 
-		List<CorrelationItem> normalized = correlationService.normalize(correlationItems);
-		model.addAttribute("correlationsForVariables", normalized);
+		List<CorrelationItem> normalized = correlationService.normalize(correlationItems, objectives);
+		//model.addAttribute("correlationsForVariables", normalized);
 		
 		for(CorrelationItem correlationItem : normalized) {
 			System.out.println(correlationItem);
@@ -474,59 +476,33 @@ public class ContinueController {
 //			
 //		}
 		
-		System.out.println(Arrays.toString(r));
 		
+		List<RankingItem> items = new ArrayList<>();
+
 		for (int i = 0; i < r.length; i++) {
-			rankingMap.put(objectiveKeys.get(i), r[i]);
+			items.add(new RankingItem(objectives.get(i), r[i]));
 		}
-		
-		rankingMap = sort(rankingMap);
-		
-//		
-		double sum = rankingMap.values().stream().reduce(Double::sum).get();
-		double average = (double) sum / (double) objectiveKeys.size();
-//		
-		
-		double epsilon = 0.002;
-		double lastValue = 0.0;
-		
-		
-		for(Entry<String, Double> entry : rankingMap.entrySet()) {
-			
-			double value = entry.getValue();
-			
-			if(value >= average) {
-				selectedMap.put(entry.getKey(), entry.getValue());
-			}
-		}
-//		
-		if(selectedMap.isEmpty()) {
-			selectedMap.putAll(rankingMap);
-		}
-		
-		selectedMap = sort(selectedMap);
-		
-		
-		List<String> selectedObjectives = selectedMap
-				.keySet()
-				.stream()
+
+		Collections.sort(items, new RankingComparator(false));
+
+		double sum = items.stream().map(e -> e.getValue()).reduce(Double::sum).get();
+		double average = (double) sum / (double) items.size();
+
+		List<RankingItem> selectedItems = items.stream()
+				.filter(e -> e.getValue() >= average)
 				.collect(Collectors.toList());
-		
-		
-		Parameters nextParameters =  execution.getParameters();
-		
-		nextParameters.setObjectiveKeys(selectedObjectives);
+
+		Parameters nextParameters = execution.getParameters();
+
+		List<String> selectedObjectiveIds = selectedItems.stream()
+				.map(e -> e.getId())
+				.collect(Collectors.toList());
+
+		nextParameters.setObjectiveKeys(selectedObjectiveIds);
 		nextParameters.setLastExecutionId(executionId);
 		
-		
-		model.addAttribute("selectedMap", selectedMap);
-		
-		
-		
-		//model.addAttribute("correlations", correlations);
-		model.addAttribute("objectiveKeys", objectiveKeys);
-		
-		model.addAttribute("rankingMap", rankingMap);
+		model.addAttribute("rankingItems", items);
+		model.addAttribute("rankingSelectedItems", selectedItems);
 		
 		return "continue";
 	}
@@ -544,35 +520,4 @@ public class ContinueController {
 	                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
 	                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 	}
-	
-	protected double[] mean(double[] array, double size) {
-		
-		if (size == 0) {
-			return array;
-		}
-
-		double[] newArray = new double[array.length];
-
-		for (int i = 0; i < array.length; i++) {
-			newArray[i] = (array[i] / size);
-		}
-
-		return newArray;
-	}
-	
-	protected double[] meanInverse(double[] array, double size) {
-		
-		if (size == 0) {
-			return array;
-		}
-
-		double[] newArray = new double[array.length];
-
-		for (int i = 0; i < array.length; i++) {
-			newArray[i] = 1.0 - (array[i] / size);
-		}
-
-		return newArray;
-	}
-	
 }
