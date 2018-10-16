@@ -222,9 +222,9 @@ public class CorrelationService {
 				double value = item.getValues().get(i);
 				
 				if(objectives.get(i).isMaximize()) {
-					item.getValues().set(i, Normalizer.normalize(value, minValue, maxValue));
+					item.getValues().set(i, Normalizer.normalize(value, -1.0, 1.0, minValue, maxValue));
 				}else {
-					item.getValues().set(i, Normalizer.normalize(value, maxValue, minValue));
+					item.getValues().set(i, Normalizer.normalize(value, -1.0, 1.0, maxValue, minValue));
 				}				
 			}
 		}

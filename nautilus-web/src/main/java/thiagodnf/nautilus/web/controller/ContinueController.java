@@ -4,14 +4,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -320,7 +316,7 @@ public class ContinueController {
 //			}
 //		}
 //		
-		Map<String, Double> rankingMap = new HashMap<>();
+		
 //
 //		for (int i = 0; i < ranking.length; i++) {
 //			rankingMap.put(objectiveKeys.get(i), ranking[i]);
@@ -483,13 +479,13 @@ public class ContinueController {
 			items.add(new RankingItem(objectives.get(i), r[i]));
 		}
 
-		Collections.sort(items, new RankingComparator(false));
+		Collections.sort(items, new RankingComparator(true));
 
 		double sum = items.stream().map(e -> e.getValue()).reduce(Double::sum).get();
 		double average = (double) sum / (double) items.size();
 
 		List<RankingItem> selectedItems = items.stream()
-				.filter(e -> e.getValue() >= average)
+				.filter(e -> e.getValue() <= average)
 				.collect(Collectors.toList());
 
 		Parameters nextParameters = execution.getParameters();
@@ -505,19 +501,5 @@ public class ContinueController {
 		model.addAttribute("rankingSelectedItems", selectedItems);
 		
 		return "continue";
-	}
-	
-	protected Map<String, Double> sort(Map<String, Double> ranking) {
-		 return ranking.entrySet().stream()
-	                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-	                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-	                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-	}
-	
-	protected Map<String, Double> sortDescedent(Map<String, Double> ranking) {
-		 return ranking.entrySet().stream()
-	                .sorted(Map.Entry.comparingByValue(Comparator.naturalOrder()))
-	                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-	                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 	}
 }

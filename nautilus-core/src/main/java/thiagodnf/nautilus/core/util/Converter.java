@@ -70,6 +70,38 @@ public class Converter {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Solution toJMetalSolutionWithOutObjectives(Problem problem, thiagodnf.nautilus.core.model.Solution solution) {
+		
+		Solution newSolution = (Solution) problem.createSolution();
+		
+		if (newSolution instanceof IntegerSolution) {
+			for (int i = 0; i < solution.getVariables().size(); i++) {
+				newSolution.setVariableValue(i, Integer.valueOf(solution.getVariables().get(i).getValue()));
+			}
+		} else if (newSolution instanceof BinarySolution) {
+			
+			int numberOfVariables = Integer.valueOf(solution.getProperties().get("number-of-variables"));
+
+			int index = 0;
+			
+			for (int i = 0; i < numberOfVariables; i++) {
+
+				int nbits = Integer.valueOf(solution.getProperties().get("binaryset-size-for-variable_" + i));
+				
+				BinarySet binarySet = new BinarySet(nbits);
+
+				for (int j = 0; j < nbits; j++) {
+					binarySet.set(j, Boolean.valueOf(solution.getVariables().get(index++).getValue()));
+				}
+				
+				newSolution.setVariableValue(i, binarySet);
+			}
+		}
+		
+		return newSolution;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Solution<?> toJMetalSolution(thiagodnf.nautilus.core.model.Solution solution) {
 
 		Solution newSolution = null;
