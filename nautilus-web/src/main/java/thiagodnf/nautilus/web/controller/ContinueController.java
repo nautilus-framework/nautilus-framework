@@ -248,244 +248,19 @@ public class ContinueController {
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//model.addAttribute("plugin", plugin);
-		
-		
-		
-		
-		
-		
-		
-//		// Step 2: Invert the objectives values
-//		for (Solution sol : selectedSolutions) {
-//
-//			for (int i = 0; i < sol.getNumberOfObjectives(); i++) {
-//				
-//				sol.setObjective(i, 1.0 - sol.getObjective(i));
-//			}
-//		}
-//		
-//		// Step 3: Normalize the objectives between [1,10]
-//		for (Solution sol : selectedSolutions) {
-//			
-//			for (int i = 0; i < sol.getNumberOfObjectives(); i++) {
-//				
-//				sol.setObjective(i, Normalizer.normalize(sol.getObjective(i), 1, 10, 0, 1));
-//			}
-//		}
-//		
-//		// Step 4: Apply the user feedback
-//		for (Solution sol : selectedSolutions) {
-//
-//			double feedback = 0.0;
-//
-//			if (sol.getProperties().containsKey("feedback")) {
-//				
-//				feedback = Double.valueOf(sol.getProperties().get("feedback"));
-//			}
-//
-//			for (int i = 0; i < sol.getNumberOfObjectives(); i++) {
-//				
-//				sol.setObjective(i, sol.getObjective(i) + feedback * sol.getObjective(i));
-//			}
-//		}
-//		
-//		double[] ranking = new double[objectiveKeys.size()];
-//		
-//		// Step 5: Sum the objective values
-//		for (Solution s : selectedSolutions) {
-//
-//			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
-//				
-//				ranking[i] += s.getObjectives().get(i);
-//			}
-//		}
-//		
-		
-//
-//		for (int i = 0; i < ranking.length; i++) {
-//			rankingMap.put(objectiveKeys.get(i), ranking[i]);
-//		}
-//
-//		rankingMap = sort(rankingMap);
-//		
-//		
-//		double sum = rankingMap.values().stream().reduce(Double::sum).get();
-//		double average = (double) sum / (double) objectiveKeys.size();
-//		
-		Map<String, Double> selectedMap = new HashMap<>();
-//		
-//		for(Entry<String, Double> entry : rankingMap.entrySet()) {
-//			
-//			double value = entry.getValue();
-//			
-//			if(value >= average) {
-//				selectedMap.put(entry.getKey(), entry.getValue());
-//			}
-//		}
-//		
-//		if(selectedMap.isEmpty()) {
-//			selectedMap.putAll(rankingMap);
-//		}
-//		
-//		selectedMap = sort(selectedMap);
-//		
-//		
-//		List<String> selectedObjectives = selectedMap
-//				.keySet()
-//				.stream()
-//				.collect(Collectors.toList());
-//		
-////		Parameters nextParameters =  execution.getParameters();
-////		
-////		nextParameters.setObjectiveKeys(selectedObjectives);
-////		nextParameters.setLastExecutionId(executionId);
-//		
-//		
-//		model.addAttribute("selectedMap", selectedMap);
-		model.addAttribute("execution", execution);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-//		PearsonCorrelation p = new PearsonCorrelation();
-//		
-//		
-//		if (objectives.size() != 1) {
-//			solutions = pluginService.getNormalizers().get(settings.getNormalize()).normalize(objectives, solutions);
-//		}
-//		
-//		
-//		int index = 1;
-//
-//		Map<String, Integer> map = new HashMap<>();
-//
-//		List<CorrelationItem> values = new ArrayList<>();
-//		
-//		for (Solution s : solutions) {
-//
-//			CorrelationItem item = new CorrelationItem();//List<String> valid = new ArrayList<>();
-//
-//			for (Variable v : s.getVariables()) {
-//
-//				if (extension.isValidForCorrelation(problem, s, v)) {
-//
-//					String value = extension.getValueForCorrelation(problem, s, v);
-//
-//					item.getVariables().add(value);
-//					
-//					if (!map.containsKey(value)) {
-//						map.put(value, index++);
-//					}
-//				}
-//			}
-//			
-//			item.setObjectives(s.getObjectives());
-//
-//			values.add(item);
-//		}
-//		
-//		System.out.println(map);
-//		
-//		System.out.println(values);
-//		
-//		System.out.println("-----");
-		
-		
-		
-		
-		
-		//System.out.println(solutions);
-		
-		// Descomentar
-		
-//		List<Correlation> correlations = p.calculate(map, values, objectiveKeys.size(), solutions);
-//		
-//		
-		//double[] r = new double[objectives.size()];
-//		
-//		for(Solution s : selectedSolutions) {
-//			
-//			System.out.println(s);
-//			
-//			for (Variable v : s.getVariables()) {
-//
-//				if (extension.isValidForCorrelation(problem, s, v)) {
-//
-//					String value = extension.getValueForCorrelation(problem, s, v);
-//					
-//					double feedback = v.getUserFeeback();
-//					
-//					for (Correlation c : correlations) {
-//	
-//						if (c.getVariable().equalsIgnoreCase(value)) {
-//	
-//							for (int i = 0; i < r.length; i++) {
-//	
-//								double distance = 0.0;
-//								double minDistance = c.getValues().get(i);
-//								
-//								if (feedback == 0) {
-//									distance = minDistance;
-//								} else if (feedback > 0) {
-//									distance = Math.pow(minDistance, 1.0 / Math.abs(feedback));
-//								} else {
-//									distance = Math.pow(1.0 - minDistance, 1.0 / Math.abs(feedback));
-//								}
-//								
-//								if (Double.isNaN(distance)) {
-//									distance = minDistance;
-//								}
-//								
-//								
-//								r[i] += distance;
-//								//System.out.println(r[i]);
-//	//							r[i] += c.getValues().get(i) + c.getValues().get(i) * v.getUserFeeback();
-//							}
-//							
-//							System.out.println(Arrays.toString(r));
-//						}
-//					}
-//				}
-//			}
-//			
-//			
-//		}
-		
-		
 		List<RankingItem> items = new ArrayList<>();
 
 		for (int i = 0; i < r.length; i++) {
 			items.add(new RankingItem(objectives.get(i), r[i]));
 		}
 
-		Collections.sort(items, new RankingComparator(true));
+		Collections.sort(items, new RankingComparator(false));
 
 		double sum = items.stream().map(e -> e.getValue()).reduce(Double::sum).get();
 		double average = (double) sum / (double) items.size();
 
 		List<RankingItem> selectedItems = items.stream()
-				.filter(e -> e.getValue() <= average)
+				.filter(e -> e.getValue() >= average)
 				.collect(Collectors.toList());
 
 		Parameters nextParameters = execution.getParameters();
@@ -499,6 +274,7 @@ public class ContinueController {
 		
 		model.addAttribute("rankingItems", items);
 		model.addAttribute("rankingSelectedItems", selectedItems);
+		model.addAttribute("execution", execution);
 		
 		return "continue";
 	}
