@@ -17,7 +17,7 @@
 		<springframework.boot.version>2.0.3.RELEASE</springframework.boot.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<jmetal.version>5.5.3</jmetal.version>
+		<jmetal.version>5.6</jmetal.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<sonar.test.exclusions>
