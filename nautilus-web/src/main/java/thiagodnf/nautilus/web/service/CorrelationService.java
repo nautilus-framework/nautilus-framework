@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.uma.jmetal.problem.Problem;
 
 import com.google.common.base.Preconditions;
 
@@ -13,13 +12,12 @@ import thiagodnf.nautilus.core.correlation.Correlation;
 import thiagodnf.nautilus.core.correlation.Correlation.CorrelationItem;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.model.Solution;
-import thiagodnf.nautilus.core.model.Variable;
-import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.problem.AbstractProblem;
 import thiagodnf.nautilus.core.problem.BinaryProblem;
 import thiagodnf.nautilus.core.problem.IntegerProblem;
 import thiagodnf.nautilus.core.solution.BinarySolution;
+import thiagodnf.nautilus.core.solution.IntegerSolution;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.Normalizer;
 
@@ -78,15 +76,11 @@ public class CorrelationService {
 				CorrelationItem item = new CorrelationItem(i);
 
 				for (int j = 0; j < objectives.size(); j++) {
-
-					double s = testeInteiro(p, objectives.get(j), j, data, solutions, i);
-					
-					item.getValues().add(s);
+					item.getValues().add(calculateForIntegerSolution(data, objectives.get(j), solutions, i));
 				}
-				
+
 				items.add(item);
 			}
-			
 		}else if (p instanceof BinaryProblem) {
 			
 			BinaryProblem problem = (BinaryProblem) p;
@@ -97,14 +91,11 @@ public class CorrelationService {
 			for (int i = min; i <= max; i++) {
 
 				CorrelationItem item = new CorrelationItem(i);
-			
-				for (int j = 0; j < objectives.size(); j++) {
 
-					double s = testeBinary(p, objectives.get(j), j, data, solutions, i);
-					
-					item.getValues().add(s);
+				for (int j = 0; j < objectives.size(); j++) {
+					item.getValues().add(calculateForBinary(data, objectives.get(j), solutions, i));
 				}
-				
+
 				items.add(item);
 			}
 		}
@@ -112,81 +103,65 @@ public class CorrelationService {
 		return items;
 	}
 	
-	public double testeInteiro(Problem p, AbstractObjective objective, int objectiveId, InstanceData data, List<Solution> solutions, int value) {
+	public double calculateForIntegerSolution(InstanceData data, AbstractObjective objective, List<Solution> solutions, int value) {
 		
 		double sum = 0.0;
 		
 		for (Solution solution : solutions) {
 
-			double originalValue  = solution.getObjective(objectiveId);
+			IntegerSolution sol = (IntegerSolution) Converter.toJMetalSolution(solution);
 			
-			originalValue = Normalizer.normalize(originalValue, objective.getMinimumValue(), objective.getMaximumValue());
+			double originalValue = objective.evaluate(data, sol);
 			
-			Solution copy = solution.copy();
+			for (int i = 0; i < sol.getNumberOfVariables(); i++) {
 
-			for (int i = 0; i < copy.getVariables().size(); i++) {
-				
-				if (!copy.getVariables().get(i).getValue().equalsIgnoreCase(String.valueOf(value))) {
-					copy.getVariables().set(i, new Variable(value));
+				if (sol.getVariableValue(i) != value) {
+					sol.setVariableValue(i, value);
 					break;
 				}
 			}
-			
-			org.uma.jmetal.solution.Solution<?> sJmetal = Converter.toJMetalSolution(copy);
 
-			double newValue = objective.evaluate(p, sJmetal);
+			double newValue = objective.evaluate(data, sol);
 
+			originalValue = Normalizer.normalize(originalValue, objective.getMinimumValue(), objective.getMaximumValue());
 			newValue = Normalizer.normalize(newValue, objective.getMinimumValue(), objective.getMaximumValue());
 
 			double diff = (originalValue - newValue);
 
-			double result = 0.0;
-
 			if (originalValue == 0) {
-				result = diff;
+				sum += diff;
 			} else {
-				result = diff / originalValue;
+				sum += diff / originalValue;
 			}
-
-			sum += result;
 		}
 
 		return (double) sum / (double) solutions.size();
 	}
 	
-	public double testeBinary(Problem p, AbstractObjective objective, int objectiveId, InstanceData data, List<Solution> solutions, int pos) {
+	public double calculateForBinary(InstanceData data, AbstractObjective objective, List<Solution> solutions, int pos) {
 		
 		double sum = 0.0;
 
 		for (Solution solution : solutions) {
 
-			double originalValue  = solution.getObjective(objectiveId);
+			BinarySolution sol = (BinarySolution) Converter.toJMetalSolution(solution);
+			
+			double originalValue = objective.evaluate(data, sol);
+			
+			sol.getVariableValue(0).set(pos);
+			
+			double newValue = objective.evaluate(data, sol);
 			
 			originalValue = Normalizer.normalize(originalValue, objective.getMinimumValue(), objective.getMaximumValue());
-			
-			Solution copy = solution.copy();
-
-			org.uma.jmetal.solution.Solution<?> sJmetal = Converter.toJMetalSolution(copy);
-
-			BinarySolution bin = (BinarySolution) sJmetal;
-			
-			bin.getVariableValue(0).set(pos);
-			
-			double newValue = objective.evaluate(p, sJmetal);
-			
 			newValue = Normalizer.normalize(newValue, objective.getMinimumValue(), objective.getMaximumValue());
 			
-			double diff = (newValue-originalValue);
-			
-			double result = 0.0;
+			double diff = (newValue - originalValue);
 
 			if (originalValue == 0) {
-				result = diff;
+				sum += diff;
 			} else {
-				result = diff / originalValue;
+				sum += diff / originalValue;
 			}
-			
-			sum += result;
 		}
 
 		return (double) sum / (double) solutions.size();

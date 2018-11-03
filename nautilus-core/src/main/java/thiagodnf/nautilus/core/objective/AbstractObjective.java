@@ -1,9 +1,8 @@
 package thiagodnf.nautilus.core.objective;
 
-import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractObjective {
@@ -14,14 +13,6 @@ public abstract class AbstractObjective {
 		return false;
 	}
 	
-	public double maximize(double value) {
-		return -1.0 * value;
-	}
-
-	public double minimize(double value) {
-		return value;
-	}
-
 	public double getMinimumValue() {
 		return 0.0;
 	}
@@ -51,13 +42,20 @@ public abstract class AbstractObjective {
 		this.isChecked = status;
 	}
 	
-	public abstract double evaluate(Problem<?> problem, Object solution);
-	
-	public abstract double evaluate(InstanceData data, Solution solution);
+	public double evaluate(InstanceData data, Solution<?> sol) {
+
+		double value = calculate(data, sol);
+
+		if (isMaximize()) {
+			return -1.0 * value;
+		}
+
+		return value;
+	}
 
 	public abstract String getName();
 	
 	public abstract String getGroupName();
-
 	
+	public abstract double calculate(InstanceData data, Solution<?> solution);	
 }

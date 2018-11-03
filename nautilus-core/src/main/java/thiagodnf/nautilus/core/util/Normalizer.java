@@ -9,7 +9,7 @@ public class Normalizer {
 	}
 
 	public static double normalize(double value, double min, double max) {
-		return normalize(value, 0, 1, min, max);
+		return normalize(value, 0.0, 1.0, min, max);
 	}
 
 	/**

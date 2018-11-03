@@ -63,7 +63,7 @@ public abstract class AbstractProblem<T extends Solution<?>> extends AbstractGen
 	public void evaluate(T solution) {
 
 		for (int i = 0; i < objectives.size(); i++) {
-			solution.setObjective(i, objectives.get(i).evaluate(this, solution));
+			solution.setObjective(i, objectives.get(i).evaluate(data, solution));
 		}
 	}
 }
