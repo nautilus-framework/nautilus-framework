@@ -23,11 +23,11 @@ public class FlashMessageService {
 	}
 
 	public void error(RedirectAttributes ra, String message, String... args) {
-		message(ra, "alert alert-danger alert-dismissible fade show", "alert.error.title", message, args);
+		message(ra, "alert alert-danger aalert-dismissible fade show", "alert.error.title", message, args);
 	}
 	
 	public void success(RedirectAttributes ra, String message, String... args) {
-		message(ra, "alert alert-success alert-dismissible fade show", "alert.success.title", message, args);
+		message(ra, "alert alert-success aalert-dismissible fade show", "alert.success.title", message, args);
 	}
 	
 }

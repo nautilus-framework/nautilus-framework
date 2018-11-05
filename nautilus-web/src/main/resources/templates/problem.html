@@ -34,7 +34,6 @@
 					</li>
 				</ul>
 				<div class="tab-content" id="myTabContent">
-					<div th:replace="fragments/flash-message :: flash-message"></div>
 					<div class="tab-pane fade" id="instances">
 						<div class="tab-pane-toolbar">
 							<a class="btn btn-outline-success btn-sm" th:href="@{/problem/} + ${pluginId} + @{/} + ${problemId} + @{/upload/instance-file/}">Upload Instance File</a>

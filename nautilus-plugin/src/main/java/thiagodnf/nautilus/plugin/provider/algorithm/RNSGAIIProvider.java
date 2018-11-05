@@ -19,7 +19,9 @@ public class RNSGAIIProvider implements AlgorithmExtension {
 	@Override
 	public Algorithm<? extends Solution<?>> getAlgorithm(Builder builder) {
 		
-		PointSolution p1 = PointSolutionUtils.createSolution(-0.0, -0.5, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.5, -0.0);
+//		PointSolution p1 = PointSolutionUtils.createSolution(-0.0, -0.5, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.5, -0.0);
+		
+		PointSolution p1 = PointSolutionUtils.createSolution(1.0, 1.0, 1.0, 1.0, 1.0, 0.0);
 
 		builder.setReferencePoints(Arrays.asList(p1));
 		builder.setEpsilon(0.0001);
