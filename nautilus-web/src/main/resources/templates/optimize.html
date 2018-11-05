@@ -51,6 +51,15 @@
 							<input type="hidden" class="form-control" th:field="*{problemId}" />
 							<input type="hidden" class="form-control" th:field="*{filename}" />
 							<div class="form-group">
+								<label for="algorithmName">Algorithm</label>
+								<select class="form-control" th:field="*{algorithmName}">
+									<option th:each="extension : ${algorithmFactory.getExtensions()}" 
+							    		th:value="${extension.toString()}"
+							    		th:text="${extension.toString()}" 
+						    		/>
+								</select>
+							</div>
+							<div class="form-group">
 								<label for="populationSize">Population Size</label>
 								<input type="number" class="form-control" th:field="*{populationSize}" min="10" max="1000" step="10" required autocomplete="off" />
 							</div>

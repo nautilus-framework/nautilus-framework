@@ -11,11 +11,9 @@
 					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
-						<a th:href="@{/problem/}+${plugin.getProblemKey()}" th:text="${plugin.getProblemName()}"></a>
+						<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a>
 						<span class="path-divider">/</span>
-						<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a> 
-						<span class="path-divider">/</span>
-						<a th:href="@{/done/}+${execution.getId()}">Done</a> 
+						<a th:href="@{/done/}+${execution.getId()}">Done</a>  
 					</h6>
 				</div>
 			</div>
@@ -45,65 +43,55 @@
 							<tbody>
 								<tr>
 									<td>1</td>
+									<td># of Solutions</td>
+									<td th:text="${numberofsolutions}"></td>
+									<td> > </td>
+								</tr>
+								<tr>
+									<td>1</td>
 									<td>Hypervolume</td>
-									<td th:text="${hypervolume}"></td>
+									<td th:text="${#numbers.formatDecimal(hypervolume, 1, 5)}"></td>
 									<td> > </td>
 								</tr>
 								<tr>
 									<td>2</td>
 									<td>GD</td>
-									<td th:text="${gd}"></td>
+									<td th:text="${#numbers.formatDecimal(gd, 1, 5)}"></td>
 									<td> &#x3c; </td>
 								</tr>
 								<tr>
 									<td>3</td>
 									<td>IGD</td>
-									<td th:text="${igd}"></td>
+									<td th:text="${#numbers.formatDecimal(igd, 1, 5)}"></td>
 									<td> &#x3c; </td>
 								</tr>
 								<tr>
 									<td>4</td>
-									<td>Epsilon</td>
-									<td th:text="${epsilon}"></td>
+									<td>Spread</td>
+									<td th:text="${#numbers.formatDecimal(spread, 1, 5)}"></td>
 									<td> > </td>
 								</tr>
 								<tr>
 									<td>5</td>
-									<td>Spread</td>
-									<td th:text="${spread}"></td>
-									<td> > </td>
-								</tr>
-								<tr>
-									<td>6</td>
 									<td>Euclidean Distance</td>
-									<td th:text="${euclideanDistance}"></td>
+									<td th:text="${#numbers.formatDecimal(euclideanDistance, 1, 5)}"></td>
 									<td> &#x3c; </td>
 								</tr>
 								
 								<tr>
-									<td>7</td>
-									<td>Number 1</td>
-									<td th:text="${number1}"></td>
-									<td> &#x3c; </td>
-								</tr>
-								<tr>
-									<td>8</td>
+									<td>6</td>
 									<td>Number 2</td>
-									<td th:text="${number2}"></td>
-									<td> &#x3c; </td>
+									<td th:text="${#numbers.formatDecimal(number2, 1, 5)}"></td>
+									<td> > </td>
 								</tr>
 								<tr>
-									<td>9</td>
-									<td>Number 3</td>
-									<td th:text="${number3}"></td>
-									<td> &#x3c; </td>
+									<td>7</td>
+									<td>Number 9</td>
+									<td th:text="${#numbers.formatDecimal(number9, 1, 5)}"></td>
+									<td> > </td>
 								</tr>
-								<tr>
-									<td>10</td>
-									<td>Number 4</td>
-									<td th:text="${number4}"></td>
-									<td> &#x3c; </td>
-								</tr>
+								
+								
 							</tbody>
 						</table>
 						<br/>

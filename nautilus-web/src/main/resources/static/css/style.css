@@ -127,3 +127,8 @@ body {
 	margin-top: 5px;	
 }
 
+
+.navbar-container .alert{
+	margin-bottom: 0px;
+	border-radius: 0px;
+}

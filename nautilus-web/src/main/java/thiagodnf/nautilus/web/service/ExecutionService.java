@@ -29,8 +29,8 @@ public class ExecutionService {
 		return this.executionRepository.findAll();
 	}
 
-	public List<IdsAndDatesOnly> findByProblemKey(String problemKey) {
-		return this.executionRepository.findByParametersProblemId(problemKey);
+	public List<IdsAndDatesOnly> findByProblemId(String problemId) {
+		return this.executionRepository.findByParametersProblemId(problemId);
 	}
 	
 	public void delete(Execution execution) {
@@ -41,7 +41,7 @@ public class ExecutionService {
 		return executionRepository.existsById(executionId);
 	}
 
-	public List<IdsAndDatesOnly> findByPluginIdAndProblemKey(String pluginId, String problemId) {
+	public List<IdsAndDatesOnly> findByPluginIdAndProblemId(String pluginId, String problemId) {
 		return this.executionRepository.findByParametersPluginIdAndParametersProblemId(pluginId, problemId);
 	}
 }

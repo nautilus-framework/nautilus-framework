@@ -21,6 +21,9 @@ public class Parameters {
 	
 	private String pluginId;
 	
+	@NotEmpty
+	private String algorithmName;
+	
 	private String problemId;
 	
 	private String filename;
@@ -168,5 +171,13 @@ public class Parameters {
 
 	public void setMutationDistribution(Double mutationDistribution) {
 		this.mutationDistribution = mutationDistribution;
+	}
+
+	public String getAlgorithmName() {
+		return algorithmName;
+	}
+
+	public void setAlgorithmName(String algorithmName) {
+		this.algorithmName = algorithmName;
 	}
 }

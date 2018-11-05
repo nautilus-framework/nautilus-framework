@@ -4,10 +4,13 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<head></head>
 	<body>
-		<nav th:fragment="default(active)" class="navbar navbar-dark bg-dark">
-			<div class="container">
-				<a class="navbar-brand" th:href="@{/}">Nautilus</a>
-			</div>
-		</nav>
+		<div th:fragment="default(active)" class="navbar-container">
+			<nav  class="navbar navbar-dark bg-dark">
+				<div class="container">
+					<a class="navbar-brand" th:href="@{/}">Nautilus</a>
+				</div>
+			</nav>
+			<div th:replace="fragments/flash-message :: flash-message"></div>
+		</div>
 	</body>
 </html>

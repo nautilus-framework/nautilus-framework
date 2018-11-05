@@ -8,11 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.uma.jmetal.operator.CrossoverOperator;
-import org.uma.jmetal.operator.MutationOperator;
-import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.operator.impl.selection.RankingAndCrowdingSelection;
-import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.comparator.DominanceComparator;
@@ -34,30 +30,14 @@ public class RNSGAII<S extends Solution<?>> extends NSGAII<S>{
 	
 	private List<PointSolution> referencePoints;
 	
-	public RNSGAII(
-			Problem<S> problem, 
-			int maxEvaluations, 
-			int populationSize, 
-			CrossoverOperator<S> crossover,
-			MutationOperator<S> mutation, 
-			SelectionOperator<List<S>, S> selection,
-			List<?> initialPopulation,
-			List<PointSolution> referencePoints,
-			double epsilon) {
-		super(
-			problem, 
-			maxEvaluations, 
-			populationSize, 
-			crossover, 
-			mutation, 
-			selection,
-			initialPopulation);
+	public RNSGAII(Builder builder) {
+		super(builder);
 		
-		Preconditions.checkNotNull(referencePoints, "The reference point list should not be null");
-		Preconditions.checkArgument(!referencePoints.isEmpty(), "The reference point list should not be empty");
+		Preconditions.checkNotNull(builder.getReferencePoints(), "The reference point list should not be null");
+		Preconditions.checkArgument(!builder.getReferencePoints().isEmpty(), "The reference point list should not be empty");
 		
-		this.referencePoints = referencePoints;
-		this.epsilon = epsilon;
+		this.referencePoints = builder.getReferencePoints();
+		this.epsilon = builder.getEpsilon();
 	}
 	
 	@Override

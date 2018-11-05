@@ -40,7 +40,7 @@ public class ProblemController {
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 		model.addAttribute("instanceFiles", fileService.getInstanceFiles(pluginId, problemId));
-		model.addAttribute("executions", executionService.findByPluginIdAndProblemKey(pluginId, problemId));
+		model.addAttribute("executions", executionService.findByPluginIdAndProblemId(pluginId, problemId));
 
 		return "problem";
 	}

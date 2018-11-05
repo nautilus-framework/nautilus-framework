@@ -3,6 +3,7 @@ package thiagodnf.nautilus.web.service;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.google.common.collect.Ordering;
 
 import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
 import thiagodnf.nautilus.core.colorize.BySimilarityColorize;
@@ -35,12 +38,14 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.operator.crossover.Crossover;
 import thiagodnf.nautilus.core.operator.mutation.Mutation;
 import thiagodnf.nautilus.core.operator.selection.Selection;
+import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.FormatterExtension;
 import thiagodnf.nautilus.plugin.extension.GUIExtension;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
 import thiagodnf.nautilus.plugin.extension.OperatorExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.plugin.extension.VariableExtension;
+import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
 import thiagodnf.nautilus.web.exception.PluginNotFoundException;
 import thiagodnf.nautilus.web.exception.ProblemNotFoundException;
 
@@ -175,6 +180,10 @@ public class PluginService {
 		return pluginManager.getExtensions(ProblemExtension.class, pluginId);
 	}
 	
+	public List<AlgorithmExtension> getAlgorithmExtensions(String pluginId) {
+		return pluginManager.getExtensions(AlgorithmExtension.class, pluginId);
+	}
+	
 	public GUIExtension getGUIExtension(String pluginId) {
 		return getGUIExtensions(pluginId)
 				.stream()
@@ -272,6 +281,19 @@ public class PluginService {
 	
 	public void store(String filename, MultipartFile file) {
 		fileService.storePlugin(filename, file);
+	}
+	
+	public AlgorithmFactory getAlgorithmFactory(String pluginId) {
+
+		AlgorithmFactory factory = new AlgorithmFactory();
+
+		for (AlgorithmExtension extension : getAlgorithmExtensions(pluginId)) {
+			factory.getExtensions().add(extension);
+		}
+
+		Collections.sort(factory.getExtensions(), Ordering.usingToString());
+
+		return factory;
 	}
 	
 	public Crossover<?> getCrossoversById(String pluginId, String problemId, String crossoverId){

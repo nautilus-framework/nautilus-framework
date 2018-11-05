@@ -77,7 +77,7 @@ public class DownloadController {
 				buffer.append(s.getObjective(i));
 
 				if (i + 1 != s.getNumberOfObjectives()) {
-					buffer.append(";");
+					buffer.append(" ");
 				}
 			}
 

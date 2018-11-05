@@ -2,17 +2,14 @@ package thiagodnf.nautilus.core.algorithm;
 
 import java.util.List;
 
-import org.uma.jmetal.operator.CrossoverOperator;
-import org.uma.jmetal.operator.MutationOperator;
-import org.uma.jmetal.operator.SelectionOperator;
-import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
+import thiagodnf.nautilus.core.listener.AlgorithmListener;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
 
 @SuppressWarnings("unchecked")
-public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.GenerationalGeneticAlgorithm<S>{
+public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.GenerationalGeneticAlgorithm<S> implements AlgorithmListener{
 
 	private static final long serialVersionUID = -3996332429840079517L;
 	
@@ -24,23 +21,17 @@ public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleob
 	
 	private int evaluations;
 	
-	public GA(Problem<S> problem, 
-			int maxEvaluations, 
-			int populationSize, 
-			CrossoverOperator<S> crossoverOperator,
-			MutationOperator<S> mutationOperator, 
-			SelectionOperator<List<S>, S> selectionOperator,
-			List<?> initialPopulation) {
-		super(problem, 
-			maxEvaluations, 
-			populationSize, 
-			crossoverOperator, 
-			mutationOperator, 
-			selectionOperator, 
+	public GA(Builder builder) {
+		super(builder.getProblem(), 
+			builder.getMaxEvaluations(), 
+			builder.getPopulationSize(), 
+			builder.getCrossover(), 
+			builder.getMutation(), 
+			builder.getSelection(), 
 			new SequentialSolutionListEvaluator<S>());
 		
-		this.initialPopulation = initialPopulation;
-		this.maxEvaluations = maxEvaluations;
+		this.initialPopulation = builder.getInitialPopulation();
+		this.maxEvaluations = builder.getMaxEvaluations();
 	}
 	
 	@Override

@@ -9,11 +9,11 @@ $(function(){
 	});
 	
 	// Hide the alert when it is available
-	window.setTimeout(function() {
-		$(".alert").fadeTo(500, 0).slideUp(500, function(){
-	        $(this).remove(); 
-	    });
-	}, 4000);
+//	window.setTimeout(function() {
+//		$(".alert").fadeTo(500, 0).slideUp(500, function(){
+//	        $(this).remove(); 
+//	    });
+//	}, 4000);
 	
 	var tz = moment.tz.guess();
 	

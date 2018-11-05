@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.colorize.Colorize;
 import thiagodnf.nautilus.core.model.Solution;
@@ -21,6 +23,7 @@ import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
@@ -34,6 +37,9 @@ public class ExecutionController {
 	
 	@Autowired
 	private PluginService pluginService;
+	
+	@Autowired
+	private FlashMessageService flashMessageService;
 	
 	@GetMapping("")
 	public String view(Model model, 
@@ -74,8 +80,9 @@ public class ExecutionController {
 		return "execution";
 	}
 	
-	@GetMapping("/delete")
-	public String delete(Model model, 
+	@PostMapping("/delete")
+	public String delete(Model model,
+			RedirectAttributes ra,
 			@PathVariable("executionId") String executionId) {
 
 		Execution execution = executionService.findById(executionId);
@@ -84,7 +91,28 @@ public class ExecutionController {
 
 		Parameters parameters = execution.getParameters();
 
-		return "redirect:/problem/" + parameters.getPluginId() + "/" + parameters.getProblemId();
+		flashMessageService.success(ra, "msg.delete.execution.success", execution.getTitle());
+		
+		return "redirect:/problem/" + parameters.getPluginId() + "/" + parameters.getProblemId()+"#executions";
+	}
+	
+	@GetMapping("/duplicate")
+	public String duplicate(Model model,
+			RedirectAttributes ra,
+			@PathVariable("executionId") String executionId) {
+
+		Execution execution = executionService.findById(executionId);
+
+		execution.setId(null);
+		execution.setDate(new Date());
+		
+		executionService.save(execution);
+
+		Parameters parameters = execution.getParameters();
+
+		flashMessageService.success(ra, "msg.duplicate.execution.success", execution.getTitle());
+		
+		return "redirect:/problem/" + parameters.getPluginId() + "/" + parameters.getProblemId()+"#executions";
 	}
 	
 	@PostMapping("/save/settings")

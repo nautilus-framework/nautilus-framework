@@ -3,14 +3,13 @@ package thiagodnf.nautilus.core.algorithm;
 import java.util.List;
 
 import org.uma.jmetal.solution.Solution;
-import org.uma.jmetal.util.comparator.DominanceComparator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
 import thiagodnf.nautilus.core.listener.AlgorithmListener;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
 
 @SuppressWarnings("unchecked")
-public class NSGAII<S extends Solution<?>> extends org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAII<S> implements AlgorithmListener{
+public class SPEA2<S extends Solution<?>> extends org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2<S> implements AlgorithmListener{
 
 	private static final long serialVersionUID = -3996332429840079517L;
 	
@@ -18,16 +17,20 @@ public class NSGAII<S extends Solution<?>> extends org.uma.jmetal.algorithm.mult
 	
 	private List<?> initialPopulation;
 	
-	public NSGAII(Builder builder) {
+	protected int maxEvaluations;
+	
+	protected int evaluations;
+	
+	public SPEA2(Builder builder) {
 		super(builder.getProblem(), 
-				builder.getMaxEvaluations(), 
+				1, 
 				builder.getPopulationSize(), 
 				builder.getCrossover(), 
 				builder.getMutation(), 
 				builder.getSelection(),
-			new DominanceComparator<>(), 
-			new SequentialSolutionListEvaluator<S>());
+				new SequentialSolutionListEvaluator<S>());
 		
+		this.maxEvaluations = builder.getMaxEvaluations();
 		this.initialPopulation = builder.getInitialPopulation();
 	}
 	
@@ -46,6 +49,16 @@ public class NSGAII<S extends Solution<?>> extends org.uma.jmetal.algorithm.mult
 	}
 	
 	@Override
+	protected void initProgress() {
+		evaluations = getMaxPopulationSize();
+	}
+	
+	@Override
+	protected boolean isStoppingConditionReached() {
+		return evaluations >= maxEvaluations;
+	}
+	
+	@Override
 	protected void updateProgress() {
 		
 		double progress = (((double) evaluations) / ((double) maxEvaluations)) * 100.0;
@@ -54,7 +67,7 @@ public class NSGAII<S extends Solution<?>> extends org.uma.jmetal.algorithm.mult
 			onProgressListener.onProgress(progress);
 		}
 		
-		super.updateProgress();
+		evaluations += getMaxPopulationSize() ;
 	}
 
 	public void setOnProgressListener(OnProgressListener onProgressListener) {

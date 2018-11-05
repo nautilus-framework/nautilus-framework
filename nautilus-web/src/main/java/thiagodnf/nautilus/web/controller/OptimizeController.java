@@ -19,21 +19,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.AlgorithmRunner;
 
+import thiagodnf.nautilus.core.algorithm.Builder;
 import thiagodnf.nautilus.core.algorithm.GA;
-import thiagodnf.nautilus.core.algorithm.NSGAII;
+import thiagodnf.nautilus.core.listener.AlgorithmListener;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.operator.crossover.Crossover;
-import thiagodnf.nautilus.core.operator.mutation.Mutation;
-import thiagodnf.nautilus.core.operator.selection.Selection;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.service.ExecutionService;
@@ -74,6 +74,7 @@ public class OptimizeController {
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 		
+		model.addAttribute("algorithmFactory", pluginService.getAlgorithmFactory(pluginId));
 		model.addAttribute("selections", pluginService.getSelections(pluginId, problemId));
 		model.addAttribute("crossovers", pluginService.getCrossovers(pluginId, problemId));
 		model.addAttribute("mutations", pluginService.getMutations(pluginId, problemId));
@@ -111,7 +112,6 @@ public class OptimizeController {
     		@DestinationVariable String sessionId) throws InterruptedException {
 		
         try {
-
         	System.out.println(parameters);
         	
 			String lastExecutionId = parameters.getLastExecutionId();
@@ -126,10 +126,8 @@ public class OptimizeController {
         	
         	Thread.currentThread().setName("optimizing-" + sessionId);
         	
-			String pluginId = parameters.getPluginId();
+        	String pluginId = parameters.getPluginId();
 			String problemId = parameters.getProblemId();
-			int populationSize = parameters.getPopulationSize();
-			int maxEvaluations = parameters.getMaxEvaluations();
 			
 			Path instance = fileService.getInstanceFile(pluginId, problemId, parameters.getFilename());
 			
@@ -139,39 +137,40 @@ public class OptimizeController {
 			
 			InstanceData data = problemExtension.readInstanceData(instance);
 			
-			Problem problem = problemExtension.createProblem(data, objectives);
-						
-			List<?> initialPopulation = getInitialPopulation(problem, lastExecution);
+			// Factories
+			
+			AlgorithmFactory algorithmFactory = pluginService.getAlgorithmFactory(pluginId);
+			
+			// Builder
+			
+			Builder builder = new Builder();
+			
+			builder.setPopulationSize(parameters.getPopulationSize());
+			builder.setMaxEvaluations(parameters.getMaxEvaluations());
+			builder.setProblem(problemExtension.createProblem(data, objectives));
+			builder.setInitialPopulation(getInitialPopulation(builder.getProblem(), lastExecution));
         	
-			// Operators
+			builder.setSelection(pluginService.getSelectionsById(pluginId, problemId, parameters.getSelectionName()));
 			
-			Selection selection = pluginService.getSelectionsById(pluginId, problemId, parameters.getSelectionName());
-			
-			Crossover crossover = pluginService.getCrossoversById(pluginId, problemId, parameters.getCrossoverName());
-			crossover.setDistributionIndex(parameters.getCrossoverDistribution());
-			crossover.setProbability(parameters.getCrossoverProbability());
+			builder.setCrossover(pluginService.getCrossoversById(pluginId, problemId, parameters.getCrossoverName()));
+			builder.getCrossover().setDistributionIndex(parameters.getCrossoverDistribution());
+			builder.getCrossover().setProbability(parameters.getCrossoverProbability());
 
-			Mutation mutation = pluginService.getMutationsById(pluginId, problemId, parameters.getMutationName());
-			mutation.setDistributionIndex(parameters.getMutationDistribution());
-			mutation.setProbability(parameters.getMutationProbability());
+			builder.setMutation(pluginService.getMutationsById(pluginId, problemId, parameters.getMutationName()));
+			builder.getMutation().setDistributionIndex(parameters.getMutationDistribution());
+			builder.getMutation().setProbability(parameters.getMutationProbability());
 			
 			// Algorithm
 			
 			List<? extends Solution<?>> rawSolutions = null;
 			
+			webSocketService.sendTitle(sessionId, "Optimizing...");
+			
 			AlgorithmRunner algorithmRunner = null;
 			
 			if(objectives.size() == 1) {
 				
-				GA<? extends Solution<?>> ga = new GA<>(
-		    		problem, 
-		    		maxEvaluations, 
-		    		populationSize, 
-		    		crossover, 
-		    		mutation, 
-		    		selection,
-		    		initialPopulation
-			    );
+				GA<? extends Solution<?>> ga = new GA<>(builder);
 				
 				ga.setOnProgressListener(new OnProgressListener() {
 					
@@ -181,37 +180,27 @@ public class OptimizeController {
 					}
 				});
 				
-				webSocketService.sendTitle(sessionId, "Optimizing...");
-				
 				algorithmRunner = new AlgorithmRunner.Executor(ga).execute() ;
 				
 				rawSolutions = Arrays.asList(ga.getResult());
 				
 			}else {
+				
+				Algorithm algorithm = algorithmFactory.getAlgorithm(parameters.getAlgorithmName(), builder);
 			    
-				NSGAII<? extends Solution<?>> nsgaii = new NSGAII<>(
-		    		problem, 
-		    		maxEvaluations, 
-		    		populationSize, 
-		    		crossover, 
-		    		mutation, 
-		    		selection,
-		    		initialPopulation
-			    );
-			    
-			    nsgaii.setOnProgressListener(new OnProgressListener() {
+				AlgorithmListener alg = (AlgorithmListener) algorithm;
+				
+				alg.setOnProgressListener(new OnProgressListener() {
 					
 					@Override
 					public void onProgress(double progress) {
 						webSocketService.sendProgress(sessionId, progress);
 					}
 				});
+				
+				algorithmRunner = new AlgorithmRunner.Executor(algorithm).execute() ;
 			    
-			    webSocketService.sendTitle(sessionId, "Optimizing...");
-			    
-			    algorithmRunner = new AlgorithmRunner.Executor(nsgaii).execute() ;
-			    
-			    rawSolutions = nsgaii.getResult();
+			    rawSolutions = (List<? extends Solution<?>>) algorithm.getResult();
 			}
 		    
 		   	webSocketService.sendTitle(sessionId, "Removing repeated solutions...");
