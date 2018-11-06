@@ -282,7 +282,7 @@ public class DoneController {
 		List<PointSolution> referencePoints = new ArrayList<>();
 		
 		
-		referencePoints.add(PointSolutionUtils.createSolution(1.0, 1.0, 1.0, 1.0, 1.0, 0.0));
+		referencePoints.add(PointSolutionUtils.createSolution(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
 		
 		
 		
@@ -362,6 +362,7 @@ public class DoneController {
 //	    
 	    double number66 = 0.0;
 	    double number67 = 0.0;
+	    double both = 0.0;
 	    double numberOfVariables = execution.getSolutions().size();
 	    
 		for (thiagodnf.nautilus.core.model.Solution s : execution.getSolutions()) {
@@ -373,10 +374,15 @@ public class DoneController {
 			if (s.getVariables().get(67).getValue().equalsIgnoreCase("true")) {
 				number67++;
 			}
+			
+			if (s.getVariables().get(66).getValue().equalsIgnoreCase("true") && s.getVariables().get(67).getValue().equalsIgnoreCase("true")) {
+				both++;
+			}
 		}
 //	    
 	    number66 = (double) number66 / (double) numberOfVariables;
 	    number67 = (double) number67 / (double) numberOfVariables;
+	    both = (double) both / (double) numberOfVariables;
 	    
 //	    number3 = (double) number3 / (double) variables;
 //	    number4 = (double) number4 / (double) variables;
@@ -384,6 +390,7 @@ public class DoneController {
 //	   
 	    model.addAttribute("number2", number66);
 	    model.addAttribute("number9", number67);
+	    model.addAttribute("both", both);
 //	    model.addAttribute("number3", number3);
 //	    model.addAttribute("number4", number4);
 //	    
