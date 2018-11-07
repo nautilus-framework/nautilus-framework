@@ -369,7 +369,7 @@ public class DoneController {
 	    
 	    Map<Integer, Double> variables = new HashMap<>();
 	    
-		List<Integer> variablesToFound = Arrays.asList(66, 67, 0, 1);
+		List<Integer> variablesToFound = Arrays.asList(66, 67, 23,35, 12, 24);
 	    
 	    double numberOfVariables = execution.getSolutions().size();
 	    

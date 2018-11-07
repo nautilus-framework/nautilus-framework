@@ -212,15 +212,15 @@ public class OptimizeController {
 		   	List<thiagodnf.nautilus.core.model.Solution> solutions = Converter.toSolutions(rawSolutions);
 		   	
 		   	
-			webSocketService.sendTitle(sessionId, "Removing repeated solutions...");
-//		   	
-		   	List<thiagodnf.nautilus.core.model.Solution> noRepeatedSolutions = SolutionListUtils.removeRepeated(solutions);
+			//webSocketService.sendTitle(sessionId, "Removing repeated solutions...");
+		   	
+		   	//List<thiagodnf.nautilus.core.model.Solution> noRepeatedSolutions = SolutionListUtils.removeRepeated(solutions);
 		   	
 		   	webSocketService.sendTitle(sessionId, "Preparing the results...");
 			
 		   	Execution execution = new Execution();
 		   			
-			execution.setSolutions(noRepeatedSolutions);
+			execution.setSolutions(solutions);
 			execution.setExecutionTime(algorithmRunner.getComputingTime());
 			execution.setParameters(parameters);
 	
