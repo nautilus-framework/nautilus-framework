@@ -2,6 +2,7 @@ package thiagodnf.nautilus.web.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
@@ -64,6 +66,10 @@ public class ExecutionController {
 		if (objectives.size() != 1) {
 			solutions = normalizer.normalize(objectives, solutions);
 		}
+		
+//		if (settings.isRemoveDuplicatedSolutions()) {
+//			solutions = SolutionListUtils.removeRepeated(solutions);
+//		}
 
 		solutions = colorize.execute(solutions);
 		

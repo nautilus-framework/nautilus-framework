@@ -3,7 +3,10 @@ package thiagodnf.nautilus.web.controller;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +33,7 @@ import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.model.Execution;
@@ -267,9 +271,12 @@ public class DoneController {
 		
 		Problem problem = problemExtension.createProblem(data, objectives);
 		
+		
+		List<Solution> solutions = SolutionListUtils.removeRepeated(execution.getSolutions());
+		
 		// Calculate
 		
-		List<org.uma.jmetal.solution.Solution<?>> jMetalSolutions = convert(problem, execution.getSolutions());
+		List<org.uma.jmetal.solution.Solution<?>> jMetalSolutions = convert(problem, solutions);
 		
 		
 		
@@ -282,7 +289,7 @@ public class DoneController {
 		List<PointSolution> referencePoints = new ArrayList<>();
 		
 		
-		referencePoints.add(PointSolutionUtils.createSolution(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
+		referencePoints.add(PointSolutionUtils.createSolution(1.0, 0.0, 1.0, 1.0, 1.0, 0.0));
 		
 		
 		
@@ -303,7 +310,6 @@ public class DoneController {
 		}
 		
 		double average = (double) sum / ((double) jMetalSolutions.size() * (double) referencePoints.size());
-		
 		
 		
 		
@@ -360,37 +366,46 @@ public class DoneController {
 	    List<PointSolution> normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront) ;	
 //	
 //	    
-	    double number66 = 0.0;
-	    double number67 = 0.0;
-	    double both = 0.0;
+	    
+	    Map<Integer, Double> variables = new HashMap<>();
+	    
+		List<Integer> variablesToFound = Arrays.asList(66, 67, 0, 1);
+	    
 	    double numberOfVariables = execution.getSolutions().size();
 	    
 		for (thiagodnf.nautilus.core.model.Solution s : execution.getSolutions()) {
 
-			if (s.getVariables().get(66).getValue().equalsIgnoreCase("true")) {
-				number66++;
-			}
-
-			if (s.getVariables().get(67).getValue().equalsIgnoreCase("true")) {
-				number67++;
-			}
-			
-			if (s.getVariables().get(66).getValue().equalsIgnoreCase("true") && s.getVariables().get(67).getValue().equalsIgnoreCase("true")) {
-				both++;
+			for(int variable : variablesToFound) {
+				
+				if(!variables.containsKey(variable)) {
+					variables.put(variable, 0.0);
+				}
+				
+				double value = variables.get(variable);
+				
+				
+				if (s.getVariables().get(variable).getValue().equalsIgnoreCase("true")) {
+					value++;
+				}
+				
+				variables.put(variable, value);
 			}
 		}
 //	    
-	    number66 = (double) number66 / (double) numberOfVariables;
-	    number67 = (double) number67 / (double) numberOfVariables;
-	    both = (double) both / (double) numberOfVariables;
+//	    number66 = (double) number66 / (double) numberOfVariables;
+//	    number67 = (double) number67 / (double) numberOfVariables;
+//	    both = (double) both / (double) numberOfVariables;
 	    
 //	    number3 = (double) number3 / (double) variables;
 //	    number4 = (double) number4 / (double) variables;
 //	    
 //	   
-	    model.addAttribute("number2", number66);
-	    model.addAttribute("number9", number67);
-	    model.addAttribute("both", both);
+	    
+//	    variables.put("number2", number66);
+//	    variables.put("number9", number67);
+//	    variables.put("both", both);
+	    
+	    model.addAttribute("variables", variables);
 //	    model.addAttribute("number3", number3);
 //	    model.addAttribute("number4", number4);
 //	    
@@ -409,7 +424,7 @@ public class DoneController {
 //		model.addAttribute("euclideanDistance", EuclideanDistance.calculate(normalizedReferenceFront, normalizedFront));
 		
 		model.addAttribute("objectives", objectives);
-		model.addAttribute("numberofsolutions", execution.getSolutions().size());
+		model.addAttribute("numberofsolutions", SolutionListUtils.removeRepeated(execution.getSolutions()).size());
 		model.addAttribute("execution", execution);
 		model.addAttribute("hypervolume", new PISAHypervolume<PointSolution>(normalizedReferenceFront).evaluate(normalizedPopulation));
 		model.addAttribute("gd", new GenerationalDistance<PointSolution>(normalizedReferenceFront).evaluate(normalizedPopulation));

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.validation.constraints.NotNull;
 
@@ -67,6 +68,10 @@ public class Solution {
 		return getObjectives().size();
 	}
 	
+	public int getNumberOfVariables() {
+		return getVariables().size();
+	}
+	
 	public double getObjective(int index) {
 		return getObjectives().get(index);
 	}
@@ -104,5 +109,68 @@ public class Solution {
 		}
 
 		return Double.valueOf(feedback);
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		
+		Solution sol = (Solution) o;
+
+		if (getNumberOfObjectives() != sol.getNumberOfObjectives()) {
+			return false;
+		}
+
+		if (getVariables().size() != getVariables().size()) {
+			return false;
+		}
+		
+		// Binary
+		
+		
+		for (int i = 0; i < getNumberOfVariables(); i++) {
+
+			String v1 = getVariables().get(i).getValue();
+			String v2 = sol.getVariables().get(i).getValue();
+
+			if (!v1.equalsIgnoreCase(v2)) {
+				return false;
+			}
+		}
+		
+
+		
+		// Integer Solution
+		
+//		Map<String, Integer> mapS1 = new HashMap<>();
+//		Map<String, Integer> mapS2 = new HashMap<>();
+//		
+//		for (int i = 0; i < getNumberOfVariables(); i++) {
+//
+//			String keyS1 = getVariables().get(i).getValue();
+//			String keyS2 = sol.getVariables().get(i).getValue();
+//			
+//			if (!mapS1.containsKey(keyS1)) {
+//				mapS1.put(keyS1, 0);
+//			}
+//
+//			if (!mapS2.containsKey(keyS2)) {
+//				mapS2.put(keyS2, 0);
+//			}
+//			
+//			int totalS1 = mapS1.get(keyS1);
+//			int totalS2 = mapS2.get(keyS2);
+//			
+//			mapS1.put(keyS1, ++totalS1);
+//			mapS2.put(keyS2, ++totalS2);
+//		}
+//		
+//		for(Entry<String, Integer> entry : mapS1.entrySet()){
+//			
+//			if(entry.getValue() != mapS2.get(entry.getKey())) {
+//				return false;
+//			}
+//		}
+		
+		return true;
 	}
 }

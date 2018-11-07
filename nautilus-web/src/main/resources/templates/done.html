@@ -78,26 +78,12 @@
 									<td> &#x3c; </td>
 								</tr>
 								
-								<tr>
+								<tr th:each="entry : ${variables}">
 									<td>6</td>
-									<td>Product 66</td>
-									<td th:text="${#numbers.formatDecimal(number2, 1, 5)}"></td>
+									<td th:text="${entry.key}"></td>
+									<td th:text="${#numbers.formatDecimal(entry.value/numberofsolutions, 1, 5)}"></td>
 									<td> > </td>
 								</tr>
-								<tr>
-									<td>7</td>
-									<td>Product 67</td>
-									<td th:text="${#numbers.formatDecimal(number9, 1, 5)}"></td>
-									<td> > </td>
-								</tr>
-								<tr>
-									<td>7</td>
-									<td>Both</td>
-									<td th:text="${#numbers.formatDecimal(both, 1, 5)}"></td>
-									<td> > </td>
-								</tr>
-								
-								
 							</tbody>
 						</table>
 						<br/>

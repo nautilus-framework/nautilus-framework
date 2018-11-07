@@ -203,19 +203,24 @@ public class OptimizeController {
 			    rawSolutions = (List<? extends Solution<?>>) algorithm.getResult();
 			}
 		    
-		   	webSocketService.sendTitle(sessionId, "Removing repeated solutions...");
-		   	
-		   	List<Solution<?>> noRepeatedSolutions = SolutionListUtils.removeRepeated(rawSolutions);
+//		   	webSocketService.sendTitle(sessionId, "Removing repeated solutions...");
+//		   	
+//		   	List<Solution<?>> noRepeatedSolutions = SolutionListUtils.removeRepeated(rawSolutions);
 		   	
 		   	webSocketService.sendTitle(sessionId, "Converting the solutions...");
 		   	
-		   	List<thiagodnf.nautilus.core.model.Solution> solutions = Converter.toSolutions(noRepeatedSolutions);
+		   	List<thiagodnf.nautilus.core.model.Solution> solutions = Converter.toSolutions(rawSolutions);
+		   	
+		   	
+			webSocketService.sendTitle(sessionId, "Removing repeated solutions...");
+//		   	
+		   	List<thiagodnf.nautilus.core.model.Solution> noRepeatedSolutions = SolutionListUtils.removeRepeated(solutions);
 		   	
 		   	webSocketService.sendTitle(sessionId, "Preparing the results...");
 			
 		   	Execution execution = new Execution();
 		   			
-			execution.setSolutions(solutions);
+			execution.setSolutions(noRepeatedSolutions);
 			execution.setExecutionTime(algorithmRunner.getComputingTime());
 			execution.setParameters(parameters);
 	

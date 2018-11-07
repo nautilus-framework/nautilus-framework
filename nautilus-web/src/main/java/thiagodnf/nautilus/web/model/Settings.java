@@ -10,6 +10,8 @@ public class Settings {
 
 	private boolean showLines = true;
 	
+	private boolean removeDuplicatedSolutions = true;
+	
 	private String colorize = new ByEuclideanDistanceColorize().getKey();
 	
 	private String normalize = new ByParetoFrontValuesNormalize().getKey();
@@ -56,6 +58,14 @@ public class Settings {
 
 	public void setCorrelation(String correlation) {
 		this.correlation = correlation;
+	}
+
+	public boolean isRemoveDuplicatedSolutions() {
+		return removeDuplicatedSolutions;
+	}
+
+	public void setRemoveDuplicatedSolutions(boolean removeDuplicatedSolutions) {
+		this.removeDuplicatedSolutions = removeDuplicatedSolutions;
 	}
 
 	public String toString() {

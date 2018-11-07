@@ -16,11 +16,25 @@ public class SolutionListUtils {
 	 * @param list list of solutions we have to remove the repeated one
 	 * @return a new list contains just non-repeated solutions.
 	 */
-	public static List<Solution<?>> removeRepeated(List<? extends Solution<?>> list) {
+//	public static List<Solution<?>> removeRepeated(List<? extends Solution<?>> list) {
+//		
+//		List<Solution<?>> nonRepeated = new ArrayList<>();
+//
+//		for (Solution solution : list) {
+//
+//			if (!contains(nonRepeated, solution)) {
+//				nonRepeated.add(solution);
+//			}
+//		}
+//
+//		return nonRepeated;
+//	}
+	
+	public static List<thiagodnf.nautilus.core.model.Solution> removeRepeated(List<thiagodnf.nautilus.core.model.Solution> list) {
 		
-		List<Solution<?>> nonRepeated = new ArrayList<>();
+		List<thiagodnf.nautilus.core.model.Solution> nonRepeated = new ArrayList<>();
 
-		for (Solution solution : list) {
+		for (thiagodnf.nautilus.core.model.Solution solution : list) {
 
 			if (!contains(nonRepeated, solution)) {
 				nonRepeated.add(solution);
@@ -39,11 +53,11 @@ public class SolutionListUtils {
 	 * @param s a given solution
 	 * @return true if the list of solutions contains the given solution. False, otherwise
 	 */
-	public static boolean contains(List<? extends Solution<?>> solutions, Solution s1) {
+	public static boolean contains(List<thiagodnf.nautilus.core.model.Solution> solutions, thiagodnf.nautilus.core.model.Solution s1) {
 		
-		for (Solution s2 : solutions) {
+		for (thiagodnf.nautilus.core.model.Solution s2 : solutions) {
 			
-			if (equals(s1, s2)) {
+			if (s1.equals(s2)) {
 				return true;
 			}
 		}

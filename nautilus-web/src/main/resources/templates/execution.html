@@ -61,7 +61,7 @@
 											
 										<td th:text="${solution.getProperties().containsKey('selected')}"/>
 										<td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td>	
-										<td th:text="${#numbers.formatDecimal(solution.getProperties().get('distance'),1,4)}"></td>
+										<td th:text="${solution.getProperties().get('distance')}"></td>
 									</tr>
 								</tbody>
 							</table>
@@ -167,6 +167,19 @@
 														    <label class="form-check-label" for="showLines1">
 														    	<strong>Show Lines</strong>
 														   		<p><small>Connect the found solutions by using lines</small></p>
+														    </label>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li class="list-group-item">
+									  			<div class="row margin-bottom-minus-20">
+													<div class="col-12">
+														<div class="form-check">
+														    <input type="checkbox" class="form-check-input" th:field="*{removeDuplicatedSolutions}"/>
+														    <label class="form-check-label" for="removeDuplicatedSolutions1">
+														    	<strong>Remove Duplicates</strong>
+														   		<p><small>Remove the duplicated solutions from pareto-front taking into account the variables's values</small></p>
 														    </label>
 														</div>
 													</div>
