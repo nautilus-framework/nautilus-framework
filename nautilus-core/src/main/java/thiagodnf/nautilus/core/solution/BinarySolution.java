@@ -19,10 +19,7 @@ public class BinarySolution extends AbstractGenericSolution<BinarySet, BinaryPro
 	 * @param numberOfVariables The number of variables
 	 */
 	public BinarySolution(int numberOfObjectives, int numberOfVariables) {
-		super(new FakeBinaryProblem(numberOfObjectives, numberOfVariables));
-
-		initializeBinaryVariables();
-		initializeObjectiveValues();
+		this(new FakeBinaryProblem(numberOfObjectives, numberOfVariables));
 	}
 	
 	/** 
@@ -46,7 +43,7 @@ public class BinarySolution extends AbstractGenericSolution<BinarySet, BinaryPro
 		}
 		
 		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-			setVariableValue(i, solution.getVariableValue(i));
+			setVariableValue(i, (BinarySet) solution.getVariableValue(i).clone());
 		}
 
 		super.attributes = new HashMap<Object, Object>(solution.attributes);
@@ -58,7 +55,7 @@ public class BinarySolution extends AbstractGenericSolution<BinarySet, BinaryPro
 
 		for (int i = 0; i < numberOfBits; i++) {
 
-			if (randomGenerator.nextDouble() < 0.5) {
+			if (randomGenerator.nextDouble() <= 0.5) {
 				binarySet.set(i);
 			} else {
 				binarySet.clear(i);
