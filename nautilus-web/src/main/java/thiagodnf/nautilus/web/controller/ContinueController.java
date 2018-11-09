@@ -63,7 +63,9 @@ public class ContinueController {
 		
 		List<Solution> solutions = execution.getSolutions();
 		
-		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
+//		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
+		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, Arrays.asList("alive-mutants", "cost"));
+		
 		
 //		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalize());
 		
