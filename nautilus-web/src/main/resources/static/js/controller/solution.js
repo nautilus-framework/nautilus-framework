@@ -53,5 +53,6 @@ $(function(){
 		changeColor();
 	});
 	
+	$(".slider-master").slider('setValue', getAverageFeedback());
 	changeColor();
 })

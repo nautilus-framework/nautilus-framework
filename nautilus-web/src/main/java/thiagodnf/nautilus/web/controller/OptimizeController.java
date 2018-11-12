@@ -31,7 +31,6 @@ import thiagodnf.nautilus.core.listener.OnProgressListener;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
-import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
 import thiagodnf.nautilus.web.model.Execution;
@@ -83,7 +82,7 @@ public class OptimizeController {
 		return "optimize";
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"rawtypes" })
 	public List<Solution> getInitialPopulation(Problem problem, Execution execution) {
 
 		if (execution == null) {
@@ -93,12 +92,7 @@ public class OptimizeController {
 		List<Solution> initialPopulation = new ArrayList<>();
 
 		for (thiagodnf.nautilus.core.model.Solution sol : execution.getSolutions()) {
-			
-			Solution s = Converter.toJMetalSolutionWithOutObjectives(problem,sol);
-			
-			problem.evaluate(s);
-			
-			initialPopulation.add(s);
+			initialPopulation.add(Converter.toJMetalSolutionWithOutObjectives(problem,sol));
 		}
 
 		return initialPopulation;
@@ -119,6 +113,9 @@ public class OptimizeController {
 			Execution lastExecution = null;
 
 			if (lastExecutionId != null) {
+				
+				webSocketService.sendTitle(sessionId, "Loading last execution...");
+				
 				lastExecution = executionService.findById(lastExecutionId);
 			}
 			
@@ -203,20 +200,17 @@ public class OptimizeController {
 			    rawSolutions = (List<? extends Solution<?>>) algorithm.getResult();
 			}
 		    
-//		   	webSocketService.sendTitle(sessionId, "Removing repeated solutions...");
-//		   	
-//		   	List<Solution<?>> noRepeatedSolutions = SolutionListUtils.removeRepeated(rawSolutions);
-		   	
 		   	webSocketService.sendTitle(sessionId, "Converting the solutions...");
 		   	
 		   	List<thiagodnf.nautilus.core.model.Solution> solutions = Converter.toSolutions(rawSolutions);
 		   	
+			webSocketService.sendTitle(sessionId, "Setting ids");
+
+			for (int i = 0; i < solutions.size(); i++) {
+				solutions.get(i).getProperties().put("id", String.valueOf(i));
+			}
 		   	
-			//webSocketService.sendTitle(sessionId, "Removing repeated solutions...");
-		   	
-		   	//List<thiagodnf.nautilus.core.model.Solution> noRepeatedSolutions = SolutionListUtils.removeRepeated(solutions);
-		   	
-		   	webSocketService.sendTitle(sessionId, "Preparing the results...");
+			webSocketService.sendTitle(sessionId, "Preparing the results...");
 			
 		   	Execution execution = new Execution();
 		   			

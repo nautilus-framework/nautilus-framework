@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.nio.file.Path;
+import java.util.List;
 
 import org.pf4j.PluginWrapper;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.service.ExecutionService;
@@ -71,7 +73,11 @@ public class DownloadController {
 		
 		StringBuffer buffer = new StringBuffer();
 		
-		for (Solution s : execution.getSolutions()) {
+		List<Solution> solutions = execution.getSolutions();
+		
+		solutions = new ByObjectivesDuplicatesRemover().execute(solutions);
+		
+		for (Solution s : solutions) {
 
 			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
 				buffer.append(s.getObjective(i));
@@ -106,12 +112,17 @@ public class DownloadController {
 		
 		StringBuffer buffer = new StringBuffer();
 		
-		for (Solution s : execution.getSolutions()) {
+		List<Solution> solutions = execution.getSolutions();
+		
+		solutions = new ByObjectivesDuplicatesRemover().execute(solutions);
+		
+		for (Solution s : solutions) {
 
-			for (int i = 0; i < s.getVariables().size(); i++) {
-				buffer.append(s.getVariables().get(i).getValue());
+			for (int i = 0; i < s.getNumberOfVariables(); i++) {
+				
+				buffer.append(s.getVariables().get(i));
 
-				if (i + 1 != s.getNumberOfObjectives()) {
+				if (i + 1 != s.getNumberOfVariables()) {
 					buffer.append(";");
 				}
 			}

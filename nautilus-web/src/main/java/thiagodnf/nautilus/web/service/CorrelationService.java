@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.uma.jmetal.problem.Problem;
 
 import com.google.common.base.Preconditions;
 
@@ -76,7 +77,7 @@ public class CorrelationService {
 				CorrelationItem item = new CorrelationItem(i);
 
 				for (int j = 0; j < objectives.size(); j++) {
-					item.getValues().add(calculateForIntegerSolution(data, objectives.get(j), solutions, i));
+					item.getValues().add(calculateForIntegerSolution(p, data, objectives.get(j), solutions, i));
 				}
 
 				items.add(item);
@@ -93,7 +94,7 @@ public class CorrelationService {
 				CorrelationItem item = new CorrelationItem(i);
 
 				for (int j = 0; j < objectives.size(); j++) {
-					item.getValues().add(calculateForBinary(data, objectives.get(j), solutions, i));
+					item.getValues().add(calculateForBinary(p, data, objectives.get(j), solutions, i));
 				}
 
 				items.add(item);
@@ -103,13 +104,13 @@ public class CorrelationService {
 		return items;
 	}
 	
-	public double calculateForIntegerSolution(InstanceData data, AbstractObjective objective, List<Solution> solutions, int value) {
+	public double calculateForIntegerSolution(Problem problem, InstanceData data, AbstractObjective objective, List<Solution> solutions, int value) {
 		
 		double sum = 0.0;
 		
 		for (Solution solution : solutions) {
 
-			IntegerSolution sol = (IntegerSolution) Converter.toJMetalSolution(solution);
+			IntegerSolution sol = (IntegerSolution) Converter.toJMetalSolution(problem, solution);
 			
 			double originalValue = objective.evaluate(data, sol);
 			
@@ -138,13 +139,13 @@ public class CorrelationService {
 		return (double) sum / (double) solutions.size();
 	}
 	
-	public double calculateForBinary(InstanceData data, AbstractObjective objective, List<Solution> solutions, int pos) {
+	public double calculateForBinary(Problem problem, InstanceData data, AbstractObjective objective, List<Solution> solutions, int pos) {
 		
 		double sum = 0.0;
 
 		for (Solution solution : solutions) {
 
-			BinarySolution sol = (BinarySolution) Converter.toJMetalSolution(solution);
+			BinarySolution sol = (BinarySolution) Converter.toJMetalSolution(problem, solution);
 			
 			double originalValue = objective.evaluate(data, sol);
 			

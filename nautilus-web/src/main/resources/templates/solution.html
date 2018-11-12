@@ -28,18 +28,15 @@
 		<div class="row">
 			<div class="col-12">
 				<ul class="nav nav-tabs " role="tablist">
-					<li class="nav-item"><a class="nav-link  active"
-						href="#variables" role="tab" data-toggle="tab"
-						aria-selected="true">Variables</a></li>
-					<li class="nav-item"><a class="nav-link" href="#objectives"
-						role="tab" data-toggle="tab">Objectives</a></li>
+					<li class="nav-item"><a class="nav-link  active" href="#variables" role="tab" data-toggle="tab" aria-selected="true">Variables</a></li>
+					<li class="nav-item"><a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a></li>
 				</ul>
 				<div class="slider-on-tab float-right">
 					<input type="text" name="general-feedback"
 						class="slider-colorful slider-master" id="general-feedback"
 						data-provide="slider" data-slider-min="-1" data-slider-max="1"
 						data-slider-step="0.1"
-						th:attr="data-slider-value=${solution.getUserFeeback()}"
+						th:attr="data-slider-value=${0}"
 						data-slider-tooltip="hide" />
 				</div>
 				<form action="#"
@@ -58,19 +55,17 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="variable,i : ${solution.getVariables()}" 
-										th:if="${solutionType == 1 || (solutionType == 2 && variable.getValue().equalsIgnoreCase('true'))}">
-										
-										<td width="100%" th:if="${solutionType == 1}" th:text="${variable.getValue()}"/>
-										<td width="100%" th:if="${solutionType == 2}" th:text="${i.index}"/>
-										
-										<td><input type="text"
-											th:name="'variable-feedback-' + ${i.index}"
-											class="slider-colorful slider-slave variable-feedback"
-											data-provide="slider" data-slider-min="-1"
-											data-slider-max="1" data-slider-step="0.1"
-											th:attr="data-slider-value=${variable.getUserFeeback()}"
-											data-slider-tooltip="hide" /></td>
+									<tr th:each="value,i : ${solution.getVariablesValueAsList()}">
+										<td width="100%" th:text="${value}"/>
+										<td th:with="feedback = ${solution.getProperties().get('feedback-for-variable-'+i.index)}">
+											<input type="text"
+												th:name="'feedback-for-variable-' + ${i.index}"
+												class="slider-colorful slider-slave variable-feedback"
+												data-provide="slider" data-slider-min="-1"
+												data-slider-max="1" data-slider-step="0.1"
+												th:attr="data-slider-value=${feedback == null? 0.0 : feedback}"
+												data-slider-tooltip="hide" />
+										</td>
 									</tr>
 								</tbody>
 							</table>
@@ -95,10 +90,8 @@
 						</div>
 					</div>
 					<hr />
-					<button type="submit" class="btn btn-success btn-sm"
-						id="btn-feedback">Save</button>
-					<a class="btn btn-light btn-sm"
-						th:href="@{/execution/} + ${executionId}">Back</a>
+					<button type="submit" class="btn btn-success btn-sm" id="btn-feedback">Save</button>
+					<a class="btn btn-light btn-sm" th:href="@{/execution/} + ${executionId}">Back</a>
 				</form>
 			</div>
 		</div>

@@ -33,6 +33,7 @@
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}">Scatter Chart</a>
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#solutions" >Solutions</a>
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#information" >Information</a>
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#parameters" >Parameters</a>
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings" >Settings</a>
 					</div>
 				</nav>
@@ -54,8 +55,8 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="solution,i : ${solutions}">
-										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i.index}" th:text="${i.index}"></a></td>
+									<tr th:each="solution : ${solutions}" th:with="i = ${solution.getProperties().get('id')}">
+										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i}" th:text="${i}"></a></td>
 										
 										<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,4)}" class="objectives-values"/>
 											
@@ -74,14 +75,13 @@
 							<dt class="col-sm-2">Date</dt>
 							<dd class="col-sm-10 dates" th:text="${#formatter.date(execution.getDate())}"></dd>
 							<dt class="col-sm-2"># of Solutions</dt>
-							<dd class="col-sm-10" th:text="${execution.getSolutions().size()}"></dd>
+							<dd class="col-sm-10" th:text="${solutions.size()}"></dd>
 							<dt class="col-sm-2">Execution Time</dt>
 							<dd class="col-sm-10" th:text="${#formatter.interval(execution.getExecutionTime())}"></dd>
-							<dt class="col-sm-2">Parameters</dt>
-							<dd class="col-sm-10">
-								<textarea class="form-control" rows="8" th:text="${execution.getParameters()}"></textarea>
-							</dd>
-						</dl>
+						</dl> 
+					</div>
+					<div role="tabpanel" class="tab-pane fade" id="parameters">
+						<div th:replace="fragments/parameters :: default(${execution.getParameters()})"></div>
 					</div>
 					<div role="tabpanel" class="tab-pane fade" id="settings">
 						
@@ -160,15 +160,20 @@
 												</div>
 											</li>
 											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-20">
+									  			<div class="row margin-bottom-minus-10">
 													<div class="col-12">
-														<div class="form-check">
-														    <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
-														    <label class="form-check-label" for="showLines1">
-														    	<strong>Show Lines</strong>
-														   		<p><small>Connect the found solutions by using lines</small></p>
-														    </label>
-														</div>
+														<div class="form-group">
+													    <label class="form-check-label" for="correlation">
+													    	<strong>Duplicates Removers</strong>
+													   		<p><small>Remove the duplicated solutions from pareto-front</small></p>
+													    </label>
+													    <select class="form-control" th:field="*{duplicatesRemover}">
+													    	<option th:each="duplicatesRemover : ${duplicatesRemovers}" 
+													    		th:value="${duplicatesRemover.key}"
+													    		th:text="${duplicatesRemover.value}" 
+												    		/>
+													    </select>
+													  </div>
 													</div>
 												</div>
 											</li>
@@ -176,10 +181,10 @@
 									  			<div class="row margin-bottom-minus-20">
 													<div class="col-12">
 														<div class="form-check">
-														    <input type="checkbox" class="form-check-input" th:field="*{removeDuplicatedSolutions}"/>
-														    <label class="form-check-label" for="removeDuplicatedSolutions1">
-														    	<strong>Remove Duplicates</strong>
-														   		<p><small>Remove the duplicated solutions from pareto-front taking into account the variables's values</small></p>
+														    <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
+														    <label class="form-check-label" for="showLines1">
+														    	<strong>Show Lines</strong>
+														   		<p><small>Connect the found solutions by using lines</small></p>
 														    </label>
 														</div>
 													</div>

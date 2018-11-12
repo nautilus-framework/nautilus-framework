@@ -1,8 +1,9 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.colorize.Colorize;
+import thiagodnf.nautilus.core.duplicated.DuplicatesRemover;
 import thiagodnf.nautilus.core.model.Solution;
-import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
@@ -53,25 +53,24 @@ public class ExecutionController {
 		Parameters parameters = execution.getParameters();
 		Settings settings = execution.getSettings();
 		
+		DuplicatesRemover duplicatesRemover = pluginService.getDuplicatesRemovers().get(settings.getDuplicatesRemover());
+		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalize());
+		Colorize colorizer = pluginService.getColorizers().get(settings.getColorize());
+		
 		String pluginId = parameters.getPluginId();
 		String problemId = parameters.getProblemId();
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		
 		List<Solution> solutions = execution.getSolutions();
-
-		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalize());
-		Colorize colorize = pluginService.getColorizers().get(settings.getColorize());
-
+		
+		solutions = duplicatesRemover.execute(solutions);
+		
 		if (objectives.size() != 1) {
 			solutions = normalizer.normalize(objectives, solutions);
 		}
 		
-//		if (settings.isRemoveDuplicatedSolutions()) {
-//			solutions = SolutionListUtils.removeRepeated(solutions);
-//		}
-
-		solutions = colorize.execute(solutions);
+		solutions = colorizer.execute(solutions);
 		
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
@@ -79,6 +78,7 @@ public class ExecutionController {
 		model.addAttribute("solutions", solutions);
 		model.addAttribute("execution", execution);
 		model.addAttribute("normalizers", pluginService.getNormalizers());
+		model.addAttribute("duplicatesRemovers", pluginService.getDuplicatesRemovers());
 		model.addAttribute("colorizers", pluginService.getColorizers());
 		model.addAttribute("correlationers", pluginService.getCorrelationers());
 		model.addAttribute("settings", execution.getSettings());
@@ -93,7 +93,7 @@ public class ExecutionController {
 
 		Execution execution = executionService.findById(executionId);
 
-		executionService.delete(execution);
+		executionService.deleteById(executionId);
 
 		Parameters parameters = execution.getParameters();
 
@@ -143,12 +143,20 @@ public class ExecutionController {
 
 		for (Solution solution : execution.getSolutions()) {
 
-			solution.getProperties().remove("feedback");
-			solution.getProperties().remove("selected");
+			List<String> keysToRemove = new ArrayList<>();
 
-			for (Variable variable : solution.getVariables()) {
-				variable.getProperties().remove("feedback");
+			for (Entry<String, String> entry : solution.getProperties().entrySet()) {
+
+				if (entry.getKey().startsWith("feedback-for-variable-")) {
+					keysToRemove.add(entry.getKey());
+				}
 			}
+
+			for (String key : keysToRemove) {
+				solution.getProperties().remove(key);
+			}
+			
+			solution.getProperties().remove("selected");
 		}
 
 		execution = executionService.save(execution);

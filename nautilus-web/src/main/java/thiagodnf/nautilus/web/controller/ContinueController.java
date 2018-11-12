@@ -63,8 +63,8 @@ public class ContinueController {
 		
 		List<Solution> solutions = execution.getSolutions();
 		
-//		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
-		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, Arrays.asList("alive-mutants", "cost"));
+		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
+//		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, Arrays.asList("alive-mutants", "cost"));
 		
 		
 //		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalize());
@@ -192,7 +192,8 @@ public class ContinueController {
 			
 			for (int i = 0; i < s.getVariables().size(); i++) {
 
-				Variable v = s.getVariables().get(i);
+				//Variable v = s.getVariables().get(i);
+				Variable v = new Variable();
 	
 				double feedback = v.getUserFeeback();
 				
@@ -271,7 +272,8 @@ public class ContinueController {
 				.map(e -> e.getId())
 				.collect(Collectors.toList());
 
-		nextParameters.setObjectiveKeys(selectedObjectiveIds);
+		nextParameters.setObjectiveKeys(Arrays.asList("alive-mutants", "cost"));
+//		nextParameters.setObjectiveKeys(Arrays.asList("number-of-5s", "number-of-10s"));
 		nextParameters.setLastExecutionId(executionId);
 		
 		model.addAttribute("rankingItems", items);

@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 
 import javax.validation.constraints.NotNull;
 
+import org.uma.jmetal.util.binarySet.BinarySet;
+
 import com.google.gson.Gson;
 
 public class Solution {
@@ -18,7 +20,7 @@ public class Solution {
 	private List<Double> objectives;
 	
 	@NotNull
-	private List<Variable> variables;
+	private List<Object> variables;
 	
 	@NotNull
 	private Map<String, String> properties;
@@ -44,11 +46,11 @@ public class Solution {
 		this.objectives = objectives;
 	}
 
-	public List<Variable> getVariables() {
+	public List<Object> getVariables() {
 		return variables;
 	}
 
-	public void setVariables(List<Variable> variables) {
+	public void setVariables(List<Object> variables) {
 		this.variables = variables;
 	}
 	
@@ -96,81 +98,49 @@ public class Solution {
 		return getProperties().containsKey("selected");
 	}
 	
-	public void setUserFeedback(double value) {
-		getProperties().put("feedback", String.valueOf(value));
-	}
-	
 	public double getUserFeeback() {
 
-		String feedback = getProperties().get("feedback");
+		double sum = 0.0;
+		double total = 0.0;
 
-		if (feedback == null) {
+		for (Entry<String, String> entry : getProperties().entrySet()) {
+
+			if (entry.getKey().startsWith("feedback-for-variable-")) {
+				sum += Double.valueOf(entry.getValue());
+				total++;
+			}
+		}
+
+		if (total == 0.0) {
 			return 0.0;
 		}
 
-		return Double.valueOf(feedback);
+		return sum / total;
 	}
 	
-	@Override
-	public boolean equals(Object o) {
-		
-		Solution sol = (Solution) o;
+	public List<String> getVariablesValueAsList() {
 
-		if (getNumberOfObjectives() != sol.getNumberOfObjectives()) {
-			return false;
-		}
+		List<String> variables = new ArrayList<>();
 
-		if (getVariables().size() != getVariables().size()) {
-			return false;
-		}
-		
-		// Binary
-		
-		
 		for (int i = 0; i < getNumberOfVariables(); i++) {
 
-			String v1 = getVariables().get(i).getValue();
-			String v2 = sol.getVariables().get(i).getValue();
+			Object object = getVariables().get(i);
 
-			if (!v1.equalsIgnoreCase(v2)) {
-				return false;
+			if (object instanceof BinarySet) {
+
+				BinarySet binarySet = (BinarySet) object;
+
+				for (int j = 0; j < binarySet.getBinarySetLength(); j++) {
+
+					if (binarySet.get(j)) {
+						variables.add(String.valueOf(j));
+					}
+				}
+			} else if (object instanceof Integer) {
+				variables.add(String.valueOf(object));
 			}
 		}
-		
 
-		
-		// Integer Solution
-		
-//		Map<String, Integer> mapS1 = new HashMap<>();
-//		Map<String, Integer> mapS2 = new HashMap<>();
-//		
-//		for (int i = 0; i < getNumberOfVariables(); i++) {
-//
-//			String keyS1 = getVariables().get(i).getValue();
-//			String keyS2 = sol.getVariables().get(i).getValue();
-//			
-//			if (!mapS1.containsKey(keyS1)) {
-//				mapS1.put(keyS1, 0);
-//			}
-//
-//			if (!mapS2.containsKey(keyS2)) {
-//				mapS2.put(keyS2, 0);
-//			}
-//			
-//			int totalS1 = mapS1.get(keyS1);
-//			int totalS2 = mapS2.get(keyS2);
-//			
-//			mapS1.put(keyS1, ++totalS1);
-//			mapS2.put(keyS2, ++totalS2);
-//		}
-//		
-//		for(Entry<String, Integer> entry : mapS1.entrySet()){
-//			
-//			if(entry.getValue() != mapS2.get(entry.getKey())) {
-//				return false;
-//			}
-//		}
-		
-		return true;
+		return variables;
 	}
 }

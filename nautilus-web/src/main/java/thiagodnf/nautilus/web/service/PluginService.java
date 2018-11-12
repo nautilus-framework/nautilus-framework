@@ -29,6 +29,10 @@ import thiagodnf.nautilus.core.colorize.NoColorColorize;
 import thiagodnf.nautilus.core.correlation.Correlation;
 import thiagodnf.nautilus.core.correlation.PearsonCorrelation;
 import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
+import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
+import thiagodnf.nautilus.core.duplicated.ByVariablesDuplicatesRemover;
+import thiagodnf.nautilus.core.duplicated.DuplicatesRemover;
+import thiagodnf.nautilus.core.duplicated.NoDuplicatesRemover;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
@@ -63,6 +67,8 @@ public class PluginService {
 	
 	private Map<String, Colorize> colorizers = new HashMap<>();
 	
+	private Map<String, DuplicatesRemover> duplicatesRemovers = new HashMap<>();
+	
 	private Map<String, Correlation> correlationers = new HashMap<>();
 	
 	@PostConstruct
@@ -86,6 +92,12 @@ public class PluginService {
 		addCorrelationer(new SpearmanCorrelation());
 		addCorrelationer(new PearsonCorrelation());
 
+		LOGGER.info("Done. Adding Duplicate Removers");
+		
+		addDuplicatesRemover(new ByVariablesDuplicatesRemover());
+		addDuplicatesRemover(new ByObjectivesDuplicatesRemover());
+		addDuplicatesRemover(new NoDuplicatesRemover());
+		
 		LOGGER.info("Done");
 	}
 	
@@ -141,8 +153,19 @@ public class PluginService {
 		LOGGER.info("Added '{}' correlationer", correlation.getKey());
 	}
 	
+	private void addDuplicatesRemover(DuplicatesRemover duplicatesRemover) {
+
+		this.duplicatesRemovers.put(duplicatesRemover.getId(), duplicatesRemover);
+
+		LOGGER.info("Added '{}' normalizer", duplicatesRemover.getId());
+	}
+	
 	public Map<String, Normalize> getNormalizers() {
 		return normalizers;
+	}
+	
+	public Map<String, DuplicatesRemover> getDuplicatesRemovers() {
+		return duplicatesRemovers;
 	}
 
 	public Map<String, Colorize> getColorizers() {

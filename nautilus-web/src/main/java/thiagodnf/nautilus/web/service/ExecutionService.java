@@ -33,8 +33,8 @@ public class ExecutionService {
 		return this.executionRepository.findByParametersProblemId(problemId);
 	}
 	
-	public void delete(Execution execution) {
-		executionRepository.delete(execution);
+	public void deleteById(String executionId) {
+		executionRepository.deleteById(executionId);
 	}
 	
 	public boolean existsById(String executionId) {

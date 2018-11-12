@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.solution.BinarySolution;
-import thiagodnf.nautilus.core.solution.IntegerSolution;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.service.ExecutionService;
@@ -65,12 +63,6 @@ public class SolutionController {
 			objectivesMap.put(objectives.get(i).getName(), solution.getObjectives().get(i));
 		}
 		
-		if (solution.getType().equalsIgnoreCase(IntegerSolution.class.getName())) {
-			model.addAttribute("solutionType", 1);
-		} else if (solution.getType().equalsIgnoreCase(BinarySolution.class.getName())) {
-			model.addAttribute("solutionType", 2);
-		}
-		
 		model.addAttribute("objectivesMap", objectivesMap);
 		model.addAttribute("solution", solution);
 		model.addAttribute("execution", execution);
@@ -88,38 +80,21 @@ public class SolutionController {
 		
 		Execution execution = executionService.findById(executionId);
 
-		if (execution == null) {
-			throw new RuntimeException("The executionId was not found");
-		}
-		
 		if (solutionIndex < 0 || solutionIndex >= execution.getSolutions().size()) {
 			throw new RuntimeException("The solutionIndex is invalid");
 		}
 		
 		Solution solution = execution.getSolutions().get(solutionIndex);
-		
+
 		solution.getProperties().put("selected", "1");
-		
-		double sum = 0.0;
-		
+
 		for (String key : parameters.keySet()) {
 
-			if (key.startsWith("variable-feedback")) {
-
-				double feedback = Double.valueOf(parameters.get(key));
-
-				int index = Integer.valueOf(key.split("-")[2]);
-
-				sum += feedback;
-
-				solution.getVariables().get(index).setUserFeedback(feedback);
+			if (key.startsWith("feedback-for-variable")) {
+				solution.getProperties().put(key, parameters.get(key));
 			}
 		}
-		
-		double feedback = (double) sum / (double) solution.getVariables().size();
-		
-		solution.setUserFeedback(feedback);
-		
+
 		execution = executionService.save(execution);
 
 		return "redirect:/execution/" + executionId;

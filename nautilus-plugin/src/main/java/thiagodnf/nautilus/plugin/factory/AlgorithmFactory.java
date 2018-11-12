@@ -8,6 +8,8 @@ import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.algorithm.Builder;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
+import thiagodnf.nautilus.plugin.provider.algorithm.BruteForceSearchExtension;
+import thiagodnf.nautilus.plugin.provider.algorithm.NSGAIIIProvider;
 import thiagodnf.nautilus.plugin.provider.algorithm.NSGAIIProvider;
 import thiagodnf.nautilus.plugin.provider.algorithm.RNSGAIIProvider;
 import thiagodnf.nautilus.plugin.provider.algorithm.SPEA2Provider;
@@ -20,6 +22,8 @@ public class AlgorithmFactory {
 		getExtensions().add(new NSGAIIProvider());
 		getExtensions().add(new SPEA2Provider());
 		getExtensions().add(new RNSGAIIProvider());
+		getExtensions().add(new NSGAIIIProvider());
+		getExtensions().add(new BruteForceSearchExtension());
 	}
 
 	public List<AlgorithmExtension> getExtensions() {

@@ -4,19 +4,20 @@ import com.google.gson.Gson;
 
 import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
 import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
+import thiagodnf.nautilus.core.duplicated.ByVariablesDuplicatesRemover;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 
 public class Settings {
 
 	private boolean showLines = true;
 	
-	private boolean removeDuplicatedSolutions = true;
-	
 	private String colorize = new ByEuclideanDistanceColorize().getKey();
 	
 	private String normalize = new ByParetoFrontValuesNormalize().getKey();
 	
 	private String correlation = new SpearmanCorrelation().getKey();
+	
+	private String duplicatesRemover = new ByVariablesDuplicatesRemover().getId();
 	
 	private String name;
 
@@ -60,12 +61,12 @@ public class Settings {
 		this.correlation = correlation;
 	}
 
-	public boolean isRemoveDuplicatedSolutions() {
-		return removeDuplicatedSolutions;
+	public String getDuplicatesRemover() {
+		return duplicatesRemover;
 	}
 
-	public void setRemoveDuplicatedSolutions(boolean removeDuplicatedSolutions) {
-		this.removeDuplicatedSolutions = removeDuplicatedSolutions;
+	public void setDuplicatesRemover(String duplicatesRemover) {
+		this.duplicatesRemover = duplicatesRemover;
 	}
 
 	public String toString() {

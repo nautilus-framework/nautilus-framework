@@ -53,6 +53,12 @@
 									<td th:text="${#numbers.formatDecimal(hypervolume, 1, 5)}"></td>
 									<td> > </td>
 								</tr>
+								<tr>
+									<td>1</td>
+									<td>Hypervolume Approx</td>
+									<td th:text="${#numbers.formatDecimal(hypervolumeApprox, 1, 5)}"></td>
+									<td> > </td>
+								</tr>
 								<!-- <tr>
 									<td>2</td>
 									<td>GD</td>
@@ -81,7 +87,7 @@
 								<tr th:each="entry : ${variables}">
 									<td>6</td>
 									<td th:text="${entry.key}"></td>
-									<td th:text="${#numbers.formatDecimal(entry.value/numberofsolutions, 1, 5)}"></td>
+									<td th:text="${#numbers.formatDecimal(entry.value, 1, 5)}"></td>
 									<td> > </td>
 								</tr>
 							</tbody>

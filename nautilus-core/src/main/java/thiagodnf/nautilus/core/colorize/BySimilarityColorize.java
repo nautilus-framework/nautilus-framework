@@ -11,17 +11,17 @@ public class BySimilarityColorize extends Colorize {
 	@Override
 	public double getDistance(Solution s, Solution selected) {
 		
-		List<String> variables1 = s.getVariables()
-				.stream()
-				.map(e -> e.getValue())
-				.collect(Collectors.toList());
+//		List<String> variables1 = s.getVariables()
+//				.stream()
+//				.map(e -> e.getValue())
+//				.collect(Collectors.toList());
+//		
+//		List<String> variables2 = selected.getVariables()
+//				.stream()
+//				.map(e -> e.getValue())
+//				.collect(Collectors.toList());
 		
-		List<String> variables2 = selected.getVariables()
-				.stream()
-				.map(e -> e.getValue())
-				.collect(Collectors.toList());
-		
-		return 1.0 - JaccardDistance.calculate(variables1, variables2);		
+		return 1.0 - JaccardDistance.calculate(null, null);		
 	}
 
 	@Override
