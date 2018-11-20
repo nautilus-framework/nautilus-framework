@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.point.PointSolution;
+
+import thiagodnf.nautilus.core.algorithm.RNSGAII.PointSolutionUtils;
 
 public class Converter {
 	
@@ -49,6 +52,10 @@ public class Converter {
 		}
 
 		return solutions;
+	}
+	
+	public static PointSolution toPointSolution(thiagodnf.nautilus.core.model.Solution solution) {
+		return PointSolutionUtils.createSolution(toDoubleArray(solution.getObjectives()));
 	}
 	
 //	public static List<thiagodnf.nautilus.core.model.Solution> toSolutions(List<? extends Solution<?>> population) {
@@ -124,7 +131,7 @@ public class Converter {
 //	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Solution toJMetalSolutionWithOutObjectives(Problem problem, thiagodnf.nautilus.core.model.Solution solution) {
+	public static Solution<?> toJMetalSolutionWithOutObjectives(Problem problem, thiagodnf.nautilus.core.model.Solution solution) {
 		
 		Solution newSolution = (Solution) problem.createSolution();
 

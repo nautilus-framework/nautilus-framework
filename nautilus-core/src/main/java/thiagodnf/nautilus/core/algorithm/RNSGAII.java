@@ -366,6 +366,28 @@ public class RNSGAII<S extends Solution<?>> extends NSGAII<S>{
 
 			return points;
 		}
+		
+		public static PointSolution shift(PointSolution s, PointSolution vector) {
+
+			PointSolution newPointSolution = s.copy();
+
+			for (int i = 0; i < newPointSolution.getNumberOfObjectives(); i++) {
+				newPointSolution.setObjective(i, s.getObjective(i) + vector.getObjective(i));
+			}
+
+			return newPointSolution;
+		}
+		
+		public static List<PointSolution> copy(List<PointSolution> solutions) {
+
+			List<PointSolution> list = new LinkedList<>();
+
+			for (PointSolution solution : solutions) {
+				list.add(solution.copy());
+			}
+
+			return list;
+		}
 	}
 	
 	private static class EuclideanDistanceUtils {

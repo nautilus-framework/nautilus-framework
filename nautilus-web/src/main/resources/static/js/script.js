@@ -4,6 +4,10 @@ function isSafari(){
  
 $(function(){
 	
+	$(".boostrap-dual-listbox").bootstrapDualListbox({
+		
+	});
+	
 	$(".dropdown-submit").click(function(){
 		$(this).parent().submit();
 	});

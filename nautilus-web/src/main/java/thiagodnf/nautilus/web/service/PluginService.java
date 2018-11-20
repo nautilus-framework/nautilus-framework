@@ -48,8 +48,10 @@ import thiagodnf.nautilus.plugin.extension.GUIExtension;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
 import thiagodnf.nautilus.plugin.extension.OperatorExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.plugin.extension.QualityIndicatorExtension;
 import thiagodnf.nautilus.plugin.extension.VariableExtension;
 import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
+import thiagodnf.nautilus.plugin.factory.QualityIndicatorFactory;
 import thiagodnf.nautilus.web.exception.PluginNotFoundException;
 import thiagodnf.nautilus.web.exception.ProblemNotFoundException;
 
@@ -207,6 +209,10 @@ public class PluginService {
 		return pluginManager.getExtensions(AlgorithmExtension.class, pluginId);
 	}
 	
+	public List<QualityIndicatorExtension> getQualityIndicatorExtensions(String pluginId) {
+		return pluginManager.getExtensions(QualityIndicatorExtension.class, pluginId);
+	}
+	
 	public GUIExtension getGUIExtension(String pluginId) {
 		return getGUIExtensions(pluginId)
 				.stream()
@@ -315,6 +321,17 @@ public class PluginService {
 		}
 
 		Collections.sort(factory.getExtensions(), Ordering.usingToString());
+
+		return factory;
+	}
+	
+	public QualityIndicatorFactory getQualityIndicatorFactory(String pluginId) {
+
+		QualityIndicatorFactory factory = new QualityIndicatorFactory();
+
+		for (QualityIndicatorExtension extension : getQualityIndicatorExtensions(pluginId)) {
+			factory.addExtension(extension);
+		}
 
 		return factory;
 	}

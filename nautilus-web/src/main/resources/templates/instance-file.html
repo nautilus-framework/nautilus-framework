@@ -14,9 +14,9 @@
 					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
-						<a th:href="@{/plugin/} + ${pluginId}"	th:text="${plugin.getDescriptor().getPluginDescription()}"/>
+						<a th:href="@{/plugin/} + ${pluginId}"	th:text="${plugin.getDescriptor().getPluginDescription()}"></a>
 						<span class="path-divider">/</span>
-						<a th:href="@{/problem} + @{/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.getName()}"/>
+						<a th:href="@{/problem} + @{/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.getName()}"></a>
 						<span class="path-divider">/</span>
 						<a th:href="@{/instance-file} + @{/} + ${pluginId} + @{/} + ${problemId} +@{/}+${filename}"th:text="${filename}"></a>
 					</h6>

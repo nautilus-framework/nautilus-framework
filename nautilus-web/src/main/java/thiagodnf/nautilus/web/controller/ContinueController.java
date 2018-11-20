@@ -273,7 +273,7 @@ public class ContinueController {
 				.collect(Collectors.toList());
 
 		nextParameters.setObjectiveKeys(Arrays.asList("alive-mutants", "cost"));
-//		nextParameters.setObjectiveKeys(Arrays.asList("number-of-5s", "number-of-10s"));
+//		nextParameters.setObjectiveKeys(Arrays.asList("number-of-2s", "number-of-4s"));
 		nextParameters.setLastExecutionId(executionId);
 		
 		model.addAttribute("rankingItems", items);

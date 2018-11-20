@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:replace="fragments/head :: default(${'Quality Indicators'})"></head>
+<body>
+	<div th:replace="fragments/navbar :: default('Home')"></div>
+	
+	<div class="page-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<h6 class="title">
+						<a th:href="@{/}">Home</a> 
+						<span class="path-divider">/</span>
+						<a th:href="@{/plugin/} + ${pluginId}"	th:text="${plugin.getDescriptor().getPluginDescription()}"></a>
+						<span class="path-divider">/</span>
+						<a th:href="@{/problem/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.getName()}"></a>
+						<span class="path-divider">/</span>
+						<a th:href="@{/quality-indicators/} + ${pluginId} + @{/} + ${problemId}">Quality Indicators</a>
+					</h6>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+					
+					<form th:action="@{/done/} + ${pluginId} + @{/} + ${problemId}" method="POST">
+						
+						<div class="form-group form-check">
+							<input type="checkbox" class="form-check-input" id="use-all-objectives" name="use-all-objectives">
+							<label class="form-check-label" for="use-all-objectives">Use All Objectives</label>
+						</div>
+						
+						<h5>Executions</h5>
+						<hr/>	
+						
+							<select multiple="multiple" size="10" name="executions" class="boostrap-dual-listbox">
+								<option th:each="execution : ${executions}" 
+									th:value="${execution.getId()}" 
+									th:text="${execution.getSettings().getName()}? ${execution.getSettings().getName()}: ${execution.getId()}" />
+							</select>
+						<br>
+						
+						<h5>Quality Indicators</h5>
+						<hr/>	
+							
+							<select multiple="multiple" size="10" name="quality-indicators" class="boostrap-dual-listbox">
+								<option th:each="extension : ${qualityIndicatorsFactory.getExtensions()}"
+									selected="selected" 
+									th:value="${extension.key}" 
+									th:text="${extension.value}" />
+							</select>		
+						
+						<br/>
+						<button type="submit" class="btn btn-success btn-sm">Calculate</button>
+						<a class="btn btn-light btn-sm" th:href="@{/problem} + @{/} + ${pluginId} + @{/} + ${problemId}">Cancel</a>
+						<br/>
+					</form>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+
+</html>
