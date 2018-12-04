@@ -409,7 +409,7 @@ public class RNSGAII<S extends Solution<?>> extends NSGAII<S>{
 
 			Preconditions.checkNotNull(x, "The solution x should not be null");
 			Preconditions.checkNotNull(r, "The solution x should not be null");
-			Preconditions.checkArgument(x.getNumberOfObjectives() == r.getNumberOfObjectives(), "The x and r points should be the same number of objectives");
+			Preconditions.checkArgument(x.getNumberOfObjectives() == r.getNumberOfObjectives(), "The x and r points should be the same number of objectives. Found"+x.getNumberOfObjectives()+" and "+r.getNumberOfObjectives());
 			Preconditions.checkArgument(fmin.length > 0, "The fmin length should be > 0");
 			Preconditions.checkArgument(fmax.length > 0, "The fmax length should be > 0");
 			Preconditions.checkArgument(fmin.length == x.getNumberOfObjectives(), "The fmin should have the same size of x");
