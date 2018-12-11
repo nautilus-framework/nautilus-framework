@@ -1,5 +1,7 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,21 +42,12 @@ public class ProblemController {
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 		model.addAttribute("instanceFiles", fileService.getInstanceFiles(pluginId, problemId));
-		model.addAttribute("executions", executionService.findByPluginIdAndProblemId(pluginId, problemId));
+		model.addAttribute("uploadInstanceFile", new UploadInstanceFile());
+//		model.addAttribute("executions", executionService.findByPluginIdAndProblemId(pluginId, problemId));
+		
+		model.addAttribute("executions", Arrays.asList());
 
 		return "problem";
-	}
-	
-	@GetMapping("/upload/instance-file/")
-	public String uploadInstanceFile(Model model, 
-			@PathVariable("pluginId") String pluginId,
-			@PathVariable("problemId") String problemId){
-		
-		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
-		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
-		model.addAttribute("uploadInstanceFile", new UploadInstanceFile());
-			
-		return "upload-instance-file";
 	}
 	
 	@GetMapping("/upload/execution/")

@@ -17,6 +17,9 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import thiagodnf.nautilus.web.exception.FileAlreadyExistsException;
+import thiagodnf.nautilus.web.exception.FileIsEmptyException;
+
 @Service
 public class FileService {
 
@@ -201,7 +204,7 @@ public class FileService {
 		createDirectories(path);
 
 		if (file.isEmpty()) {
-			throw new RuntimeException("File is empty");
+			throw new FileIsEmptyException();
 		}
 		
 		// This is a security check
@@ -210,7 +213,7 @@ public class FileService {
 		}
 		
 		if (exists(path, filename)) {
-			throw new RuntimeException("The file already exists. Please choose a different one");
+			throw new FileAlreadyExistsException();
 		}
 		
 		try {

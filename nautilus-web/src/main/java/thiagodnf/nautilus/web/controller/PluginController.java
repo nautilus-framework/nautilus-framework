@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import thiagodnf.nautilus.web.model.UploadPlugin;
 import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.PluginService;
 
@@ -54,13 +53,5 @@ public class PluginController {
 		flashMessageService.success(ra, "msg.delete.plugin.success", plugin.getDescriptor().getPluginDescription());
 		
 		return "redirect:/home";
-	}
-
-	@GetMapping("/upload")
-	public String uploadFile(Model model) {
-
-		model.addAttribute("uploadPlugin", new UploadPlugin());
-
-		return "upload-plugin";
 	}
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import thiagodnf.nautilus.web.model.UploadPlugin;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
@@ -17,6 +18,7 @@ public class HomeController {
 	public String index(Model model) {
 		
 		model.addAttribute("startedPlugins", pluginService.getStartedPlugins());
+		model.addAttribute("uploadPlugin", new UploadPlugin());
 		
 		return "home";
 	}

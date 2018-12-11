@@ -11,7 +11,7 @@ public class NotEmptyFileValidator implements ConstraintValidator<NotEmptyFile, 
 
 	@Override
 	public void initialize(NotEmptyFile contraint) {
-
+		
 	}
 
 	@Override

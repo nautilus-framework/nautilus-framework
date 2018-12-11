@@ -8,7 +8,7 @@ import thiagodnf.nautilus.web.annotation.NotEmptyFile;
 public class UploadPlugin {
 	
 	@NotEmptyFile
-	//@ContentType("application/json")
+	@ContentType("application/octet-stream")
 	private MultipartFile file;
 	
 	public MultipartFile getFile() {

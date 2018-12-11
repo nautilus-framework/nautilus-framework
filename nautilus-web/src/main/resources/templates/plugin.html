@@ -19,7 +19,7 @@
 						<h6 class="title">
 							<a th:href="@{/home}">Home</a> 
 							<span class="path-divider">/</span> 
-							<a th:href="@{/plugin/{id}(id=${pluginId})}" th:text="${pluginName}"></a>
+							<a th:href="@{/plugin/} + ${pluginId}" th:text="${pluginName}"></a>
 						</h6>
 					</div>
 				</div>

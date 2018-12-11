@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 
+import thiagodnf.nautilus.web.exception.RedirectException;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.UploadExecution;
 import thiagodnf.nautilus.web.model.UploadInstanceFile;
@@ -43,33 +44,59 @@ public class UploadController {
 	@Autowired
 	private FlashMessageService flashMessageService;
 	
+	@PostMapping("/plugin/")
+	public String uploadPlugin(
+			@Valid UploadPlugin uploadPlugin, 
+			BindingResult result,
+			RedirectAttributes ra,
+			Model model) {
+
+		if (result.hasErrors()) {
+			flashMessageService.error(ra, result.getAllErrors());
+		}else {
+			MultipartFile file = uploadPlugin.getFile();
+			
+			String filename = file.getOriginalFilename();
+			
+			LOGGER.info("Storing the plugin " + filename);
+			
+			try {
+				fileService.storePlugin(filename, file);
+				pluginService.loadPluginsFromDirectory();
+				flashMessageService.success(ra, "msg.upload.file.success", filename);
+			} catch (RedirectException ex) {
+				flashMessageService.error(ra, ex);
+			}
+		}
+		
+		return "redirect:/home";
+	}
+	
 	@PostMapping("/instance-file/{pluginId:.+}/{problemId:.+}")
 	public String uploadWithPost(
 			@PathVariable("pluginId") String pluginId,
 			@PathVariable("problemId") String problemId,
 			@Valid UploadInstanceFile uploadInstanceFile, 
 			BindingResult result, 
+			RedirectAttributes ra,
 			Model model) {
 
-		LOGGER.info("Uploading the file: " + uploadInstanceFile.getFile().getOriginalFilename());
-
 		if (result.hasErrors()) {
+			flashMessageService.error(ra, result.getAllErrors());
+		}else {
+			MultipartFile file = uploadInstanceFile.getFile();
 			
-			model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
-			model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
+			String filename = file.getOriginalFilename();
 			
-			return "upload-instance-file";
-		}
-		
-		MultipartFile file = uploadInstanceFile.getFile();
-		
-		String filename = file.getOriginalFilename();
-		
-		LOGGER.info("Storing the instance");
+			LOGGER.info("Storing the instance file " + filename);
 
-		fileService.storeInstanceFile(pluginId, problemId, filename, file);
-		
-		LOGGER.info("Done");
+			try {
+				fileService.storeInstanceFile(pluginId, problemId, filename, file);
+				flashMessageService.success(ra, "msg.upload.file.success", filename);
+			} catch (RedirectException ex) {
+				flashMessageService.error(ra, ex);
+			}
+		}
 		
 		return "redirect:/problem/" + pluginId + "/" + problemId;
 	}
@@ -123,31 +150,5 @@ public class UploadController {
 		}
 	}
 	
-	@PostMapping("/plugin/")
-	public String uploadPlugin(
-			@Valid UploadPlugin uploadPlugin, 
-			BindingResult result,
-			RedirectAttributes ra,
-			Model model) {
-
-		LOGGER.info("Uploading the file: {} ", uploadPlugin.getFile().getOriginalFilename());
-
-		if (result.hasErrors()) {
-			return "upload-plugin";
-		}
-		
-		MultipartFile file = uploadPlugin.getFile();
-		
-		String filename = file.getOriginalFilename();
-		
-		LOGGER.info("No error found. Storing the plugin file on directory");
-		
-		fileService.storePlugin(filename, file);
-		
-		pluginService.loadPluginsFromDirectory();
-		
-		flashMessageService.success(ra, "msg.upload.plugin.success", filename);
-		
-		return "redirect:/home";
-	}
+	
 }
