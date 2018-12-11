@@ -12,6 +12,7 @@
 		<module>nautilus-core</module>
 		<module>nautilus-plugin</module>
 		<module>nautilus-web</module>
+		<module>nautilus-plugin-toy</module>
 	</modules>
 	<properties>
 		<springframework.boot.version>2.0.3.RELEASE</springframework.boot.version>
@@ -72,6 +73,13 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>22.0</version>
+		</dependency>
+		<!-- JUnit Test Framework -->
+		<dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter-engine</artifactId>
+		    <version>5.1.0</version>
+		    <scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>

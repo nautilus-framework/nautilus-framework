@@ -1,7 +1,5 @@
 package thiagodnf.nautilus.web.controller;
 
-import java.nio.file.Path;
-
 import org.pf4j.PluginWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.web.model.UploadPlugin;
-import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.PluginService;
 
@@ -27,9 +24,6 @@ public class PluginController {
 	
 	@Autowired
 	private PluginService pluginService;
-	
-	@Autowired
-	private FileService fileService;
 	
 	@Autowired
 	private FlashMessageService flashMessageService;
@@ -59,7 +53,7 @@ public class PluginController {
 		
 		flashMessageService.success(ra, "msg.delete.plugin.success", plugin.getDescriptor().getPluginDescription());
 		
-		return "redirect:/";
+		return "redirect:/home";
 	}
 
 	@GetMapping("/upload")

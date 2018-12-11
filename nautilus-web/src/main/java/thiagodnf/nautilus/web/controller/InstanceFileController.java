@@ -42,7 +42,8 @@ public class InstanceFileController {
 		
 		Path instance = fileService.getInstanceFile(pluginId, problemId, filename);
 		
-		InstanceData data = pluginService.getProblemExtension(pluginId, problemId).readInstanceData(instance);
+//		InstanceData data = pluginService.getProblemExtension(pluginId, problemId).readInstanceData(instance);
+		InstanceData data = null;
 		
 		model.addAttribute("filename", filename);
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));

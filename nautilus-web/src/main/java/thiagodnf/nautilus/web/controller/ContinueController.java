@@ -79,9 +79,11 @@ public class ContinueController {
 		
 		Path instance = fileService.getInstanceFile(pluginId, problemId, parameters.getFilename());
 		
-		InstanceData data = pluginService.getProblemExtension(pluginId, problemId).readInstanceData(instance); 
+//		InstanceData data = pluginService.getProblemExtension(pluginId, problemId).readInstanceData(instance);
+		InstanceData data = null;
 		
-		AbstractProblem problem = pluginService.getProblemExtension(pluginId, problemId).createProblem(data, objectives);
+//		AbstractProblem problem = pluginService.getProblemExtension(pluginId, problemId).createProblem(data, objectives);
+		AbstractProblem problem = null;
 		
 		Correlation correlation = pluginService.getCorrelationers().get(settings.getCorrelation());
 		

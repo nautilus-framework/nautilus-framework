@@ -132,7 +132,8 @@ public class OptimizeController {
         	
 			ProblemExtension problemExtension = pluginService.getProblemExtension(pluginId, problemId);
 			
-			InstanceData data = problemExtension.readInstanceData(instance);
+			//InstanceData data = problemExtension.readInstanceData(instance);
+			InstanceData data = null;
 			
 			// Factories
 			

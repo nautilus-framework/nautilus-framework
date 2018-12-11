@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	
-<head th:replace="fragments/head :: default(${problem.getName()})"></head>
+	<head th:replace="fragments/head :: default(${problem.getName()})"></head>
 	
-<body th:with="pluginId=${plugin.getDescriptor().getPluginId()} , problemId=${problem.getId()}">
+	<body th:with="
+		descriptor = ${plugin.getDescriptor()},
+		pluginId = ${descriptor.getPluginId()},
+		pluginName = ${descriptor.getPluginDescription()}">
 
 	<div th:replace="fragments/navbar :: default('Home')"></div>
 	
@@ -14,9 +17,9 @@
 					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
-						<a th:href="@{/plugin/} + ${pluginId}"	th:text="${plugin.getDescriptor().getPluginDescription()}"></a>
+						<a th:href="@{/plugin/} + ${pluginId}" th:text="${pluginName}"></a>
 						<span class="path-divider">/</span>
-						<a th:href="@{/problem} + @{/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.getName()}"></a>
+						<a th:href="@{/problem/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.name}"></a>
 					</h6>
 				</div>
 				<div class="col-4 float-right">

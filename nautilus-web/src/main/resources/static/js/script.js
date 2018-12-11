@@ -8,7 +8,16 @@ $(function(){
 		
 	});
 	
-	$(".dropdown-submit").click(function(){
+	$("#form-delete-plugin").submit(function(){
+		
+		if(confirm("Are you sure to delete this item?")){
+			return true;
+		}
+		
+		return false;
+	});
+	
+	$("#form-delete-plugin a").click(function(){
 		$(this).parent().submit();
 	});
 	

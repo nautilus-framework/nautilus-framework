@@ -33,8 +33,6 @@ import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.ByVariablesDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.DuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.NoDuplicatesRemover;
-import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.normalize.Normalize;
@@ -42,6 +40,7 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.operator.crossover.Crossover;
 import thiagodnf.nautilus.core.operator.mutation.Mutation;
 import thiagodnf.nautilus.core.operator.selection.Selection;
+import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.FormatterExtension;
 import thiagodnf.nautilus.plugin.extension.GUIExtension;
@@ -125,9 +124,11 @@ public class PluginService {
 
 			for (ProblemExtension extension : getProblemExtensions(plugin.getPluginId())) {
 
-				LOGGER.info("Creating folder for {} / {}", plugin.getPluginId(), extension.getId());
+				String problemId = Converter.toKey(extension.getName());
+				
+				LOGGER.info("Creating folder for {}/{}", plugin.getPluginId(), problemId);
 
-				fileService.createPluginDirectory(plugin.getPluginId(), extension.getId());
+				fileService.createPluginDirectory(plugin.getPluginId(), problemId);
 			}
 		}
 		
@@ -223,7 +224,7 @@ public class PluginService {
 	public ProblemExtension getProblemExtension(String pluginId, String problemId) {
 		return getProblemExtensions(pluginId)
 				.stream()
-				.filter(p -> p.getId().equalsIgnoreCase(problemId))
+				//.filter(p -> p.getId().equalsIgnoreCase(problemId))
 				.findFirst()
 				.orElseThrow(ProblemNotFoundException::new);
 	}
@@ -405,28 +406,4 @@ public class PluginService {
 	public void deletePlugin(String pluginId) {
 		this.pluginManager.deletePlugin(pluginId);
 	}
-
-	public List<Variable> getVariables(String pluginId, String problemId, InstanceData data) {
-		return getProblemExtension(pluginId, problemId).getVariables(data);
-	}
-
-	public void loadPlugin(String filename) {
-		
-		Path path = fileService.getPluginsLocation().resolve(filename); 
-		
-		pluginManager.loadPlugin(Paths.get(path.toFile().getAbsolutePath()));
-		
-		pluginManager.startPlugins();
-		
-		for(PluginWrapper plugin : getStartedPlugins()) {
-			
-			for (ProblemExtension extension : getProblemExtensions(plugin.getPluginId())) {
-
-				LOGGER.info("Creating folder for {} / {}", plugin.getPluginId(), extension.getId());
-
-				fileService.createPluginDirectory(plugin.getPluginId(), extension.getId());
-			}
-		}
-	}
-	
 }

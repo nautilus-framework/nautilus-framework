@@ -81,7 +81,8 @@ public class ExecutionService {
 
 		ProblemExtension problemExtension = pluginService.getProblemExtension(pluginId, problemId);
 
-		InstanceData data = problemExtension.readInstanceData(instance);
+//		InstanceData data = problemExtension.readInstanceData(instance);
+		InstanceData data = null;
 
 		@SuppressWarnings("rawtypes")
 		Problem problem = problemExtension.createProblem(data, objectives);

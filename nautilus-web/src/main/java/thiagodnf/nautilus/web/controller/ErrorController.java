@@ -32,10 +32,10 @@ public class ErrorController {
 		if (status != null) {
 			reason = status.reason();
 		}
-
+		
 		flashMessageService.error(ra, reason);
 		
-		return "redirect:/";
+		return "redirect:/home";
 	}
 	
 	@ExceptionHandler(PageException.class)

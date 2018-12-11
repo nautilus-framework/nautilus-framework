@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 
@@ -21,6 +22,7 @@ import thiagodnf.nautilus.web.model.UploadInstanceFile;
 import thiagodnf.nautilus.web.model.UploadPlugin;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FileService;
+import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
@@ -37,6 +39,9 @@ public class UploadController {
 	
 	@Autowired
 	private PluginService pluginService;
+	
+	@Autowired
+	private FlashMessageService flashMessageService;
 	
 	@PostMapping("/instance-file/{pluginId:.+}/{problemId:.+}")
 	public String uploadWithPost(
@@ -119,7 +124,11 @@ public class UploadController {
 	}
 	
 	@PostMapping("/plugin/")
-	public String uploadExtension(@Valid UploadPlugin uploadPlugin, BindingResult result, Model model) {
+	public String uploadPlugin(
+			@Valid UploadPlugin uploadPlugin, 
+			BindingResult result,
+			RedirectAttributes ra,
+			Model model) {
 
 		LOGGER.info("Uploading the file: {} ", uploadPlugin.getFile().getOriginalFilename());
 
@@ -135,10 +144,10 @@ public class UploadController {
 		
 		fileService.storePlugin(filename, file);
 		
-		pluginService.loadPlugin(filename);
+		pluginService.loadPluginsFromDirectory();
 		
-		LOGGER.info("Done");
+		flashMessageService.success(ra, "msg.upload.plugin.success", filename);
 		
-		return "redirect:/";
+		return "redirect:/home";
 	}
 }
