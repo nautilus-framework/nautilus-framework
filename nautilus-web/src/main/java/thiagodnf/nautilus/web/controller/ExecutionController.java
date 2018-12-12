@@ -62,20 +62,20 @@ public class ExecutionController {
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		
-		List<? extends Solution<?>> solutions = execution.getSolutions();
-		
-		solutions = duplicatesRemover.execute(solutions);
-		
-		if (objectives.size() != 1) {
-			solutions = normalizer.normalize(objectives, solutions);
-		}
-		
-		solutions = colorizer.execute(solutions);
+//		List<? extends Solution<?>> solutions = execution.getSolutions();
+//		
+//		solutions = duplicatesRemover.execute(solutions);
+//		
+//		if (objectives.size() != 1) {
+//			solutions = normalizer.normalize(objectives, solutions);
+//		}
+//		
+//		solutions = colorizer.execute(solutions);
 		
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 		model.addAttribute("objectives", objectives);
-		model.addAttribute("solutions", solutions);
+		model.addAttribute("solutions", execution.getSolutions());
 		model.addAttribute("execution", execution);
 		model.addAttribute("normalizers", pluginService.getNormalizers());
 		model.addAttribute("duplicatesRemovers", pluginService.getDuplicatesRemovers());

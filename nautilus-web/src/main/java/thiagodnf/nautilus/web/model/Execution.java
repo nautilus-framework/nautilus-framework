@@ -8,9 +8,10 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
-import org.uma.jmetal.solution.Solution;
 
 import com.google.gson.Gson;
+
+import thiagodnf.nautilus.core.model.Solution;
 
 public class Execution {
 
@@ -26,7 +27,7 @@ public class Execution {
 	private Parameters parameters;
 	
 	@NotNull
-	private List<? extends Solution<?>> solutions;
+	private List<Solution> solutions;
 	
 	@NotNull
 	private Settings settings;
@@ -62,11 +63,11 @@ public class Execution {
 		this.parameters = parameters;
 	}
 
-	public List<? extends Solution<?>> getSolutions() {
+	public List<Solution> getSolutions() {
 		return solutions;
 	}
 
-	public void setSolutions(List<? extends Solution<?>> solutions) {
+	public void setSolutions(List<Solution> solutions) {
 		this.solutions = solutions;
 	}
 	

@@ -23,19 +23,19 @@ public class Solution {
 	private List<Object> variables;
 	
 	@NotNull
-	private Map<String, String> properties;
+	private Map<String, String> attributes;
 	
 	public Solution() {
 		this.objectives = new ArrayList<>();
 		this.variables = new ArrayList<>();
-		this.properties = new HashMap<>();
+		this.attributes = new HashMap<>();
 	}
 	
 	public Solution(Solution solution) {
 		this.type = new String(solution.getType());
 		this.objectives = new ArrayList<>(solution.getObjectives());
 		this.variables = new ArrayList<>(solution.getVariables());
-		this.properties = new HashMap<>(solution.getProperties());
+		this.attributes = new HashMap<>(solution.getAttributes());
 	}
 
 	public List<Double> getObjectives() {
@@ -54,12 +54,12 @@ public class Solution {
 		this.variables = variables;
 	}
 	
-	public Map<String, String> getProperties() {
-		return properties;
+	public Map<String, String> getAttributes() {
+		return attributes;
 	}
 
-	public void setProperties(Map<String, String> properties) {
-		this.properties = properties;
+	public void setAttributes(Map<String, String> properties) {
+		this.attributes = properties;
 	}
 
 	public String toString() {
@@ -95,7 +95,7 @@ public class Solution {
 	}
 	
 	public boolean isSelected() {
-		return getProperties().containsKey("selected");
+		return getAttributes().containsKey("selected");
 	}
 	
 	public double getUserFeeback() {
@@ -103,7 +103,7 @@ public class Solution {
 		double sum = 0.0;
 		double total = 0.0;
 
-		for (Entry<String, String> entry : getProperties().entrySet()) {
+		for (Entry<String, String> entry : getAttributes().entrySet()) {
 
 			if (entry.getKey().startsWith("feedback-for-variable-")) {
 				sum += Double.valueOf(entry.getValue());

@@ -55,14 +55,14 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="solution : ${solutions}" th:with="i = ${solution.getProperties().get('id')}">
+									<tr th:each="solution : ${solutions}" th:with="i = ${solution.getAttributes().get('id')}">
 										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i}" th:text="${i}"></a></td>
 										
 										<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,4)}" class="objectives-values"/>
 											
-										<td th:text="${solution.getProperties().containsKey('selected')}"/>
+										<td th:text="${solution.getAttributes().containsKey('selected')}"/>
 										<td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td>	
-										<td th:text="${solution.getProperties().get('distance')}"></td>
+										<td th:text="${solution.getAttributes().get('distance')}"></td>
 									</tr>
 								</tbody>
 							</table>

@@ -14,16 +14,15 @@ $(function(){
 		
 		bootbox.confirm({
 			 message: "Are you sure to delete this item?",
-			 size: "small",
 			 closeButton: false,
 			 buttons: {
 		        cancel: {
 		            label: "Cancel",
-		            className: "btn-outline-secondary btn-sm pull-right"
+		            className: "btn-outline-secondary pull-right"
 		        },
 		        confirm: {
 		            label: "Delete",
-		            className: "btn-outline-danger btn-sm pull-left"
+		            className: "btn-outline-danger pull-left"
 		        }
 			 },
 			 callback: function(result){
@@ -41,16 +40,15 @@ $(function(){
 		
 		bootbox.confirm({
 			 message: "Are you sure to delete this item?",
-			 size: "small",
 			 closeButton: false,
 			 buttons: {
 		        cancel: {
 		            label: "Cancel",
-		            className: "btn-outline-secondary btn-sm pull-right"
+		            className: "btn-outline-secondary pull-right"
 		        },
 		        confirm: {
 		            label: "Delete",
-		            className: "btn-outline-danger btn-sm pull-left"
+		            className: "btn-outline-danger pull-left"
 		        }
 			 },
 			 callback: function(result){

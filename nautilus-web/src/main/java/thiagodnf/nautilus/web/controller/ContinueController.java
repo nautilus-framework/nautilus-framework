@@ -12,18 +12,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.correlation.Correlation;
 import thiagodnf.nautilus.core.correlation.Correlation.CorrelationItem;
 import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.problem.AbstractProblem;
 import thiagodnf.nautilus.core.ranking.RankingComparator;
 import thiagodnf.nautilus.core.ranking.RankingItem;
-import thiagodnf.nautilus.core.solution.BinarySolution;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
@@ -59,7 +58,8 @@ public class ContinueController {
 		String pluginId = parameters.getPluginId();
 		String problemId = parameters.getProblemId();
 		
-		List<? extends Solution<?>> solutions = execution.getSolutions();
+//		List<? extends Solution<?>> solutions = execution.getSolutions();
+		List<Solution> solutions = execution.getSolutions();
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 //		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, Arrays.asList("alive-mutants", "cost"));
@@ -85,7 +85,8 @@ public class ContinueController {
 		
 		Correlation correlation = pluginService.getCorrelationers().get(settings.getCorrelation());
 		
-		List<CorrelationItem> correlationItems = correlationService.correlateVariables(problem, data, objectives, solutions);
+//		List<CorrelationItem> correlationItems = correlationService.correlateVariables(problem, data, objectives, solutions);
+		List<CorrelationItem> correlationItems = Arrays.asList();
 		
 		for(CorrelationItem correlationItem : correlationItems) {
 			System.out.println(correlationItem);
@@ -94,7 +95,7 @@ public class ContinueController {
 		
 		
 		model.addAttribute("objectives", objectives);
-		model.addAttribute("correlationsForObjectives", correlationService.correlateObjectives(correlation, objectives, solutions));
+		//model.addAttribute("correlationsForObjectives", correlationService.correlateObjectives(correlation, objectives, solutions));
 		model.addAttribute("correlationsForVariables", correlationItems);
 		
 		
@@ -113,16 +114,16 @@ public class ContinueController {
 		
 		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalize());
 		
-		if (objectives.size() != 1) {
-			solutions = normalizer.normalize(objectives, solutions);
-		}
+//		if (objectives.size() != 1) {
+//			solutions = normalizer.normalize(objectives, solutions);
+//		}
 		
-		List<Solution<?>> selectedSolutions = new ArrayList<>();
+		List<Solution> selectedSolutions = new ArrayList<>();
 		
 		// Step 1: Separate the selected solutions
-		for(Solution<?> sol : execution.getSolutions()) {
+		for(Solution sol : execution.getSolutions()) {
 			
-			if(sol.getAttribute("selected") != null) {
+			if(sol.getAttributes().get("selected") != null) {
 				selectedSolutions.add(sol);
 			}
 		}
@@ -187,7 +188,7 @@ public class ContinueController {
 //		}
 		
 		
-		for(Solution<?> s : selectedSolutions) {
+		for(Solution s : selectedSolutions) {
 			
 			System.out.println(s);
 			

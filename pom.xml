@@ -11,8 +11,8 @@
 	<modules>
 		<module>nautilus-core</module>
 		<module>nautilus-plugin</module>
-		<module>nautilus-web</module>
 		<module>nautilus-plugin-toy</module>
+		<module>nautilus-web</module>
 	</modules>
 	<properties>
 		<springframework.boot.version>2.0.3.RELEASE</springframework.boot.version>

@@ -14,9 +14,6 @@ import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.point.PointSolution;
-import org.uma.jmetal.util.point.util.distance.DominanceDistance;
-import org.uma.jmetal.util.solutionattribute.impl.CrowdingDistance;
-import org.uma.jmetal.util.solutionattribute.impl.DominanceRanking;
 
 import thiagodnf.nautilus.core.algorithm.RNSGAII.PointSolutionUtils;
 
@@ -34,12 +31,10 @@ public class Converter {
 		return text.replaceAll("[^A-Za-z0-9]", "-").toLowerCase();
 	}
 	
-	public static thiagodnf.nautilus.core.model.Solution toSolution(Solution<?> solution) {
+	public static thiagodnf.nautilus.core.model.Solution toNautilusSolution(Solution<?> solution) {
 
 		thiagodnf.nautilus.core.model.Solution newSolution = new thiagodnf.nautilus.core.model.Solution();
 
-		newSolution.setType(solution.getClass().getName());
-		
 		for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
 			newSolution.getObjectives().add(solution.getObjective(i));
 		}
@@ -51,12 +46,12 @@ public class Converter {
 		return newSolution;
 	}
 	
-	public static List<thiagodnf.nautilus.core.model.Solution> toSolutions(List<? extends Solution<?>> population) {
+	public static List<thiagodnf.nautilus.core.model.Solution> toNautilusSolutions(List<? extends Solution<?>> population) {
 
 		List<thiagodnf.nautilus.core.model.Solution> solutions = new ArrayList<>();
 
 		for (Solution<?> s : population) {
-			solutions.add(toSolution(s));
+			solutions.add(toNautilusSolution(s));
 		}
 
 		return solutions;
@@ -172,7 +167,7 @@ public class Converter {
 			newSolution.setVariableValue(i, solution.getVariables().get(i));
 		}
 
-		for (Entry<String, String> entry : solution.getProperties().entrySet()) {
+		for (Entry<String, String> entry : solution.getAttributes().entrySet()) {
 			newSolution.setAttribute(entry.getKey(), entry.getValue());
 		}
 
@@ -233,17 +228,35 @@ public class Converter {
 		return result;
 	}
 
-	public static List<? extends Solution<?>> clearAttributes(List<? extends Solution<?>> rawSolutions) {
-		
-		for(Solution<?> s : rawSolutions) {
-			
-			s.setAttribute(new CrowdingDistance<>().getAttributeIdentifier(), null);
-			s.setAttribute(new DominanceRanking<>().getAttributeIdentifier(), null);
-			
-			
-		}
-		
-		// TODO Auto-generated method stub
-		return rawSolutions;
-	}
+//	public static List<? extends Solution<?>> clearAttributes(Problem<?> problem, List<? extends Solution<?>> rawSolutions) {
+//		
+//		List<Solution<?>> solutions = new ArrayList<>();
+//		
+//		for(Solution<?> rawSolution : rawSolutions) {
+//			solutions.add(toSolutionsWithOutAttributes(problem, rawSolution));
+//		}
+//		
+//		return solutions;
+//	}
+	
+//	public static Solution<?> toSolutionsWithOutAttributes(Problem<?> problem, Solution<?> solution) {
+//
+//		Solution<?> newSolution = (Solution<?>) problem.createSolution();
+//
+//		for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
+//			newSolution.setObjective(i, solution.getObjective(i));
+//		}
+//
+//		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
+//
+//			if (problem instanceof IntegerProblem) {
+//				((IntegerSolution) newSolution).setVariableValue(i, (Integer) solution.getVariableValue(i));
+//			}
+//			if (problem instanceof BinaryProblem) {
+//				((BinarySolution) newSolution).setVariableValue(i, (BinarySet) solution.getVariableValue(i));
+//			}
+//		}
+//
+//		return newSolution;
+//	}
 }

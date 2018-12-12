@@ -206,12 +206,12 @@ public class OptimizeController {
 		    
 		   	webSocketService.sendTitle(sessionId, "Clearing the attributes from solutions...");
 		   	
-		   	List<? extends Solution<?>> solutions = Converter.clearAttributes(rawSolutions);
+		   	List<thiagodnf.nautilus.core.model.Solution> solutions = Converter.toNautilusSolutions(rawSolutions);
 		   	
 			webSocketService.sendTitle(sessionId, "Setting ids");
 
 			for (int i = 0; i < solutions.size(); i++) {
-				solutions.get(i).setAttribute("id", String.valueOf(i));
+				solutions.get(i).getAttributes().put("id", String.valueOf(i));
 			}
 		   	
 			webSocketService.sendTitle(sessionId, "Preparing the results...");

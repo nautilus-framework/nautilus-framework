@@ -49,4 +49,7 @@ public class ToyProblem extends AbstractIntegerProblem {
 		}
 	}
 
+	public List<AbstractObjective> getObjectives() {
+		return objectives;
+	}
 }
