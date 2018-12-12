@@ -3,148 +3,153 @@
 
 <head th:replace="fragments/head :: default(Optimize)"></head>
 
-<body th:with="pluginId=${plugin.getDescriptor().getPluginId()} , problemId=${problem.getId()}">
+	<body th:with="
+		descriptor = ${plugin.getDescriptor()},
+		pluginId = ${descriptor.getPluginId()},
+		pluginName = ${descriptor.getPluginDescription()},
+		problemId = ${#converter.toKey(problem.name)}">
 
-	<div th:replace="fragments/navbar :: default('home')"></div>
-	
-	<div class="page-header page-header-with-navbar">
-		<div class="container">
-			<div class="row">
-				<div class="col-12">
-					<h6 class="title">
-						<a th:href="@{/}">Home</a> 
-						<span class="path-divider">/</span>
-						<a th:href="@{/plugin/} + ${pluginId}"	th:text="${plugin.getDescriptor().getPluginDescription()}"/>
-						<span class="path-divider">/</span>
-						<a th:href="@{/problem} + @{/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.getName()}"/>
-						<span class="path-divider">/</span>
-						<a th:href="@{/instance-file} + @{/} + ${pluginId} + @{/} + ${problemId} +@{/}+${filename}"th:text="${filename}"></a>
-						<span class="path-divider">/</span>
-						<a th:href="@{/optimize/} + @{/} + ${pluginId} + @{/} + ${problemId} + @{/} + ${filename}">Optimize</a>
-					</h6>
+		<div th:replace="fragments/navbar :: default('home')"></div>
+		
+		<div class="page-header page-header-with-navbar">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<h6 class="title">
+							<a th:href="@{/}">Home</a> 
+							<span class="path-divider">/</span>
+							<a th:href="@{/plugin/} + ${pluginId}" th:text="${pluginName}"></a>
+							<span class="path-divider">/</span>
+							<a th:href="@{/problem/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.name}"></a>
+							<span class="path-divider">/</span>
+							<a th:href="@{/instance-file/} + ${pluginId} + @{/} + ${problemId} +@{/} + ${filename}"th:text="${filename}"></a>
+							<span class="path-divider">/</span>
+							<a th:href="@{/optimize/} + @{/} + ${pluginId} + @{/} + ${problemId} + @{/} + ${filename}">Optimize</a>
+						</h6>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	
-	<div class="container page-navbar">
-		<div class="row">
-			<div class="col-12">
-
-				<ul class="nav nav-tabs" role="tablist">
-					<li class="nav-item">
-						<a class="nav-link" href="#general" role="tab" data-toggle="tab">General</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#operators" role="tab" data-toggle="tab">Operators</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a>
-					</li>
-				</ul>
 		
-				<form id="form-execute" class="needs-validation" th:object="${parameters}" novalidate autocomplete="off">
-					<!-- Tab panes -->
-					<div class="tab-content">
-						<div role="tabpanel" class="tab-pane" id="general">
-							<input type="hidden" class="form-control" th:field="*{pluginId}" />
-							<input type="hidden" class="form-control" th:field="*{problemId}" />
-							<input type="hidden" class="form-control" th:field="*{filename}" />
-							<div class="form-group">
-								<label for="algorithmName">Algorithm</label>
-								<select class="form-control" th:field="*{algorithmName}">
-									<option th:each="extension : ${algorithmFactory.getExtensions()}" 
-							    		th:value="${extension.toString()}"
-							    		th:text="${extension.toString()}" 
-						    		/>
-								</select>
-							</div>
-							<div class="form-group">
-								<label for="populationSize">Population Size</label>
-								<input type="number" class="form-control" th:field="*{populationSize}" min="10" max="1000" step="1" required autocomplete="off" />
-							</div>
-							<div class="form-group">
-								<label for="maxEvaluations">Max Evaluations</label>
-								<input type="number" class="form-control" th:field="*{maxEvaluations}" min="10" max="10000000" step="1" required autocomplete="off" />
-							</div>
-						</div>
-						<div class="tab-pane fade" id="operators">
-							<div class="row">
-								<div class="form-group col-12">
-									<label for="selectionName">Selection</label>
-									<select class="form-control" th:field="*{selectionName}">
-										<option th:each="selection : ${selections}" 
-								    		th:value="${selection.id}"
-								    		th:text="${selection.name}" 
+		<div class="container page-navbar">
+			<div class="row">
+				<div class="col-12">
+	
+					<ul class="nav nav-tabs" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link" href="#general" role="tab" data-toggle="tab">General</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#operators" role="tab" data-toggle="tab">Operators</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a>
+						</li>
+					</ul>
+			
+					<form id="form-execute" class="needs-validation" th:object="${parameters}" novalidate autocomplete="off">
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane" id="general">
+								<input type="hidden" class="form-control" th:field="*{pluginId}" />
+								<input type="hidden" class="form-control" th:field="*{problemId}" />
+								<input type="hidden" class="form-control" th:field="*{filename}" />
+								<div class="form-group">
+									<label for="algorithmName">Algorithm</label>
+									<select class="form-control" th:field="*{algorithmId}">
+										<option th:each="algorithm : ${algorithmFactory.getExtensions()}" 
+								    		th:value="${algorithm.id}"
+								    		th:text="${algorithm.name}" 
 							    		/>
 									</select>
 								</div>
-							</div>
-							<hr/>
-							<div class="row">
-								<div class="form-group col-4">
-									<label for="crossoverName">Crossover</label>
-									<select class="form-control" th:field="*{crossoverName}">
-										<option th:each="crossover : ${crossovers}" 
-								    		th:value="${crossover.id}"
-								    		th:text="${crossover.name}" 
-							    		/>
-									</select>
+								<div class="form-group">
+									<label for="populationSize">Population Size</label>
+									<input type="number" class="form-control" th:field="*{populationSize}" min="10" max="1000" step="1" required autocomplete="off" />
 								</div>
-								<div class="form-group col-4">
-									<label for="crossoverProbability">Probability</label>
-									<input type="number" class="form-control" th:field="*{crossoverProbability}" min="0.0" max="1.0" step="0.1" required/>
-								</div>
-								<div class="form-group col-4">
-									<label for="crossoverDistribution">Distribution</label>
-									<input type="number" class="form-control" th:field="*{crossoverDistribution}" min="1.0" max="1000.0" step="0.1" required/>
+								<div class="form-group">
+									<label for="maxEvaluations">Max Evaluations</label>
+									<input type="number" class="form-control" th:field="*{maxEvaluations}" min="10" max="10000000" step="1" required autocomplete="off" />
 								</div>
 							</div>
-							<hr/>
-							<div class="row">
-								<div class="form-group col-4">
-									<label for="mutationName">Mutation</label>
-									<select class="form-control" th:field="*{mutationName}">
-										<option th:each="mutation : ${mutations}" 
-								    		th:value="${mutation.id}"
-								    		th:text="${mutation.name}" 
-							    		/>
-							  		</select>
+							<div class="tab-pane fade" id="operators">
+								<div class="row">
+									<div class="form-group col-12">
+										<label for="selectionName">Selection</label>
+										<select class="form-control" th:field="*{selectionId}">
+											<option th:each="selection : ${selectionFactory.getExtensions()}" 
+									    		th:value="${selection.id}"
+									    		th:text="${selection.name}" 
+								    		/>
+										</select>
+									</div>
 								</div>
-								<div class="form-group col-4">
-									<label for="mutationProbability">Probability</label>
-									<input type="number" class="form-control" th:field="*{mutationProbability}" min="0.0" max="1.0" step="0.001" required/>
+								<hr/>
+								<div class="row">
+									<div class="form-group col-4">
+										<label for="crossoverName">Crossover</label>
+										<select class="form-control" th:field="*{crossoverId}">
+											<option th:each="crossover : ${crossoverFactory.getExtensions()}" 
+									    		th:value="${crossover.id}"
+									    		th:text="${crossover.name}" 
+								    		/>
+										</select>
+									</div>
+									<div class="form-group col-4">
+										<label for="crossoverProbability">Probability</label>
+										<input type="number" class="form-control" th:field="*{crossoverProbability}" min="0.0" max="1.0" step="0.1" required/>
+									</div>
+									<div class="form-group col-4">
+										<label for="crossoverDistribution">Distribution</label>
+										<input type="number" class="form-control" th:field="*{crossoverDistribution}" min="1.0" max="1000.0" step="0.1" required/>
+									</div>
 								</div>
-								<div class="form-group col-4">
-									<label for="mutationDistribution">Distribution</label>
-									<input type="number" class="form-control" th:field="*{mutationDistribution}" min="1.0" max="1000.0" step="0.1" required/>
+								<hr/>
+								<div class="row">
+									<div class="form-group col-4">
+										<label for="mutationName">Mutation</label>
+										<select class="form-control" th:field="*{mutationId}">
+											<option th:each="mutation : ${mutationFactory.getExtensions()}" 
+									    		th:value="${mutation.id}"
+									    		th:text="${mutation.name}" 
+								    		/>
+								  		</select>
+									</div>
+									<div class="form-group col-4">
+										<label for="mutationProbability">Probability</label>
+										<input type="number" class="form-control" th:field="*{mutationProbability}" min="0.0" max="1.0" step="0.001" required/>
+									</div>
+									<div class="form-group col-4">
+										<label for="mutationDistribution">Distribution</label>
+										<input type="number" class="form-control" th:field="*{mutationDistribution}" min="1.0" max="1000.0" step="0.1" required/>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="tab-pane fade" id="objectives">
-							<div class="row" th:with="size = ${12/objectiveGroups.size()}">
-								<div th:class="'col-' + ${size}" th:each="group,i : ${objectiveGroups}">
-									<div class="card" >
-										<div class="card-header" >
-											<span th:text="${group.key}"></span>
-											<input type="checkbox" 
-												class="float-right checkbox-select-all"
-												name="objectivesName"	 
-											/>
-										</div>
-										<div class="card-body">
-											<div th:each="objective : ${group.value}">
-												<div class="form-group">
-													<div class="checkbox">
-														<label class="no-select">
-															<input type="checkbox" 
-																class="objectiveKeys"
-																name="objectiveKeys" 
-																th:checked="${objective.isChecked()}"
-																th:value="${objective.getId()}" 
-																th:text="${objective.getName()}"
-															/>
-														</label>
+							<div class="tab-pane fade" id="objectives">
+								<div class="row" th:with="size = ${12/objectiveGroups.size()}">
+									<div th:class="'col-' + ${size}" th:each="group,i : ${objectiveGroups}">
+										<div class="card" >
+											<div class="card-header" >
+												<span th:text="${group.key}"></span>
+												<input type="checkbox" 
+													class="float-right checkbox-select-all"
+													name="objectivesName"	 
+												/>
+											</div>
+											<div class="card-body">
+												<div th:each="objective : ${group.value}">
+													<div class="form-group">
+														<div class="checkbox">
+															<label class="no-select">
+																<input type="checkbox" 
+																	class="objectiveKeys"
+																	name="objectiveKeys" 
+																	th:checked="${objective.isChecked()}"
+																	th:value="${objective.getId()}" 
+																	th:text="${objective.getName()}"
+																/>
+															</label>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -153,22 +158,21 @@
 								</div>
 							</div>
 						</div>
-					</div>
-					<hr/>
-					<button type="submit" id="btn-execute" class="btn btn-success btn-sm">Execute</button>
-					<button class="btn btn-light btn-sm" onclick="window.history.back()">Cancel</button>
-					
-					
-				</form>
-				<div class="console"></div>
+						<hr/>
+						<button type="submit" id="btn-execute" class="btn btn-success btn-sm">Execute</button>
+						<button class="btn btn-light btn-sm" onclick="window.history.back()">Cancel</button>
+						
+						
+					</form>
+					<div class="console"></div>
+				</div>
 			</div>
 		</div>
-	</div>
-
-	<div th:replace="fragments/footer :: footer"></div>
-	<div th:replace="fragments/modal-progressbar :: progressbar"></div>
-	<div th:replace="fragments/modal-console :: console"></div>
-	<script type="text/javascript" th:src="@{/js/controller/optimize.js}"></script>
-</body>
+	
+		<div th:replace="fragments/footer :: footer"></div>
+		<div th:replace="fragments/modal-progressbar :: progressbar"></div>
+		<div th:replace="fragments/modal-console :: console"></div>
+		<script type="text/javascript" th:src="@{/js/controller/optimize.js}"></script>
+	</body>
 
 </html>

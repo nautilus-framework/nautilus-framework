@@ -2,29 +2,29 @@ package thiagodnf.nautilus.core.algorithm;
 
 import java.util.List;
 
+import org.uma.jmetal.operator.CrossoverOperator;
+import org.uma.jmetal.operator.MutationOperator;
+import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.point.PointSolution;
-
-import thiagodnf.nautilus.core.operator.crossover.Crossover;
-import thiagodnf.nautilus.core.operator.mutation.Mutation;
-import thiagodnf.nautilus.core.operator.selection.Selection;
 
 @SuppressWarnings("rawtypes")
 public class Builder {
 	
 	private Problem problem;
 	
-	private List<?> initialPopulation;
+	private List<? extends Solution<?>> initialPopulation;
 	
 	private int populationSize;
 	
 	private int maxEvaluations;
 	
-	private Selection selection;
+	private SelectionOperator selection;
 	
-	private Crossover crossover;
+	private CrossoverOperator crossover;
 	
-	private Mutation mutation;
+	private MutationOperator mutation;
 
 	private List<PointSolution> referencePoints;
 	
@@ -42,7 +42,7 @@ public class Builder {
 		return initialPopulation;
 	}
 
-	public void setInitialPopulation(List<?> initialPopulation) {
+	public void setInitialPopulation(List<? extends Solution<?>> initialPopulation) {
 		this.initialPopulation = initialPopulation;
 	}
 
@@ -62,27 +62,27 @@ public class Builder {
 		this.maxEvaluations = maxEvaluations;
 	}
 
-	public Selection getSelection() {
+	public SelectionOperator getSelection() {
 		return selection;
 	}
 
-	public void setSelection(Selection selection) {
+	public void setSelection(SelectionOperator selection) {
 		this.selection = selection;
 	}
 
-	public Crossover getCrossover() {
+	public CrossoverOperator getCrossover() {
 		return crossover;
 	}
 
-	public void setCrossover(Crossover crossover) {
+	public void setCrossover(CrossoverOperator crossover) {
 		this.crossover = crossover;
 	}
 
-	public Mutation getMutation() {
+	public MutationOperator getMutation() {
 		return mutation;
 	}
 
-	public void setMutation(Mutation mutation) {
+	public void setMutation(MutationOperator mutation) {
 		this.mutation = mutation;
 	}
 

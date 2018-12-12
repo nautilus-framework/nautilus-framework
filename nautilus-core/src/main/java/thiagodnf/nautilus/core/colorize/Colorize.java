@@ -3,7 +3,8 @@ package thiagodnf.nautilus.core.colorize;
 import java.util.ArrayList;
 import java.util.List;
 
-import thiagodnf.nautilus.core.model.Solution;
+import org.uma.jmetal.solution.Solution;
+
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.Normalizer;
 
@@ -13,33 +14,33 @@ public abstract class Colorize {
 		return Converter.toKey(getName());
 	}
 	
-	public List<Solution> execute(List<Solution> solutions) {
+	public List<? extends Solution<?>> execute(List<? extends Solution<?>> solutions) {
 		
-		List<Solution> selectedSolutions = getSelectedSolutions(solutions);
+		List<? extends Solution<?>> selectedSolutions = getSelectedSolutions(solutions);
 		
-		for (Solution solution : solutions) {
-			solution.getProperties().put("distance", calculate(solution, selectedSolutions));
-		}
+//		for (Solution<?> solution : solutions) {
+//			solution.getProperties().put("distance", calculate(solution, selectedSolutions));
+//		}
 		
 		return solutions;
 	}
 
-	public List<Solution> getSelectedSolutions(List<Solution> solutions) {
+	public List<Solution<?>> getSelectedSolutions(List<? extends Solution<?>> solutions) {
 
-		List<Solution> selectedSolutions = new ArrayList<>();
+		List<Solution<?>> selectedSolutions = new ArrayList<>();
 
-		for (Solution sol : solutions) {
-
-			if (sol.isSelected()) {
-
-				selectedSolutions.add(sol);
-			}
-		}
+//		for (Solution sol : solutions) {
+//
+//			if (sol.isSelected()) {
+//
+//				selectedSolutions.add(sol);
+//			}
+//		}
 
 		return selectedSolutions;
 	}
 	
-	public String calculate(Solution s, List<Solution> selectedSolutions) {
+	public String calculate(Solution<?> s, List<Solution<?>> selectedSolutions) {
 		
 		if (selectedSolutions.isEmpty()) {
 			return "0.0";
@@ -47,9 +48,9 @@ public abstract class Colorize {
 
 		double minDistance = Double.MAX_VALUE;
 
-		Solution closeSolution = null;
+		Solution<?> closeSolution = null;
 
-		for (Solution selected : selectedSolutions) {
+		for (Solution<?> selected : selectedSolutions) {
 
 			double distance = getDistance(s, selected);
 
@@ -61,17 +62,17 @@ public abstract class Colorize {
 		
 		minDistance = Normalizer.normalize(minDistance, 0, Math.sqrt(2));
 
-		double feedback = closeSolution.getUserFeeback();
-		
+//		double feedback = closeSolution.getUserFeeback();
+//		
 		double distance = 0.0;
-		
-		if (feedback == 0) {
-			distance = minDistance;
-		} else if (feedback > 0) {
-			distance = Math.pow(minDistance, 1.0 / Math.abs(feedback));
-		} else {
-			distance = Math.pow(1.0 - minDistance, 1.0 / Math.abs(feedback));
-		}
+//		
+//		if (feedback == 0) {
+//			distance = minDistance;
+//		} else if (feedback > 0) {
+//			distance = Math.pow(minDistance, 1.0 / Math.abs(feedback));
+//		} else {
+//			distance = Math.pow(1.0 - minDistance, 1.0 / Math.abs(feedback));
+//		}
 		
 		return String.valueOf(distance);
 	}
@@ -80,7 +81,7 @@ public abstract class Colorize {
 		return getName();
 	}
 	
-	public abstract double getDistance(Solution s, Solution selectedSolutions) ;
+	public abstract double getDistance(Solution<?> s, Solution<?> selectedSolutions) ;
 	
 	public abstract String getName() ;
 }

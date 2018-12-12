@@ -1,5 +1,6 @@
-package thiagodnf.nautilus.plugin.toy.problem;
+package thiagodnf.nautilus.plugin.toy.encoding.problem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.uma.jmetal.problem.impl.AbstractIntegerProblem;
@@ -7,6 +8,7 @@ import org.uma.jmetal.solution.IntegerSolution;
 
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.plugin.toy.encoding.instance.TXTInstanceData;
 
 public class ToyProblem extends AbstractIntegerProblem {
 
@@ -20,6 +22,23 @@ public class ToyProblem extends AbstractIntegerProblem {
 		
 		this.data = data;
 		this.objectives = objectives;
+		
+		TXTInstanceData d = (TXTInstanceData) data;
+		
+		// JMetal's Settings
+		setNumberOfObjectives(objectives.size());
+		setNumberOfVariables(d.getNumberOfVariables());
+		
+		List<Integer> lowerLimit = new ArrayList<>(getNumberOfVariables());
+		List<Integer> upperLimit = new ArrayList<>(getNumberOfVariables());
+
+		for (int i = 0; i < getNumberOfVariables(); i++) {
+			lowerLimit.add(d.getLowerBound());
+			upperLimit.add(d.getUpperBound());
+		}
+
+		setLowerLimit(lowerLimit);
+		setUpperLimit(upperLimit);
 	}
 	
 	@Override

@@ -72,7 +72,7 @@ public class ExecutionService {
 		List<AbstractObjective> objectives = null;
 
 		if (useAllObjectives) {
-			objectives = pluginService.getObjectiveExtension(pluginId).getObjectives(problemId);
+			objectives = pluginService.getObjectiveExtension(pluginId, problemId).getObjectives();
 		} else {
 			objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		}
@@ -85,20 +85,20 @@ public class ExecutionService {
 		InstanceData data = null;
 
 		@SuppressWarnings("rawtypes")
-		Problem problem = problemExtension.createProblem(data, objectives);
+		Problem problem = problemExtension.getProblem(data, objectives);
 		
 		List<Solution<?>> population = new ArrayList<>();
 		
-		List<thiagodnf.nautilus.core.model.Solution> solutions = new ByVariablesDuplicatesRemover().execute(execution.getSolutions());
+		//List<thiagodnf.nautilus.core.model.Solution> solutions = new ByVariablesDuplicatesRemover().execute(execution.getSolutions());
 		
-		for (thiagodnf.nautilus.core.model.Solution sol : solutions) {
-			
-			Solution<?> s = Converter.toJMetalSolutionWithOutObjectives(problem, sol);
-			
-			problem.evaluate(s);
-			
-			population.add(s);
-		}
+//		for (thiagodnf.nautilus.core.model.Solution sol : solutions) {
+//			
+//			Solution<?> s = Converter.toJMetalSolutionWithOutObjectives(problem, sol);
+//			
+//			problem.evaluate(s);
+//			
+//			population.add(s);
+//		}
 
 		return population;
 		

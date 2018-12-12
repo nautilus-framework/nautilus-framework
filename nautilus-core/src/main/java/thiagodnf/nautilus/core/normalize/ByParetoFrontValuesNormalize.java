@@ -2,7 +2,8 @@ package thiagodnf.nautilus.core.normalize;
 
 import java.util.List;
 
-import thiagodnf.nautilus.core.model.Solution;
+import org.uma.jmetal.solution.Solution;
+
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class ByParetoFrontValuesNormalize extends Normalize {
@@ -14,9 +15,9 @@ public class ByParetoFrontValuesNormalize extends Normalize {
 	 * @param solutions a list of solutions
 	 * @return a list of minimum values for each objective
 	 */
-	public static double[] getMinimumValues(List<Solution> solutions) {
+	public static double[] getMinimumValues(List<? extends Solution<?>> solutions) {
 
-		int numberOfObjectives = solutions.get(0).getObjectives().size();
+		int numberOfObjectives = solutions.get(0).getNumberOfObjectives();
 
 		double[] minimumValues = new double[numberOfObjectives];
 
@@ -24,10 +25,10 @@ public class ByParetoFrontValuesNormalize extends Normalize {
 
 			double minValue = Double.MAX_VALUE;
 
-			for (Solution solution : solutions) {
+			for (Solution<?> solution : solutions) {
 
 				if (solution.getObjective(i) < minValue) {
-					minValue = solution.getObjectives().get(i);
+					minValue = solution.getObjective(i);
 				}
 			}
 
@@ -44,9 +45,9 @@ public class ByParetoFrontValuesNormalize extends Normalize {
 	 * @param solutions a list of solutions
 	 * @return a list of maximum values for each objective
 	 */
-	public static double[] getMaximumValues(List<Solution> solutions) {
+	public static double[] getMaximumValues(List<? extends Solution<?>> solutions) {
 
-		int numberOfObjectives = solutions.get(0).getObjectives().size();
+		int numberOfObjectives = solutions.get(0).getNumberOfObjectives();
 
 		double[] maximumValues = new double[numberOfObjectives];
 
@@ -54,10 +55,10 @@ public class ByParetoFrontValuesNormalize extends Normalize {
 
 			double maxValue = Double.NEGATIVE_INFINITY;
 			
-			for (Solution solution : solutions) {
+			for (Solution<?> solution : solutions) {
 
 				if (solution.getObjective(i) > maxValue) {
-					maxValue = solution.getObjectives().get(i);
+					maxValue = solution.getObjective(i);
 				}
 			}
 
@@ -74,7 +75,7 @@ public class ByParetoFrontValuesNormalize extends Normalize {
 	 * @param solutions a list of solutions
 	 * @return a copy of a given list of solutions with normalized objective values
 	 */
-	public List<Solution> normalize(List<AbstractObjective> objectives, List<Solution> solutions) {
+	public List<Solution<?>> normalize(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
 
 		double[] minValues = getMinimumValues(solutions);
 		double[] maxValues = getMaximumValues(solutions);

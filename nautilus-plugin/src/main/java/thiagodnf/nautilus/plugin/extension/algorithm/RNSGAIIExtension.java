@@ -1,20 +1,17 @@
-package thiagodnf.nautilus.plugin.provider.algorithm;
-
-import java.util.Arrays;
+package thiagodnf.nautilus.plugin.extension.algorithm;
 
 import org.pf4j.Extension;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.solution.Solution;
-import org.uma.jmetal.util.point.PointSolution;
 
 import thiagodnf.nautilus.core.algorithm.Builder;
 import thiagodnf.nautilus.core.algorithm.RNSGAII;
-import thiagodnf.nautilus.core.algorithm.RNSGAII.PointSolutionUtils;
+import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 
 @Extension
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class RNSGAIIProvider implements AlgorithmExtension {
+public class RNSGAIIExtension implements AlgorithmExtension {
 
 	@Override
 	public Algorithm<? extends Solution<?>> getAlgorithm(Builder builder) {
@@ -32,7 +29,12 @@ public class RNSGAIIProvider implements AlgorithmExtension {
 	}
 
 	@Override
-	public String toString() {
+	public String getName() {
 		return "R-NSGA-II";
+	}
+	
+	@Override
+	public String getId() {
+		return Converter.toKey(getName());
 	}
 }

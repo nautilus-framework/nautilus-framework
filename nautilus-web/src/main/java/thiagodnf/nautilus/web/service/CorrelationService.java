@@ -6,15 +6,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.Solution;
 
 import com.google.common.base.Preconditions;
 
 import thiagodnf.nautilus.core.correlation.Correlation;
 import thiagodnf.nautilus.core.correlation.Correlation.CorrelationItem;
 import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.problem.AbstractProblem;
 import thiagodnf.nautilus.core.problem.BinaryProblem;
 import thiagodnf.nautilus.core.problem.IntegerProblem;
 import thiagodnf.nautilus.core.solution.BinarySolution;
@@ -25,10 +24,7 @@ import thiagodnf.nautilus.core.util.Normalizer;
 @Service
 public class CorrelationService {
 
-	@Autowired
-	private PluginService pluginService;
-	
-	public List<CorrelationItem> correlateObjectives(Correlation correlation, List<AbstractObjective> objectives, List<Solution> solutions) {
+	public List<CorrelationItem> correlateObjectives(Correlation correlation, List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
 		
 		Preconditions.checkNotNull(solutions, "The solution list should not be null");
 		Preconditions.checkNotNull(objectives, "The objective list should not be null");
@@ -58,7 +54,7 @@ public class CorrelationService {
 		return items;
 	}
 
-	public List<CorrelationItem> correlateVariables(AbstractProblem<?> p, InstanceData data, List<AbstractObjective> objectives, List<Solution> solutions){
+	public List<CorrelationItem> correlateVariables(Problem<?> p, InstanceData data, List<AbstractObjective> objectives, List<? extends Solution<?>> solutions){
 		
 		Preconditions.checkNotNull(solutions, "The solution list should not be null");
 		Preconditions.checkNotNull(objectives, "The objective list should not be null");
@@ -104,13 +100,13 @@ public class CorrelationService {
 		return items;
 	}
 	
-	public double calculateForIntegerSolution(Problem problem, InstanceData data, AbstractObjective objective, List<Solution> solutions, int value) {
+	public double calculateForIntegerSolution(Problem problem, InstanceData data, AbstractObjective objective, List<? extends Solution<?>> solutions, int value) {
 		
 		double sum = 0.0;
 		
 		for (Solution solution : solutions) {
 
-			IntegerSolution sol = (IntegerSolution) Converter.toJMetalSolution(problem, solution);
+			IntegerSolution sol = (IntegerSolution) solution;
 			
 			double originalValue = objective.evaluate(data, sol);
 			
@@ -139,13 +135,13 @@ public class CorrelationService {
 		return (double) sum / (double) solutions.size();
 	}
 	
-	public double calculateForBinary(Problem problem, InstanceData data, AbstractObjective objective, List<Solution> solutions, int pos) {
+	public double calculateForBinary(Problem problem, InstanceData data, AbstractObjective objective, List<? extends Solution<?>> solutions, int pos) {
 		
 		double sum = 0.0;
 
 		for (Solution solution : solutions) {
 
-			BinarySolution sol = (BinarySolution) Converter.toJMetalSolution(problem, solution);
+			BinarySolution sol = (BinarySolution) solution;
 			
 			double originalValue = objective.evaluate(data, sol);
 			

@@ -22,7 +22,7 @@ public class Parameters {
 	private String pluginId;
 	
 	@NotEmpty
-	private String algorithmName;
+	private String algorithmId;
 	
 	private String problemId;
 	
@@ -31,7 +31,10 @@ public class Parameters {
 	private List<String> objectiveKeys;
 	
 	@NotEmpty
-	private String crossoverName;
+	private String selectionId;
+	
+	@NotEmpty
+	private String crossoverId;
 	
 	@DecimalMin("0.0")
 	@DecimalMax("1.0")
@@ -42,10 +45,7 @@ public class Parameters {
 	private Double crossoverDistribution = 20.0;
 	
 	@NotEmpty
-	private String mutationName;
-	
-	@NotEmpty
-	private String selectionName;
+	private String mutationId;
 	
 	@DecimalMin("0.0")
 	@DecimalMax("1.0")
@@ -120,25 +120,29 @@ public class Parameters {
 	public void setLastExecutionId(String lastExecutionId) {
 		this.lastExecutionId = lastExecutionId;
 	}
+	
+	public void setSelectionId(String selectionId) {
+		this.selectionId = selectionId;
+	}
 
-	public String getSelectionName() {
-		return selectionName;
+	public String getSelectionId() {
+		return selectionId;
 	}
 	
-	public String getCrossoverName() {
-		return crossoverName;
+	public String getCrossoverId() {
+		return crossoverId;
 	}
 
-	public void setCrossoverName(String crossoverName) {
-		this.crossoverName = crossoverName;
+	public void setCrossoverId(String crossoverId) {
+		this.crossoverId = crossoverId;
 	}
 
-	public String getMutationName() {
-		return mutationName;
+	public String getMutationId() {
+		return mutationId;
 	}
 
-	public void setMutationName(String mutationName) {
-		this.mutationName = mutationName;
+	public void setMutationId(String mutationId) {
+		this.mutationId = mutationId;
 	}
 
 	public Double getCrossoverProbability() {
@@ -173,11 +177,11 @@ public class Parameters {
 		this.mutationDistribution = mutationDistribution;
 	}
 
-	public String getAlgorithmName() {
-		return algorithmName;
+	public String getAlgorithmId() {
+		return algorithmId;
 	}
 
-	public void setAlgorithmName(String algorithmName) {
-		this.algorithmName = algorithmName;
+	public void setAlgorithmId(String algorithmName) {
+		this.algorithmId = algorithmName;
 	}
 }

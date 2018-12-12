@@ -3,7 +3,8 @@ package thiagodnf.nautilus.core.normalize;
 import java.util.ArrayList;
 import java.util.List;
 
-import thiagodnf.nautilus.core.model.Solution;
+import org.uma.jmetal.solution.Solution;
+
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.Normalizer;
@@ -14,7 +15,7 @@ public abstract class Normalize {
 		return Converter.toKey(getName());
 	}
 	
-	protected List<Solution> normalize(List<Solution> solutions, double[] minValues, double[] maxValues) {
+	protected List<Solution<?>> normalize(List<? extends Solution<?>> solutions, double[] minValues, double[] maxValues) {
 		
 		if (solutions.isEmpty()) {
 			return new ArrayList<>(solutions.size());
@@ -24,16 +25,16 @@ public abstract class Normalize {
 //			return new ArrayList<>(solutions);
 //		}
 
-		List<Solution> normalizedSolutions = new ArrayList<>(solutions.size());
+		List<Solution<?>> normalizedSolutions = new ArrayList<>(solutions.size());
 
-		int numberOfObjectives = solutions.get(0).getObjectives().size();
+		int numberOfObjectives = minValues.length;
 
-		for (Solution solution : solutions) {
+		for (Solution<?> solution : solutions) {
 
-			Solution copy = solution.copy();
+			Solution<?> copy = solution.copy();
 
 			for (int j = 0; j < numberOfObjectives; j++) {
-				copy.getObjectives().set(j, Normalizer.normalize(solution.getObjective(j), minValues[j], maxValues[j]));
+				copy.setObjective(j, Normalizer.normalize(solution.getObjective(j), minValues[j], maxValues[j]));
 			}
 
 			normalizedSolutions.add(copy);
@@ -52,7 +53,7 @@ public abstract class Normalize {
 	 * @param solutions a list of solutions
 	 * @return a copy of a given list of solutions with normalized objective values
 	 */
-	public abstract List<Solution> normalize(List<AbstractObjective> objectives, List<Solution> solutions);
+	public abstract List<Solution<?>> normalize(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions);
 	
 	public abstract String getName() ;
 }

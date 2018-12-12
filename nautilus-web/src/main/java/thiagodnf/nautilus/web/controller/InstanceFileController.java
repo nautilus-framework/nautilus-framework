@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.plugin.extension.GUIExtension;
+import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.PluginService;
@@ -36,20 +36,16 @@ public class InstanceFileController {
 			@PathVariable("problemId") String problemId, 
 			@PathVariable("filename") String filename){
 		
-		String content = fileService.readFileToString(pluginId, problemId, filename);
-
-		GUIExtension guiExtension = pluginService.getGUIExtension(pluginId);
+		InstanceDataExtension extension = pluginService.getInstanceDataExtension(pluginId);
 		
-		Path instance = fileService.getInstanceFile(pluginId, problemId, filename);
+		Path path = fileService.getInstanceFile(pluginId, problemId, filename);
 		
-//		InstanceData data = pluginService.getProblemExtension(pluginId, problemId).readInstanceData(instance);
-		InstanceData data = null;
+		InstanceData data = extension.getInstanceData(path);
 		
 		model.addAttribute("filename", filename);
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
-		model.addAttribute("content", pluginService.formatInstanceFile(pluginId, problemId, content));
-		model.addAttribute("tabs", guiExtension.getTabs(data));
+		model.addAttribute("tabs", extension.getTabs(data));
 		
 		return "instance-file";
 	}

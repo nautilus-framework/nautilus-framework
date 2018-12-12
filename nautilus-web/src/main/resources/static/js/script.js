@@ -8,25 +8,59 @@ $(function(){
 		
 	});
 	
-	$("#form-delete-plugin").submit(function(){
-		
-		if(confirm("Are you sure to delete this item?")){
-			return true;
-		}
-		
-		return false;
-	});
-	
 	$("#form-delete-plugin a").click(function(){
-		$(this).parent().submit();
+		
+		var that = $(this);
+		
+		bootbox.confirm({
+			 message: "Are you sure to delete this item?",
+			 size: "small",
+			 closeButton: false,
+			 buttons: {
+		        cancel: {
+		            label: "Cancel",
+		            className: "btn-outline-secondary btn-sm pull-right"
+		        },
+		        confirm: {
+		            label: "Delete",
+		            className: "btn-outline-danger btn-sm pull-left"
+		        }
+			 },
+			 callback: function(result){
+			
+				if(result){
+					that.parent().submit();
+				}
+			 }
+		});
 	});
 	
-	// Hide the alert when it is available
-//	window.setTimeout(function() {
-//		$(".alert").fadeTo(500, 0).slideUp(500, function(){
-//	        $(this).remove(); 
-//	    });
-//	}, 4000);
+	$("#form-delete-instance-file a").click(function(){
+		
+		var that = $(this);
+		
+		bootbox.confirm({
+			 message: "Are you sure to delete this item?",
+			 size: "small",
+			 closeButton: false,
+			 buttons: {
+		        cancel: {
+		            label: "Cancel",
+		            className: "btn-outline-secondary btn-sm pull-right"
+		        },
+		        confirm: {
+		            label: "Delete",
+		            className: "btn-outline-danger btn-sm pull-left"
+		        }
+			 },
+			 callback: function(result){
+			
+				if(result){
+					that.parent().submit();
+				}
+			 }
+		});
+	});
 	
 	var tz = moment.tz.guess();
 	

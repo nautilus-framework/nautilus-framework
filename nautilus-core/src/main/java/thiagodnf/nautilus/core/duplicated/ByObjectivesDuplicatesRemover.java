@@ -1,6 +1,6 @@
 package thiagodnf.nautilus.core.duplicated;
 
-import thiagodnf.nautilus.core.model.Solution;
+import org.uma.jmetal.solution.Solution;
 
 public class ByObjectivesDuplicatesRemover extends DuplicatesRemover {
 
@@ -10,13 +10,8 @@ public class ByObjectivesDuplicatesRemover extends DuplicatesRemover {
 	}
 
 	@Override
-	public boolean equals(Solution s1, Solution s2) {
+	public boolean equals(Solution<?> s1, Solution<?> s2) {
 		
-		// It is false if both solutions have different solution types
-		if (!s1.getType().equalsIgnoreCase(s2.getType())) {
-			return false;
-		}
-
 		// It is false if they have different number of objectives
 		if (s1.getNumberOfObjectives() != s2.getNumberOfObjectives()) {
 			return false;

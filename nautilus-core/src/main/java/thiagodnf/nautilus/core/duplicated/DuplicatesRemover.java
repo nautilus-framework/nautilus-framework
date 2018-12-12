@@ -3,24 +3,17 @@ package thiagodnf.nautilus.core.duplicated;
 import java.util.ArrayList;
 import java.util.List;
 
-import thiagodnf.nautilus.core.model.Solution;
+import org.uma.jmetal.solution.Solution;
+
 import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class DuplicatesRemover {
 
-	public String getId() {
-		return Converter.toKey(getName());
-	}
-	
-	public String toString() {
-		return getName();
-	}
-	
-	public List<Solution> execute(List<Solution> solutions) {
+	public List<Solution<?>> execute(List<? extends Solution<?>> solutions) {
 		
-		List<Solution> nonRepeated = new ArrayList<>();
+		List<Solution<?>> nonRepeated = new ArrayList<>();
 
-		for (Solution solution : solutions) {
+		for (Solution<?> solution : solutions) {
 
 			if (!contains(nonRepeated, solution)) {
 				nonRepeated.add(solution.copy());
@@ -30,9 +23,9 @@ public abstract class DuplicatesRemover {
 		return nonRepeated;
 	}
 	
-	public boolean contains(List<Solution> solutions, Solution s2) {
+	public boolean contains(List<Solution<?>> solutions, Solution<?> s2) {
 
-		for (Solution s1 : solutions) {
+		for (Solution<?> s1 : solutions) {
 
 			if (equals(s1, s2)) {
 				return true;
@@ -42,7 +35,15 @@ public abstract class DuplicatesRemover {
 		return false;
 	}
 	
-	public abstract boolean equals(Solution s1, Solution s2);
+	public String getId() {
+		return Converter.toKey(getName());
+	}
+	
+	public String toString() {
+		return getName();
+	}
+	
+	public abstract boolean equals(Solution<?> s1, Solution<?> s2);
 	
 	public abstract String getName() ;
 }

@@ -1,6 +1,5 @@
 package thiagodnf.nautilus.web.service;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Ordering;
 
@@ -42,15 +40,18 @@ import thiagodnf.nautilus.core.operator.mutation.Mutation;
 import thiagodnf.nautilus.core.operator.selection.Selection;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.FormatterExtension;
-import thiagodnf.nautilus.plugin.extension.GUIExtension;
+import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
+import thiagodnf.nautilus.plugin.extension.MutationExtension;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
 import thiagodnf.nautilus.plugin.extension.OperatorExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
-import thiagodnf.nautilus.plugin.extension.QualityIndicatorExtension;
-import thiagodnf.nautilus.plugin.extension.VariableExtension;
+import thiagodnf.nautilus.plugin.extension.SelectionExtension;
 import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
-import thiagodnf.nautilus.plugin.factory.QualityIndicatorFactory;
+import thiagodnf.nautilus.plugin.factory.CrossoverFactory;
+import thiagodnf.nautilus.plugin.factory.MutationFactory;
+import thiagodnf.nautilus.plugin.factory.SelectionFactory;
 import thiagodnf.nautilus.web.exception.PluginNotFoundException;
 import thiagodnf.nautilus.web.exception.ProblemNotFoundException;
 
@@ -194,12 +195,8 @@ public class PluginService {
 		return plugin;
 	}
 	
-	public List<GUIExtension> getGUIExtensions(String pluginId) {
-		return pluginManager.getExtensions(GUIExtension.class, pluginId);
-	}
-	
-	public List<VariableExtension> getVariableExtensions(String pluginId) {
-		return pluginManager.getExtensions(VariableExtension.class, pluginId);
+	public List<InstanceDataExtension> getInstanceDataExtensions(String pluginId) {
+		return pluginManager.getExtensions(InstanceDataExtension.class, pluginId);
 	}
 	
 	public List<ProblemExtension> getProblemExtensions(String pluginId) {
@@ -210,37 +207,35 @@ public class PluginService {
 		return pluginManager.getExtensions(AlgorithmExtension.class, pluginId);
 	}
 	
-	public List<QualityIndicatorExtension> getQualityIndicatorExtensions(String pluginId) {
-		return pluginManager.getExtensions(QualityIndicatorExtension.class, pluginId);
+	public List<SelectionExtension> getSelectionExtensions(String pluginId) {
+		return pluginManager.getExtensions(SelectionExtension.class, pluginId);
 	}
 	
-	public GUIExtension getGUIExtension(String pluginId) {
-		return getGUIExtensions(pluginId)
+	public List<CrossoverExtension> getCrossoverExtensions(String pluginId) {
+		return pluginManager.getExtensions(CrossoverExtension.class, pluginId);
+	}
+	
+	public List<MutationExtension> getMutationExtensions(String pluginId) {
+		return pluginManager.getExtensions(MutationExtension.class, pluginId);
+	}
+	
+//	public List<QualityIndicatorExtension> getQualityIndicatorExtensions(String pluginId) {
+//		return pluginManager.getExtensions(QualityIndicatorExtension.class, pluginId);
+//	}
+	
+	public InstanceDataExtension getInstanceDataExtension(String pluginId) {
+		return getInstanceDataExtensions(pluginId)
 				.stream()
 				.findFirst()
-				.orElseThrow(() -> new RuntimeException("The gui extension was not found"));
+				.orElseThrow(() -> new RuntimeException("The instance data extension was not found"));
 	}
 	
 	public ProblemExtension getProblemExtension(String pluginId, String problemId) {
 		return getProblemExtensions(pluginId)
 				.stream()
-				//.filter(p -> p.getId().equalsIgnoreCase(problemId))
+				.filter(p -> Converter.toKey(p.getName()).equalsIgnoreCase(problemId))
 				.findFirst()
 				.orElseThrow(ProblemNotFoundException::new);
-	}
-	
-	public VariableExtension getVariableExtension(String pluginId) {
-		return getVariableExtensions(pluginId)
-				.stream()
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("The variable extension was not found"));
-	}
-	
-	public ObjectiveExtension getObjectiveExtension(String pluginId) {
-		return getObjectiveExtensions(pluginId)
-				.stream()
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("The objective was not found"));
 	}
 	
 	public OperatorExtension getOperatorExtension(String pluginId) {
@@ -250,8 +245,12 @@ public class PluginService {
 				.orElseThrow(() -> new RuntimeException("The operator extension was not found"));
 	}
 	
-	public List<ObjectiveExtension> getObjectiveExtensions(String pluginId) {
-		return pluginManager.getExtensions(ObjectiveExtension.class, pluginId);
+	public ObjectiveExtension getObjectiveExtension(String pluginId, String problemId) {
+		return pluginManager.getExtensions(ObjectiveExtension.class, pluginId)
+				.stream()
+				.filter(e -> e.getProblemId().equalsIgnoreCase(problemId))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("Objective Extension was not found"));
 	}
 
 	public List<OperatorExtension> getOperatorExtensions(String pluginId) {
@@ -265,14 +264,10 @@ public class PluginService {
 	public Map<String, List<AbstractObjective>> getObjectivesByGroups(String pluginId, String problemId) {
 
 		Map<String, List<AbstractObjective>> map = new HashMap<>();
-
-		ObjectiveExtension extension = getObjectiveExtension(pluginId);
 		
-		if (extension == null) {
-			throw new RuntimeException("The problemId was not found");
-		}
+		ObjectiveExtension extension = getObjectiveExtension(pluginId, problemId);
 
-		for (AbstractObjective objective : extension.getObjectives(problemId)) {
+		for (AbstractObjective objective : extension.getObjectives()) {
 
 			if (!map.containsKey(objective.getGroupName())) {
 				map.put(objective.getGroupName(), new ArrayList<>());
@@ -284,33 +279,25 @@ public class PluginService {
 		return map;
 	}
 	
-	public String formatInstanceFile(String pluginId, String problemId, String content) {
-
-		List<FormatterExtension> formatters = getFormatters(pluginId);
-
-		if (formatters.isEmpty()) {
-			return "The formatter was not defined";
-		}
-
-		return formatters.get(0).formatInstanceFile(problemId, content);
-	}
+//	public String formatInstanceFile(String pluginId, String problemId, String content) {
+//
+//		List<FormatterExtension> formatters = getFormatters(pluginId);
+//
+//		if (formatters.isEmpty()) {
+//			return "The formatter was not defined";
+//		}
+//
+//		return formatters.get(0).formatInstanceFile(problemId, content);
+//	}
 	
 	public List<AbstractObjective> getObjectivesByIds(String pluginId, String problemId, List<String> objectiveIds){
 		
-		ObjectiveExtension extension = getObjectiveExtension(pluginId);
+		ObjectiveExtension extension = getObjectiveExtension(pluginId, problemId);
 
-		if (extension == null) {
-			throw new RuntimeException("The plugin id was not found");
-		}
-
-		return extension.getObjectives(problemId)
+		return extension.getObjectives()
 				.stream()
 				.filter(o -> objectiveIds.contains(o.getId()))
 				.collect(Collectors.toList());
-	}
-	
-	public void store(String filename, MultipartFile file) {
-		fileService.storePlugin(filename, file);
 	}
 	
 	public AlgorithmFactory getAlgorithmFactory(String pluginId) {
@@ -326,16 +313,55 @@ public class PluginService {
 		return factory;
 	}
 	
-	public QualityIndicatorFactory getQualityIndicatorFactory(String pluginId) {
+	public SelectionFactory getSelectionFactory(String pluginId) {
 
-		QualityIndicatorFactory factory = new QualityIndicatorFactory();
+		SelectionFactory factory = new SelectionFactory();
 
-		for (QualityIndicatorExtension extension : getQualityIndicatorExtensions(pluginId)) {
-			factory.addExtension(extension);
+		for (SelectionExtension extension : getSelectionExtensions(pluginId)) {
+			factory.getExtensions().add(extension);
 		}
+
+		Collections.sort(factory.getExtensions(), Ordering.usingToString());
 
 		return factory;
 	}
+	
+	public CrossoverFactory getCrossoverFactory(String pluginId) {
+
+		CrossoverFactory factory = new CrossoverFactory();
+
+		for (CrossoverExtension extension : getCrossoverExtensions(pluginId)) {
+			factory.getExtensions().add(extension);
+		}
+
+		Collections.sort(factory.getExtensions(), Ordering.usingToString());
+
+		return factory;
+	}
+	
+	public MutationFactory getMutationFactory(String pluginId) {
+
+		MutationFactory factory = new MutationFactory();
+
+		for (MutationExtension extension : getMutationExtensions(pluginId)) {
+			factory.getExtensions().add(extension);
+		}
+
+		Collections.sort(factory.getExtensions(), Ordering.usingToString());
+
+		return factory;
+	}
+	
+//	public QualityIndicatorFactory getQualityIndicatorFactory(String pluginId) {
+//
+//		QualityIndicatorFactory factory = new QualityIndicatorFactory();
+//
+//		for (QualityIndicatorExtension extension : getQualityIndicatorExtensions(pluginId)) {
+//			factory.addExtension(extension);
+//		}
+//
+//		return factory;
+//	}
 	
 	public Crossover<?> getCrossoversById(String pluginId, String problemId, String crossoverId){
 		
@@ -348,16 +374,16 @@ public class PluginService {
 				.orElseThrow(() -> new RuntimeException("The crossoverId was not found"));			
 	}
 
-	public List<Crossover<?>> getCrossovers(String pluginId, String problemId) {
-		
-		OperatorExtension extension = getOperatorExtension(pluginId);
-		
-		if(extension == null) {
-			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
-		}
-		
-		return extension.getCrossoverOperators(problemId);
-	}
+//	public List<Crossover<?>> getCrossovers(String pluginId, String problemId) {
+//		
+//		OperatorExtension extension = getOperatorExtension(pluginId);
+//		
+//		if(extension == null) {
+//			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
+//		}
+//		
+//		return extension.getCrossoverOperators(problemId);
+//	}
 	
 	public Selection<?> getSelectionsById(String pluginId, String problemId, String selectionId){
 		
@@ -370,16 +396,16 @@ public class PluginService {
 				.orElseThrow(() -> new RuntimeException("The selectionId was not found"));			
 	}
 	
-	public List<Selection<?>> getSelections(String pluginId, String problemId) {
-		
-		OperatorExtension extension = getOperatorExtension(pluginId);
-		
-		if(extension == null) {
-			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
-		}
-		
-		return extension.getSelectionOperators(problemId);
-	}
+//	public List<Selection<?>> getSelections(String pluginId, String problemId) {
+//		
+//		OperatorExtension extension = getOperatorExtension(pluginId);
+//		
+//		if(extension == null) {
+//			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
+//		}
+//		
+//		return extension.getSelectionOperators(problemId);
+//	}
 	
 	public Mutation<?> getMutationsById(String pluginId, String problemId, String mutationId){
 		
@@ -392,16 +418,16 @@ public class PluginService {
 				.orElseThrow(() -> new RuntimeException("The mutationId was not found"));			
 	}
 	
-	public List<Mutation<?>> getMutations(String pluginId, String problemId) {
-		
-		OperatorExtension extension = getOperatorExtension(pluginId);
-		
-		if(extension == null) {
-			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
-		}
-		
-		return extension.getMutationOperators(problemId);
-	}
+//	public List<Mutation<?>> getMutations(String pluginId, String problemId) {
+//		
+//		OperatorExtension extension = getOperatorExtension(pluginId);
+//		
+//		if(extension == null) {
+//			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
+//		}
+//		
+//		return extension.getMutationOperators(problemId);
+//	}
 
 	public void deletePlugin(String pluginId) {
 		this.pluginManager.deletePlugin(pluginId);

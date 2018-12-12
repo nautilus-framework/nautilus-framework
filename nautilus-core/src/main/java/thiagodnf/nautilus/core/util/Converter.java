@@ -6,9 +6,17 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import org.uma.jmetal.problem.BinaryProblem;
+import org.uma.jmetal.problem.IntegerProblem;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.BinarySolution;
+import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.point.PointSolution;
+import org.uma.jmetal.util.point.util.distance.DominanceDistance;
+import org.uma.jmetal.util.solutionattribute.impl.CrowdingDistance;
+import org.uma.jmetal.util.solutionattribute.impl.DominanceRanking;
 
 import thiagodnf.nautilus.core.algorithm.RNSGAII.PointSolutionUtils;
 
@@ -130,18 +138,23 @@ public class Converter {
 //		return newSolution;
 //	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Solution<?> toJMetalSolutionWithOutObjectives(Problem problem, thiagodnf.nautilus.core.model.Solution solution) {
+	public static Solution<?> toJMetalSolutionWithOutObjectives(Problem<?> problem, Solution<?> solution) {
 		
-		Solution newSolution = (Solution) problem.createSolution();
+		Solution<?> newSolution = (Solution<?>) problem.createSolution();
 
 		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-			newSolution.setVariableValue(i, solution.getVariables().get(i));
-		}
 
-		for (Entry<String, String> entry : solution.getProperties().entrySet()) {
-			newSolution.setAttribute(entry.getKey(), entry.getValue());
+			if (problem instanceof IntegerProblem) {
+				((IntegerSolution) newSolution).setVariableValue(i, (Integer) solution.getVariableValue(i));
+			}
+			if (problem instanceof BinaryProblem) {
+				((BinarySolution) newSolution).setVariableValue(i, (BinarySet) solution.getVariableValue(i));
+			}
 		}
+		
+//		for (Entry<String, String> entry : solution.getProperties().entrySet()) {
+//			newSolution.setAttribute(entry.getKey(), entry.getValue());
+//		}
 		
 		return newSolution;
 	}
@@ -218,5 +231,19 @@ public class Converter {
 		}
 
 		return result;
+	}
+
+	public static List<? extends Solution<?>> clearAttributes(List<? extends Solution<?>> rawSolutions) {
+		
+		for(Solution<?> s : rawSolutions) {
+			
+			s.setAttribute(new CrowdingDistance<>().getAttributeIdentifier(), null);
+			s.setAttribute(new DominanceRanking<>().getAttributeIdentifier(), null);
+			
+			
+		}
+		
+		// TODO Auto-generated method stub
+		return rawSolutions;
 	}
 }

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
@@ -48,7 +48,7 @@ public class SolutionController {
 			throw new RuntimeException("The solution Index is invalid");
 		}
 		
-		Solution solution = execution.getSolutions().get(solutionIndex);
+		Solution<?> solution = execution.getSolutions().get(solutionIndex);
 		
 		Parameters parameters = execution.getParameters();
 		
@@ -60,7 +60,7 @@ public class SolutionController {
 		Map<String, Double> objectivesMap = new HashMap<>();
 
 		for (int i = 0; i < objectives.size(); i++) {
-			objectivesMap.put(objectives.get(i).getName(), solution.getObjectives().get(i));
+			objectivesMap.put(objectives.get(i).getName(), solution.getObjective(i));
 		}
 		
 		model.addAttribute("objectivesMap", objectivesMap);
@@ -84,14 +84,14 @@ public class SolutionController {
 			throw new RuntimeException("The solutionIndex is invalid");
 		}
 		
-		Solution solution = execution.getSolutions().get(solutionIndex);
+		Solution<?> solution = execution.getSolutions().get(solutionIndex);
 
-		solution.getProperties().put("selected", "1");
+		solution.setAttribute("selected", "1");
 
 		for (String key : parameters.keySet()) {
 
 			if (key.startsWith("feedback-for-variable")) {
-				solution.getProperties().put(key, parameters.get(key));
+				solution.setAttribute(key, parameters.get(key));
 			}
 		}
 

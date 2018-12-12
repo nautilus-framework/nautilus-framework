@@ -1,58 +1,53 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<head th:replace="fragments/head :: default(${filename})"></head>
+	<head th:replace="fragments/head :: default(${filename})"></head>
 
-<body th:with="pluginId=${plugin.getDescriptor().getPluginId()} , problemId=${problem.getId()}">
+	<body th:with="
+		descriptor = ${plugin.getDescriptor()},
+		pluginId = ${descriptor.getPluginId()},
+		pluginName = ${descriptor.getPluginDescription()},
+		problemId = ${#converter.toKey(problem.name)}">
 
-	<div th:replace="fragments/navbar :: default('home')"></div>
-	
-	<div class="page-header page-header-with-navbar">
-		<div class="container">
+		<div th:replace="fragments/navbar :: default('home')"></div>
+		
+		<div class="page-header page-header-with-navbar">
+			<div class="container">
+				<div class="row">
+					<div class="col-8">
+						<h6 class="title">
+							<a th:href="@{/}">Home</a> 
+							<span class="path-divider">/</span>
+							<a th:href="@{/plugin/} + ${pluginId}" th:text="${pluginName}"></a>
+							<span class="path-divider">/</span>
+							<a th:href="@{/problem/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.name}"></a>
+							<span class="path-divider">/</span>
+							<a th:href="@{/instance-file/} + ${pluginId} + @{/} + ${problemId} +@{/} + ${filename}"th:text="${filename}"></a>
+						</h6>
+					</div>
+					<div class="col-4 float-right">
+						<a class="btn btn-success btn-sm float-right" th:href="@{/optimize} + @{/} + ${pluginId} + @{/} + ${problemId} +@{/}+${filename}">Optimize</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container page-navbar">
 			<div class="row">
-				<div class="col-8">
-					<h6 class="title">
-						<a th:href="@{/}">Home</a> 
-						<span class="path-divider">/</span>
-						<a th:href="@{/plugin/} + ${pluginId}"	th:text="${plugin.getDescriptor().getPluginDescription()}"></a>
-						<span class="path-divider">/</span>
-						<a th:href="@{/problem} + @{/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.getName()}"></a>
-						<span class="path-divider">/</span>
-						<a th:href="@{/instance-file} + @{/} + ${pluginId} + @{/} + ${problemId} +@{/}+${filename}"th:text="${filename}"></a>
-					</h6>
-				</div>
-				<div class="col-4 float-right">
-					<a class="btn btn-success btn-sm float-right" th:href="@{/optimize} + @{/} + ${pluginId} + @{/} + ${problemId} +@{/}+${filename}">Optimize</a>
+				<div class="col-12">
+					<nav>
+						<div class="nav nav-tabs" id="nav-tab" role="tablist" >
+							<a th:each="tab,i : ${tabs}" class="nav-item nav-link" role="tab" data-toggle="tab" th:href="'#'+${tab.getId()}" th:text="${tab.getName()}"></a>
+						</div>
+					</nav>
+					<div class="tab-content">
+						<div th:each="tab,i : ${tabs}" role="tabpanel" class="tab-pane fade"th:id="${tab.getId()}" th:utext="${tab.getTabContent().getHTML()}"></div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 	
-	<div class="container page-navbar">
-		<div class="row">
-			<div class="col-12">
-				<nav>
-					<div class="nav nav-tabs" id="nav-tab" role="tablist" >
-						<a th:each="tab,i : ${tabs}" 
-							class="nav-item nav-link" 
-							role="tab" data-toggle="tab" 
-							th:href="'#'+${tab.getId()}" 
-							th:text="${tab.getName()}"/>
-					</div>
-				</nav>
-				<div class="tab-content">
-					<div th:each="tab,i : ${tabs}" 
-						role="tabpanel" 
-						class="tab-pane fade" 
-						th:id="${tab.getId()}"  
-						th:utext="${tab.getTabContent().getHTML()}"/>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div th:replace="fragments/footer :: footer"></div>
-</body>
+		<div th:replace="fragments/footer :: footer"></div>
+	</body>
 
 </html>

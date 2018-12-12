@@ -4,9 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.correlation.Correlation;
 import thiagodnf.nautilus.core.correlation.Correlation.CorrelationItem;
 import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
@@ -61,7 +59,7 @@ public class ContinueController {
 		String pluginId = parameters.getPluginId();
 		String problemId = parameters.getProblemId();
 		
-		List<Solution> solutions = execution.getSolutions();
+		List<? extends Solution<?>> solutions = execution.getSolutions();
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 //		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, Arrays.asList("alive-mutants", "cost"));
@@ -119,11 +117,12 @@ public class ContinueController {
 			solutions = normalizer.normalize(objectives, solutions);
 		}
 		
-		List<Solution> selectedSolutions = new ArrayList<>();
+		List<Solution<?>> selectedSolutions = new ArrayList<>();
 		
 		// Step 1: Separate the selected solutions
-		for(Solution sol : execution.getSolutions()) {
-			if(sol.getProperties().containsKey("selected")) {
+		for(Solution<?> sol : execution.getSolutions()) {
+			
+			if(sol.getAttribute("selected") != null) {
 				selectedSolutions.add(sol);
 			}
 		}
@@ -188,11 +187,11 @@ public class ContinueController {
 //		}
 		
 		
-		for(Solution s : selectedSolutions) {
+		for(Solution<?> s : selectedSolutions) {
 			
 			System.out.println(s);
 			
-			for (int i = 0; i < s.getVariables().size(); i++) {
+			for (int i = 0; i < s.getNumberOfVariables(); i++) {
 
 				//Variable v = s.getVariables().get(i);
 				Variable v = new Variable();
@@ -201,13 +200,13 @@ public class ContinueController {
 				
 				String value = v.getValue();
 				
-				if (s.getType().equalsIgnoreCase(BinarySolution.class.getName())) {
-					value = String.valueOf(i);
-					
-					if(v.getValue().equalsIgnoreCase("false")) {
-						continue;
-					}
-				}
+//				if (s.getType().equalsIgnoreCase(BinarySolution.class.getName())) {
+//					value = String.valueOf(i);
+//					
+//					if(v.getValue().equalsIgnoreCase("false")) {
+//						continue;
+//					}
+//				}
 				
 				CorrelationItem item = null;
 				

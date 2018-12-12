@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.colorize.Colorize;
 import thiagodnf.nautilus.core.duplicated.DuplicatesRemover;
-import thiagodnf.nautilus.core.model.Solution;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.web.model.Execution;
@@ -62,7 +62,7 @@ public class ExecutionController {
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		
-		List<Solution> solutions = execution.getSolutions();
+		List<? extends Solution<?>> solutions = execution.getSolutions();
 		
 		solutions = duplicatesRemover.execute(solutions);
 		
@@ -141,23 +141,23 @@ public class ExecutionController {
 			
 		Execution execution = executionService.findById(executionId);
 
-		for (Solution solution : execution.getSolutions()) {
-
-			List<String> keysToRemove = new ArrayList<>();
-
-			for (Entry<String, String> entry : solution.getProperties().entrySet()) {
-
-				if (entry.getKey().startsWith("feedback-for-variable-")) {
-					keysToRemove.add(entry.getKey());
-				}
-			}
-
-			for (String key : keysToRemove) {
-				solution.getProperties().remove(key);
-			}
-			
-			solution.getProperties().remove("selected");
-		}
+//		for (Solution solution : execution.getSolutions()) {
+//
+//			List<String> keysToRemove = new ArrayList<>();
+//
+//			for (Entry<String, String> entry : solution.getProperties().entrySet()) {
+//
+//				if (entry.getKey().startsWith("feedback-for-variable-")) {
+//					keysToRemove.add(entry.getKey());
+//				}
+//			}
+//
+//			for (String key : keysToRemove) {
+//				solution.getProperties().remove(key);
+//			}
+//			
+//			solution.getProperties().remove("selected");
+//		}
 
 		execution = executionService.save(execution);
 

@@ -1,10 +1,10 @@
-package thiagodnf.nautilus.plugin.toy.objective;
+package thiagodnf.nautilus.plugin.toy.encoding.objective;
 
+import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.solution.IntegerSolution;
 
 public class NumberOfObjective extends AbstractObjective {
 
@@ -13,7 +13,7 @@ public class NumberOfObjective extends AbstractObjective {
 	public NumberOfObjective(int searchFor) {
 		this.searchFor = searchFor;
 	}
-	
+
 	@Override
 	public double calculate(InstanceData data, Solution<?> sol) {
 
@@ -30,22 +30,22 @@ public class NumberOfObjective extends AbstractObjective {
 
 		return (double) numbers / (double) solution.getNumberOfVariables();
 	}
-	
+
 	@Override
 	public double getMinimumValue() {
 		return -1.0;
 	}
-	
+
 	@Override
 	public double getMaximumValue() {
 		return 0.0;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Number of " + this.searchFor + "s";
 	}
-	
+
 	@Override
 	public boolean isMaximize() {
 		return true;

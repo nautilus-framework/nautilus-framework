@@ -1,6 +1,6 @@
 package thiagodnf.nautilus.core.duplicated;
 
-import thiagodnf.nautilus.core.model.Solution;
+import org.uma.jmetal.solution.Solution;
 
 public class NoDuplicatesRemover extends DuplicatesRemover {
 
@@ -10,7 +10,7 @@ public class NoDuplicatesRemover extends DuplicatesRemover {
 	}
 
 	@Override
-	public boolean equals(Solution s1, Solution s2) {
+	public boolean equals(Solution<?> s1, Solution<?> s2) {
 		return false;
 	}
 }

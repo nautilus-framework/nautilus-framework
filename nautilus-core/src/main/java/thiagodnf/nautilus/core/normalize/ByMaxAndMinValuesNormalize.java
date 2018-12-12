@@ -2,12 +2,13 @@ package thiagodnf.nautilus.core.normalize;
 
 import java.util.List;
 
-import thiagodnf.nautilus.core.model.Solution;
+import org.uma.jmetal.solution.Solution;
+
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class ByMaxAndMinValuesNormalize extends Normalize {
 
-	public List<Solution> normalize(List<AbstractObjective> objectives, List<Solution> solutions) {
+	public List<Solution<?>> normalize(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
 
 		double[] minValues = new double[objectives.size()];
 		double[] maxValues = new double[objectives.size()];

@@ -8,6 +8,7 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public interface ObjectiveExtension extends ExtensionPoint {
 
-	public List<AbstractObjective> getObjectives(String problemId);
-	
+	public abstract String getProblemId();
+
+	public abstract List<AbstractObjective> getObjectives();
 }

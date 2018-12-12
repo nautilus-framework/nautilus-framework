@@ -1,15 +1,13 @@
 package thiagodnf.nautilus.core.colorize;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.distance.JaccardDistance;
-import thiagodnf.nautilus.core.model.Solution;
 
 public class BySimilarityColorize extends Colorize {
 
 	@Override
-	public double getDistance(Solution s, Solution selected) {
+	public double getDistance(Solution<?> s, Solution<?> selected) {
 		
 //		List<String> variables1 = s.getVariables()
 //				.stream()

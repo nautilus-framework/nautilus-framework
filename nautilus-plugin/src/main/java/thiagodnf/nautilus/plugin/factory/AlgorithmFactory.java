@@ -8,21 +8,21 @@ import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.algorithm.Builder;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
-import thiagodnf.nautilus.plugin.provider.algorithm.BruteForceSearchExtension;
-import thiagodnf.nautilus.plugin.provider.algorithm.NSGAIIIProvider;
-import thiagodnf.nautilus.plugin.provider.algorithm.NSGAIIProvider;
-import thiagodnf.nautilus.plugin.provider.algorithm.RNSGAIIProvider;
-import thiagodnf.nautilus.plugin.provider.algorithm.SPEA2Provider;
+import thiagodnf.nautilus.plugin.extension.algorithm.BruteForceSearchExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIIExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.RNSGAIIExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.SPEA2Extension;
 
 public class AlgorithmFactory {
-	
+
 	private List<AlgorithmExtension> extensions = new ArrayList<>();
-	
+
 	public AlgorithmFactory() {
-		getExtensions().add(new NSGAIIProvider());
-		getExtensions().add(new SPEA2Provider());
-		getExtensions().add(new RNSGAIIProvider());
-		getExtensions().add(new NSGAIIIProvider());
+		getExtensions().add(new NSGAIIExtension());
+		getExtensions().add(new SPEA2Extension());
+		getExtensions().add(new RNSGAIIExtension());
+		getExtensions().add(new NSGAIIIExtension());
 		getExtensions().add(new BruteForceSearchExtension());
 	}
 
@@ -34,7 +34,7 @@ public class AlgorithmFactory {
 
 		for (AlgorithmExtension extension : getExtensions()) {
 
-			if (name.equalsIgnoreCase(extension.toString())) {
+			if (name.equalsIgnoreCase(extension.getId())) {
 				return extension.getAlgorithm(builder);
 			}
 		}

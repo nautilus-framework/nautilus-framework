@@ -10,5 +10,7 @@ public interface AlgorithmExtension extends ExtensionPoint {
 
 	public Algorithm<? extends Solution<?>> getAlgorithm(Builder builder);
 	
-	public String toString();
+	public String getName();
+	
+	public String getId();
 }

@@ -27,7 +27,7 @@ public class QualityIndicatorsController {
 		
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
-		model.addAttribute("qualityIndicatorsFactory", pluginService.getQualityIndicatorFactory(pluginId));
+		//model.addAttribute("qualityIndicatorsFactory", pluginService.getQualityIndicatorFactory(pluginId));
 		model.addAttribute("executions", executionService.findByPluginIdAndProblemId(pluginId, problemId));
 		
 		return "quality-indicators";

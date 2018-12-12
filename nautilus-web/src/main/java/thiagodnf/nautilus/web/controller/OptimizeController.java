@@ -31,8 +31,12 @@ import thiagodnf.nautilus.core.listener.OnProgressListener;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
+import thiagodnf.nautilus.plugin.factory.CrossoverFactory;
+import thiagodnf.nautilus.plugin.factory.MutationFactory;
+import thiagodnf.nautilus.plugin.factory.SelectionFactory;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.service.ExecutionService;
@@ -74,26 +78,27 @@ public class OptimizeController {
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 		
 		model.addAttribute("algorithmFactory", pluginService.getAlgorithmFactory(pluginId));
-		model.addAttribute("selections", pluginService.getSelections(pluginId, problemId));
-		model.addAttribute("crossovers", pluginService.getCrossovers(pluginId, problemId));
-		model.addAttribute("mutations", pluginService.getMutations(pluginId, problemId));
+		model.addAttribute("selectionFactory", pluginService.getSelectionFactory(pluginId));
+		model.addAttribute("crossoverFactory", pluginService.getCrossoverFactory(pluginId));
+		model.addAttribute("mutationFactory", pluginService.getMutationFactory(pluginId));
+		
 		model.addAttribute("objectiveGroups", pluginService.getObjectivesByGroups(pluginId, problemId));
 		
 		return "optimize";
 	}
 	
-	@SuppressWarnings({"rawtypes" })
-	public List<Solution> getInitialPopulation(Problem problem, Execution execution) {
+	@SuppressWarnings({ "rawtypes" })
+	public List<? extends Solution<?>> getInitialPopulation(Problem<?> problem, Execution execution) {
 
 		if (execution == null) {
 			return null;
 		}
 
-		List<Solution> initialPopulation = new ArrayList<>();
+		List<? extends Solution<?>> initialPopulation = new ArrayList<>();
 
-		for (thiagodnf.nautilus.core.model.Solution sol : execution.getSolutions()) {
-			initialPopulation.add(Converter.toJMetalSolutionWithOutObjectives(problem,sol));
-		}
+//		for (thiagodnf.nautilus.core.model.Solution sol : execution.getSolutions()) {
+//			initialPopulation.add(Converter.toJMetalSolutionWithOutObjectives(problem, sol));
+//		}
 
 		return initialPopulation;
 	}
@@ -125,19 +130,23 @@ public class OptimizeController {
         	
         	String pluginId = parameters.getPluginId();
 			String problemId = parameters.getProblemId();
+			String filename = parameters.getFilename();
 			
-			Path instance = fileService.getInstanceFile(pluginId, problemId, parameters.getFilename());
+			Path instance = fileService.getInstanceFile(pluginId, problemId, filename);
 			
 			List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
         	
 			ProblemExtension problemExtension = pluginService.getProblemExtension(pluginId, problemId);
+			InstanceDataExtension instanceDataExtension = pluginService.getInstanceDataExtension(pluginId);
 			
-			//InstanceData data = problemExtension.readInstanceData(instance);
-			InstanceData data = null;
+			InstanceData instanceData = instanceDataExtension.getInstanceData(instance);
 			
 			// Factories
 			
 			AlgorithmFactory algorithmFactory = pluginService.getAlgorithmFactory(pluginId);
+			SelectionFactory selectionFactory = pluginService.getSelectionFactory(pluginId);
+			CrossoverFactory crossoverFactory = pluginService.getCrossoverFactory(pluginId);
+			MutationFactory mutationFactory = pluginService.getMutationFactory(pluginId);
 			
 			// Builder
 			
@@ -145,18 +154,12 @@ public class OptimizeController {
 			
 			builder.setPopulationSize(parameters.getPopulationSize());
 			builder.setMaxEvaluations(parameters.getMaxEvaluations());
-			builder.setProblem(problemExtension.createProblem(data, objectives));
+			builder.setProblem(problemExtension.getProblem(instanceData, objectives));
 			builder.setInitialPopulation(getInitialPopulation(builder.getProblem(), lastExecution));
         	
-			builder.setSelection(pluginService.getSelectionsById(pluginId, problemId, parameters.getSelectionName()));
-			
-			builder.setCrossover(pluginService.getCrossoversById(pluginId, problemId, parameters.getCrossoverName()));
-			builder.getCrossover().setDistributionIndex(parameters.getCrossoverDistribution());
-			builder.getCrossover().setProbability(parameters.getCrossoverProbability());
-
-			builder.setMutation(pluginService.getMutationsById(pluginId, problemId, parameters.getMutationName()));
-			builder.getMutation().setDistributionIndex(parameters.getMutationDistribution());
-			builder.getMutation().setProbability(parameters.getMutationProbability());
+			builder.setSelection(selectionFactory.getSelection(parameters.getSelectionId()));
+			builder.setCrossover(crossoverFactory.getCrossover(parameters.getCrossoverId(), parameters.getCrossoverProbability(), parameters.getCrossoverDistribution()));
+			builder.setMutation(mutationFactory.getMutation(parameters.getMutationId(), parameters.getMutationProbability(), parameters.getMutationDistribution()));
 			
 			// Algorithm
 			
@@ -184,7 +187,7 @@ public class OptimizeController {
 				
 			}else {
 				
-				Algorithm algorithm = algorithmFactory.getAlgorithm(parameters.getAlgorithmName(), builder);
+				Algorithm algorithm = algorithmFactory.getAlgorithm(parameters.getAlgorithmId(), builder);
 			    
 				AlgorithmListener alg = (AlgorithmListener) algorithm;
 				
@@ -201,14 +204,14 @@ public class OptimizeController {
 			    rawSolutions = (List<? extends Solution<?>>) algorithm.getResult();
 			}
 		    
-		   	webSocketService.sendTitle(sessionId, "Converting the solutions...");
+		   	webSocketService.sendTitle(sessionId, "Clearing the attributes from solutions...");
 		   	
-		   	List<thiagodnf.nautilus.core.model.Solution> solutions = Converter.toSolutions(rawSolutions);
+		   	List<? extends Solution<?>> solutions = Converter.clearAttributes(rawSolutions);
 		   	
 			webSocketService.sendTitle(sessionId, "Setting ids");
 
 			for (int i = 0; i < solutions.size(); i++) {
-				solutions.get(i).getProperties().put("id", String.valueOf(i));
+				solutions.get(i).setAttribute("id", String.valueOf(i));
 			}
 		   	
 			webSocketService.sendTitle(sessionId, "Preparing the results...");

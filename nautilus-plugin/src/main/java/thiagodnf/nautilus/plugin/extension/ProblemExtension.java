@@ -10,7 +10,9 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public interface ProblemExtension extends ExtensionPoint {
 
-	public Problem<?> createProblem(InstanceData data, List<AbstractObjective> objectives);
+	public Problem<?> getProblem(InstanceData data, List<AbstractObjective> objectives);
 	
 	public String getName();
+	
+	public String getId();
 }

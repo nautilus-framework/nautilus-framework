@@ -6,19 +6,11 @@ import java.util.List;
 import org.pf4j.ExtensionPoint;
 
 import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.core.model.Variable;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.problem.AbstractProblem;
+import thiagodnf.nautilus.plugin.gui.Tab;
 
 public interface InstanceDataExtension extends ExtensionPoint {
 
-	public AbstractProblem<?> createProblem(InstanceData instanceData, List<AbstractObjective> objectives);
+	public InstanceData getInstanceData(Path path);
 	
-	public InstanceData readInstanceData(Path path);
-	
-	public List<Variable> getVariables(InstanceData data);
-	
-	public String getName();
-	
-	public String getId();
+	public List<Tab> getTabs(InstanceData data);
 }
