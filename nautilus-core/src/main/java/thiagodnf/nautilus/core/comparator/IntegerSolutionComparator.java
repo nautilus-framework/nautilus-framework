@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import thiagodnf.nautilus.core.model.Solution;
+import thiagodnf.nautilus.core.model.GenericSolution;
 
-public class IntegerSolutionComparator implements Comparator<Solution>{
+public class IntegerSolutionComparator implements Comparator<GenericSolution>{
 
 	@Override
-	public int compare(Solution s1, Solution s2) {
+	public int compare(GenericSolution s1, GenericSolution s2) {
 
 		if (s1.getNumberOfObjectives() != s2.getNumberOfObjectives()) {
 			return 0;

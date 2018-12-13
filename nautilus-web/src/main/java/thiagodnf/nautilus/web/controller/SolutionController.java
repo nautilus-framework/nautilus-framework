@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import thiagodnf.nautilus.core.model.Solution;
+import thiagodnf.nautilus.core.model.GenericSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
@@ -48,7 +48,7 @@ public class SolutionController {
 			throw new RuntimeException("The solution Index is invalid");
 		}
 		
-		Solution solution = execution.getSolutions().get(solutionIndex);
+		GenericSolution solution = execution.getSolutions().get(solutionIndex);
 		
 		Parameters parameters = execution.getParameters();
 		
@@ -84,7 +84,7 @@ public class SolutionController {
 			throw new RuntimeException("The solutionIndex is invalid");
 		}
 		
-		Solution solution = execution.getSolutions().get(solutionIndex);
+		GenericSolution solution = execution.getSolutions().get(solutionIndex);
 
 //		solution.setAttribute("selected", "1");
 		solution.getAttributes().put("selected", "1");

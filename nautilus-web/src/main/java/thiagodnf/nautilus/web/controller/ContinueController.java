@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import thiagodnf.nautilus.core.correlation.Correlation;
 import thiagodnf.nautilus.core.correlation.Correlation.CorrelationItem;
 import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.core.model.Solution;
+import thiagodnf.nautilus.core.model.GenericSolution;
 import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
@@ -59,7 +59,7 @@ public class ContinueController {
 		String problemId = parameters.getProblemId();
 		
 //		List<? extends Solution<?>> solutions = execution.getSolutions();
-		List<Solution> solutions = execution.getSolutions();
+		List<GenericSolution> solutions = execution.getSolutions();
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 //		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, Arrays.asList("alive-mutants", "cost"));
@@ -118,10 +118,10 @@ public class ContinueController {
 //			solutions = normalizer.normalize(objectives, solutions);
 //		}
 		
-		List<Solution> selectedSolutions = new ArrayList<>();
+		List<GenericSolution> selectedSolutions = new ArrayList<>();
 		
 		// Step 1: Separate the selected solutions
-		for(Solution sol : execution.getSolutions()) {
+		for(GenericSolution sol : execution.getSolutions()) {
 			
 			if(sol.getAttributes().get("selected") != null) {
 				selectedSolutions.add(sol);
@@ -188,7 +188,7 @@ public class ContinueController {
 //		}
 		
 		
-		for(Solution s : selectedSolutions) {
+		for(GenericSolution s : selectedSolutions) {
 			
 			System.out.println(s);
 			

@@ -16,6 +16,7 @@ import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.point.PointSolution;
 
 import thiagodnf.nautilus.core.algorithm.RNSGAII.PointSolutionUtils;
+import thiagodnf.nautilus.core.model.GenericSolution;
 
 public class Converter {
 	
@@ -31,34 +32,37 @@ public class Converter {
 		return text.replaceAll("[^A-Za-z0-9]", "-").toLowerCase();
 	}
 	
-	public static thiagodnf.nautilus.core.model.Solution toNautilusSolution(Solution<?> solution) {
-
-		thiagodnf.nautilus.core.model.Solution newSolution = new thiagodnf.nautilus.core.model.Solution();
+	public static GenericSolution toGenericSolution(Solution<?> solution) {
+		
+		int numberOfObjectives = solution.getNumberOfObjectives();
+		int numberOfVariables = solution.getNumberOfVariables();
+		
+		GenericSolution newSolution = new GenericSolution(numberOfObjectives, numberOfVariables);
 
 		for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
-			newSolution.getObjectives().add(solution.getObjective(i));
+			newSolution.setObjective(i, solution.getObjective(i));
 		}
 
 		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-			newSolution.getVariables().add(solution.getVariableValue(i));
+			newSolution.setVariableValue(i, solution.getVariableValue(i));
 		}
 
 		return newSolution;
 	}
 	
-	public static List<thiagodnf.nautilus.core.model.Solution> toNautilusSolutions(List<? extends Solution<?>> population) {
+	public static List<GenericSolution> toGenericSolutions(List<? extends Solution<?>> solutions) {
 
-		List<thiagodnf.nautilus.core.model.Solution> solutions = new ArrayList<>();
+		List<GenericSolution> newSolutions = new ArrayList<>();
 
-		for (Solution<?> s : population) {
-			solutions.add(toNautilusSolution(s));
+		for (Solution<?> solution : solutions) {
+			newSolutions.add(toGenericSolution(solution));
 		}
 
-		return solutions;
+		return newSolutions;
 	}
 	
-	public static PointSolution toPointSolution(thiagodnf.nautilus.core.model.Solution solution) {
-		return PointSolutionUtils.createSolution(toDoubleArray(solution.getObjectives()));
+	public static PointSolution toPointSolution(GenericSolution solution) {
+		return PointSolutionUtils.createSolution(solution.getObjectives());
 	}
 	
 //	public static List<thiagodnf.nautilus.core.model.Solution> toSolutions(List<? extends Solution<?>> population) {
@@ -155,7 +159,7 @@ public class Converter {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Solution<?> toJMetalSolution(Problem problem, thiagodnf.nautilus.core.model.Solution solution) {
+	public static Solution<?> toJMetalSolution(Problem problem, GenericSolution solution) {
 
 		Solution newSolution = (Solution) problem.createSolution();
 
@@ -167,7 +171,7 @@ public class Converter {
 			newSolution.setVariableValue(i, solution.getVariables().get(i));
 		}
 
-		for (Entry<String, String> entry : solution.getAttributes().entrySet()) {
+		for (Entry<Object, Object> entry : solution.getAttributes().entrySet()) {
 			newSolution.setAttribute(entry.getKey(), entry.getValue());
 		}
 
@@ -175,11 +179,11 @@ public class Converter {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List<? extends Solution<?>> toJMetalSolutions(Problem problem, List<thiagodnf.nautilus.core.model.Solution> population) {
+	public static List<? extends Solution<?>> toJMetalSolutions(Problem problem, List<thiagodnf.nautilus.core.model.GenericSolution> population) {
 
 		List solutions = new ArrayList<>();
 
-		for (thiagodnf.nautilus.core.model.Solution solution : population) {
+		for (thiagodnf.nautilus.core.model.GenericSolution solution : population) {
 			solutions.add(toJMetalSolution(problem, solution));
 		}
 

@@ -53,8 +53,8 @@ public class ExecutionController {
 		Parameters parameters = execution.getParameters();
 		Settings settings = execution.getSettings();
 		
-		DuplicatesRemover duplicatesRemover = pluginService.getDuplicatesRemovers().get(settings.getDuplicatesRemover());
 		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalize());
+		DuplicatesRemover duplicatesRemover = pluginService.getDuplicatesRemovers().get(settings.getDuplicatesRemover());
 		Colorize colorizer = pluginService.getColorizers().get(settings.getColorize());
 		
 		String pluginId = parameters.getPluginId();
@@ -62,20 +62,20 @@ public class ExecutionController {
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		
-//		List<? extends Solution<?>> solutions = execution.getSolutions();
-//		
-//		solutions = duplicatesRemover.execute(solutions);
-//		
-//		if (objectives.size() != 1) {
-//			solutions = normalizer.normalize(objectives, solutions);
-//		}
+		List<? extends Solution<?>> solutions = execution.getSolutions();
+		
+		if (objectives.size() != 1) {
+			solutions = normalizer.normalize(objectives, solutions);
+		}
+		
+		solutions = duplicatesRemover.execute(solutions);
 //		
 //		solutions = colorizer.execute(solutions);
 		
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 		model.addAttribute("objectives", objectives);
-		model.addAttribute("solutions", execution.getSolutions());
+		model.addAttribute("solutions", solutions);
 		model.addAttribute("execution", execution);
 		model.addAttribute("normalizers", pluginService.getNormalizers());
 		model.addAttribute("duplicatesRemovers", pluginService.getDuplicatesRemovers());

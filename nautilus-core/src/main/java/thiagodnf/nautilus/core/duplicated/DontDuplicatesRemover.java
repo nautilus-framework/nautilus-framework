@@ -2,11 +2,11 @@ package thiagodnf.nautilus.core.duplicated;
 
 import org.uma.jmetal.solution.Solution;
 
-public class NoDuplicatesRemover extends DuplicatesRemover {
+public class DontDuplicatesRemover extends DuplicatesRemover {
 
 	@Override
 	public String getName() {
-		return "No Remove";
+		return "Don't Remove";
 	}
 
 	@Override

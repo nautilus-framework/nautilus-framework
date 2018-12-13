@@ -23,7 +23,7 @@ public abstract class DuplicatesRemover {
 		return nonRepeated;
 	}
 	
-	public boolean contains(List<Solution<?>> solutions, Solution<?> s2) {
+	public boolean contains(List<? extends Solution<?>> solutions, Solution<?> s2) {
 
 		for (Solution<?> s1 : solutions) {
 

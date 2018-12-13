@@ -61,7 +61,8 @@
 										<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,4)}" class="objectives-values"/>
 											
 										<td th:text="${solution.getAttributes().containsKey('selected')}"/>
-										<td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td>	
+										<!-- <td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td> -->
+										<td></td>	
 										<td th:text="${solution.getAttributes().get('distance')}"></td>
 									</tr>
 								</tbody>
@@ -98,7 +99,7 @@
 														<div class="form-group">
 															 <label class="form-check-label" for="name">
 														    	<strong>Name</strong>
-														   		<p><small>Define an own name for this execution</small></p>
+														   		<p class="small">Define an own name for this execution</p>
 														    </label>
 														    <input type="text" class="form-control" th:field="*{name}"/>
 														 </div>
@@ -111,7 +112,7 @@
 														<div class="form-group">
 													    <label class="form-check-label" for="normalize">
 													    	<strong>Normalizer</strong>
-													   		<p><small>Normalize the objective's values between 0 and 1</small></p>
+													   		<p class="small">Normalize the objective's values between 0 and 1</p>
 													    </label>
 													    <select class="form-control" th:field="*{normalize}">
 													      <option th:each="normalize : ${normalizers}" 
@@ -129,7 +130,7 @@
 														<div class="form-group">
 													    <label class="form-check-label" for="colorize">
 													    	<strong>Colorizer</strong>
-													   		<p><small>Colorize the closest solutions those ones you selected</small></p>
+													   		<p class="small">Colorize the closest solutions those ones you selected</p>
 													    </label>
 													    <select class="form-control" th:field="*{colorize}">
 													    	<option th:each="colorize : ${colorizers}" 
@@ -147,7 +148,7 @@
 														<div class="form-group">
 													    <label class="form-check-label" for="correlation">
 													    	<strong>Correlationer</strong>
-													   		<p><small>Correlation among the objectives and variables</small></p>
+													   		<p class="small">Correlation among the objectives and variables</p>
 													    </label>
 													    <select class="form-control" th:field="*{correlation}">
 													    	<option th:each="correlationer : ${correlationers}" 
@@ -165,7 +166,7 @@
 														<div class="form-group">
 													    <label class="form-check-label" for="correlation">
 													    	<strong>Duplicates Removers</strong>
-													   		<p><small>Remove the duplicated solutions from pareto-front</small></p>
+													   		<p class="small">Remove the duplicated solutions from pareto-front</p>
 													    </label>
 													    <select class="form-control" th:field="*{duplicatesRemover}">
 													    	<option th:each="duplicatesRemover : ${duplicatesRemovers}" 
@@ -184,7 +185,7 @@
 														    <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
 														    <label class="form-check-label" for="showLines1">
 														    	<strong>Show Lines</strong>
-														   		<p><small>Connect the found solutions by using lines</small></p>
+														   		<p class="small">Connect the found solutions by using lines</p>
 														    </label>
 														</div>
 													</div>
@@ -203,8 +204,8 @@
 										<li class="list-group-item">
 								  			<div class="row margin-bottom-minus-20">
 												<div class="col-8">
-													<strong>Nautilus</strong><br/>
-													<p><small>Export a json file with the execution information to Nautilus</small></p>
+													<strong>Nautilus</strong>
+													<p class="small">Export a json file with the execution information to Nautilus</p>
 												</div>
 												<div class="col-4 text-right">
 													<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/json'">Download Json</a>
@@ -214,8 +215,8 @@
 										<li class="list-group-item">
 								  			<div class="row margin-bottom-minus-20">
 												<div class="col-6">
-													<p><strong>JMetal Framework</strong><br/>
-													<small>Export a fun and/or var files to jMetal Framework tool</small></p>
+													<strong>JMetal Framework</strong>
+													<p class="small">Export a fun and/or var files to jMetal Framework tool</p>
 												</div>
 												<div class="col-6 text-right">
 													<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/fun'">Download FUN File</a>

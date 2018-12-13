@@ -4,7 +4,9 @@ class ScatterChart2D {
 		this.yAxisName = "Objective 1";
 		this.xAxisName = "Objective 2";
 		this.onClickListener = undefined
-		this.series = []
+		this.series = [];
+		this.min = 0;
+		this.max = 1;
 	}
 	
 	addSerie(serie){
@@ -65,7 +67,9 @@ class ScatterChart2D {
 				title: {
 					text: that.yAxisName
 				},
-				min: 0, max: 1,tickInterval: 0.1,
+				min: that.min, 
+				max: that.max, 
+				tickInterval: 0.1,
 			},	
 			xAxis: {
 				title: {

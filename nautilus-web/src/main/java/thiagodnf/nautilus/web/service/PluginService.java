@@ -30,14 +30,12 @@ import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
 import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.ByVariablesDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.DuplicatesRemover;
-import thiagodnf.nautilus.core.duplicated.NoDuplicatesRemover;
+import thiagodnf.nautilus.core.duplicated.DontDuplicatesRemover;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
+import thiagodnf.nautilus.core.normalize.DontNormalize;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.operator.crossover.Crossover;
-import thiagodnf.nautilus.core.operator.mutation.Mutation;
-import thiagodnf.nautilus.core.operator.selection.Selection;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
@@ -45,7 +43,6 @@ import thiagodnf.nautilus.plugin.extension.FormatterExtension;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.extension.MutationExtension;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
-import thiagodnf.nautilus.plugin.extension.OperatorExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.plugin.extension.SelectionExtension;
 import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
@@ -88,6 +85,7 @@ public class PluginService {
 
 		addNormalizer(new ByMaxAndMinValuesNormalize());
 		addNormalizer(new ByParetoFrontValuesNormalize());
+		addNormalizer(new DontNormalize());
 		
 		LOGGER.info("Done. Adding Correlationers");
 
@@ -98,7 +96,7 @@ public class PluginService {
 		
 		addDuplicatesRemover(new ByVariablesDuplicatesRemover());
 		addDuplicatesRemover(new ByObjectivesDuplicatesRemover());
-		addDuplicatesRemover(new NoDuplicatesRemover());
+		addDuplicatesRemover(new DontDuplicatesRemover());
 		
 		LOGGER.info("Done");
 	}
@@ -145,9 +143,9 @@ public class PluginService {
 
 	private void addNormalizer(Normalize normalize) {
 
-		this.normalizers.put(normalize.getKey(), normalize);
+		this.normalizers.put(normalize.getId(), normalize);
 		
-		LOGGER.info("Added '{}' normalizer", normalize.getKey());
+		LOGGER.info("Added '{}' normalizer", normalize.getId());
 	}
 	
 	private void addCorrelationer(Correlation correlation) {
@@ -219,10 +217,6 @@ public class PluginService {
 		return pluginManager.getExtensions(MutationExtension.class, pluginId);
 	}
 	
-//	public List<QualityIndicatorExtension> getQualityIndicatorExtensions(String pluginId) {
-//		return pluginManager.getExtensions(QualityIndicatorExtension.class, pluginId);
-//	}
-	
 	public InstanceDataExtension getInstanceDataExtension(String pluginId) {
 		return getInstanceDataExtensions(pluginId)
 				.stream()
@@ -238,23 +232,12 @@ public class PluginService {
 				.orElseThrow(ProblemNotFoundException::new);
 	}
 	
-	public OperatorExtension getOperatorExtension(String pluginId) {
-		return getOperatorExtensions(pluginId)
-				.stream()
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("The operator extension was not found"));
-	}
-	
 	public ObjectiveExtension getObjectiveExtension(String pluginId, String problemId) {
 		return pluginManager.getExtensions(ObjectiveExtension.class, pluginId)
 				.stream()
 				.filter(e -> e.getProblemId().equalsIgnoreCase(problemId))
 				.findFirst()
 				.orElseThrow(() -> new RuntimeException("Objective Extension was not found"));
-	}
-
-	public List<OperatorExtension> getOperatorExtensions(String pluginId) {
-		return pluginManager.getExtensions(OperatorExtension.class, pluginId);
 	}
 	
 	public List<FormatterExtension> getFormatters(String pluginId) {
@@ -351,83 +334,6 @@ public class PluginService {
 
 		return factory;
 	}
-	
-//	public QualityIndicatorFactory getQualityIndicatorFactory(String pluginId) {
-//
-//		QualityIndicatorFactory factory = new QualityIndicatorFactory();
-//
-//		for (QualityIndicatorExtension extension : getQualityIndicatorExtensions(pluginId)) {
-//			factory.addExtension(extension);
-//		}
-//
-//		return factory;
-//	}
-	
-	public Crossover<?> getCrossoversById(String pluginId, String problemId, String crossoverId){
-		
-		OperatorExtension extension = getOperatorExtension(pluginId);
-
-		return extension.getCrossoverOperators(problemId)
-				.stream()
-				.filter(p -> p.getId().equalsIgnoreCase(crossoverId))
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("The crossoverId was not found"));			
-	}
-
-//	public List<Crossover<?>> getCrossovers(String pluginId, String problemId) {
-//		
-//		OperatorExtension extension = getOperatorExtension(pluginId);
-//		
-//		if(extension == null) {
-//			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
-//		}
-//		
-//		return extension.getCrossoverOperators(problemId);
-//	}
-	
-	public Selection<?> getSelectionsById(String pluginId, String problemId, String selectionId){
-		
-		OperatorExtension extension = getOperatorExtension(pluginId);
-
-		return extension.getSelectionOperators(problemId)
-				.stream()
-				.filter(p -> p.getId().equalsIgnoreCase(selectionId))
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("The selectionId was not found"));			
-	}
-	
-//	public List<Selection<?>> getSelections(String pluginId, String problemId) {
-//		
-//		OperatorExtension extension = getOperatorExtension(pluginId);
-//		
-//		if(extension == null) {
-//			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
-//		}
-//		
-//		return extension.getSelectionOperators(problemId);
-//	}
-	
-	public Mutation<?> getMutationsById(String pluginId, String problemId, String mutationId){
-		
-		OperatorExtension extension = getOperatorExtension(pluginId);
-
-		return extension.getMutationOperators(problemId)
-				.stream()
-				.filter(p -> p.getId().equalsIgnoreCase(mutationId))
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("The mutationId was not found"));			
-	}
-	
-//	public List<Mutation<?>> getMutations(String pluginId, String problemId) {
-//		
-//		OperatorExtension extension = getOperatorExtension(pluginId);
-//		
-//		if(extension == null) {
-//			throw new RuntimeException("There is no operator operator defined. Please contact the developer"); 
-//		}
-//		
-//		return extension.getMutationOperators(problemId);
-//	}
 
 	public void deletePlugin(String pluginId) {
 		this.pluginManager.deletePlugin(pluginId);

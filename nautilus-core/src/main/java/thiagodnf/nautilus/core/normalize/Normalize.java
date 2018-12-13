@@ -11,19 +11,24 @@ import thiagodnf.nautilus.core.util.Normalizer;
 
 public abstract class Normalize {
 
-	public String getKey() {
+	public String getId() {
 		return Converter.toKey(getName());
 	}
 	
-	protected List<Solution<?>> normalize(List<? extends Solution<?>> solutions, double[] minValues, double[] maxValues) {
+	/**
+	 * This method returns a copy of a given list of solutions with normalized objective values.
+	 * 
+	 * @param solutions a list of solutions
+	 * @return a copy of a given list of solutions with normalized objective values
+	 */
+	public List<Solution<?>> normalize(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
 		
 		if (solutions.isEmpty()) {
-			return new ArrayList<>(solutions.size());
+			return new ArrayList<>();
 		}
-
-//		if (solutions.size() == 1) {
-//			return new ArrayList<>(solutions);
-//		}
+		
+		double[] minValues = getMinimumValues(objectives, solutions);
+		double[] maxValues = getMaximumValues(objectives, solutions);
 
 		List<Solution<?>> normalizedSolutions = new ArrayList<>(solutions.size());
 
@@ -33,8 +38,8 @@ public abstract class Normalize {
 
 			Solution<?> copy = solution.copy();
 
-			for (int j = 0; j < numberOfObjectives; j++) {
-				copy.setObjective(j, Normalizer.normalize(solution.getObjective(j), minValues[j], maxValues[j]));
+			for (int i = 0; i < numberOfObjectives; i++) {
+				copy.setObjective(i, Normalizer.normalize(solution.getObjective(i), minValues[i], maxValues[i]));
 			}
 
 			normalizedSolutions.add(copy);
@@ -47,13 +52,23 @@ public abstract class Normalize {
 		return getName();
 	}
 	
+	public abstract String getName() ;
+	
 	/**
-	 * This method returns a copy of a given list of solutions with normalized objective values.
+	 * This method returns an array contains the minimum values 
+	 * for each objective
 	 * 
 	 * @param solutions a list of solutions
-	 * @return a copy of a given list of solutions with normalized objective values
+	 * @return a list of minimum values for each objective
 	 */
-	public abstract List<Solution<?>> normalize(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions);
+	public abstract double[] getMinimumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) ;
 	
-	public abstract String getName() ;
+	/**
+	 * This method returns an array contains the maximum values 
+	 * for each objective
+	 * 
+	 * @param solutions a list of solutions
+	 * @return a list of maximum values for each objective
+	 */
+	public abstract double[] getMaximumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) ;
 }

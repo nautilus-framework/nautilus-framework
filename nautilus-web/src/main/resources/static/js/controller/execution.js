@@ -26,6 +26,10 @@ function getColor(percent, start, end) {
 
 function getColorForDistance(distance, minDistance, maxDistance){
 	
+	distance = isNaN(distance)? 0.0 : distance; 
+	minDistance = isNaN(minDistance)? 0.0 : minDistance; 
+	maxDistance = isNaN(maxDistance)? 0.0 : maxDistance; 
+	
 	if(getColorize() == 0){
 		return "#7cb5ec";
 	}
@@ -126,7 +130,7 @@ function getSeries(rows, lineWidthPlus){
 	return series
 }
 
-function plot2D(tableHeader, rows){
+function plot2D(tableHeader, rows, normalize){
 
 	var series = getSeries(rows, 0);
 	
@@ -138,11 +142,15 @@ function plot2D(tableHeader, rows){
 	chart.setOnClickListener(function(solutionIndex){
 		openSolution(solutionIndex);
 	})
+	
+	if(!normalize){
+		chart.min = chart.max = null;
+	}
 
 	chart.plot("execution-chart");
 }
 
-function plot3D(tableHeader, rows){
+function plot3D(tableHeader, rows, normalize){
 
 	var series = getSeries(rows, 0);
 	
@@ -155,11 +163,15 @@ function plot3D(tableHeader, rows){
 	chart.setOnClickListener(function(solutionIndex){
 		openSolution(solutionIndex);
 	})
+	
+	if(!normalize){
+		chart.min = chart.max = null;
+	}
 
 	chart.plot("execution-chart");
 }
 
-function plot4D(tableHeader, rows){
+function plot4D(tableHeader, rows, normalize){
 
 	var data = getData(rows);
 	
@@ -198,6 +210,10 @@ function plot4D(tableHeader, rows){
 		openSolution(solutionIndex);
 	})
 	
+	if(!normalize){
+		chart.min = chart.max = null;
+	}
+	
 	chart.plot("execution-chart");
 }
 
@@ -221,6 +237,7 @@ $(function(){
 	var tableHeader = getObjectivesNames("#execution-table");
 	
 	var rows = table.rows().data();
+	var normalize = $("#normalize").val() == "don-t-normalize" ? false : true;
 	
 	if(tableHeader.length == 1){
 		
@@ -229,6 +246,6 @@ $(function(){
 	}else if(tableHeader.length == 3){
 		plot3D(tableHeader, rows)
 	}else{
-		plot4D(tableHeader, rows)
+		plot4D(tableHeader, rows, normalize)
 	}
 });

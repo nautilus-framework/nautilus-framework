@@ -11,7 +11,7 @@ import org.springframework.data.annotation.Id;
 
 import com.google.gson.Gson;
 
-import thiagodnf.nautilus.core.model.Solution;
+import thiagodnf.nautilus.core.model.GenericSolution;
 
 public class Execution {
 
@@ -27,7 +27,7 @@ public class Execution {
 	private Parameters parameters;
 	
 	@NotNull
-	private List<Solution> solutions;
+	private List<GenericSolution> solutions;
 	
 	@NotNull
 	private Settings settings;
@@ -63,11 +63,11 @@ public class Execution {
 		this.parameters = parameters;
 	}
 
-	public List<Solution> getSolutions() {
+	public List<GenericSolution> getSolutions() {
 		return solutions;
 	}
 
-	public void setSolutions(List<Solution> solutions) {
+	public void setSolutions(List<GenericSolution> solutions) {
 		this.solutions = solutions;
 	}
 	

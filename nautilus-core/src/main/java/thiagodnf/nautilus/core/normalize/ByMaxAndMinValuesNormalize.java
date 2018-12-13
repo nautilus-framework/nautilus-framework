@@ -8,22 +8,32 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class ByMaxAndMinValuesNormalize extends Normalize {
 
-	public List<Solution<?>> normalize(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
-
-		double[] minValues = new double[objectives.size()];
-		double[] maxValues = new double[objectives.size()];
-
-		for (int i = 0; i < objectives.size(); i++) {
-			
-			minValues[i] = objectives.get(i).getMinimumValue();
-			maxValues[i] = objectives.get(i).getMaximumValue();
-		}
-		
-		return normalize(solutions, minValues, maxValues);
-	}
-
 	@Override
 	public String getName() {
 		return "by Max And Min Values";
+	}
+
+	@Override
+	public double[] getMinimumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+		
+		double[] minValues = new double[objectives.size()];
+		
+		for (int i = 0; i < objectives.size(); i++) {
+			minValues[i] = objectives.get(i).getMinimumValue();
+		}
+		
+		return minValues;
+	}
+
+	@Override
+	public double[] getMaximumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+		
+		double[] maxValues = new double[objectives.size()];
+
+		for (int i = 0; i < objectives.size(); i++) {
+			maxValues[i] = objectives.get(i).getMaximumValue();
+		}
+		
+		return maxValues;
 	}
 }

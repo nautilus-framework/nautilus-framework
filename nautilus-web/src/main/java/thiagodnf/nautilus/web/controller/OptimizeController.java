@@ -28,6 +28,7 @@ import thiagodnf.nautilus.core.algorithm.Builder;
 import thiagodnf.nautilus.core.algorithm.GA;
 import thiagodnf.nautilus.core.listener.AlgorithmListener;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
+import thiagodnf.nautilus.core.model.GenericSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
@@ -204,14 +205,14 @@ public class OptimizeController {
 			    rawSolutions = (List<? extends Solution<?>>) algorithm.getResult();
 			}
 		    
-		   	webSocketService.sendTitle(sessionId, "Clearing the attributes from solutions...");
+		   	webSocketService.sendTitle(sessionId, "Converting to generic solutions...");
 		   	
-		   	List<thiagodnf.nautilus.core.model.Solution> solutions = Converter.toNautilusSolutions(rawSolutions);
+		   	List<GenericSolution> solutions = Converter.toGenericSolutions(rawSolutions);
 		   	
 			webSocketService.sendTitle(sessionId, "Setting ids");
 
 			for (int i = 0; i < solutions.size(); i++) {
-				solutions.get(i).getAttributes().put("id", String.valueOf(i));
+				solutions.get(i).setAttribute("id", String.valueOf(i));
 			}
 		   	
 			webSocketService.sendTitle(sessionId, "Preparing the results...");
@@ -222,7 +223,7 @@ public class OptimizeController {
 			execution.setExecutionTime(algorithmRunner.getComputingTime());
 			execution.setParameters(parameters);
 	
-			webSocketService.sendTitle(sessionId, "Saving the execution...");
+			webSocketService.sendTitle(sessionId, "Saving the execution to database...");
 			
 			execution = executionService.save(execution);
 	

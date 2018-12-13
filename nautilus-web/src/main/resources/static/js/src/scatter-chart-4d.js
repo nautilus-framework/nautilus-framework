@@ -5,6 +5,8 @@ class ScatterChart4D {
 		this.xAxisName = [];
 		this.onClickListener = undefined
 		this.series = []
+		this.min = 0;
+		this.max = 1;
 	}
 	
 	setSeries(series){
@@ -38,7 +40,9 @@ class ScatterChart4D {
 				title: {
 					text: that.yAxisName
 				},
-				min: 0, max: 1, tickInterval: 0.1,
+				min: that.min, 
+				max: that.max, 
+				tickInterval: 0.1,
 			},
 			tooltip: {
 			    formatter: function() {

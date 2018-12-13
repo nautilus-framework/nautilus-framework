@@ -6,6 +6,8 @@ class ScatterChart3D {
 		this.zAxisName = "Objective 3";
 		this.onClickListener = undefined
 		this.series = []
+		this.min = 0;
+		this.max = 1;
 	}
 	
 	addSerie(serie){
@@ -89,7 +91,9 @@ class ScatterChart3D {
 				title: {
 					text: that.yAxisName
 				},
-				min: 0, max: 1,tickInterval: 0.1,
+				min: that.min, 
+				max: that.max, 
+				tickInterval: 0.1,
 			},	
 			xAxis: {
 				title: {

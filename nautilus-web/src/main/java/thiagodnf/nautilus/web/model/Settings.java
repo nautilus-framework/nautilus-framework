@@ -13,7 +13,7 @@ public class Settings {
 	
 	private String colorize = new ByEuclideanDistanceColorize().getKey();
 	
-	private String normalize = new ByParetoFrontValuesNormalize().getKey();
+	private String normalize = new ByParetoFrontValuesNormalize().getId();
 	
 	private String correlation = new SpearmanCorrelation().getKey();
 	

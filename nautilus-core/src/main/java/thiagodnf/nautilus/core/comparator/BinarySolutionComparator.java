@@ -4,12 +4,12 @@ import java.util.Comparator;
 
 import org.uma.jmetal.util.binarySet.BinarySet;
 
-import thiagodnf.nautilus.core.model.Solution;
+import thiagodnf.nautilus.core.model.GenericSolution;
 
-public class BinarySolutionComparator implements Comparator<Solution>{
+public class BinarySolutionComparator implements Comparator<GenericSolution>{
 
 	@Override
-	public int compare(Solution s1, Solution s2) {
+	public int compare(GenericSolution s1, GenericSolution s2) {
 
 		if (s1.getNumberOfObjectives() != s2.getNumberOfObjectives()) {
 			return 0;
