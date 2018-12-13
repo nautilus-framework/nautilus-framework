@@ -61,6 +61,10 @@ public class ExecutionService {
 		return this.executionRepository.findByParametersPluginIdAndParametersProblemId(pluginId, problemId);
 	}
 	
+	public List<IdsAndDatesOnly> findByPluginId(String pluginId) {
+		return this.executionRepository.findByParametersPluginId(pluginId);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Solution<?>> toJMetalSolutions(Execution execution, boolean useAllObjectives){
 		

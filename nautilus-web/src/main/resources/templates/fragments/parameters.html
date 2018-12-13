@@ -7,6 +7,24 @@
 	<body>
 	
 		<div th:fragment="default(parameters)">
+		
+			<h5>Information</h5>
+			<hr>
+			
+			<dl class="row">
+				<dt class="col-sm-2">Execution Id</dt>
+				<dd class="col-sm-10" th:text="${execution.getId()}"></dd>
+				<dt class="col-sm-2">Date</dt>
+				<dd class="col-sm-10 dates" th:text="${#formatter.date(execution.getDate())}"></dd>
+				<dt class="col-sm-2"># of Solutions</dt>
+				<dd class="col-sm-10" th:text="${solutions.size()}"></dd>
+				<dt class="col-sm-2">Execution Time</dt>
+				<dd class="col-sm-10" th:text="${#formatter.interval(execution.getExecutionTime())}"></dd>
+			</dl>
+			
+			<h5>Parameters</h5>
+			<hr>
+		
 			<dl class="row">
 				
 				<dt class="col-sm-2">Plugin Id</dt>

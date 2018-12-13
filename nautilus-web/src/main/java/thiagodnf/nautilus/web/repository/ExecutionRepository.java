@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import thiagodnf.nautilus.web.model.Execution;
+import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
 
 public interface ExecutionRepository extends MongoRepository<Execution, String> {
@@ -16,10 +17,14 @@ public interface ExecutionRepository extends MongoRepository<Execution, String> 
 		
 		Date getDate();
 		
+		Parameters getParameters();
+		
 		Settings getSettings();
 	}
 	
 	List<IdsAndDatesOnly> findByParametersProblemId(String problemId);
 	
 	List<IdsAndDatesOnly> findByParametersPluginIdAndParametersProblemId(String pluginId, String problemId);
+	
+	List<IdsAndDatesOnly> findByParametersPluginId(String pluginId);
 }

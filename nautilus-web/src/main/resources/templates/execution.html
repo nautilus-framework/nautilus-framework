@@ -1,276 +1,270 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<head th:replace="fragments/head :: default('Execution')"></head>
+	<head th:replace="fragments/head :: default('Execution')"></head>
 
-<body>
+	<body th:with="
+		descriptor = ${plugin.getDescriptor()},
+		pluginId = ${descriptor.getPluginId()},
+		pluginName = ${descriptor.getPluginDescription()}">
+		
 	<div th:replace="fragments/navbar :: default('home')"></div>
 	
-	<div class="page-header page-header-with-navbar">
-		<div class="container">
-			<div class="row">
-				<div class="col-8">
-					<h6 class="title">
-						<a th:href="@{/}">Home</a> 
-						<span class="path-divider">/</span>
-						<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a> 
-					</h6>
-				</div>
-				<div class="col-4 float-right">
-					<a class="btn btn-success btn-sm float-right" th:href="@{/done/} + ${execution.getId()}">Done</a>
-					<a class="btn btn-outline-secondary btn-sm float-right" th:href="@{/continue/} + ${execution.getId()}">Continue</a>
-				  	
+		<div class="page-header page-header-with-navbar">
+			<div class="container">
+				<div class="row">
+					<div class="col-8">
+						<h6 class="title">
+							<a th:href="@{/}">Home</a> 
+							<span class="path-divider">/</span>
+							<a th:href="@{/plugin/} + ${pluginId}" th:text="${pluginName}"></a>
+							<span class="path-divider">/</span> 
+							<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a> 
+						</h6>
+					</div>
+					<div class="col-4 float-right">
+						<a class="btn btn-success btn-sm float-right" th:href="@{/done/} + ${execution.getId()}">Done</a>
+						<a class="btn btn-outline-secondary btn-sm float-right" th:href="@{/continue/} + ${execution.getId()}">Continue</a>
+					  	
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	
-	<div class="container page-navbar">
-		<div class="row">
-			<div class="col-12">
-				<nav>
-					<div class="nav nav-tabs" id="nav-tab" role="tablist">
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}">Scatter Chart</a>
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#solutions" >Solutions</a>
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#information" >Information</a>
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#parameters" >Parameters</a>
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings" >Settings</a>
-					</div>
-				</nav>
-				<!-- Tab panes -->
-				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane fade" id="scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}">
-						<div id="execution-chart"></div>
-					</div>
-					<div role="tabpanel" class="tab-pane fade" id="solutions">
-						<div class="table-responsive horizontal-scroll">
-							<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
-								<thead>
-									<tr>
-										<th>#</th>
-										<th th:each="obj,i : ${objectives}" th:text="${obj.getName()}" class="objectives-names"></th>	
-										<th>Selected</th>
-										<th>Feedback</th>
-										<th>Distance</th>		
-									</tr>
-								</thead>
-								<tbody>
-									<tr th:each="solution : ${solutions}" th:with="i = ${solution.getAttributes().get('id')}">
-										<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i}" th:text="${i}"></a></td>
-										
-										<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,4)}" class="objectives-values"/>
-											
-										<td th:text="${solution.getAttributes().containsKey('selected')}"/>
-										<!-- <td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td> -->
-										<td></td>	
-										<td th:text="${solution.getAttributes().get('distance')}"></td>
-									</tr>
-								</tbody>
-							</table>
+		
+		<div class="container page-navbar">
+			<div class="row">
+				<div class="col-12">
+					<nav>
+						<div class="nav nav-tabs" id="nav-tab" role="tablist">
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}">Scatter Chart</a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#solutions" >Solutions</a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#information" >Information</a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings" >Settings</a>
 						</div>
-					</div>
-					<div role="tabpanel" class="tab-pane fade" id="information">
-						<dl class="row">
-							<dt class="col-sm-2">Execution Id</dt>
-							<dd class="col-sm-10" th:text="${execution.getId()}"></dd>
-							<dt class="col-sm-2">Date</dt>
-							<dd class="col-sm-10 dates" th:text="${#formatter.date(execution.getDate())}"></dd>
-							<dt class="col-sm-2"># of Solutions</dt>
-							<dd class="col-sm-10" th:text="${solutions.size()}"></dd>
-							<dt class="col-sm-2">Execution Time</dt>
-							<dd class="col-sm-10" th:text="${#formatter.interval(execution.getExecutionTime())}"></dd>
-						</dl> 
-					</div>
-					<div role="tabpanel" class="tab-pane fade" id="parameters">
-						<div th:replace="fragments/parameters :: default(${execution.getParameters()})"></div>
-					</div>
-					<div role="tabpanel" class="tab-pane fade" id="settings">
-						
-						<div class="row">
-							<div class="col-12">
+					</nav>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane fade" id="scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}">
+							<div id="execution-chart"></div>
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="solutions">
+							<div class="table-responsive horizontal-scroll">
+								<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th th:each="obj,i : ${objectives}" th:text="${obj.getName()}" class="objectives-names"></th>	
+											<th>Selected</th>
+											<th>Feedback</th>
+											<th>Distance</th>		
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="solution : ${solutions}" th:with="i = ${solution.getAttributes().get('id')}">
+											<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i}" th:text="${i}"></a></td>
+											
+											<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,4)}" class="objectives-values"/>
+												
+											<td th:text="${solution.getAttributes().containsKey('selected')}"/>
+											<!-- <td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td> -->
+											<td></td>	
+											<td th:text="${solution.getAttributes().get('distance')}"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="information">
 							
-								<div class="card border-default mb-3">
-									<div class="card-header bg-transparent border-default">General</div>
-									<form action="#" th:action="@{/execution/}+${execution.getId()} + '/save/settings'" method="post" th:object="${settings}">
+							<div th:replace="fragments/parameters :: default(${execution.getParameters()})"></div>
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="settings">
+							
+							<div class="row">
+								<div class="col-12">
+								
+									<div class="card border-default mb-3">
+										<div class="card-header bg-transparent border-default">General</div>
+										<form action="#" th:action="@{/execution/}+${execution.getId()} + '/save/settings'" method="post" th:object="${settings}">
+											<ul class="list-group list-group-flush">
+												<li class="list-group-item">
+										  			<div class="row margin-bottom-minus-10">
+														<div class="col-12">
+															<div class="form-group">
+																 <label class="form-check-label" for="name">
+															    	<strong>Name</strong>
+															   		<p class="small">Define an own name for this execution</p>
+															    </label>
+															    <input type="text" class="form-control" th:field="*{name}"/>
+															 </div>
+														</div>
+													</div>
+												</li>
+												<li class="list-group-item">
+										  			<div class="row margin-bottom-minus-10">
+														<div class="col-12">
+															<div class="form-group">
+														    <label class="form-check-label" for="normalize">
+														    	<strong>Normalizer</strong>
+														   		<p class="small">Normalize the objective's values between 0 and 1</p>
+														    </label>
+														    <select class="form-control" th:field="*{normalize}">
+														      <option th:each="normalize : ${normalizers}" 
+														    		th:value="${normalize.key}"
+														    		th:text="${normalize.value}" 
+													    		/>
+														    </select>
+														  </div>
+														</div>
+													</div>
+												</li>
+												<li class="list-group-item">
+										  			<div class="row margin-bottom-minus-10">
+														<div class="col-12">
+															<div class="form-group">
+														    <label class="form-check-label" for="colorize">
+														    	<strong>Colorizer</strong>
+														   		<p class="small">Colorize the closest solutions those ones you selected</p>
+														    </label>
+														    <select class="form-control" th:field="*{colorize}">
+														    	<option th:each="colorize : ${colorizers}" 
+														    		th:value="${colorize.key}"
+														    		th:text="${colorize.value}" 
+													    		/>
+														    </select>
+														  </div>
+														</div>
+													</div>
+												</li>
+												<li class="list-group-item">
+										  			<div class="row margin-bottom-minus-10">
+														<div class="col-12">
+															<div class="form-group">
+														    <label class="form-check-label" for="correlation">
+														    	<strong>Correlationer</strong>
+														   		<p class="small">Correlation among the objectives and variables</p>
+														    </label>
+														    <select class="form-control" th:field="*{correlation}">
+														    	<option th:each="correlationer : ${correlationers}" 
+														    		th:value="${correlationer.key}"
+														    		th:text="${correlationer.value}" 
+													    		/>
+														    </select>
+														  </div>
+														</div>
+													</div>
+												</li>
+												<li class="list-group-item">
+										  			<div class="row margin-bottom-minus-10">
+														<div class="col-12">
+															<div class="form-group">
+														    <label class="form-check-label" for="correlation">
+														    	<strong>Duplicates Removers</strong>
+														   		<p class="small">Remove the duplicated solutions from pareto-front</p>
+														    </label>
+														    <select class="form-control" th:field="*{duplicatesRemover}">
+														    	<option th:each="duplicatesRemover : ${duplicatesRemovers}" 
+														    		th:value="${duplicatesRemover.key}"
+														    		th:text="${duplicatesRemover.value}" 
+													    		/>
+														    </select>
+														  </div>
+														</div>
+													</div>
+												</li>
+												<li class="list-group-item">
+										  			<div class="row margin-bottom-minus-20">
+														<div class="col-12">
+															<div class="form-check">
+															    <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
+															    <label class="form-check-label" for="showLines1">
+															    	<strong>Show Lines</strong>
+															   		<p class="small">Connect the found solutions by using lines</p>
+															    </label>
+															</div>
+														</div>
+													</div>
+												</li>
+												<li class="list-group-item">
+													<button type="submit" class="btn btn-outline-success btn-sm">Save</button>
+												</li>
+											</ul>
+										</form>
+									</div>
+									
+									<div class="card border-default mb-3">
+										<div class="card-header bg-transparent border-default">Export</div>
 										<ul class="list-group list-group-flush">
 											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-10">
-													<div class="col-12">
-														<div class="form-group">
-															 <label class="form-check-label" for="name">
-														    	<strong>Name</strong>
-														   		<p class="small">Define an own name for this execution</p>
-														    </label>
-														    <input type="text" class="form-control" th:field="*{name}"/>
-														 </div>
+									  			<div class="row margin-bottom-minus-20">
+													<div class="col-8">
+														<strong>Nautilus</strong>
+														<p class="small">Export a json file with the execution information to Nautilus</p>
 													</div>
-												</div>
-											</li>
-											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-10">
-													<div class="col-12">
-														<div class="form-group">
-													    <label class="form-check-label" for="normalize">
-													    	<strong>Normalizer</strong>
-													   		<p class="small">Normalize the objective's values between 0 and 1</p>
-													    </label>
-													    <select class="form-control" th:field="*{normalize}">
-													      <option th:each="normalize : ${normalizers}" 
-													    		th:value="${normalize.key}"
-													    		th:text="${normalize.value}" 
-												    		/>
-													    </select>
-													  </div>
-													</div>
-												</div>
-											</li>
-											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-10">
-													<div class="col-12">
-														<div class="form-group">
-													    <label class="form-check-label" for="colorize">
-													    	<strong>Colorizer</strong>
-													   		<p class="small">Colorize the closest solutions those ones you selected</p>
-													    </label>
-													    <select class="form-control" th:field="*{colorize}">
-													    	<option th:each="colorize : ${colorizers}" 
-													    		th:value="${colorize.key}"
-													    		th:text="${colorize.value}" 
-												    		/>
-													    </select>
-													  </div>
-													</div>
-												</div>
-											</li>
-											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-10">
-													<div class="col-12">
-														<div class="form-group">
-													    <label class="form-check-label" for="correlation">
-													    	<strong>Correlationer</strong>
-													   		<p class="small">Correlation among the objectives and variables</p>
-													    </label>
-													    <select class="form-control" th:field="*{correlation}">
-													    	<option th:each="correlationer : ${correlationers}" 
-													    		th:value="${correlationer.key}"
-													    		th:text="${correlationer.value}" 
-												    		/>
-													    </select>
-													  </div>
-													</div>
-												</div>
-											</li>
-											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-10">
-													<div class="col-12">
-														<div class="form-group">
-													    <label class="form-check-label" for="correlation">
-													    	<strong>Duplicates Removers</strong>
-													   		<p class="small">Remove the duplicated solutions from pareto-front</p>
-													    </label>
-													    <select class="form-control" th:field="*{duplicatesRemover}">
-													    	<option th:each="duplicatesRemover : ${duplicatesRemovers}" 
-													    		th:value="${duplicatesRemover.key}"
-													    		th:text="${duplicatesRemover.value}" 
-												    		/>
-													    </select>
-													  </div>
-													</div>
+													<div class="col-4 text-right">
+														<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/json'">Download Json</a>
+													</div>	
 												</div>
 											</li>
 											<li class="list-group-item">
 									  			<div class="row margin-bottom-minus-20">
-													<div class="col-12">
-														<div class="form-check">
-														    <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
-														    <label class="form-check-label" for="showLines1">
-														    	<strong>Show Lines</strong>
-														   		<p class="small">Connect the found solutions by using lines</p>
-														    </label>
-														</div>
+													<div class="col-6">
+														<strong>JMetal Framework</strong>
+														<p class="small">Export a fun and/or var files to jMetal Framework tool</p>
 													</div>
+													<div class="col-6 text-right">
+														<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/fun'">Download FUN File</a>
+														<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/var'">Download VAR File</a>
+													</div>	
+												</div>
+											</li>
+										</ul>
+									</div>
+									
+									
+									
+									
+									<div class="card border-danger mb-3">
+										<div class="card-header bg-transparent border-danger">Danger Zone</div>
+										<ul class="list-group list-group-flush">
+											<li class="list-group-item">
+									  			<div class="row margin-bottom-minus-20">
+													<div class="col-8">
+														<strong>Clear User Preferences</strong><br/>
+														<p><small>Clear the user feedback to provide the preferences again</small></p>
+														
+													</div>
+													<div class="col-4 text-right">
+														<a class="btn btn-outline-danger btn-sm" th:href="@{/execution/} + ${execution.getId()} + @{/clear/user-feedback}">Clear Feedback</a>
+													</div>	
 												</div>
 											</li>
 											<li class="list-group-item">
-												<button type="submit" class="btn btn-outline-success btn-sm">Save</button>
+									  			<div class="row margin-bottom-minus-20">
+													<div class="col-8">
+														<p><strong>Delete Execution</strong><br/>
+														<small>Once you delete, there is no going back. Please be certain.</small></p>
+													</div>
+													<div class="col-4 text-right">
+														<a class="btn btn-outline-danger btn-sm" th:href="@{/execution/} + ${execution.getId()} + @{/delete}">Delete Execution</a>
+													</div>	
+												</div>
 											</li>
 										</ul>
-									</form>
+									</div>
+									
 								</div>
-								
-								<div class="card border-default mb-3">
-									<div class="card-header bg-transparent border-default">Export</div>
-									<ul class="list-group list-group-flush">
-										<li class="list-group-item">
-								  			<div class="row margin-bottom-minus-20">
-												<div class="col-8">
-													<strong>Nautilus</strong>
-													<p class="small">Export a json file with the execution information to Nautilus</p>
-												</div>
-												<div class="col-4 text-right">
-													<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/json'">Download Json</a>
-												</div>	
-											</div>
-										</li>
-										<li class="list-group-item">
-								  			<div class="row margin-bottom-minus-20">
-												<div class="col-6">
-													<strong>JMetal Framework</strong>
-													<p class="small">Export a fun and/or var files to jMetal Framework tool</p>
-												</div>
-												<div class="col-6 text-right">
-													<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/fun'">Download FUN File</a>
-													<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/var'">Download VAR File</a>
-												</div>	
-											</div>
-										</li>
-									</ul>
-								</div>
-								
-								
-								
-								
-								<div class="card border-danger mb-3">
-									<div class="card-header bg-transparent border-danger">Danger Zone</div>
-									<ul class="list-group list-group-flush">
-										<li class="list-group-item">
-								  			<div class="row margin-bottom-minus-20">
-												<div class="col-8">
-													<strong>Clear User Preferences</strong><br/>
-													<p><small>Clear the user feedback to provide the preferences again</small></p>
-													
-												</div>
-												<div class="col-4 text-right">
-													<a class="btn btn-outline-danger btn-sm" th:href="@{/execution/} + ${execution.getId()} + @{/clear/user-feedback}">Clear Feedback</a>
-												</div>	
-											</div>
-										</li>
-										<li class="list-group-item">
-								  			<div class="row margin-bottom-minus-20">
-												<div class="col-8">
-													<p><strong>Delete Execution</strong><br/>
-													<small>Once you delete, there is no going back. Please be certain.</small></p>
-												</div>
-												<div class="col-4 text-right">
-													<a class="btn btn-outline-danger btn-sm" th:href="@{/execution/} + ${execution.getId()} + @{/delete}">Delete Execution</a>
-												</div>	
-											</div>
-										</li>
-									</ul>
-								</div>
-								
-							</div>
-						</div>			
-					
+							</div>			
 						
+							
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-
-	<div th:replace="fragments/footer :: footer"></div>
-	<script type="text/javascript" th:src="@{/js/controller/execution.js}"></script>
-</body>
+	
+		<div th:replace="fragments/footer :: footer"></div>
+		<script type="text/javascript" th:src="@{/js/controller/execution.js}"></script>
+	</body>
 
 </html>
