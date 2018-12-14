@@ -3,9 +3,12 @@ package thiagodnf.nautilus.core.correlation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.uma.jmetal.solution.Solution;
+
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 
-public abstract class Correlation {
+public abstract class AbstractCorrelation {
 	
 	public static class CorrelationItem {
 
@@ -60,7 +63,34 @@ public abstract class Correlation {
 		return getName();
 	}
 	
+	public List<CorrelationItem> execute(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+		
+		List<CorrelationItem> items = new ArrayList<>();
+		
+		for (int i = 0; i < objectives.size(); i++) {
+
+			CorrelationItem item = new CorrelationItem(objectives.get(i).getName());
+
+			for (int j = 0; j < objectives.size(); j++) {
+
+				double[] x = new double[solutions.size()];
+				double[] y = new double[solutions.size()];
+
+				for (int k = 0; k < solutions.size(); k++) {
+					x[k] = solutions.get(k).getObjective(i);
+					y[k] = solutions.get(k).getObjective(j);
+				}
+
+				item.getValues().add(getCorrelation(x, y));
+			}
+
+			items.add(item);
+		}
+		
+		return items;
+	}
+	
 	public abstract String getName() ;
 	
-	public abstract double getCorrelation(final double[] x, final double[] y);
+	public abstract double getCorrelation(final double[] x, final double[] y);	
 }

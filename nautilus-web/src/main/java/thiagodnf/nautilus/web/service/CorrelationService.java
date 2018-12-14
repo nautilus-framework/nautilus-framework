@@ -13,8 +13,8 @@ import org.uma.jmetal.solution.Solution;
 
 import com.google.common.base.Preconditions;
 
-import thiagodnf.nautilus.core.correlation.Correlation;
-import thiagodnf.nautilus.core.correlation.Correlation.CorrelationItem;
+import thiagodnf.nautilus.core.correlation.AbstractCorrelation;
+import thiagodnf.nautilus.core.correlation.AbstractCorrelation.CorrelationItem;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Normalizer;
@@ -22,7 +22,7 @@ import thiagodnf.nautilus.core.util.Normalizer;
 @Service
 public class CorrelationService {
 
-	public List<CorrelationItem> correlateObjectives(Correlation correlation, List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+	public List<CorrelationItem> correlateObjectives(AbstractCorrelation correlation, List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
 		
 		Preconditions.checkNotNull(solutions, "The solution list should not be null");
 		Preconditions.checkNotNull(objectives, "The objective list should not be null");

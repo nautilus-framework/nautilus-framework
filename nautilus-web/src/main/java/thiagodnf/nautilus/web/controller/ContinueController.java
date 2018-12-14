@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.uma.jmetal.problem.Problem;
 
-import thiagodnf.nautilus.core.correlation.Correlation;
-import thiagodnf.nautilus.core.correlation.Correlation.CorrelationItem;
+import thiagodnf.nautilus.core.correlation.AbstractCorrelation;
+import thiagodnf.nautilus.core.correlation.AbstractCorrelation.CorrelationItem;
 import thiagodnf.nautilus.core.model.GenericSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.model.Variable;
@@ -83,7 +83,7 @@ public class ContinueController {
 //		AbstractProblem problem = pluginService.getProblemExtension(pluginId, problemId).createProblem(data, objectives);
 		Problem<?> problem = null;
 		
-		Correlation correlation = pluginService.getCorrelationers().get(settings.getCorrelationId());
+		AbstractCorrelation correlation = pluginService.getCorrelationers().get(settings.getCorrelationId());
 		
 //		List<CorrelationItem> correlationItems = correlationService.correlateVariables(problem, data, objectives, solutions);
 		List<CorrelationItem> correlationItems = Arrays.asList();

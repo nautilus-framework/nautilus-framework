@@ -2,7 +2,7 @@ package thiagodnf.nautilus.core.colorize;
 
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.distance.JaccardDistance;
+import thiagodnf.nautilus.core.distance.JaccardD;
 
 public class BySimilarityColorize extends AbstractColorize {
 
@@ -18,12 +18,13 @@ public class BySimilarityColorize extends AbstractColorize {
 //				.stream()
 //				.map(e -> e.getValue())
 //				.collect(Collectors.toList());
+
 		
-		return 1.0 - JaccardDistance.calculate(null, null);		
+		return 1.0 - JaccardD.calculate(null, null);		
 	}
 
 	@Override
 	public String getName() {
-		return "By Similarity";
+		return "By Similarity with Jaccard Distance";
 	}
 }

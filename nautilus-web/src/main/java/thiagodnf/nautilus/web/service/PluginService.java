@@ -24,7 +24,8 @@ import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
 import thiagodnf.nautilus.core.colorize.BySimilarityColorize;
 import thiagodnf.nautilus.core.colorize.AbstractColorize;
 import thiagodnf.nautilus.core.colorize.DontColorize;
-import thiagodnf.nautilus.core.correlation.Correlation;
+import thiagodnf.nautilus.core.correlation.AbstractCorrelation;
+import thiagodnf.nautilus.core.correlation.KendallCorrelation;
 import thiagodnf.nautilus.core.correlation.PearsonCorrelation;
 import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
 import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
@@ -68,7 +69,7 @@ public class PluginService {
 	
 	private Map<String, AbstractDuplicatesRemover> duplicatesRemovers = new HashMap<>();
 	
-	private Map<String, Correlation> correlationers = new HashMap<>();
+	private Map<String, AbstractCorrelation> correlationers = new HashMap<>();
 	
 	@PostConstruct
 	private void initIt() {
@@ -91,6 +92,7 @@ public class PluginService {
 
 		addCorrelationer(new SpearmanCorrelation());
 		addCorrelationer(new PearsonCorrelation());
+		addCorrelationer(new KendallCorrelation());
 
 		LOGGER.info("Done. Adding Duplicate Removers");
 		
@@ -148,7 +150,7 @@ public class PluginService {
 		LOGGER.info("Added '{}' normalizer", normalize.getId());
 	}
 	
-	private void addCorrelationer(Correlation correlation) {
+	private void addCorrelationer(AbstractCorrelation correlation) {
 
 		this.correlationers.put(correlation.getId(), correlation);
 		
@@ -174,7 +176,7 @@ public class PluginService {
 		return colorizers;
 	}
 	
-	public Map<String, Correlation> getCorrelationers() {
+	public Map<String, AbstractCorrelation> getCorrelationers() {
 		return correlationers;
 	}
 	

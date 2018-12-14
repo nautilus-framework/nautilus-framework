@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.colorize.AbstractColorize;
+import thiagodnf.nautilus.core.correlation.AbstractCorrelation;
 import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
 import thiagodnf.nautilus.core.model.GenericSolution;
 import thiagodnf.nautilus.core.normalize.Normalize;
@@ -61,19 +62,21 @@ public class ExecutionController {
 		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalizeId());
 		AbstractDuplicatesRemover duplicatesRemover = pluginService.getDuplicatesRemovers().get(settings.getDuplicatesRemoverId());
 		AbstractColorize colorizer = pluginService.getColorizers().get(settings.getColorizeId());
+		AbstractCorrelation correlation = pluginService.getCorrelationers().get(settings.getCorrelationId());
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		
 		List<? extends Solution<?>> solutions = execution.getSolutions();
 		
-		solutions = normalizer.normalize(objectives, solutions);
-		solutions = duplicatesRemover.execute(solutions);
-		solutions = colorizer.execute(solutions);
+		List<? extends Solution<?>> normalizedSolutions = normalizer.normalize(objectives, solutions);
+		List<? extends Solution<?>> distinctSolutions = duplicatesRemover.execute(normalizedSolutions);
+		List<? extends Solution<?>> colorfulSolutions = colorizer.execute(distinctSolutions);
 		
+		model.addAttribute("correlations", correlation.execute(objectives, normalizedSolutions));
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 		model.addAttribute("objectives", objectives);
-		model.addAttribute("solutions", solutions);
+		model.addAttribute("solutions", colorfulSolutions);
 		model.addAttribute("execution", execution);
 		model.addAttribute("normalizers", pluginService.getNormalizers());
 		model.addAttribute("duplicatesRemovers", pluginService.getDuplicatesRemovers());
