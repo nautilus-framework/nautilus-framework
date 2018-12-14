@@ -5,12 +5,17 @@ class ScatterChart4D {
 		this.xAxisName = [];
 		this.onClickListener = undefined
 		this.series = []
+		this.solutionIndexes = [];
 		this.min = 0;
 		this.max = 1;
 	}
 	
 	setSeries(series){
 		this.series = series;
+	}
+	
+	setSolutionIndexes(solutionIndexes){
+		this.solutionIndexes = solutionIndexes;
 	}
 	
 	setXAxisName(name){
@@ -46,7 +51,10 @@ class ScatterChart4D {
 			},
 			tooltip: {
 			    formatter: function() {
-			    	return '<b>Solution</b> ' + (this.series.index) + '<br/> <b>Objectives</b><br/>' + this.series.yData.join(",  ");
+			    	
+			    	var solutionIndex = that.solutionIndexes[this.series.index];
+			    	
+			    	return '<b>Solution</b> ' + (solutionIndex) + '<br/> <b>Objectives</b><br/>' + this.series.yData.join(",  ");
 			    }
 			},
 			plotOptions: {
@@ -66,7 +74,10 @@ class ScatterChart4D {
 				      events:{
 				        select: function(e){
 				        	if(that.onClickListener){
-				        		that.onClickListener(this.series.index)
+				        		
+				        		var solutionIndex = that.solutionIndexes[this.series.index];
+				        		
+				        		that.onClickListener(solutionIndex)
 				        	}
 				        },
 				      }

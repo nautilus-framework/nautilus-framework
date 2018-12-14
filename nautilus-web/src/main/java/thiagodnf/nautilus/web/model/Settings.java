@@ -11,13 +11,13 @@ public class Settings {
 
 	private boolean showLines = true;
 	
-	private String colorize = new ByEuclideanDistanceColorize().getKey();
+	private String colorizeId = new ByEuclideanDistanceColorize().getId();
 	
-	private String normalize = new ByParetoFrontValuesNormalize().getId();
+	private String normalizeId = new ByParetoFrontValuesNormalize().getId();
 	
-	private String correlation = new SpearmanCorrelation().getKey();
+	private String correlationId = new SpearmanCorrelation().getId();
 	
-	private String duplicatesRemover = new ByVariablesDuplicatesRemover().getId();
+	private String duplicatesRemoverId = new ByVariablesDuplicatesRemover().getId();
 	
 	private String name;
 
@@ -28,14 +28,6 @@ public class Settings {
 	public void setShowLines(boolean showLines) {
 		this.showLines = showLines;
 	}
-
-	public String getColorize() {
-		return colorize;
-	}
-
-	public void setColorize(String colorize) {
-		this.colorize = colorize;
-	}
 	
 	public String getName() {
 		return name;
@@ -45,28 +37,36 @@ public class Settings {
 		this.name = name;
 	}
 	
-	public String getNormalize() {
-		return normalize;
+	public String getColorizeId() {
+		return colorizeId;
 	}
 
-	public void setNormalize(String normalize) {
-		this.normalize = normalize;
-	}
-	
-	public String getCorrelation() {
-		return correlation;
+	public void setColorizeId(String colorizeId) {
+		this.colorizeId = colorizeId;
 	}
 
-	public void setCorrelation(String correlation) {
-		this.correlation = correlation;
+	public String getNormalizeId() {
+		return normalizeId;
 	}
 
-	public String getDuplicatesRemover() {
-		return duplicatesRemover;
+	public void setNormalizeId(String normalizeId) {
+		this.normalizeId = normalizeId;
 	}
 
-	public void setDuplicatesRemover(String duplicatesRemover) {
-		this.duplicatesRemover = duplicatesRemover;
+	public String getCorrelationId() {
+		return correlationId;
+	}
+
+	public void setCorrelationId(String correlationId) {
+		this.correlationId = correlationId;
+	}
+
+	public String getDuplicatesRemoverId() {
+		return duplicatesRemoverId;
+	}
+
+	public void setDuplicatesRemoverId(String duplicatesRemoverId) {
+		this.duplicatesRemoverId = duplicatesRemoverId;
 	}
 
 	public String toString() {

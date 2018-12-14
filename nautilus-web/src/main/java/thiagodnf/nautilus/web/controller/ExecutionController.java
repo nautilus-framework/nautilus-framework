@@ -58,9 +58,9 @@ public class ExecutionController {
 		String pluginId = parameters.getPluginId();
 		String problemId = parameters.getProblemId();
 		
-		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalize());
-		AbstractDuplicatesRemover duplicatesRemover = pluginService.getDuplicatesRemovers().get(settings.getDuplicatesRemover());
-		AbstractColorize colorizer = pluginService.getColorizers().get(settings.getColorize());
+		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalizeId());
+		AbstractDuplicatesRemover duplicatesRemover = pluginService.getDuplicatesRemovers().get(settings.getDuplicatesRemoverId());
+		AbstractColorize colorizer = pluginService.getColorizers().get(settings.getColorizeId());
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		

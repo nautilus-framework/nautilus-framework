@@ -5,6 +5,7 @@ class ScatterChart2D {
 		this.xAxisName = "Objective 2";
 		this.onClickListener = undefined
 		this.series = [];
+		this.solutionIndexes = [];
 		this.min = 0;
 		this.max = 1;
 	}
@@ -15,6 +16,10 @@ class ScatterChart2D {
 	
 	setXAxisName(name){
 		this.xAxisName = name;
+	}
+	
+	setSolutionIndexes(solutionIndexes){
+		this.solutionIndexes = solutionIndexes;
 	}
 	
 	setYAxisName(name){
@@ -41,7 +46,10 @@ class ScatterChart2D {
 		    },
 			tooltip: {
 			    formatter: function() {
-			    	return '<b>Solution</b> ' + (this.series.index) + '<br/> <b>Objectives</b><br/>' + this.point.options.x +", "+ this.point.options.y;
+			    	
+			    	var solutionIndex = that.solutionIndexes[this.series.index];
+			    	
+			    	return '<b>Solution</b> ' + (solutionIndex) + '<br/> <b>Objectives</b><br/>' + this.point.options.x +", "+ this.point.options.y;
 			    }
 			},
 			plotOptions:{
@@ -56,7 +64,10 @@ class ScatterChart2D {
 			      events:{
 			    	  click: function(e){
 				        	if(that.onClickListener){
-				        		that.onClickListener(this.series.index)
+				        		
+				        		var solutionIndex = that.solutionIndexes[this.series.index];
+				        		
+				        		that.onClickListener(solutionIndex)
 				        	}
 				        }
 			      }

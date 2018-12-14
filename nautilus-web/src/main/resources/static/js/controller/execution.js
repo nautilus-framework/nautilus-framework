@@ -102,15 +102,32 @@ function getDistances(rows){
 	return distances;
 }
 
+function getSolutionIndexes(rows){
+	
+	var indexes = [];
+	
+	$.each(rows, function(i, row){
+		
+		$.each(row, function(j, col){
+			
+			if(j == 0){
+				indexes.push(parseFloat($(col).text()));
+			}
+		});
+	});
+	
+	return indexes;
+}
+
 function getSeries(rows, lineWidthPlus){
 	
 	var data = getData(rows);
-	
 	var distances = getDistances(rows);
 	
 	var maxDistance = distances.reduce(function(a, b) {
 	    return Math.max(a.toFixed(5), b.toFixed(5));
 	});
+	
 	var minDistance = distances.reduce(function(a, b) {
 	    return Math.min(a.toFixed(5), b.toFixed(5));
 	});
@@ -136,6 +153,7 @@ function plot2D(tableHeader, rows, normalize){
 	
 	var chart = new ScatterChart2D()
 
+	chart.setSolutionIndexes(getSolutionIndexes(rows));
 	chart.addSerie(series)
 	chart.setXAxisName(tableHeader[0]);
 	chart.setYAxisName(tableHeader[1]);
@@ -156,6 +174,7 @@ function plot3D(tableHeader, rows, normalize){
 	
 	var chart = new ScatterChart3D()
 
+	chart.setSolutionIndexes(getSolutionIndexes(rows));
 	chart.addSerie(series)
 	chart.setXAxisName(tableHeader[0]);
 	chart.setYAxisName(tableHeader[1]);
@@ -204,6 +223,7 @@ function plot4D(tableHeader, rows, normalize){
 	
 	var chart = new ScatterChart4D()
 	
+	chart.setSolutionIndexes(getSolutionIndexes(rows));
 	chart.setXAxisName(tableHeader)
 	chart.setSeries(series)
 	chart.setOnClickListener(function(solutionIndex){
@@ -248,8 +268,4 @@ $(function(){
 	}else{
 		plot4D(tableHeader, rows, normalize)
 	}
-	
-	
-	
-	
 });

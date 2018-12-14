@@ -52,7 +52,7 @@ public abstract class Correlation {
 		}
 	}
 
-	public String getKey() {
+	public String getId() {
 		return Converter.toKey(getName());
 	}
 	

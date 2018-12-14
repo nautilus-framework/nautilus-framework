@@ -83,7 +83,7 @@ public class ContinueController {
 //		AbstractProblem problem = pluginService.getProblemExtension(pluginId, problemId).createProblem(data, objectives);
 		Problem<?> problem = null;
 		
-		Correlation correlation = pluginService.getCorrelationers().get(settings.getCorrelation());
+		Correlation correlation = pluginService.getCorrelationers().get(settings.getCorrelationId());
 		
 //		List<CorrelationItem> correlationItems = correlationService.correlateVariables(problem, data, objectives, solutions);
 		List<CorrelationItem> correlationItems = Arrays.asList();
@@ -112,7 +112,7 @@ public class ContinueController {
 		
 		
 		
-		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalize());
+		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalizeId());
 		
 //		if (objectives.size() != 1) {
 //			solutions = normalizer.normalize(objectives, solutions);

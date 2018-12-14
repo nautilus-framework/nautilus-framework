@@ -136,9 +136,9 @@ public class PluginService {
 	
 	private void addColorizer(AbstractColorize colorize) {
 
-		this.colorizers.put(colorize.getKey(), colorize);
+		this.colorizers.put(colorize.getId(), colorize);
 		
-		LOGGER.info("Added '{}' colorizer", colorize.getKey());
+		LOGGER.info("Added '{}' colorizer", colorize.getId());
 	}
 
 	private void addNormalizer(Normalize normalize) {
@@ -150,9 +150,9 @@ public class PluginService {
 	
 	private void addCorrelationer(Correlation correlation) {
 
-		this.correlationers.put(correlation.getKey(), correlation);
+		this.correlationers.put(correlation.getId(), correlation);
 		
-		LOGGER.info("Added '{}' correlationer", correlation.getKey());
+		LOGGER.info("Added '{}' correlationer", correlation.getId());
 	}
 	
 	private void addDuplicatesRemover(AbstractDuplicatesRemover duplicatesRemover) {

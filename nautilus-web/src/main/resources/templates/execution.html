@@ -105,7 +105,7 @@
 														    	<strong>Normalizer</strong>
 														   		<p class="small">Normalize the objective's values between 0 and 1</p>
 														    </label>
-														    <select class="form-control" th:field="*{normalize}">
+														    <select class="form-control" th:field="*{normalizeId}">
 														      <option th:each="normalize : ${normalizers}" 
 														    		th:value="${normalize.key}"
 														    		th:text="${normalize.value}" 
@@ -123,7 +123,7 @@
 														    	<strong>Colorizer</strong>
 														   		<p class="small">Colorize the closest solutions those ones you selected</p>
 														    </label>
-														    <select class="form-control" th:field="*{colorize}">
+														    <select class="form-control" th:field="*{colorizeId}">
 														    	<option th:each="colorize : ${colorizers}" 
 														    		th:value="${colorize.key}"
 														    		th:text="${colorize.value}" 
@@ -141,7 +141,7 @@
 														    	<strong>Correlationer</strong>
 														   		<p class="small">Correlation among the objectives and variables</p>
 														    </label>
-														    <select class="form-control" th:field="*{correlation}">
+														    <select class="form-control" th:field="*{correlationId}">
 														    	<option th:each="correlationer : ${correlationers}" 
 														    		th:value="${correlationer.key}"
 														    		th:text="${correlationer.value}" 
@@ -159,7 +159,7 @@
 														    	<strong>Duplicates Removers</strong>
 														   		<p class="small">Remove the duplicated solutions from pareto-front</p>
 														    </label>
-														    <select class="form-control" th:field="*{duplicatesRemover}">
+														    <select class="form-control" th:field="*{duplicatesRemoverId}">
 														    	<option th:each="duplicatesRemover : ${duplicatesRemovers}" 
 														    		th:value="${duplicatesRemover.key}"
 														    		th:text="${duplicatesRemover.value}" 

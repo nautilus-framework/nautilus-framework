@@ -12,7 +12,7 @@ import thiagodnf.nautilus.core.util.SolutionListUtils;
 
 public abstract class AbstractColorize {
 	
-	public String getKey() {
+	public String getId() {
 		return Converter.toKey(getName());
 	}
 	

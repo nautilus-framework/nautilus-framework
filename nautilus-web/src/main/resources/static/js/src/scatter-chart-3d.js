@@ -5,6 +5,7 @@ class ScatterChart3D {
 		this.xAxisName = "Objective 2";
 		this.zAxisName = "Objective 3";
 		this.onClickListener = undefined
+		this.solutionIndexes = [];
 		this.series = []
 		this.min = 0;
 		this.max = 1;
@@ -16,6 +17,10 @@ class ScatterChart3D {
 	
 	setXAxisName(name){
 		this.xAxisName = name;
+	}
+	
+	setSolutionIndexes(solutionIndexes){
+		this.solutionIndexes = solutionIndexes;
 	}
 	
 	setYAxisName(name){
@@ -60,7 +65,10 @@ class ScatterChart3D {
 		    },
 			tooltip: {
 			    formatter: function() {
-			    	return '<b>Solution</b> ' + (this.series.index) + '<br/> <b>Objectives</b><br/>' + this.point.options.x +", "+ this.point.options.y +", "+ this.point.options.z;
+			    	
+			    	var solutionIndex = that.solutionIndexes[this.series.index];
+			    	
+			    	return '<b>Solution</b> ' + (solutionIndex) + '<br/> <b>Objectives</b><br/>' + this.point.options.x +", "+ this.point.options.y +", "+ this.point.options.z;
 			    }
 			},
 			plotOptions: {
@@ -80,7 +88,10 @@ class ScatterChart3D {
 				      events:{
 				        click: function(e){
 				        	if(that.onClickListener){
-				        		that.onClickListener(this.series.index)
+				        		
+				        		var solutionIndex = that.solutionIndexes[this.series.index];
+				        		
+				        		that.onClickListener(solutionIndex)
 				        	}
 				        }
 				      }
