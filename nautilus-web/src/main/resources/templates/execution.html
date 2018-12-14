@@ -183,7 +183,7 @@
 													</div>
 												</li>
 												<li class="list-group-item">
-													<button type="submit" class="btn btn-outline-success btn-sm">Save</button>
+													<button type="submit" class="btn btn-outline-success">Save</button>
 												</li>
 											</ul>
 										</form>
@@ -199,7 +199,7 @@
 														<p class="small">Export a json file with the execution information to Nautilus</p>
 													</div>
 													<div class="col-4 text-right">
-														<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/json'">Download Json</a>
+														<a class="btn btn-outline-secondary" th:href="@{/download/execution/} + ${execution.getId()}+'/json'">Download Json</a>
 													</div>	
 												</div>
 											</li>
@@ -210,8 +210,8 @@
 														<p class="small">Export a fun and/or var files to jMetal Framework tool</p>
 													</div>
 													<div class="col-6 text-right">
-														<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/fun'">Download FUN File</a>
-														<a class="btn btn-outline-secondary btn-sm" th:href="@{/download/execution/} + ${execution.getId()}+'/var'">Download VAR File</a>
+														<a class="btn btn-outline-secondary" th:href="@{/download/execution/} + ${execution.getId()}+'/fun'">Download FUN File</a>
+														<a class="btn btn-outline-secondary" th:href="@{/download/execution/} + ${execution.getId()}+'/var'">Download VAR File</a>
 													</div>	
 												</div>
 											</li>
@@ -229,10 +229,11 @@
 													<div class="col-8">
 														<strong>Clear User Preferences</strong><br/>
 														<p><small>Clear the user feedback to provide the preferences again</small></p>
-														
 													</div>
 													<div class="col-4 text-right">
-														<a class="btn btn-outline-danger btn-sm" th:href="@{/execution/} + ${execution.getId()} + @{/clear/user-feedback}">Clear Feedback</a>
+														<form method="POST" th:action="@{/execution/} + ${execution.getId()} + @{/clear/user-feedback}">
+															<button type="submit" class="btn btn-outline-danger" data:confirm="#{clear.all.user.feedbacks.all.solution}" >Clear Feedback</button>
+														</form>
 													</div>	
 												</div>
 											</li>
@@ -243,7 +244,9 @@
 														<small>Once you delete, there is no going back. Please be certain.</small></p>
 													</div>
 													<div class="col-4 text-right">
-														<a class="btn btn-outline-danger btn-sm" th:href="@{/execution/} + ${execution.getId()} + @{/delete}">Delete Execution</a>
+														<form method="POST" th:action="@{/execution/} + ${execution.getId()} + @{/delete}">
+															<button type="submit" class="btn btn-outline-danger" data:confirm="#{delete.execution}">Delete Execution</button>
+														</form>
 													</div>	
 												</div>
 											</li>

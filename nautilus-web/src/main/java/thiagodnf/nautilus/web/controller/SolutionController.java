@@ -151,7 +151,7 @@ public class SolutionController {
 		
 		execution = executionService.save(execution);
 		
-		flashMessageService.success(ra, "msg.cleaned.feedback.for.solution.success", String.valueOf(solutionIndex));
+		flashMessageService.success(ra, "msg.cleaned.feedback.single.solution.success", String.valueOf(solutionIndex));
 		
 		return "redirect:/execution/" + executionId;
 	}

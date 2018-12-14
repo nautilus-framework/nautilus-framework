@@ -4,6 +4,34 @@ function isSafari(){
  
 $(function(){
 	
+	$("button[data-confirm]").click(function(e){
+		e.preventDefault();
+		
+		var that = $(this);
+		
+		bootbox.dialog({
+			 message: that.data("confirm"),
+			 closeButton: false,
+			 title: "Confirm",
+			 onEscape: true,
+			 buttons: {
+				 confirm: {
+					label: "Confirm",
+		            className: "btn-outline-danger",
+		            callback: function(result){
+		            	that.parent().submit();
+					}
+		        },
+		        cancel: {
+		            label: "Cancel",
+		            className: "btn-outline-secondary pull-right"
+		        },
+			 },
+		});
+		
+		return false;
+	});
+	
 	$(".boostrap-dual-listbox").bootstrapDualListbox({
 		
 	});

@@ -97,7 +97,7 @@ public class ExecutionController {
 
 		flashMessageService.success(ra, "msg.delete.execution.success", execution.getTitle());
 		
-		return "redirect:/problem/" + parameters.getPluginId() + "/" + parameters.getProblemId()+"#executions";
+		return "redirect:/plugin/" + parameters.getPluginId() + "/#executions";
 	}
 	
 	@GetMapping("/duplicate")
@@ -136,7 +136,7 @@ public class ExecutionController {
 		return "redirect:/execution/" + executionId;
 	}
 	
-	@GetMapping("/clear/user-feedback")
+	@PostMapping("/clear/user-feedback")
 	public String clearUserFeedback(Model model,
 			RedirectAttributes ra,
 			@PathVariable("executionId") String executionId) {
@@ -165,7 +165,7 @@ public class ExecutionController {
 
 		execution = executionService.save(execution);
 		
-		flashMessageService.success(ra, "msg.cleaned.feedback.success");
+		flashMessageService.success(ra, "msg.cleaned.feedback.all.solutions.success");
 
 		return "redirect:/execution/" + executionId;
 	}

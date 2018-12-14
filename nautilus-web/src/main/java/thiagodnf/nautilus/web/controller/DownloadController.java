@@ -72,10 +72,7 @@ public class DownloadController {
 		
 		StringBuffer buffer = new StringBuffer();
 		
-//		List<? extends Solution<?>> solutions = execution.getSolutions();
 		List<GenericSolution> solutions = execution.getSolutions();
-		
-		//solutions = new ByObjectivesDuplicatesRemover().execute(solutions);
 		
 		for (GenericSolution s : solutions) {
 
@@ -83,7 +80,7 @@ public class DownloadController {
 				buffer.append(s.getObjective(i));
 
 				if (i + 1 != s.getNumberOfObjectives()) {
-					buffer.append(" ");
+					buffer.append(";");
 				}
 			}
 
@@ -94,9 +91,11 @@ public class DownloadController {
 
 		Resource file = new ByteArrayResource(content.getBytes());
 
+		String filename = "FUN_" + executionId + ".txt";
+		
 		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + executionId + ".fun\"")
-				.header(HttpHeaders.CONTENT_TYPE, "text/fun")
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+				.header(HttpHeaders.CONTENT_TYPE, "text/plain")
 				.header(HttpHeaders.CONTENT_ENCODING, "UTF-8")
 				.body(file);
 	}
@@ -114,13 +113,11 @@ public class DownloadController {
 		
 		List<GenericSolution> solutions = execution.getSolutions();
 		
-		//solutions = new ByObjectivesDuplicatesRemover().execute(solutions);
-		
 		for (GenericSolution s : solutions) {
 
 			for (int i = 0; i < s.getNumberOfVariables(); i++) {
 				
-				//buffer.append(s.getVariableValue(i));
+				buffer.append(s.getVariableValue(i));
 
 				if (i + 1 != s.getNumberOfVariables()) {
 					buffer.append(";");
@@ -133,10 +130,12 @@ public class DownloadController {
 		String content = buffer.toString();
 
 		Resource file = new ByteArrayResource(content.getBytes());
+		
+		String filename = "VAR_" + executionId + ".txt";
 
 		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + executionId + ".var\"")
-				.header(HttpHeaders.CONTENT_TYPE, "text/var")
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+				.header(HttpHeaders.CONTENT_TYPE, "text/plain")
 				.header(HttpHeaders.CONTENT_ENCODING, "UTF-8")
 				.body(file);
 	}

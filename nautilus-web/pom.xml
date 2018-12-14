@@ -165,6 +165,10 @@
 			<artifactId>nautilus-plugin</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.github.mxab.thymeleaf.extras</groupId>
+		    <artifactId>thymeleaf-extras-data-attribute</artifactId>
+		</dependency>
 		<!-- PF4J -->
 		<dependency>
             <groupId>org.pf4j</groupId>

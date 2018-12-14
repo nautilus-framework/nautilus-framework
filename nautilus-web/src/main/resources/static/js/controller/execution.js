@@ -248,4 +248,8 @@ $(function(){
 	}else{
 		plot4D(tableHeader, rows, normalize)
 	}
+	
+	
+	
+	
 });
