@@ -2,7 +2,7 @@ package thiagodnf.nautilus.core.colorize;
 
 import org.uma.jmetal.solution.Solution;
 
-public class NoColorColorize extends Colorize {
+public class DontColorize extends AbstractColorize {
 
 	@Override
 	public double getDistance(Solution<?> s, Solution<?> selected) {
@@ -11,6 +11,6 @@ public class NoColorColorize extends Colorize {
 
 	@Override
 	public String getName() {
-		return "No Color";
+		return "Don't Color";
 	}
 }

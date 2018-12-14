@@ -12,25 +12,24 @@ $(function(){
 		
 		var that = $(this);
 		
-		bootbox.confirm({
+		bootbox.dialog({
 			 message: "Are you sure to delete this item?",
 			 closeButton: false,
+			 title: "Confirm",
+			 onEscape: true,
 			 buttons: {
+				 confirm: {
+					 label: "Confirm",
+		            className: "btn-outline-danger",
+		            callback: function(result){
+		            	that.parent().submit();
+					}
+		        },
 		        cancel: {
 		            label: "Cancel",
 		            className: "btn-outline-secondary pull-right"
 		        },
-		        confirm: {
-		            label: "Delete",
-		            className: "btn-outline-danger pull-left"
-		        }
 			 },
-			 callback: function(result){
-			
-				if(result){
-					that.parent().submit();
-				}
-			 }
 		});
 	});
 	
@@ -38,25 +37,25 @@ $(function(){
 		
 		var that = $(this);
 		
-		bootbox.confirm({
+		bootbox.dialog({
 			 message: "Are you sure to delete this item?",
 			 closeButton: false,
+			 title: "Confirm",
+			 onEscape: true,
 			 buttons: {
+				 confirm: {
+		            label: "Confirm",
+		            className: "btn-outline-danger",
+		            callback: function(result){
+		            	that.parent().submit();
+					}
+		        },
 		        cancel: {
 		            label: "Cancel",
 		            className: "btn-outline-secondary pull-right"
 		        },
-		        confirm: {
-		            label: "Delete",
-		            className: "btn-outline-danger pull-left"
-		        }
 			 },
-			 callback: function(result){
-			
-				if(result){
-					that.parent().submit();
-				}
-			 }
+			 
 		});
 	});
 	

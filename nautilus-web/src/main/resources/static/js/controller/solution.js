@@ -55,4 +55,32 @@ $(function(){
 	
 	$(".slider-master").slider('setValue', getAverageFeedback());
 	changeColor();
+	
+	
+	$("#btn-clear-user-feedback").click(function(e){
+		
+		e.preventDefault();
+		
+		bootbox.dialog({
+			 message: "Are you sure to clear the user feedback for this solution?",
+			 closeButton: false,
+			 title: "Confirm",
+			 onEscape: true,
+			 buttons: {
+		        confirm: {
+		            label: "Confirm",
+		            className: "btn-outline-danger",
+		            callback: function(result){
+		            	$("#form-clear-user-feedback").submit();
+					}
+		        },
+		        cancel: {
+		            label: "Cancel",
+		            className: "btn-outline-secondary pull-right"
+		        },
+			 },
+		});
+		
+		return false;
+	})
 })

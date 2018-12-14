@@ -15,7 +15,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import thiagodnf.nautilus.web.exception.RedirectException;
+import thiagodnf.nautilus.web.exception.AbstractRedirectException;
 
 @Service
 public class FlashMessageService {
@@ -74,7 +74,7 @@ public class FlashMessageService {
 				.collect(Collectors.toList()));
 	}
 
-	public void error(RedirectAttributes ra, RedirectException ex) {
+	public void error(RedirectAttributes ra, AbstractRedirectException ex) {
 
 		ResponseStatus status = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);
 

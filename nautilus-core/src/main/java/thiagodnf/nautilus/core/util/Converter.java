@@ -32,6 +32,28 @@ public class Converter {
 		return text.replaceAll("[^A-Za-z0-9]", "-").toLowerCase();
 	}
 	
+	public static List<Integer> toIntegerList(List<Object> objects) {
+
+		List<Integer> binarySets = new ArrayList<>();
+
+		for (Object obj : objects) {
+			binarySets.add((Integer) obj);
+		}
+
+		return binarySets;
+	}
+	
+	public static List<BinarySet> toBinarySetList(List<Object> objects) {
+
+		List<BinarySet> binarySets = new ArrayList<>();
+
+		for (Object obj : objects) {
+			binarySets.add((BinarySet) obj);
+		}
+
+		return binarySets;
+	}
+	
 	public static GenericSolution toGenericSolution(Solution<?> solution) {
 		
 		int numberOfObjectives = solution.getNumberOfObjectives();
@@ -46,6 +68,8 @@ public class Converter {
 		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
 			newSolution.setVariableValue(i, solution.getVariableValue(i));
 		}
+		
+		newSolution.setType(solution.getClass().getName());
 
 		return newSolution;
 	}

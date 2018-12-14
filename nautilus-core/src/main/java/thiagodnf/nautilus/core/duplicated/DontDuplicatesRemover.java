@@ -2,7 +2,7 @@ package thiagodnf.nautilus.core.duplicated;
 
 import org.uma.jmetal.solution.Solution;
 
-public class DontDuplicatesRemover extends DuplicatesRemover {
+public class DontDuplicatesRemover extends AbstractDuplicatesRemover {
 
 	@Override
 	public String getName() {

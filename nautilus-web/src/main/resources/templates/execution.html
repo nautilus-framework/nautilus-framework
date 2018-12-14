@@ -25,7 +25,6 @@
 					<div class="col-4 float-right">
 						<a class="btn btn-success btn-sm float-right" th:href="@{/done/} + ${execution.getId()}">Done</a>
 						<a class="btn btn-outline-secondary btn-sm float-right" th:href="@{/continue/} + ${execution.getId()}">Continue</a>
-					  	
 					</div>
 				</div>
 			</div>
@@ -61,21 +60,19 @@
 									</thead>
 									<tbody>
 										<tr th:each="solution : ${solutions}" th:with="i = ${solution.getAttributes().get('id')}">
-											<td><a th:href="@{/solution}+'/'+${execution.getId()}+'/'+${i}" th:text="${i}"></a></td>
+											<td><a th:href="@{/solution/}+${execution.getId()}+@{/}+${i}" th:text="${i}"></a></td>
 											
-											<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,4)}" class="objectives-values"/>
+											<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,5 )}" class="objectives-values"/>
 												
 											<td th:text="${solution.getAttributes().containsKey('selected')}"/>
-											<!-- <td th:text="${#numbers.formatDecimal(solution.getUserFeeback(), 1, 4)}"></td> -->
-											<td></td>	
-											<td th:text="${solution.getAttributes().get('distance')}"></td>
+											<td th:text="${#numbers.formatDecimal(solution.getUserFeedback(), 1, 5)}"></td>
+											<td th:text="${#numbers.formatDecimal(solution.getAttributes().get('distance'),1,5)}"></td>
 										</tr>
 									</tbody>
 								</table>
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="information">
-							
 							<div th:replace="fragments/parameters :: default(${execution.getParameters()})"></div>
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="settings">

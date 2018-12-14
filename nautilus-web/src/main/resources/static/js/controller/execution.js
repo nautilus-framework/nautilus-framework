@@ -242,9 +242,9 @@ $(function(){
 	if(tableHeader.length == 1){
 		
 	} else if(tableHeader.length == 2){
-		plot2D(tableHeader, rows)
+		plot2D(tableHeader, rows, normalize)
 	}else if(tableHeader.length == 3){
-		plot3D(tableHeader, rows)
+		plot3D(tableHeader, rows, normalize)
 	}else{
 		plot4D(tableHeader, rows, normalize)
 	}

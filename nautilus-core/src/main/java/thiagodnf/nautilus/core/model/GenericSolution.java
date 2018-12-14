@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
+
+import thiagodnf.nautilus.core.util.SolutionAttribute;
 
 public class GenericSolution implements Solution<Object> {
 	
@@ -21,9 +24,12 @@ public class GenericSolution implements Solution<Object> {
 	
 	private Map<Object, Object> attributes;
 	
+	private String type;
+	
 	public GenericSolution() {
 		this.variables = new ArrayList<>();
 		this.attributes = new HashMap<>();
+		this.type = "";
 	}
 	
 	public GenericSolution(int numberOfObjectives, int numberOfVariables) {
@@ -33,6 +39,7 @@ public class GenericSolution implements Solution<Object> {
 		
 		this.objectives = new double[numberOfObjectives];
 		this.variables = new ArrayList<>(numberOfVariables);
+		this.type = ""; 
 
 		for (int i = 0; i < numberOfVariables; i++) {
 			variables.add(i, null);
@@ -56,7 +63,8 @@ public class GenericSolution implements Solution<Object> {
 				setVariableValue(i, solution.getVariableValue(i));
 			}
 		}
-
+		
+		this.type = solution.type;
 		this.attributes = new HashMap<>(solution.attributes);
 	}
 
@@ -83,32 +91,6 @@ public class GenericSolution implements Solution<Object> {
 	public int getNumberOfVariables() {
 		return variables.size();
 	}
-	
-//	public List<String> getVariablesValueAsList() {
-//
-//		List<String> variables = new ArrayList<>();
-//
-//		for (int i = 0; i < getNumberOfVariables(); i++) {
-//
-//			Object object = getVariables().get(i);
-//
-//			if (object instanceof BinarySet) {
-//
-//				BinarySet binarySet = (BinarySet) object;
-//
-//				for (int j = 0; j < binarySet.getBinarySetLength(); j++) {
-//
-//					if (binarySet.get(j)) {
-//						variables.add(String.valueOf(j));
-//					}
-//				}
-//			} else if (object instanceof Integer) {
-//				variables.add(String.valueOf(object));
-//			}
-//		}
-//
-//		return variables;
-//	}
 
 	@Override
 	public double[] getObjectives() {
@@ -156,5 +138,72 @@ public class GenericSolution implements Solution<Object> {
 	@Override
 	public double getObjective(int index) {
 		return objectives[index];
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public List<String> getVariablesAsList() {
+
+		List<String> variables = new ArrayList<>();
+
+		for (Object object : getVariables()) {
+
+			if (object instanceof BinarySet) {
+
+				BinarySet binarySet = (BinarySet) object;
+
+				for (int i = 0; i < binarySet.getBinarySetLength(); i++) {
+
+					if (binarySet.get(i)) {
+						variables.add(String.valueOf(i));
+					}
+				}
+			} else if (object instanceof Integer) {
+				variables.add(String.valueOf(object));
+			}
+		}
+
+		return variables;
+	}
+	
+	public double getUserFeedback() {
+
+		double sum = 0.0;
+		double total = 0.0;
+
+		for (Entry<Object, Object> entry : getAttributes().entrySet()) {
+
+			String key = entry.getKey().toString();
+
+			if (key.startsWith(SolutionAttribute.FEEDBACK_FOR_VARIABLE)) {
+				sum += (Double) entry.getValue();
+				total++;
+			}
+		}
+
+		if (total == 0.0) {
+			return 0.0;
+		}
+
+		return sum / total;
+	}
+	
+	public void setVariableUserFeedback(int index, double value) {
+		setAttribute(SolutionAttribute.FEEDBACK_FOR_VARIABLE + index, value);
+	}
+	
+	public double getVariableUserFeedback(int index) {
+
+		if (getAttribute(SolutionAttribute.FEEDBACK_FOR_VARIABLE + index) == null) {
+			return 0.0;
+		}
+
+		return (double) getAttribute(SolutionAttribute.FEEDBACK_FOR_VARIABLE + index);
 	}
 }

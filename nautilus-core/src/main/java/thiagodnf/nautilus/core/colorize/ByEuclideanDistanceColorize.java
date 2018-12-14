@@ -1,20 +1,17 @@
 package thiagodnf.nautilus.core.colorize;
 
+import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.distance.EuclideanDistance;
-
-public class ByEuclideanDistanceColorize extends Colorize{
+public class ByEuclideanDistanceColorize extends AbstractColorize{
 
 	@Override
 	public double getDistance(Solution<?> s, Solution<?> selected) {
-		//return EuclideanDistance.calculate(s.getObjectives(), selected.getObjectives());
-		return 1.0;
+		return new EuclideanDistance().compute(s.getObjectives(), selected.getObjectives());
 	}
 
 	@Override
 	public String getName() {
 		return "By Euclidean Distance";
 	}
-
 }

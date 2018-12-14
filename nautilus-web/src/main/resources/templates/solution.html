@@ -5,100 +5,106 @@
 
 	<head th:replace="fragments/head :: default(Solution)"></head>
 
-<body>
-	<div th:replace="fragments/navbar :: default('home')"></div>
-
-	<div class="page-header page-header-with-navbar">
-		<div class="container">
+	<body>
+	
+		<div th:replace="fragments/navbar :: default('home')"></div>
+	
+		<div class="page-header page-header-with-navbar">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<h6 class="title">
+							<a th:href="@{/}">Home</a> 
+							<span class="path-divider">/</span>
+							<a th:href="@{/execution/} + ${execution.getId()}" th:text="${execution.getTitle()}"></a>
+							<span class="path-divider">/</span>
+							<a th:href="@{/solution/} + ${executionId} + @{/} + ${solutionIndex}" th:text="'Solution '+${solutionIndex}"></a> 
+						</h6>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<div class="container page-navbar">
 			<div class="row">
 				<div class="col-12">
-					<h6 class="title">
-						<a th:href="@{/}">Home</a> 
-						<span class="path-divider">/</span>
-						<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a>
-						<span class="path-divider">/</span>
-						<a th:href="@{/solution/}+${executionId}+@{/}+${solutionIndex}" th:text="'Solution '+${solutionIndex}"></a> 
-					</h6>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="container page-navbar">
-		<div class="row">
-			<div class="col-12">
-				<ul class="nav nav-tabs " role="tablist">
-					<li class="nav-item"><a class="nav-link  active" href="#variables" role="tab" data-toggle="tab" aria-selected="true">Variables</a></li>
-					<li class="nav-item"><a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a></li>
-				</ul>
-				<div class="slider-on-tab float-right">
-					<input type="text" name="general-feedback"
-						class="slider-colorful slider-master" id="general-feedback"
-						data-provide="slider" data-slider-min="-1" data-slider-max="1"
-						data-slider-step="0.1"
-						th:attr="data-slider-value=${0}"
-						data-slider-tooltip="hide" />
-				</div>
-				<form action="#"
-					th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/save/feedback}"
-					method="post">
-					<!-- Tab panes -->
-					<div class="tab-content">
-						<div role="tabpanel" class="tab-pane active" id="variables">
-							<table id="table-variables"
-								class="table table-striped table-hover table-sm table-datatable-no-paginaton"
-								style="width: 100%">
-								<thead>
-									<tr>
-										<th>Variable</th>
-										<th>Feedback</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr th:each="value,i : ${solution.getVariablesValueAsList()}">
-										<td width="100%" th:text="${value}"/>
-										<td th:with="feedback = ${solution.getProperties().get('feedback-for-variable-'+i.index)}">
-											<input type="text"
-												th:name="'feedback-for-variable-' + ${i.index}"
-												class="slider-colorful slider-slave variable-feedback"
-												data-provide="slider" data-slider-min="-1"
-												data-slider-max="1" data-slider-step="0.1"
-												th:attr="data-slider-value=${feedback == null? 0.0 : feedback}"
-												data-slider-tooltip="hide" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div role="tabpanel" class="tab-pane fade" id="objectives">
-							<table id="execution-table"
-								class="table table-striped table-hover table-sm table-datatable"
-								style="width: 100%">
-								<thead>
-									<tr>
-										<th>Objective</th>
-										<th>Value</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr th:each="instance : ${objectivesMap}">
-										<td th:text="${instance.key}"></td>
-										<td th:text="${instance.value}"></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
+					<ul class="nav nav-tabs " role="tablist">
+						<li class="nav-item"><a class="nav-link  active" href="#variables" role="tab" data-toggle="tab" aria-selected="true">Variables</a></li>
+						<li class="nav-item"><a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a></li>
+					</ul>
+					<div class="slider-on-tab float-right">
+						<input type="text" name="general-feedback"
+							class="slider-colorful slider-master" id="general-feedback"
+							data-provide="slider" data-slider-min="-1" data-slider-max="1"
+							data-slider-step="0.1"
+							th:attr="data-slider-value=${0}"
+							data-slider-tooltip="hide" />
 					</div>
-					<hr />
-					<button type="submit" class="btn btn-success btn-sm" id="btn-feedback">Save</button>
-					<a class="btn btn-light btn-sm" th:href="@{/execution/} + ${executionId}">Back</a>
-				</form>
+					<form action="#" th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/save/feedback}" method="post">
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="variables">
+								<table id="table-variables"
+									class="table table-striped table-hover table-sm table-datatable-no-paginaton"
+									style="width: 100%">
+									<thead>
+										<tr>
+											<th>Variable</th>
+											<th>Feedback</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="value,i : ${solution.getVariablesAsList()}">
+											<td width="100%" th:text="${value}"/>
+											<td th:with="feedback = ${solution.getVariableUserFeedback(i.index)}">
+												<input type="text"
+													th:name="'feedback-for-variable-' + ${i.index}"
+													class="slider-colorful slider-slave variable-feedback"
+													data-provide="slider" 
+													data-slider-min="-1"
+													data-slider-max="1" 
+													data-slider-step="0.1"
+													th:attr="data-slider-value = ${feedback == null? 0.0 : feedback}"
+													data-slider-tooltip="hide" />
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div role="tabpanel" class="tab-pane fade" id="objectives">
+								<table id="execution-table"
+									class="table table-striped table-hover table-sm table-datatable"
+									style="width: 100%">
+									<thead>
+										<tr>
+											<th>Objective</th>
+											<th>Value</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="instance : ${objectivesMap}">
+											<td th:text="${instance.key}"></td>
+											<td th:text="${instance.value}"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<hr />
+						<button type="submit" class="btn btn-success" id="btn-feedback">Save</button>
+						<a class="btn btn-outline-secondary" th:href="@{/execution/} + ${executionId}">Back</a>
+						
+						<button class="btn btn-outline-danger pull-right" id="btn-clear-user-feedback">Clear User Feedback</button>
+					</form>
+					<form action="#" th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/clear/user-feedback}" method="post" id="form-clear-user-feedback">
+					</form>
+					
+				</div>
 			</div>
 		</div>
-	</div>
-
-	<div th:replace="fragments/footer :: footer"></div>
-	<script type="text/javascript" th:src="@{/js/controller/solution.js}"></script>
-</body>
+	
+		<div th:replace="fragments/footer :: footer"></div>
+		<script type="text/javascript" th:src="@{/js/controller/solution.js}"></script>
+	</body>
 
 </html>

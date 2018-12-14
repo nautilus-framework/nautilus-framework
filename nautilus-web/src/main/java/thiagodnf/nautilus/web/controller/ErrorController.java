@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.web.exception.PageException;
-import thiagodnf.nautilus.web.exception.RedirectException;
+import thiagodnf.nautilus.web.exception.AbstractRedirectException;
 import thiagodnf.nautilus.web.service.FlashMessageService;
 
 @ControllerAdvice
@@ -22,8 +22,8 @@ public class ErrorController {
 	@Autowired
 	private FlashMessageService flashMessageService;
 	
-	@ExceptionHandler(RedirectException.class)
-	public String handleRedirectException(HttpServletRequest req, RedirectException ex, RedirectAttributes ra) {
+	@ExceptionHandler(AbstractRedirectException.class)
+	public String handleRedirectException(HttpServletRequest req, AbstractRedirectException ex, RedirectAttributes ra) {
 		
 		ResponseStatus status = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);
 

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.uma.jmetal.algorithm.Algorithm;
+import org.uma.jmetal.problem.IntegerProblem;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.SolutionListUtils;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
@@ -12,8 +14,6 @@ import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
 import thiagodnf.nautilus.core.listener.AlgorithmListener;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
-import thiagodnf.nautilus.core.problem.IntegerProblem;
-import thiagodnf.nautilus.core.solution.IntegerSolution;
 
 @SuppressWarnings("unchecked")
 public class BruteForceSearch<S extends Solution<?>> implements Algorithm<List<S>>, AlgorithmListener{

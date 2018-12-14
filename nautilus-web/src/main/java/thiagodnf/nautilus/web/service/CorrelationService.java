@@ -3,9 +3,12 @@ package thiagodnf.nautilus.web.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.uma.jmetal.problem.BinaryProblem;
+import org.uma.jmetal.problem.IntegerProblem;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.BinarySolution;
+import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
 
 import com.google.common.base.Preconditions;
@@ -14,11 +17,6 @@ import thiagodnf.nautilus.core.correlation.Correlation;
 import thiagodnf.nautilus.core.correlation.Correlation.CorrelationItem;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.problem.BinaryProblem;
-import thiagodnf.nautilus.core.problem.IntegerProblem;
-import thiagodnf.nautilus.core.solution.BinarySolution;
-import thiagodnf.nautilus.core.solution.IntegerSolution;
-import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.Normalizer;
 
 @Service

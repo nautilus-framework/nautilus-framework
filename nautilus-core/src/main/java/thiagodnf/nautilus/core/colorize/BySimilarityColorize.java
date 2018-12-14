@@ -4,7 +4,7 @@ import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.distance.JaccardDistance;
 
-public class BySimilarityColorize extends Colorize {
+public class BySimilarityColorize extends AbstractColorize {
 
 	@Override
 	public double getDistance(Solution<?> s, Solution<?> selected) {

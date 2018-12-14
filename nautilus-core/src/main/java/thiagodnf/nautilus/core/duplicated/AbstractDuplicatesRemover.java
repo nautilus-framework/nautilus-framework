@@ -7,7 +7,7 @@ import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.util.Converter;
 
-public abstract class DuplicatesRemover {
+public abstract class AbstractDuplicatesRemover {
 
 	public List<Solution<?>> execute(List<? extends Solution<?>> solutions) {
 		

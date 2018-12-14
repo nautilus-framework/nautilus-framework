@@ -22,14 +22,14 @@ import com.google.common.collect.Ordering;
 
 import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
 import thiagodnf.nautilus.core.colorize.BySimilarityColorize;
-import thiagodnf.nautilus.core.colorize.Colorize;
-import thiagodnf.nautilus.core.colorize.NoColorColorize;
+import thiagodnf.nautilus.core.colorize.AbstractColorize;
+import thiagodnf.nautilus.core.colorize.DontColorize;
 import thiagodnf.nautilus.core.correlation.Correlation;
 import thiagodnf.nautilus.core.correlation.PearsonCorrelation;
 import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
 import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.ByVariablesDuplicatesRemover;
-import thiagodnf.nautilus.core.duplicated.DuplicatesRemover;
+import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.DontDuplicatesRemover;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
@@ -64,9 +64,9 @@ public class PluginService {
 	
 	private Map<String, Normalize> normalizers = new HashMap<>();
 	
-	private Map<String, Colorize> colorizers = new HashMap<>();
+	private Map<String, AbstractColorize> colorizers = new HashMap<>();
 	
-	private Map<String, DuplicatesRemover> duplicatesRemovers = new HashMap<>();
+	private Map<String, AbstractDuplicatesRemover> duplicatesRemovers = new HashMap<>();
 	
 	private Map<String, Correlation> correlationers = new HashMap<>();
 	
@@ -77,7 +77,7 @@ public class PluginService {
 
 		LOGGER.info("Done. Adding Colorizers");
 
-		addColorizer(new NoColorColorize());
+		addColorizer(new DontColorize());
 		addColorizer(new ByEuclideanDistanceColorize());
 		addColorizer(new BySimilarityColorize());
 
@@ -134,7 +134,7 @@ public class PluginService {
 		LOGGER.info("Done. All plugins were loaded and started");
 	}
 	
-	private void addColorizer(Colorize colorize) {
+	private void addColorizer(AbstractColorize colorize) {
 
 		this.colorizers.put(colorize.getKey(), colorize);
 		
@@ -155,7 +155,7 @@ public class PluginService {
 		LOGGER.info("Added '{}' correlationer", correlation.getKey());
 	}
 	
-	private void addDuplicatesRemover(DuplicatesRemover duplicatesRemover) {
+	private void addDuplicatesRemover(AbstractDuplicatesRemover duplicatesRemover) {
 
 		this.duplicatesRemovers.put(duplicatesRemover.getId(), duplicatesRemover);
 
@@ -166,11 +166,11 @@ public class PluginService {
 		return normalizers;
 	}
 	
-	public Map<String, DuplicatesRemover> getDuplicatesRemovers() {
+	public Map<String, AbstractDuplicatesRemover> getDuplicatesRemovers() {
 		return duplicatesRemovers;
 	}
 
-	public Map<String, Colorize> getColorizers() {
+	public Map<String, AbstractColorize> getColorizers() {
 		return colorizers;
 	}
 	

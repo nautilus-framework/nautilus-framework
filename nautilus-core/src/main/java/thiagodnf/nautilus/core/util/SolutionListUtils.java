@@ -7,14 +7,20 @@ import org.uma.jmetal.solution.Solution;
 
 public class SolutionListUtils {
 
-	public static List<Solution<?>> getNondominatedSolutions(List<List<Solution<?>>> paretoFronts) {
+	public static List<? extends Solution<?>> getSelectedSolutions(List<? extends Solution<?>> solutions) {
 
-		List<Solution<?>> pfknown = new ArrayList<>();
+		List<Solution<?>> selectedSolutions = new ArrayList<>();
 
-		for (List<Solution<?>> solutions : paretoFronts) {
-			pfknown.addAll(solutions);
+		for (Solution<?> sol : solutions) {
+			
+			Object value = sol.getAttribute(SolutionAttribute.SELECTED);
+
+			if (value != null && (boolean) value == true) {
+
+				selectedSolutions.add(sol.copy());
+			}
 		}
 
-		return org.uma.jmetal.util.SolutionListUtils.getNondominatedSolutions(pfknown);
+		return selectedSolutions;
 	}
 }

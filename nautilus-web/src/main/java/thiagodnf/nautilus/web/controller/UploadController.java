@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 
-import thiagodnf.nautilus.web.exception.RedirectException;
+import thiagodnf.nautilus.web.exception.AbstractRedirectException;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.UploadExecution;
 import thiagodnf.nautilus.web.model.UploadInstanceFile;
@@ -64,7 +64,7 @@ public class UploadController {
 				fileService.storePlugin(filename, file);
 				pluginService.loadPluginsFromDirectory();
 				flashMessageService.success(ra, "msg.upload.file.success", filename);
-			} catch (RedirectException ex) {
+			} catch (AbstractRedirectException ex) {
 				flashMessageService.error(ra, ex);
 			}
 		}
@@ -93,7 +93,7 @@ public class UploadController {
 			try {
 				fileService.storeInstanceFile(pluginId, problemId, filename, file);
 				flashMessageService.success(ra, "msg.upload.file.success", filename);
-			} catch (RedirectException ex) {
+			} catch (AbstractRedirectException ex) {
 				flashMessageService.error(ra, ex);
 			}
 		}

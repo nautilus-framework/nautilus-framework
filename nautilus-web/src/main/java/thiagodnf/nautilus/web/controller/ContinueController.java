@@ -12,15 +12,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.uma.jmetal.problem.Problem;
 
 import thiagodnf.nautilus.core.correlation.Correlation;
 import thiagodnf.nautilus.core.correlation.Correlation.CorrelationItem;
-import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.model.GenericSolution;
+import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.model.Variable;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.problem.AbstractProblem;
 import thiagodnf.nautilus.core.ranking.RankingComparator;
 import thiagodnf.nautilus.core.ranking.RankingItem;
 import thiagodnf.nautilus.web.model.Execution;
@@ -81,7 +81,7 @@ public class ContinueController {
 		InstanceData data = null;
 		
 //		AbstractProblem problem = pluginService.getProblemExtension(pluginId, problemId).createProblem(data, objectives);
-		AbstractProblem problem = null;
+		Problem<?> problem = null;
 		
 		Correlation correlation = pluginService.getCorrelationers().get(settings.getCorrelation());
 		

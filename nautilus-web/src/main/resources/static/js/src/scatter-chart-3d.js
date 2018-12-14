@@ -99,13 +99,17 @@ class ScatterChart3D {
 				title: {
 					text: that.xAxisName
 				},
-				min: 0, max: 1,tickInterval: 0.1,
+				min: that.min, 
+				max: that.max,
+				tickInterval: 0.1,
 			},	
 			zAxis: {
 				title: {
 					text: that.zAxisName
 				},
-				min: 0, max: 1,tickInterval: 0.1,
+				min: that.min, 
+				max: that.max,
+				tickInterval: 0.1,
 			},
 			series: that.series,
 		});

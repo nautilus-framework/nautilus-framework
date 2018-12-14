@@ -21,7 +21,11 @@ public abstract class Normalize {
 	 * @param solutions a list of solutions
 	 * @return a copy of a given list of solutions with normalized objective values
 	 */
-	public List<Solution<?>> normalize(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+	public List<? extends Solution<?>> normalize(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+		
+		if (objectives.size() == 1) {
+			return solutions;
+		}
 		
 		if (solutions.isEmpty()) {
 			return new ArrayList<>();
