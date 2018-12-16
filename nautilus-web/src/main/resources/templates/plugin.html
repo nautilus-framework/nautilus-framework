@@ -66,20 +66,18 @@
 								<thead>
 									<tr>
 										<th width="50px">#</th>
-										<th>Id</th>
-										<th width="200px">Name</th>
+										<th>Title</th>
 										<th width="200px">Problem Id</th>
 										<th width="200px">Date</th>
 										<th width="10px"></th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="execution,i : ${executions}">
+									<tr th:each="execution,i : ${executions}" th:with="executionName = ${execution.getSettings().getName()}">
 										<td th:text="${i.count}"></td>
 										<td>
-											<a th:text="${execution.getId()}" th:href="@{/execution/} + ${execution.getId()}"></a>
+											<a  th:href="@{/execution/} + ${execution.getId()}" th:text="${#strings.isEmpty(executionName)} ? ${execution.getId()} : ${executionName}"></a>
 										</td>
-										<td th:text="${execution.getSettings().getName()}"></td>
 										<td th:text="${execution.getParameters().getProblemId()}"></td>			
 										<td class="dates" th:text="${#formatter.date(execution.getDate())}"></td>
 										<td>
@@ -87,10 +85,12 @@
 											  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 											  </button>
 											  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-											  	<a class="dropdown-item" th:href="@{/execution/} + ${execution.getId()} + @{/duplicate}"><i class="fa fa-copy"></i> Duplicate</a>
+											  	<form method="POST" th:action="@{/execution/} + ${execution.getId()} + @{/duplicate}">
+											  		<a class="dropdown-item" href="#" data:confirm="#{duplicate.execution}"><i class="fa fa-copy"></i> Duplicate</a>
+												</form>
 												<div class="dropdown-divider"></div>
 												<form method="POST" th:action="@{/execution/} + ${execution.getId()} + @{/delete}">
-											    	<a class="dropdown-item text-danger dropdown-submit" href="#"><i class="fa fa-trash"></i> Remove</a>
+											    	<a class="dropdown-item text-danger dropdown-submit" href="#" data:confirm="#{delete.execution}"><i class="fa fa-trash"></i> Remove</a>
 											    </form>
 											  </div>
 											</div>

@@ -10,7 +10,7 @@ public class ByMaxAndMinValuesNormalize extends Normalize {
 
 	@Override
 	public String getName() {
-		return "by Max And Min Values";
+		return "By Max And Min Values";
 	}
 
 	@Override

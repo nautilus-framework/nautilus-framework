@@ -8,53 +8,57 @@
 	
 		<div th:fragment="default(parameters)">
 		
-			<h5>Information</h5>
-			<hr>
-			
-			<dl class="row">
-				<dt class="col-sm-2">Execution Id</dt>
-				<dd class="col-sm-10" th:text="${execution.getId()}"></dd>
-				<dt class="col-sm-2">Date</dt>
-				<dd class="col-sm-10 dates" th:text="${#formatter.date(execution.getDate())}"></dd>
-				<dt class="col-sm-2"># of Solutions</dt>
-				<dd class="col-sm-10" th:text="${solutions.size()}"></dd>
-				<dt class="col-sm-2">Execution Time</dt>
-				<dd class="col-sm-10" th:text="${#formatter.interval(execution.getExecutionTime())}"></dd>
-			</dl>
-			
-			<h5>Parameters</h5>
-			<hr>
-		
-			<dl class="row">
+			<div class="card">
+			  <div class="card-header">Information</div>
+			  <div class="card-body">
+			    <dl class="row">
+					<dt class="col-sm-2">Execution Id</dt>
+					<dd class="col-sm-10" th:text="${execution.getId()}"></dd>
+					<dt class="col-sm-2">Date</dt>
+					<dd class="col-sm-10 dates" th:text="${#formatter.date(execution.getDate())}"></dd>
+					<dt class="col-sm-2"># of Solutions</dt>
+					<dd class="col-sm-10" th:text="${solutions.size()}"></dd>
+					<dt class="col-sm-2">Execution Time</dt>
+					<dd class="col-sm-10" th:text="${#formatter.interval(execution.getExecutionTime())}"></dd>
+				</dl>
+			  </div>
+			</div>
+			<br/>
+			<div class="card">
+			  <div class="card-header">Parameters</div>
+			  <div class="card-body">
+			    <dl class="row">
 				
-				<dt class="col-sm-2">Plugin Id</dt>
-				<dd class="col-sm-10" th:text="${parameters.getPluginId()}"></dd>
-				<dt class="col-sm-2">Problem Id</dt>
-				<dd class="col-sm-10" th:text="${parameters.getProblemId()}"></dd>
-				<dt class="col-sm-2">Filename</dt>
-				<dd class="col-sm-10" th:text="${parameters.getFilename()}"></dd>
-				
-				<dt class="col-sm-2">Population Size</dt>
-				<dd class="col-sm-10" th:text="${parameters.getPopulationSize()}"></dd>
-				<dt class="col-sm-2">Max Evalution</dt>
-				<dd class="col-sm-10" th:text="${parameters.getMaxEvaluations()}"></dd>
-				
-				
-				<dt class="col-sm-2">Algorithm Name</dt>
-				<dd class="col-sm-10" th:text="${parameters.getAlgorithmId()}"></dd>
-				<dt class="col-sm-2">Objective Ids</dt>
-				<dd class="col-sm-10" th:text="${parameters.getObjectiveKeys()}"></dd>
-				<dt class="col-sm-2">Selection Name</dt>
-				<dd class="col-sm-10" th:text="${parameters.getSelectionId()}"></dd>
-				<dt class="col-sm-2">Crossover Name</dt>
-				<dd class="col-sm-10" th:text="${parameters.getCrossoverId()}"></dd>
-				<dt class="col-sm-2">Crossover Probability</dt>
-				<dd class="col-sm-10" th:text="${parameters.getCrossoverProbability()}"></dd>
-				<dt class="col-sm-2">Mutation Name</dt>
-				<dd class="col-sm-10" th:text="${parameters.getMutationId()}"></dd>
-				<dt class="col-sm-2">Mutation Probability</dt>
-				<dd class="col-sm-10" th:text="${parameters.getMutationProbability()}"></dd>
-			</dl>
+					<dt class="col-sm-2">Plugin Id</dt>
+					<dd class="col-sm-10" th:text="${parameters.getPluginId()}"></dd>
+					<dt class="col-sm-2">Problem Id</dt>
+					<dd class="col-sm-10" th:text="${parameters.getProblemId()}"></dd>
+					<dt class="col-sm-2">Filename</dt>
+					<dd class="col-sm-10" th:text="${parameters.getFilename()}"></dd>
+					
+					<dt class="col-sm-2">Population Size</dt>
+					<dd class="col-sm-10" th:text="${parameters.getPopulationSize()}"></dd>
+					<dt class="col-sm-2">Max Evalution</dt>
+					<dd class="col-sm-10" th:text="${parameters.getMaxEvaluations()}"></dd>
+					
+					
+					<dt class="col-sm-2">Algorithm Name</dt>
+					<dd class="col-sm-10" th:text="${parameters.getAlgorithmId()}"></dd>
+					<dt class="col-sm-2">Objective Ids</dt>
+					<dd class="col-sm-10" th:text="${parameters.getObjectiveKeys()}"></dd>
+					<dt class="col-sm-2">Selection Name</dt>
+					<dd class="col-sm-10" th:text="${parameters.getSelectionId()}"></dd>
+					<dt class="col-sm-2">Crossover Name</dt>
+					<dd class="col-sm-10" th:text="${parameters.getCrossoverId()}"></dd>
+					<dt class="col-sm-2">Crossover Probability</dt>
+					<dd class="col-sm-10" th:text="${parameters.getCrossoverProbability()}"></dd>
+					<dt class="col-sm-2">Mutation Name</dt>
+					<dd class="col-sm-10" th:text="${parameters.getMutationId()}"></dd>
+					<dt class="col-sm-2">Mutation Probability</dt>
+					<dd class="col-sm-10" th:text="${parameters.getMutationProbability()}"></dd>
+				</dl>
+			  </div>
+			</div>
 		</div>
 	</body>
 

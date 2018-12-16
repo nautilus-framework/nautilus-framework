@@ -6,7 +6,7 @@ public class ByObjectivesDuplicatesRemover extends AbstractDuplicatesRemover {
 
 	@Override
 	public String getName() {
-		return "by Objective Values";
+		return "By Objective Values";
 	}
 
 	@Override

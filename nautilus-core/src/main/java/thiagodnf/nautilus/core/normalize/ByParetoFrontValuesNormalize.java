@@ -70,6 +70,6 @@ public class ByParetoFrontValuesNormalize extends Normalize {
 
 	@Override
 	public String getName() {
-		return "by Pareto-front Values";
+		return "By Pareto-front Values";
 	}
 }

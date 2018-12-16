@@ -11,6 +11,6 @@ public class DontColorize extends AbstractColorize {
 
 	@Override
 	public String getName() {
-		return "Don't Color";
+		return "Don't Colorize";
 	}
 }

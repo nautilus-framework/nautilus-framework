@@ -1,9 +1,7 @@
 package thiagodnf.nautilus.web.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +21,7 @@ import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
 import thiagodnf.nautilus.core.model.GenericSolution;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.util.SolutionAttribute;
+import thiagodnf.nautilus.core.util.GenericSolutionUtils;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
@@ -98,12 +96,12 @@ public class ExecutionController {
 
 		Parameters parameters = execution.getParameters();
 
-		flashMessageService.success(ra, "msg.delete.execution.success", execution.getTitle());
+		flashMessageService.success(ra, "msg.delete.execution.success", execution.getId());
 		
 		return "redirect:/plugin/" + parameters.getPluginId() + "/#executions";
 	}
 	
-	@GetMapping("/duplicate")
+	@PostMapping("/duplicate")
 	public String duplicate(Model model,
 			RedirectAttributes ra,
 			@PathVariable("executionId") String executionId) {
@@ -115,11 +113,9 @@ public class ExecutionController {
 		
 		executionService.save(execution);
 
-		Parameters parameters = execution.getParameters();
-
-		flashMessageService.success(ra, "msg.duplicate.execution.success", execution.getTitle());
+		flashMessageService.success(ra, "msg.duplicate.execution.success", execution.getId());
 		
-		return "redirect:/problem/" + parameters.getPluginId() + "/" + parameters.getProblemId()+"#executions";
+		return "redirect:/plugin/" + execution.getParameters().getPluginId() + "#executions";
 	}
 	
 	@PostMapping("/save/settings")
@@ -147,23 +143,7 @@ public class ExecutionController {
 		Execution execution = executionService.findById(executionId);
 
 		for (GenericSolution solution : execution.getSolutions()) {
-
-			List<String> keysToRemove = new ArrayList<>();
-
-			for (Entry<Object, Object> entry : solution.getAttributes().entrySet()) {
-
-				String key = entry.getKey().toString();
-
-				if (key.startsWith(SolutionAttribute.FEEDBACK_FOR_VARIABLE)) {
-					keysToRemove.add(key);
-				}
-			}
-
-			for (String key : keysToRemove) {
-				solution.getAttributes().remove(key);
-			}
-			
-			solution.getAttributes().remove(SolutionAttribute.SELECTED);
+			GenericSolutionUtils.clearUserFeedback(solution);
 		}
 
 		execution = executionService.save(execution);

@@ -3,9 +3,9 @@ package thiagodnf.nautilus.web.model;
 import com.google.gson.Gson;
 
 import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
-import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
-import thiagodnf.nautilus.core.duplicated.ByVariablesDuplicatesRemover;
-import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
+import thiagodnf.nautilus.core.correlation.DontCorrelation;
+import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
+import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 
 public class Settings {
 
@@ -13,11 +13,11 @@ public class Settings {
 	
 	private String colorizeId = new ByEuclideanDistanceColorize().getId();
 	
-	private String normalizeId = new ByParetoFrontValuesNormalize().getId();
+	private String normalizeId = new ByMaxAndMinValuesNormalize().getId();
 	
-	private String correlationId = new SpearmanCorrelation().getId();
+	private String correlationId = new DontCorrelation().getId();
 	
-	private String duplicatesRemoverId = new ByVariablesDuplicatesRemover().getId();
+	private String duplicatesRemoverId = new ByObjectivesDuplicatesRemover().getId();
 	
 	private String name;
 

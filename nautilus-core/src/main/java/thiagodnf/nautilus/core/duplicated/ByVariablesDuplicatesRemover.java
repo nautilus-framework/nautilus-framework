@@ -19,7 +19,7 @@ public class ByVariablesDuplicatesRemover extends AbstractDuplicatesRemover {
 
 	@Override
 	public String getName() {
-		return "by Variables Values";
+		return "By Variables Values";
 	}
 
 	@Override

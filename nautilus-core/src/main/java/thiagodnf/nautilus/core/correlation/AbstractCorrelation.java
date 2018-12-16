@@ -67,6 +67,10 @@ public abstract class AbstractCorrelation {
 		
 		List<CorrelationItem> items = new ArrayList<>();
 		
+		if(!isEnabled()) {
+			return null;
+		}
+		
 		for (int i = 0; i < objectives.size(); i++) {
 
 			CorrelationItem item = new CorrelationItem(objectives.get(i).getName());
@@ -88,6 +92,10 @@ public abstract class AbstractCorrelation {
 		}
 		
 		return items;
+	}
+	
+	public boolean isEnabled() {
+		return true;
 	}
 	
 	public abstract String getName() ;

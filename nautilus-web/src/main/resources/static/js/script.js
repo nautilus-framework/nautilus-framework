@@ -1,90 +1,46 @@
 function isSafari(){
 	return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 }
+
+function confirm(message, callback){
+	
+	bootbox.dialog({
+		 message: message,
+		 closeButton: false,
+		 title: "Confirm",
+		 onEscape: true,
+		 buttons: {
+			 confirm: {
+				label: "Confirm",
+	            className: "btn-outline-danger",
+	            callback: function(result){
+	            	callback();
+				}
+	        },
+	        cancel: {
+	            label: "Cancel",
+	            className: "btn-outline-secondary pull-right"
+	        },
+		 },
+	});
+}
  
 $(function(){
 	
-	$("button[data-confirm]").click(function(e){
+	$("button[data-confirm], a[data-confirm]").click(function(e){
 		e.preventDefault();
 		
 		var that = $(this);
 		
-		bootbox.dialog({
-			 message: that.data("confirm"),
-			 closeButton: false,
-			 title: "Confirm",
-			 onEscape: true,
-			 buttons: {
-				 confirm: {
-					label: "Confirm",
-		            className: "btn-outline-danger",
-		            callback: function(result){
-		            	that.parent().submit();
-					}
-		        },
-		        cancel: {
-		            label: "Cancel",
-		            className: "btn-outline-secondary pull-right"
-		        },
-			 },
-		});
+		if(confirm(that.data("confirm"), function(){
+			that.parent().submit();
+		}));
 		
 		return false;
 	});
 	
 	$(".boostrap-dual-listbox").bootstrapDualListbox({
 		
-	});
-	
-	$("#form-delete-plugin a").click(function(){
-		
-		var that = $(this);
-		
-		bootbox.dialog({
-			 message: "Are you sure to delete this item?",
-			 closeButton: false,
-			 title: "Confirm",
-			 onEscape: true,
-			 buttons: {
-				 confirm: {
-					 label: "Confirm",
-		            className: "btn-outline-danger",
-		            callback: function(result){
-		            	that.parent().submit();
-					}
-		        },
-		        cancel: {
-		            label: "Cancel",
-		            className: "btn-outline-secondary pull-right"
-		        },
-			 },
-		});
-	});
-	
-	$("#form-delete-instance-file a").click(function(){
-		
-		var that = $(this);
-		
-		bootbox.dialog({
-			 message: "Are you sure to delete this item?",
-			 closeButton: false,
-			 title: "Confirm",
-			 onEscape: true,
-			 buttons: {
-				 confirm: {
-		            label: "Confirm",
-		            className: "btn-outline-danger",
-		            callback: function(result){
-		            	that.parent().submit();
-					}
-		        },
-		        cancel: {
-		            label: "Cancel",
-		            className: "btn-outline-secondary pull-right"
-		        },
-			 },
-			 
-		});
 	});
 	
 	var tz = moment.tz.guess();

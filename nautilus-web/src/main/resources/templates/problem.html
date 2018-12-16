@@ -72,8 +72,8 @@ Upload Instance File
 										  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 										  	<a class="dropdown-item" th:href="@{/download/instance-file/} + ${pluginId} + @{/}+ ${problemId}+ @{/} + ${instanceFile.getFileName()}">Download</a>
 										  	<div class="dropdown-divider"></div>
-										  	<form method="POST" th:action="@{/instance-file/}+${pluginId}+@{/}+${problemId}+@{/}+${instanceFile.getFileName()}+@{/delete}" id="form-delete-instance-file">
-										    	<a class="dropdown-item text-danger dropdown-submit" href="#"><i class="fa fa-trash"></i> Remove</a>
+										  	<form method="POST" th:action="@{/instance-file/}+${pluginId}+@{/}+${problemId}+@{/}+${instanceFile.getFileName()}+@{/delete}">
+										    	<a class="dropdown-item text-danger dropdown-submit" href="#" data:confirm="#{delete.instance-file}"><i class="fa fa-trash"></i> Remove</a>
 										    </form>
 										  </div>
 										</div>

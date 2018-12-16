@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -20,17 +21,19 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Ordering;
 
-import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
-import thiagodnf.nautilus.core.colorize.BySimilarityColorize;
 import thiagodnf.nautilus.core.colorize.AbstractColorize;
+import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
+import thiagodnf.nautilus.core.colorize.BySimilarityWithHammingDistanceColorize;
+import thiagodnf.nautilus.core.colorize.BySimilarityWithJaccardIndexColorize;
 import thiagodnf.nautilus.core.colorize.DontColorize;
 import thiagodnf.nautilus.core.correlation.AbstractCorrelation;
+import thiagodnf.nautilus.core.correlation.DontCorrelation;
 import thiagodnf.nautilus.core.correlation.KendallCorrelation;
 import thiagodnf.nautilus.core.correlation.PearsonCorrelation;
 import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
+import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.ByVariablesDuplicatesRemover;
-import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.DontDuplicatesRemover;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
@@ -63,13 +66,13 @@ public class PluginService {
 
 	private final PluginManager pluginManager = new DefaultPluginManager(); 
 	
-	private Map<String, Normalize> normalizers = new HashMap<>();
+	private Map<String, Normalize> normalizers = new TreeMap<>();
 	
-	private Map<String, AbstractColorize> colorizers = new HashMap<>();
+	private Map<String, AbstractColorize> colorizers = new TreeMap<>();
 	
-	private Map<String, AbstractDuplicatesRemover> duplicatesRemovers = new HashMap<>();
+	private Map<String, AbstractDuplicatesRemover> duplicatesRemovers = new TreeMap<>();
 	
-	private Map<String, AbstractCorrelation> correlationers = new HashMap<>();
+	private Map<String, AbstractCorrelation> correlationers = new TreeMap<>();
 	
 	@PostConstruct
 	private void initIt() {
@@ -80,25 +83,27 @@ public class PluginService {
 
 		addColorizer(new DontColorize());
 		addColorizer(new ByEuclideanDistanceColorize());
-		addColorizer(new BySimilarityColorize());
+		addColorizer(new BySimilarityWithJaccardIndexColorize());
+		addColorizer(new BySimilarityWithHammingDistanceColorize());
 
 		LOGGER.info("Done. Adding Normalizers");
 
+		addNormalizer(new DontNormalize());
 		addNormalizer(new ByMaxAndMinValuesNormalize());
 		addNormalizer(new ByParetoFrontValuesNormalize());
-		addNormalizer(new DontNormalize());
 		
 		LOGGER.info("Done. Adding Correlationers");
 
+		addCorrelationer(new DontCorrelation());
 		addCorrelationer(new SpearmanCorrelation());
 		addCorrelationer(new PearsonCorrelation());
 		addCorrelationer(new KendallCorrelation());
-
+		
 		LOGGER.info("Done. Adding Duplicate Removers");
 		
+		addDuplicatesRemover(new DontDuplicatesRemover());
 		addDuplicatesRemover(new ByVariablesDuplicatesRemover());
 		addDuplicatesRemover(new ByObjectivesDuplicatesRemover());
-		addDuplicatesRemover(new DontDuplicatesRemover());
 		
 		LOGGER.info("Done");
 	}

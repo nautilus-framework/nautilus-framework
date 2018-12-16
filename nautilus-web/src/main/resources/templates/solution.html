@@ -5,7 +5,11 @@
 
 	<head th:replace="fragments/head :: default(Solution)"></head>
 
-	<body>
+	<body th:with="
+		descriptor = ${plugin.getDescriptor()},
+		pluginId = ${descriptor.getPluginId()},
+		pluginName = ${descriptor.getPluginDescription()},
+		executionName = ${execution.getSettings().getName()}">
 	
 		<div th:replace="fragments/navbar :: default('home')"></div>
 	
@@ -16,7 +20,9 @@
 						<h6 class="title">
 							<a th:href="@{/}">Home</a> 
 							<span class="path-divider">/</span>
-							<a th:href="@{/execution/} + ${execution.getId()}" th:text="${execution.getTitle()}"></a>
+							<a th:href="@{/plugin/} + ${pluginId}" th:text="${pluginName}"></a>
+							<span class="path-divider">/</span> 
+							<a th:href="@{/execution/}+${execution.getId()}" th:text="${#strings.isEmpty(executionName)} ? ${execution.getId()} : ${executionName}"></a>
 							<span class="path-divider">/</span>
 							<a th:href="@{/solution/} + ${executionId} + @{/} + ${solutionIndex}" th:text="'Solution '+${solutionIndex}"></a> 
 						</h6>
@@ -28,24 +34,25 @@
 		<div class="container page-navbar">
 			<div class="row">
 				<div class="col-12">
-					<ul class="nav nav-tabs " role="tablist">
-						<li class="nav-item"><a class="nav-link  active" href="#variables" role="tab" data-toggle="tab" aria-selected="true">Variables</a></li>
-						<li class="nav-item"><a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a></li>
-					</ul>
-					<div class="slider-on-tab float-right">
-						<input type="text" name="general-feedback"
-							class="slider-colorful slider-master" id="general-feedback"
-							data-provide="slider" data-slider-min="-1" data-slider-max="1"
-							data-slider-step="0.1"
-							th:attr="data-slider-value=${0}"
-							data-slider-tooltip="hide" />
+					<div class="nav nav-tabs" id="nav-tab" role="tablist">
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#variables">Variables</a>
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#objectives">Objectives</a>
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings">Settings</a>
 					</div>
-					<form action="#" th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/save/feedback}" method="post">
-						<!-- Tab panes -->
-						<div class="tab-content">
-							<div role="tabpanel" class="tab-pane active" id="variables">
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane fade" id="variables">
+							<div class="slider-on-tab float-right">
+								<input type="text" name="general-feedback"
+									class="slider-colorful slider-master" id="general-feedback"
+									data-provide="slider" data-slider-min="-1" data-slider-max="1"
+									data-slider-step="0.1"
+									th:attr="data-slider-value=${0}"
+									data-slider-tooltip="hide" />
+							</div>
+							<form action="#" th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/save/feedback}" method="post">
 								<table id="table-variables"
-									class="table table-striped table-hover table-sm table-datatable-no-paginaton"
+									class="table table-striped table-hover table-sm"
 									style="width: 100%">
 									<thead>
 										<tr>
@@ -70,36 +77,62 @@
 										</tr>
 									</tbody>
 								</table>
-							</div>
-							<div role="tabpanel" class="tab-pane fade" id="objectives">
-								<table id="execution-table"
-									class="table table-striped table-hover table-sm table-datatable"
-									style="width: 100%">
-									<thead>
-										<tr>
-											<th>Objective</th>
-											<th>Value</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="instance : ${objectivesMap}">
-											<td th:text="${instance.key}"></td>
-											<td th:text="${instance.value}"></td>
-										</tr>
-									</tbody>
-								</table>
+								<hr />
+								<button type="submit" class="btn btn-success" id="btn-feedback">Save</button>
+								<a class="btn btn-outline-secondary" th:href="@{/execution/} + ${executionId}">Back</a>
+							</form>
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="objectives">
+							<table id="execution-table"
+								class="table table-striped table-hover table-sm table-datatable"
+								style="width: 100%">
+								<thead>
+									<tr>
+										<th>Objective</th>
+										<th>Value</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="instance : ${objectivesMap}">
+										<td th:text="${instance.key}"></td>
+										<td th:text="${instance.value}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="settings">
+							<div class="card border-danger mb-3">
+								<div class="card-header bg-transparent border-danger">Danger Zone</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+							  			<div class="row margin-bottom-minus-20">
+											<div class="col-8">
+												<strong>Clear User Preferences</strong><br/>
+												<p><small>Clear the user feedback to provide the preferences again</small></p>
+											</div>
+											<div class="col-4 text-right">
+												<form method="post" th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/clear/user-feedback}" >
+													<button class="btn btn-outline-danger pull-right" data:confirm="#{clear.all.user.feedbacks.single.solution}">Clear User Feedback</button>
+												</form>
+											</div>	
+										</div>
+									</li>
+								</ul>
 							</div>
 						</div>
-						<hr />
-						<button type="submit" class="btn btn-success" id="btn-feedback">Save</button>
-						<a class="btn btn-outline-secondary" th:href="@{/execution/} + ${executionId}">Back</a>
-						
-						<button class="btn btn-outline-danger pull-right" id="btn-clear-user-feedback">Clear User Feedback</button>
-					</form>
-					<form action="#" th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/clear/user-feedback}" method="post" id="form-clear-user-feedback">
-					</form>
+					</div>
+					
 					
 				</div>
+				
+					
+					
+				
+				
+				
+									
+				
+				
 			</div>
 		</div>
 	

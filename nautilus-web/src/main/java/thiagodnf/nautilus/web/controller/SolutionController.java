@@ -1,10 +1,8 @@
 package thiagodnf.nautilus.web.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.model.GenericSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.util.GenericSolutionUtils;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.web.exception.SolutionNotFoundException;
 import thiagodnf.nautilus.web.model.Execution;
@@ -78,6 +77,7 @@ public class SolutionController {
 		}
 		
 		model.addAttribute("objectivesMap", objectivesMap);
+		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("solution", solution);
 		model.addAttribute("execution", execution);
 		
@@ -132,22 +132,7 @@ public class SolutionController {
 		
 		GenericSolution solution = solutions.get(solutionIndex);
 
-		List<String> keysToRemove = new ArrayList<>();
-
-		for (Entry<Object, Object> entry : solution.getAttributes().entrySet()) {
-
-			String key = entry.getKey().toString();
-
-			if (key.startsWith(SolutionAttribute.FEEDBACK_FOR_VARIABLE)) {
-				keysToRemove.add(key);
-			}
-		}
-
-		for (String key : keysToRemove) {
-			solution.getAttributes().remove(key);
-		}
-		
-		solution.getAttributes().remove(SolutionAttribute.SELECTED);
+		GenericSolutionUtils.clearUserFeedback(solution);
 		
 		execution = executionService.save(execution);
 		

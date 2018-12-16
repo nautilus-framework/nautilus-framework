@@ -53,8 +53,8 @@
 											  <div class="dropdown-menu dropdown-menu-right">
 											  	<a class="dropdown-item" th:href="@{/download/plugin/{id}(id=${id})}">Download</a>
 											  	<div class="dropdown-divider"></div>
-											  	<form method="POST" th:action="@{/plugin/{id}/delete(id=${id})}" id="form-delete-plugin">
-											    	<a class="dropdown-item text-danger dropdown-submit" href="#"><i class="fa fa-trash"></i> Remove</a>
+											  	<form method="POST" th:action="@{/plugin/{id}/delete(id=${id})}">
+											    	<a class="dropdown-item text-danger dropdown-submit" href="#" data:confirm="#{delete.plugin}"><i class="fa fa-trash"></i> Remove</a>
 											    </form>
 											  </div>
 											</div>

@@ -257,7 +257,7 @@ $(function(){
 	var tableHeader = getObjectivesNames("#execution-table");
 	
 	var rows = table.rows().data();
-	var normalize = $("#normalize").val() == "don-t-normalize" ? false : true;
+	var normalize = $("#normalizeId").val() == "don-t-normalize" ? false : true;
 	
 	if(tableHeader.length == 1){
 		
