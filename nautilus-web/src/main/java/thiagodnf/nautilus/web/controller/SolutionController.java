@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.model.GenericSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.util.GenericSolutionUtils;
+import thiagodnf.nautilus.core.util.SolutionUtils;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.web.exception.SolutionNotFoundException;
 import thiagodnf.nautilus.web.model.Execution;
@@ -132,7 +132,7 @@ public class SolutionController {
 		
 		GenericSolution solution = solutions.get(solutionIndex);
 
-		GenericSolutionUtils.clearUserFeedback(solution);
+		SolutionUtils.clearUserFeedback(solution);
 		
 		execution = executionService.save(execution);
 		

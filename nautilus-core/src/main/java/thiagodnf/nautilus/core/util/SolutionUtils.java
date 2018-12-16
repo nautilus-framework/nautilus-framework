@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 import thiagodnf.nautilus.core.model.GenericSolution;
 
-public class GenericSolutionUtils {
+public class SolutionUtils {
 	
 	public static GenericSolution clearUserFeedback(GenericSolution solution) {
 

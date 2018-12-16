@@ -21,7 +21,7 @@ import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
 import thiagodnf.nautilus.core.model.GenericSolution;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.util.GenericSolutionUtils;
+import thiagodnf.nautilus.core.util.SolutionUtils;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
@@ -143,7 +143,7 @@ public class ExecutionController {
 		Execution execution = executionService.findById(executionId);
 
 		for (GenericSolution solution : execution.getSolutions()) {
-			GenericSolutionUtils.clearUserFeedback(solution);
+			SolutionUtils.clearUserFeedback(solution);
 		}
 
 		execution = executionService.save(execution);
