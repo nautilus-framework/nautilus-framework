@@ -61,7 +61,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="value,i : ${solution.getVariablesAsList()}">
+										<tr th:each="value,i : ${variables}">
 											<td width="100%" th:text="${value}"/>
 											<td th:with="feedback = ${solution.getVariableUserFeedback(i.index)}">
 												<input type="text"

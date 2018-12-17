@@ -64,7 +64,7 @@ public class GenericSolution implements Solution<Object> {
 			}
 		}
 		
-		this.type = solution.type;
+		this.type = new String(solution.type);
 		this.attributes = new HashMap<>(solution.attributes);
 	}
 
@@ -146,30 +146,6 @@ public class GenericSolution implements Solution<Object> {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public List<String> getVariablesAsList() {
-
-		List<String> variables = new ArrayList<>();
-
-		for (Object object : getVariables()) {
-
-			if (object instanceof BinarySet) {
-
-				BinarySet binarySet = (BinarySet) object;
-
-				for (int i = 0; i < binarySet.getBinarySetLength(); i++) {
-
-					if (binarySet.get(i)) {
-						variables.add(String.valueOf(i));
-					}
-				}
-			} else if (object instanceof Integer) {
-				variables.add(String.valueOf(object));
-			}
-		}
-
-		return variables;
 	}
 	
 	public double getUserFeedback() {

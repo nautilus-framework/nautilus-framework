@@ -79,6 +79,7 @@ public class SolutionController {
 		model.addAttribute("objectivesMap", objectivesMap);
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("solution", solution);
+		model.addAttribute("variables", SolutionUtils.getVariablesAsList(solution));
 		model.addAttribute("execution", execution);
 		
 		return "solution";

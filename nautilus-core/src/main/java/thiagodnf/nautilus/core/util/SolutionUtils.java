@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.uma.jmetal.solution.Solution;
+
 import thiagodnf.nautilus.core.model.GenericSolution;
 
 public class SolutionUtils {
-	
+
 	public static GenericSolution clearUserFeedback(GenericSolution solution) {
 
 		List<String> keysToRemove = new ArrayList<>();
@@ -26,7 +28,18 @@ public class SolutionUtils {
 		}
 
 		solution.getAttributes().remove(SolutionAttribute.SELECTED);
-		
+
 		return solution;
+	}
+
+	public static List<String> getVariablesAsList(Solution<?> solution) {
+
+		List<String> variables = new ArrayList<>();
+
+		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
+			variables.addAll(VariableUtils.getVariableAsList(solution.getVariableValue(i)));
+		}
+
+		return variables;
 	}
 }

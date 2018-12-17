@@ -33,7 +33,8 @@ import thiagodnf.nautilus.core.correlation.PearsonCorrelation;
 import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
 import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
-import thiagodnf.nautilus.core.duplicated.ByVariablesDuplicatesRemover;
+import thiagodnf.nautilus.core.duplicated.ByVariablesOrderDoesNotMatterDuplicatesRemover;
+import thiagodnf.nautilus.core.duplicated.ByVariablesOrderMattersDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.DontDuplicatesRemover;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
@@ -102,7 +103,8 @@ public class PluginService {
 		LOGGER.info("Done. Adding Duplicate Removers");
 		
 		addDuplicatesRemover(new DontDuplicatesRemover());
-		addDuplicatesRemover(new ByVariablesDuplicatesRemover());
+		addDuplicatesRemover(new ByVariablesOrderDoesNotMatterDuplicatesRemover());
+		addDuplicatesRemover(new ByVariablesOrderMattersDuplicatesRemover());
 		addDuplicatesRemover(new ByObjectivesDuplicatesRemover());
 		
 		LOGGER.info("Done");
