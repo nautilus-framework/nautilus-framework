@@ -80,6 +80,7 @@ public class ExecutionController {
 		model.addAttribute("duplicatesRemovers", pluginService.getDuplicatesRemovers());
 		model.addAttribute("colorizers", pluginService.getColorizers());
 		model.addAttribute("correlationers", pluginService.getCorrelationers());
+		model.addAttribute("reducers", pluginService.getReducers());
 		model.addAttribute("settings", execution.getSettings());
 		
 		return "execution";

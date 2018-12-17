@@ -126,7 +126,7 @@
 										  			<div class="row margin-bottom-minus-10">
 														<div class="col-12">
 															<div class="form-group">
-														    <label class="form-check-label" for="normalize">
+														    <label class="form-check-label" for="normalizeId">
 														    	<strong>Normalize</strong>
 														   		<p class="small">Normalize the objective's values between 0 and 1</p>
 														    </label>
@@ -144,7 +144,7 @@
 										  			<div class="row margin-bottom-minus-10">
 														<div class="col-12">
 															<div class="form-group">
-														    <label class="form-check-label" for="colorize">
+														    <label class="form-check-label" for="colorizeId">
 														    	<strong>Colorize</strong>
 														   		<p class="small">Colorize the closest solutions those ones you selected</p>
 														    </label>
@@ -162,7 +162,7 @@
 										  			<div class="row margin-bottom-minus-10">
 														<div class="col-12">
 															<div class="form-group">
-														    <label class="form-check-label" for="correlation">
+														    <label class="form-check-label" for="correlationId">
 														    	<strong>Correlate</strong>
 														   		<p class="small">Correlate the objectives values</p>
 														    </label>
@@ -180,7 +180,7 @@
 										  			<div class="row margin-bottom-minus-10">
 														<div class="col-12">
 															<div class="form-group">
-														    <label class="form-check-label" for="correlation">
+														    <label class="form-check-label" for="duplicatesRemoverId">
 														    	<strong>Duplicates Removers</strong>
 														   		<p class="small">Remove the duplicated solutions from pareto-front. Ideally, if you are using a IntegerProblem, the order doesn't matter. If you are using a BinaryProblem, the order matters. </p>
 														    </label>
@@ -188,6 +188,24 @@
 														    	<option th:each="duplicatesRemover : ${duplicatesRemovers}" 
 														    		th:value="${duplicatesRemover.key}"
 														    		th:text="${duplicatesRemover.value}" 
+													    		/>
+														    </select>
+														  </div>
+														</div>
+													</div>
+												</li>
+												<li class="list-group-item">
+										  			<div class="row margin-bottom-minus-10">
+														<div class="col-12">
+															<div class="form-group">
+														    <label class="form-check-label" for="reducerId">
+														    	<strong>Objective Reducers</strong>
+														   		<p class="small">Reduce the number objectives to be optimized in the next execution</p>
+														    </label>
+														    <select class="form-control" th:field="*{reducerId}">
+														    	<option th:each="reducer : ${reducers}" 
+														    		th:value="${reducer.key}"
+														    		th:text="${reducer.value}" 
 													    		/>
 														    </select>
 														  </div>
@@ -242,9 +260,6 @@
 											</li>
 										</ul>
 									</div>
-									
-									
-									
 									
 									<div class="card border-danger mb-3">
 										<div class="card-header bg-transparent border-danger">Danger Zone</div>

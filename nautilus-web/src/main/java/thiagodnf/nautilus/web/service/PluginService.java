@@ -41,6 +41,9 @@ import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.normalize.DontNormalize;
 import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.reducer.AbstractReducer;
+import thiagodnf.nautilus.core.reducer.AlphaReducer;
+import thiagodnf.nautilus.core.reducer.DontReducer;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
@@ -75,6 +78,8 @@ public class PluginService {
 	
 	private Map<String, AbstractCorrelation> correlationers = new TreeMap<>();
 	
+	private Map<String, AbstractReducer> reducers = new TreeMap<>();
+	
 	@PostConstruct
 	private void initIt() {
 
@@ -106,6 +111,11 @@ public class PluginService {
 		addDuplicatesRemover(new ByVariablesOrderDoesNotMatterDuplicatesRemover());
 		addDuplicatesRemover(new ByVariablesOrderMattersDuplicatesRemover());
 		addDuplicatesRemover(new ByObjectivesDuplicatesRemover());
+		
+		LOGGER.info("Done. Adding Objective Reducers");
+		
+		addReducer(new DontReducer());
+		addReducer(new AlphaReducer());
 		
 		LOGGER.info("Done");
 	}
@@ -171,6 +181,13 @@ public class PluginService {
 		LOGGER.info("Added '{}' normalizer", duplicatesRemover.getId());
 	}
 	
+	private void addReducer(AbstractReducer reducer) {
+
+		this.reducers.put(reducer.getId(), reducer);
+		
+		LOGGER.info("Added '{}' reducer", reducer.getId());
+	}
+	
 	public Map<String, Normalize> getNormalizers() {
 		return normalizers;
 	}
@@ -185,6 +202,10 @@ public class PluginService {
 	
 	public Map<String, AbstractCorrelation> getCorrelationers() {
 		return correlationers;
+	}
+	
+	public Map<String, AbstractReducer> getReducers() {
+		return reducers;
 	}
 	
 	public List<PluginWrapper> getStartedPlugins() {

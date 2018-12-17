@@ -6,6 +6,7 @@ import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
 import thiagodnf.nautilus.core.correlation.DontCorrelation;
 import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
+import thiagodnf.nautilus.core.reducer.DontReducer;
 
 public class Settings {
 
@@ -18,6 +19,8 @@ public class Settings {
 	private String correlationId = new DontCorrelation().getId();
 	
 	private String duplicatesRemoverId = new ByObjectivesDuplicatesRemover().getId();
+	
+	private String reducerId = new DontReducer().getId();
 	
 	private String name;
 
@@ -67,6 +70,14 @@ public class Settings {
 
 	public void setDuplicatesRemoverId(String duplicatesRemoverId) {
 		this.duplicatesRemoverId = duplicatesRemoverId;
+	}
+	
+	public String getReducerId() {
+		return reducerId;
+	}
+
+	public void setReducerId(String reducerId) {
+		this.reducerId = reducerId;
 	}
 
 	public String toString() {
