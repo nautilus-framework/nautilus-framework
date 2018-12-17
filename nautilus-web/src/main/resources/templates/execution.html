@@ -182,7 +182,7 @@
 															<div class="form-group">
 														    <label class="form-check-label" for="correlation">
 														    	<strong>Duplicates Removers</strong>
-														   		<p class="small">Remove the duplicated solutions from pareto-front</p>
+														   		<p class="small">Remove the duplicated solutions from pareto-front. Ideally, if you are using a IntegerProblem, the order doesn't matter. If you are using a BinaryProblem, the order matters. </p>
 														    </label>
 														    <select class="form-control" th:field="*{duplicatesRemoverId}">
 														    	<option th:each="duplicatesRemover : ${duplicatesRemovers}" 
