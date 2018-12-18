@@ -24,7 +24,7 @@ public class AlphaReducer extends AbstractReducer {
 	}
 
 	@Override
-	public List<Ranking> execute(List<AbstractObjective> allObjectives, 
+	public List<RankingItem> execute(List<AbstractObjective> allObjectives, 
 			List<AbstractObjective> selectedObjectives,
 			List<Solution<?>> solutions) {
 		
@@ -60,19 +60,19 @@ public class AlphaReducer extends AbstractReducer {
 			general[i] = alpha * rankingForUserSelection[i] + (1.0 - alpha) * rankingForUserFeedback[i];
 		}
 		
-		List<Ranking> rankings = new ArrayList<>();
+		List<RankingItem> rankings = new ArrayList<>();
 		
 		for (int i = 0; i < general.length; i++) {
-			rankings.add(new Ranking(selectedObjectives.get(i).getId(), general[i]));
+			rankings.add(new RankingItem(selectedObjectives.get(i).getId(), general[i]));
 		}
 		
-		Collections.sort(rankings, Comparator.comparing(Ranking::getValue).reversed());
+		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue).reversed());
 		
 		rankings.get(0).selected = true;
 		
 		double minRanking = rankings.get(0).getValue();
 		
-		for (Ranking ranking : rankings) {
+		for (RankingItem ranking : rankings) {
 			
 			if (minRanking - ranking.getValue() <= range) {
 				ranking.selected = true;

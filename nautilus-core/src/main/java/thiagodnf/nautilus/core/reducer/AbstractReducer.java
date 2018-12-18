@@ -11,7 +11,7 @@ import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractReducer {
 	
-	public class Ranking {
+	public class RankingItem {
 
 		public String objectiveId;
 
@@ -19,11 +19,11 @@ public abstract class AbstractReducer {
 
 		public boolean selected;
 		
-		public Ranking(String objectiveId, double value) {
+		public RankingItem(String objectiveId, double value) {
 			this(objectiveId, value, false);
 		}
 		
-		public Ranking(String objectiveId, double value, boolean selected) {
+		public RankingItem(String objectiveId, double value, boolean selected) {
 			this.objectiveId = objectiveId;
 			this.value = value;
 			this.selected = selected;
@@ -51,7 +51,7 @@ public abstract class AbstractReducer {
 		return getName();
 	}
 	
-	public abstract List<Ranking> execute(List<AbstractObjective> allObjectives, List<AbstractObjective> selectedObjectives, List<Solution<?>> solutions);
+	public abstract List<RankingItem> execute(List<AbstractObjective> allObjectives, List<AbstractObjective> selectedObjectives, List<Solution<?>> solutions);
 	
 	public abstract String getName() ;
 }
