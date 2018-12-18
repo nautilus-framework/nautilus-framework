@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import thiagodnf.nautilus.web.model.UploadExecution;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.PluginService;
@@ -40,6 +41,7 @@ public class PluginController {
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problems", pluginService.getProblemExtensions(pluginId));
 		model.addAttribute("executions", executionService.findByPluginId(pluginId));
+		model.addAttribute("uploadExecution", new UploadExecution());
 		
 		return "plugin";
 	}

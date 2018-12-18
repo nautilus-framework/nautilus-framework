@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import thiagodnf.nautilus.web.model.UploadExecution;
 import thiagodnf.nautilus.web.model.UploadInstanceFile;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
@@ -39,17 +38,5 @@ public class ProblemController {
 		model.addAttribute("uploadInstanceFile", new UploadInstanceFile());
 
 		return "problem";
-	}
-	
-	@GetMapping("/upload/execution/")
-	public String uploadExecution(Model model, 
-			@PathVariable("pluginId") String pluginId,
-			@PathVariable("problemId") String problemId){
-		
-		model.addAttribute("uploadExecution", new UploadExecution());
-		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
-		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
-			
-		return "upload-execution";
 	}
 }

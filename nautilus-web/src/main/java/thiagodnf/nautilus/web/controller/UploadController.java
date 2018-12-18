@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 
 import thiagodnf.nautilus.web.exception.AbstractRedirectException;
+import thiagodnf.nautilus.web.exception.ExecutionAlreadyExistsException;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.UploadExecution;
 import thiagodnf.nautilus.web.model.UploadInstanceFile;
@@ -63,7 +64,7 @@ public class UploadController {
 			try {
 				fileService.storePlugin(filename, file);
 				pluginService.loadPluginsFromDirectory();
-				flashMessageService.success(ra, "msg.upload.file.success", filename);
+				flashMessageService.success(ra, "msg.upload.plugin.success", filename);
 			} catch (AbstractRedirectException ex) {
 				flashMessageService.error(ra, ex);
 			}
@@ -92,7 +93,7 @@ public class UploadController {
 
 			try {
 				fileService.storeInstanceFile(pluginId, problemId, filename, file);
-				flashMessageService.success(ra, "msg.upload.file.success", filename);
+				flashMessageService.success(ra, "msg.upload.instance-file.success", filename);
 			} catch (AbstractRedirectException ex) {
 				flashMessageService.error(ra, ex);
 			}
@@ -101,54 +102,48 @@ public class UploadController {
 		return "redirect:/problem/" + pluginId + "/" + problemId;
 	}
 	
-	@PostMapping("/execution/{pluginId:.+}/{problemId:.+}")
+	@PostMapping("/execution/{pluginId:.+}")
 	public String uploadExecution(
 			@PathVariable("pluginId") String pluginId,
-			@PathVariable("problemId") String problemId,
 			@Valid UploadExecution uploadExecution, 
 			BindingResult result, 
+			RedirectAttributes ra,
 			Model model) {
 
 		LOGGER.info("Uploading the file: " + uploadExecution.getFile().getOriginalFilename());
 
 		if (result.hasErrors()) {
+			flashMessageService.error(ra, result.getAllErrors());
+		}else {
+			try {
 
-			model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
-			model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
+				MultipartFile file = uploadExecution.getFile();
 
-			return "upload-execution";
+				String content = null;
+
+				try {
+					content = new String(file.getBytes(), "UTF-8");
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				} 
+
+				Execution execution = new Gson().fromJson(content, Execution.class);
+
+				if (executionService.existsById(execution.getId())) {
+					throw new ExecutionAlreadyExistsException();
+				}
+				
+				if (!execution.getParameters().getPluginId().equalsIgnoreCase(pluginId)) {
+					throw new RuntimeException("This execution is for a different plugin");
+				}
+
+				executionService.save(execution);
+				flashMessageService.success(ra, "msg.upload.execution.success");
+			} catch (AbstractRedirectException ex) {
+				flashMessageService.error(ra, ex);
+			}
 		}
-
-		try {
-
-			MultipartFile file = uploadExecution.getFile();
-
-			String content = new String(file.getBytes(), "UTF-8");
-
-			Execution execution = new Gson().fromJson(content, Execution.class);
-
-			if (executionService.existsById(execution.getId())) {
-				throw new RuntimeException("The execution id already exists");
-			}
-			
-			if (!execution.getParameters().getPluginId().equalsIgnoreCase(pluginId)) {
-				throw new RuntimeException("This execution is for a different plugin");
-			}
-
-			if (!execution.getParameters().getProblemId().equalsIgnoreCase(problemId)) {
-				throw new RuntimeException("This execution is for a different problem");
-			}
-
-			executionService.save(execution);
-
-			LOGGER.info("Saved");
-
-			return "redirect:/problem/" + pluginId + "/" + problemId + "#executions";
-
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		
+		return "redirect:/plugin/" + pluginId+"#executions";
 	}
-	
-	
 }
