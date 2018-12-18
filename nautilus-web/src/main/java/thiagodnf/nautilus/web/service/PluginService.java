@@ -43,7 +43,8 @@ import thiagodnf.nautilus.core.normalize.Normalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reducer.AbstractReducer;
 import thiagodnf.nautilus.core.reducer.AlphaReducer;
-import thiagodnf.nautilus.core.reducer.DontReducer;
+import thiagodnf.nautilus.core.reducer.KeepCurrentObjectivesReducer;
+import thiagodnf.nautilus.core.reducer.KeepOriginalObjectivesReducer;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
@@ -112,10 +113,11 @@ public class PluginService {
 		addDuplicatesRemover(new ByVariablesOrderMattersDuplicatesRemover());
 		addDuplicatesRemover(new ByObjectivesDuplicatesRemover());
 		
-		LOGGER.info("Done. Adding Objective Reducers");
+		LOGGER.info("Done. Adding Reducers");
 		
-		addReducer(new DontReducer());
+		addReducer(new KeepCurrentObjectivesReducer());
 		addReducer(new AlphaReducer());
+		addReducer(new KeepOriginalObjectivesReducer());
 		
 		LOGGER.info("Done");
 	}

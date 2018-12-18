@@ -1,27 +1,30 @@
 package thiagodnf.nautilus.core.reducer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
-public class AlphaReducer extends AbstractReducer {
+public class KeepCurrentObjectivesReducer extends AbstractReducer {
 
 	@Override
 	public String getName() {
-		return "Alpha Reducer";
+		return "Keep Current Objectives";
 	}
 
 	@Override
 	public List<Ranking> execute(List<AbstractObjective> allObjectives, 
 			List<AbstractObjective> selectedObjectives,
 			List<? extends Solution<?>> solutions) {
-		// TODO Auto-generated method stub
-		return null;
+
+		List<Ranking> rankings = new ArrayList<>();
+
+		for (AbstractObjective objective : selectedObjectives) {
+			rankings.add(new Ranking(objective.getId(), 1.0, true));
+		}
+
+		return rankings;
 	}
-
-	
-
-	
 }

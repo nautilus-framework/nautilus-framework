@@ -1,167 +1,95 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<head th:replace="fragments/head :: default(Continue)"></head>
+	<head th:replace="fragments/head :: default(Continue)"></head>
 
-<body>
-	<div th:replace="fragments/navbar :: default('home')"></div>
-	
-	<div class="page-header page-header-with-navbar">
-		<div class="container">
+	<body th:with="
+		descriptor = ${plugin.getDescriptor()},
+		pluginId = ${descriptor.getPluginId()},
+		pluginName = ${descriptor.getPluginDescription()},
+		executionName = ${execution.getSettings().getName()}">
+		
+		<div th:replace="fragments/navbar :: default('home')"></div>
+		
+		<div class="page-header page-header-with-navbar">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<h6 class="title">
+							<a th:href="@{/}">Home</a> 
+							<span class="path-divider">/</span>
+							<a th:href="@{/plugin/} + ${pluginId}" th:text="${pluginName}"></a>
+							<span class="path-divider">/</span> 
+							<a th:href="@{/execution/}+${execution.getId()}" th:text="${#strings.isEmpty(executionName)} ? ${execution.getId()} : ${executionName}"></a>
+							<span class="path-divider">/</span> 
+							<a th:href="@{/continue/}+${executionId}">Continue</a> 
+						</h6>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container page-navbar">
 			<div class="row">
 				<div class="col-12">
-					<h6 class="title">
-						<a th:href="@{/}">Home</a> 
-						<span class="path-divider">/</span>
-						<a th:href="@{/execution/}+${execution.getId()}" th:text="${execution.getTitle()}"></a>
-						<span class="path-divider">/</span>
-						<a th:href="@{/continue/}+${executionId}">Continue</a> 
-					</h6>
+					<nav>
+						<div class="nav nav-tabs" id="nav-tab" role="tablist">
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#selected">Selected Objectives</a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#ranking">Ranking</a>
+						</div>
+					</nav>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane fade" id="selected">
+							<table class="table table-striped table-hover table-sm table-datatable">
+								<thead>
+									<tr>
+										<th width="50px">#</th>
+										<th>Objective</th>
+										<th>Value</th>						
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="item,i : ${rankings}" th:if="${item.selected}">
+										<td th:text="${i.count}"></td>
+									    <td th:text="${item.objectiveId}"></td>
+									    <td th:text="${item.value}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="ranking">
+							<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
+								<thead>
+									<tr>
+										<th width="50px">#</th>
+										<th>Objective</th>
+										<th>Value</th>						
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="item,i : ${rankings}">
+										<td th:text="${i.count}"></td>
+									    <td th:text="${item.objectiveId}"></td>
+									    <td th:text="${item.value}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				
+					<div class="d-none" id="next-parameters" th:text="${execution.getParameters()}"></div>	
+					<hr/>
+					<a class="btn btn-success" href="" id="btn-continue" >Continue</a>
+					<a class="btn btn-outline-secondary" th:href="@{/execution/} + ${executionId}">Back</a>
 				</div>
 			</div>
 		</div>
-	</div>
 	
-	<div class="container page-navbar">
-		<div class="row">
-			<div class="col-12">
-				<ul class="nav nav-tabs" role="tablist">
-					<li class="nav-item">
-						<a class="nav-link" href="#selected" role="tab" data-toggle="tab" aria-selected="true">Selected Objectives</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#ranking" role="tab" data-toggle="tab">Ranking</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#correlation" role="tab" data-toggle="tab">Correlation</a>
-					</li>
-				</ul>
-				<!-- Tab panes -->
-				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane fade" id="selected">
-						<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
-							<thead>
-								<tr>
-									<th width="50px">#</th>
-									<th>Objective</th>
-									<th>Value</th>						
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="item,i : ${rankingSelectedItems}">
-									<td th:text="${i.count}"></td>
-								    <td th:text="${item.getName()}"></td>
-								    <td th:text="${item.getValue()}"></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div role="tabpanel" class="tab-pane fade" id="ranking">
-						<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
-							<thead>
-								<tr>
-									<th width="50px">#</th>
-									<th>Objective</th>
-									<th>Value</th>						
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="item,i : ${rankingItems}">
-									<td th:text="${i.count}"></td>
-								    <td th:text="${item.getName()}"></td>
-								    <td th:text="${item.getValue()}"></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div role="tabpanel" class="tab-pane fade" id="correlation">
-						<div class="card">
-						  <div class="card-header">
-						    Correlation Among Objectives
-						  </div>
-						  <div class="card-body">
-						    
-						    	<div class="table-responsive horizontal-scroll">
-								<table class="table table-striped table-hover table-sm table-datatable">
-									<thead>
-										<tr>
-											<th width="50px">#</th>
-											<th>Objective</th>
-											<th th:each="obj : ${objectives}" th:text="${obj.getName()}"/>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="c,i : ${correlationsForObjectives}">
-											<td th:text="${i.count}"></td>
-											<td th:text="${c.getName()}"></td>
-											<td th:each="v : ${c.getValues()}" 
-												th:text="${#numbers.formatDecimal(v,1,4)}"
-												th:classappend="${v == 0 ? 'text-secondary' : (v < 0 ? 'text-danger' : 'text-success')}"
-											/>
-										   
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						  </div>
-						</div>
-						<br/>
-						<div class="card">
-						  <div class="card-header">
-						    Correlation Among Variables and Objectives
-						  </div>
-						  <div class="card-body">
-						    
-						    	<div class="table-responsive horizontal-scroll">
-								<table class="table table-striped table-hover table-sm table-datatable">
-									<thead>
-										<tr>
-											<th width="50px">#</th>
-											<th>Variable</th>
-											<th th:each="obj : ${objectives}" th:text="${obj.getName()}"/>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="c,i : ${correlationsForVariables}">
-											<td th:text="${i.count}"></td>
-											<td th:text="${c.getName()}"></td>
-											<td th:each="v : ${c.getValues()}" 
-												th:text="${#numbers.formatDecimal(v,1,4)}"
-												th:classappend="${v == 0 ? 'text-secondary' : (v < 0 ? 'text-danger' : 'text-success')}"
-											/>
-										   
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						  </div>
-						</div>
-					</div>
-				</div>
-			
-			
-				<div class="d-none" id="next-parameters" th:text="${execution.getParameters()}"></div>
-				
-			
-			
-			
-			
-			
-				
-				
-				
-				
-				<hr/>
-				<a class="btn btn-success btn-sm" href="" id="btn-continue" >Continue</a>
-				<a class="btn btn-light btn-sm" th:href="@{/execution/} + ${executionId}">Back</a>
-			</div>
-		</div>
-	</div>
-
-	<div th:replace="fragments/footer :: footer"></div>
-	<div th:replace="fragments/modal-progressbar :: progressbar"></div>
-	<div th:replace="fragments/modal-console :: console"></div>
-	<script type="text/javascript" th:src="@{/js/controller/optimize.js}"></script>
-</body>
+		<div th:replace="fragments/footer :: footer"></div>
+		<div th:replace="fragments/modal-progressbar :: progressbar"></div>
+		<div th:replace="fragments/modal-console :: console"></div>
+		<script type="text/javascript" th:src="@{/js/controller/optimize.js}"></script>
+	</body>
 
 </html>

@@ -16,11 +16,26 @@ public class SolutionListUtils {
 			Object value = sol.getAttribute(SolutionAttribute.SELECTED);
 
 			if (value != null && (boolean) value == true) {
-
 				selectedSolutions.add(sol.copy());
 			}
 		}
 
 		return selectedSolutions;
+	}
+	
+	public static List<? extends Solution<?>> getVisualizedSolutions(List<? extends Solution<?>> solutions) {
+
+		List<Solution<?>> visualizedSolutions = new ArrayList<>();
+
+		for (Solution<?> sol : solutions) {
+			
+			Object value = sol.getAttribute(SolutionAttribute.VISUALIZED);
+
+			if (value != null && (boolean) value == true) {
+				visualizedSolutions.add(sol.copy());
+			}
+		}
+
+		return visualizedSolutions;
 	}
 }
