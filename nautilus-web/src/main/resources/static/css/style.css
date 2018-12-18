@@ -18,7 +18,11 @@ body {
 	margin-bottom: 0px;
 }
 
-.page-header-with-navbar .btn-sm:first-child{
+.page-header-with-navbar .btn{
+	margin-top: -5px;
+}
+
+.page-header-with-navbar .btn:first-child{
 	margin-left: 10px;
 }
 
