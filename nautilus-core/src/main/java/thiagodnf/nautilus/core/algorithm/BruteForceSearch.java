@@ -1,6 +1,7 @@
 package thiagodnf.nautilus.core.algorithm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.uma.jmetal.algorithm.Algorithm;
@@ -65,6 +66,14 @@ public class BruteForceSearch<S extends Solution<?>> implements Algorithm<List<S
 	}
 	
 	public List<S> createSolutionsForIntegerProblem() {
+		
+		if (problem.getNumberOfVariables() > 10) {
+			throw new RuntimeException("The problem should have at most 10 variables");
+		}
+
+		if (problem.getNumberOfObjectives() > 5) {
+			throw new RuntimeException("The problem should have at most 5 objectives");
+		}
 
 		List<S> population = new ArrayList<>();
 		
@@ -153,9 +162,9 @@ public class BruteForceSearch<S extends Solution<?>> implements Algorithm<List<S
 
 	public static void main(String[] args){
 	    
-		String[] result = generateForInteger(25, 2);
+		String[] result = generateForInteger(10, 3);
         
-		System.out.println(result.length);
+		System.out.println(Arrays.toString(result));
 //		for(int j=0; j<result.length; j++){
 //            System.out.println(result[j]);
 //        }

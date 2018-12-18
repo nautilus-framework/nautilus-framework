@@ -12,14 +12,14 @@ function confirm(message, callback){
 		 buttons: {
 			 confirm: {
 				label: "Confirm",
-	            className: "btn-outline-danger",
+	            className: "btn-danger",
 	            callback: function(result){
 	            	callback();
 				}
 	        },
 	        cancel: {
 	            label: "Cancel",
-	            className: "btn-outline-secondary pull-right"
+	            className: "btn-light pull-right"
 	        },
 		 },
 	});

@@ -8,6 +8,7 @@ import java.util.concurrent.Future;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
@@ -23,6 +24,7 @@ import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.AlgorithmRunner;
+import org.uma.jmetal.util.JMetalException;
 
 import thiagodnf.nautilus.core.algorithm.Builder;
 import thiagodnf.nautilus.core.algorithm.GA;
@@ -111,7 +113,7 @@ public class OptimizeController {
     		@Valid Parameters parameters, 
     		@DestinationVariable String sessionId) throws InterruptedException {
 		
-        try {
+        //try {
         	System.out.println(parameters);
         	
 			String lastExecutionId = parameters.getLastExecutionId();
@@ -132,6 +134,10 @@ public class OptimizeController {
         	String pluginId = parameters.getPluginId();
 			String problemId = parameters.getProblemId();
 			String filename = parameters.getFilename();
+			
+//			if(parameters.getPopulationSize() == 100) {
+//				throw new RuntimeException("Testando");
+//			}
 			
 			Path instance = fileService.getInstanceFile(pluginId, problemId, filename);
 			
@@ -170,6 +176,8 @@ public class OptimizeController {
 			
 			AlgorithmRunner algorithmRunner = null;
 			
+			long computingTime = 0L;
+					
 			if(objectives.size() == 1) {
 				
 				GA<? extends Solution<?>> ga = new GA<>(builder);
@@ -200,7 +208,9 @@ public class OptimizeController {
 					}
 				});
 				
-				algorithmRunner = new AlgorithmRunner.Executor(algorithm).execute() ;
+				long initTime = System.currentTimeMillis();
+				execute(algorithm);
+				computingTime = System.currentTimeMillis() - initTime;
 			    
 			    rawSolutions = (List<? extends Solution<?>>) algorithm.getResult();
 			}
@@ -220,7 +230,7 @@ public class OptimizeController {
 		   	Execution execution = new Execution();
 		   			
 			execution.setSolutions(solutions);
-			execution.setExecutionTime(algorithmRunner.getComputingTime());
+			execution.setExecutionTime(computingTime);
 			execution.setParameters(parameters);
 	
 			webSocketService.sendTitle(sessionId, "Saving the execution to database...");
@@ -231,16 +241,44 @@ public class OptimizeController {
 			webSocketService.sendProgress(sessionId, 100);
 			webSocketService.sendDone(sessionId, execution.getId());
 			
-		} catch (Exception e) {
-			webSocketService.sendException(sessionId, e.getMessage());
-			throw new InterruptedException();
-		}
+//		} catch (Exception e) {
+//			System.out.println(ExceptionUtils.getStackTrace(e));
+//			webSocketService.sendException(sessionId, e.getMessage());
+//			throw new InterruptedException();
+//		}
         
         return new AsyncResult<>("Success");
     }
 	
 	@MessageExceptionHandler
 	public void handleException(Throwable exception, @DestinationVariable String sessionId) {
+		System.out.println("oi2");
 		webSocketService.sendException(sessionId, exception.getMessage());
     }
+	
+	public void execute(Algorithm<?> algorithm) {
+		System.out.println("executing..");
+		
+		algorithm.run();
+		
+//		Thread thread = new Thread(algorithm);
+//		thread.start();
+//		
+//		try {
+//			thread.join();
+//		} catch (InterruptedException e) {
+//			System.out.println(" oi1");
+//			throw new JMetalException("Error in thread.join()", e);
+//		} catch (RuntimeException e) {
+//			System.out.println(" oi2");
+//			throw new JMetalException("Error in thread.join()", e);
+//		} catch (Exception e) {
+//			System.out.println(" oi3");
+//			throw new JMetalException("Error in thread.join()", e);
+//		}
+//		
+//		thread.
+//		
+//		System.out.println(" ok");
+	}
 }
