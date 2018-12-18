@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.normalize.Normalize;
+import thiagodnf.nautilus.core.model.GenericSolution;
+import thiagodnf.nautilus.core.normalize.AbstractNormalize;
+import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reducer.AbstractReducer;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
@@ -36,8 +38,9 @@ public class ContinueController {
 	@Autowired
 	private CorrelationService correlationService;
 	
+	@SuppressWarnings("unchecked")
 	@GetMapping("/continue/{executionId}")
-	public String view(Model model, 
+	public String continueExecution(Model model, 
 			@PathVariable("executionId") String executionId) {
 		
 		Execution execution = executionService.findById(executionId);
@@ -48,14 +51,15 @@ public class ContinueController {
 		String pluginId = parameters.getPluginId();
 		String problemId = parameters.getProblemId();
 		
-		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalizeId());
+		AbstractNormalize normalizer = new ByMaxAndMinValuesNormalize();
 		AbstractReducer reducer = pluginService.getReducers().get(settings.getReducerId());
 		
 		List<AbstractObjective> allObjectives = pluginService.getObjectiveExtension(pluginId, problemId).getObjectives();
 		List<AbstractObjective> selectedObjectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		
-		List<? extends Solution<?>> solutions = execution.getSolutions();
-		List<? extends Solution<?>> normalizedSolutions = normalizer.normalize(selectedObjectives, solutions);
+		List<GenericSolution> solutions = execution.getSolutions();
+		
+		List<Solution<?>> normalizedSolutions = normalizer.normalize(selectedObjectives, (List<Solution<?>>)(Object) solutions);
 				
 		model.addAttribute("execution", execution);
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));

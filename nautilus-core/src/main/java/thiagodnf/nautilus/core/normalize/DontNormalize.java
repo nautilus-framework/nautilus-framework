@@ -7,17 +7,17 @@ import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
-public class DontNormalize extends Normalize {
+public class DontNormalize extends AbstractNormalize {
 
-	public double[] getMinimumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+	public double[] getMinimumValues(List<AbstractObjective> objectives, List<Solution<?>> solutions) {
 		return new double[solutions.get(0).getNumberOfObjectives()];
 	}
 	
-	public double[] getMaximumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+	public double[] getMaximumValues(List<AbstractObjective> objectives, List<Solution<?>> solutions) {
 		return new double[solutions.get(0).getNumberOfObjectives()];
 	}
 	
-	public List<Solution<?>> normalize(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+	public List<Solution<?>> normalize(List<AbstractObjective> objectives, List<Solution<?>> solutions) {
 
 		List<Solution<?>> copiedSolutions = new ArrayList<>(solutions.size());
 

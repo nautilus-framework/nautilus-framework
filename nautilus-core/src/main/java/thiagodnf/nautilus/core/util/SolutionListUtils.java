@@ -7,7 +7,7 @@ import org.uma.jmetal.solution.Solution;
 
 public class SolutionListUtils {
 
-	public static List<? extends Solution<?>> getSelectedSolutions(List<? extends Solution<?>> solutions) {
+	public static List<Solution<?>> getSelectedSolutions(List<Solution<?>> solutions) {
 
 		List<Solution<?>> selectedSolutions = new ArrayList<>();
 
@@ -23,7 +23,7 @@ public class SolutionListUtils {
 		return selectedSolutions;
 	}
 	
-	public static List<? extends Solution<?>> getVisualizedSolutions(List<? extends Solution<?>> solutions) {
+	public static List<Solution<?>> getVisualizedSolutions(List<Solution<?>> solutions) {
 
 		List<Solution<?>> visualizedSolutions = new ArrayList<>();
 

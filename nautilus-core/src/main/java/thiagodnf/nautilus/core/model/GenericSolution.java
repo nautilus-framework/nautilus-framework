@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
@@ -13,6 +12,7 @@ import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 
 import thiagodnf.nautilus.core.util.SolutionAttribute;
+import thiagodnf.nautilus.core.util.SolutionUtils;
 
 public class GenericSolution implements Solution<Object> {
 	
@@ -149,25 +149,7 @@ public class GenericSolution implements Solution<Object> {
 	}
 	
 	public double getUserFeedback() {
-
-		double sum = 0.0;
-		double total = 0.0;
-
-		for (Entry<Object, Object> entry : getAttributes().entrySet()) {
-
-			String key = entry.getKey().toString();
-
-			if (key.startsWith(SolutionAttribute.FEEDBACK_FOR_VARIABLE)) {
-				sum += (Double) entry.getValue();
-				total++;
-			}
-		}
-
-		if (total == 0.0) {
-			return 0.0;
-		}
-
-		return sum / total;
+		return SolutionUtils.getUserFeedback(this);
 	}
 	
 	public void setVariableUserFeedback(int index, double value) {

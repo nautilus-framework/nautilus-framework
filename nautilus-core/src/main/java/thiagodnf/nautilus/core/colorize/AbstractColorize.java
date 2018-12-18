@@ -16,9 +16,9 @@ public abstract class AbstractColorize {
 		return Converter.toKey(getName());
 	}
 	
-	public List<? extends Solution<?>> execute(List<? extends Solution<?>> solutions) {
+	public List<Solution<?>> execute(List<Solution<?>> solutions) {
 		
-		List<? extends Solution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(solutions);
+		List<Solution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(solutions);
 		
 		for (Solution<?> solution : solutions) {
 			solution.setAttribute(SolutionAttribute.DISTANCE, calculate(solution, selectedSolutions));
@@ -27,7 +27,7 @@ public abstract class AbstractColorize {
 		return solutions;
 	}	
 	
-	public String calculate(Solution<?> s, List<? extends Solution<?>> selectedSolutions) {
+	public String calculate(Solution<?> s, List<Solution<?>> selectedSolutions) {
 		
 		if (selectedSolutions.isEmpty()) {
 			return "0.0";

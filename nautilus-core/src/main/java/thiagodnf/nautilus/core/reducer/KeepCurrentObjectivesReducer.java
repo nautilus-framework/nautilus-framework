@@ -17,7 +17,7 @@ public class KeepCurrentObjectivesReducer extends AbstractReducer {
 	@Override
 	public List<Ranking> execute(List<AbstractObjective> allObjectives, 
 			List<AbstractObjective> selectedObjectives,
-			List<? extends Solution<?>> solutions) {
+			List<Solution<?>> solutions) {
 
 		List<Ranking> rankings = new ArrayList<>();
 

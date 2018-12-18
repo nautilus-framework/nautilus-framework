@@ -19,7 +19,7 @@ import thiagodnf.nautilus.core.colorize.AbstractColorize;
 import thiagodnf.nautilus.core.correlation.AbstractCorrelation;
 import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
 import thiagodnf.nautilus.core.model.GenericSolution;
-import thiagodnf.nautilus.core.normalize.Normalize;
+import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionUtils;
 import thiagodnf.nautilus.web.model.Execution;
@@ -44,6 +44,7 @@ public class ExecutionController {
 	@Autowired
 	private FlashMessageService flashMessageService;
 	
+	@SuppressWarnings("unchecked")
 	@GetMapping("")
 	public String view(Model model, 
 			@PathVariable("executionId") String executionId) {
@@ -57,18 +58,18 @@ public class ExecutionController {
 		String pluginId = parameters.getPluginId();
 		String problemId = parameters.getProblemId();
 		
-		Normalize normalizer = pluginService.getNormalizers().get(settings.getNormalizeId());
+		AbstractNormalize normalizer = pluginService.getNormalizers().get(settings.getNormalizeId());
 		AbstractDuplicatesRemover duplicatesRemover = pluginService.getDuplicatesRemovers().get(settings.getDuplicatesRemoverId());
 		AbstractColorize colorizer = pluginService.getColorizers().get(settings.getColorizeId());
 		AbstractCorrelation correlation = pluginService.getCorrelationers().get(settings.getCorrelationId());
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
 		
-		List<? extends Solution<?>> solutions = execution.getSolutions();
+		List<GenericSolution> solutions = execution.getSolutions();
 		
-		List<? extends Solution<?>> normalizedSolutions = normalizer.normalize(objectives, solutions);
-		List<? extends Solution<?>> distinctSolutions = duplicatesRemover.execute(normalizedSolutions);
-		List<? extends Solution<?>> colorfulSolutions = colorizer.execute(distinctSolutions);
+		List<Solution<?>> normalizedSolutions = normalizer.normalize(objectives, (List<Solution<?>>)(Object) solutions);
+		List<Solution<?>> distinctSolutions = duplicatesRemover.execute(normalizedSolutions);
+		List<Solution<?>> colorfulSolutions = colorizer.execute(distinctSolutions);
 		
 		model.addAttribute("correlations", correlation.execute(objectives, normalizedSolutions));
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));

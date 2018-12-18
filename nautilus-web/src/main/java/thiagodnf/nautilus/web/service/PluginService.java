@@ -39,7 +39,7 @@ import thiagodnf.nautilus.core.duplicated.DontDuplicatesRemover;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.normalize.DontNormalize;
-import thiagodnf.nautilus.core.normalize.Normalize;
+import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reducer.AbstractReducer;
 import thiagodnf.nautilus.core.reducer.AlphaReducer;
@@ -71,7 +71,7 @@ public class PluginService {
 
 	private final PluginManager pluginManager = new DefaultPluginManager(); 
 	
-	private Map<String, Normalize> normalizers = new TreeMap<>();
+	private Map<String, AbstractNormalize> normalizers = new TreeMap<>();
 	
 	private Map<String, AbstractColorize> colorizers = new TreeMap<>();
 	
@@ -115,8 +115,9 @@ public class PluginService {
 		
 		LOGGER.info("Done. Adding Reducers");
 		
-		addReducer(new KeepCurrentObjectivesReducer());
+		
 		addReducer(new AlphaReducer());
+		addReducer(new KeepCurrentObjectivesReducer());
 		addReducer(new KeepOriginalObjectivesReducer());
 		
 		LOGGER.info("Done");
@@ -162,7 +163,7 @@ public class PluginService {
 		LOGGER.info("Added '{}' colorizer", colorize.getId());
 	}
 
-	private void addNormalizer(Normalize normalize) {
+	private void addNormalizer(AbstractNormalize normalize) {
 
 		this.normalizers.put(normalize.getId(), normalize);
 		
@@ -190,7 +191,7 @@ public class PluginService {
 		LOGGER.info("Added '{}' reducer", reducer.getId());
 	}
 	
-	public Map<String, Normalize> getNormalizers() {
+	public Map<String, AbstractNormalize> getNormalizers() {
 		return normalizers;
 	}
 	

@@ -6,7 +6,7 @@ import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
-public class ByMaxAndMinValuesNormalize extends Normalize {
+public class ByMaxAndMinValuesNormalize extends AbstractNormalize {
 
 	@Override
 	public String getName() {
@@ -14,7 +14,7 @@ public class ByMaxAndMinValuesNormalize extends Normalize {
 	}
 
 	@Override
-	public double[] getMinimumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+	public double[] getMinimumValues(List<AbstractObjective> objectives, List<Solution<?>> solutions) {
 		
 		double[] minValues = new double[objectives.size()];
 		
@@ -26,7 +26,7 @@ public class ByMaxAndMinValuesNormalize extends Normalize {
 	}
 
 	@Override
-	public double[] getMaximumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+	public double[] getMaximumValues(List<AbstractObjective> objectives, List<Solution<?>> solutions) {
 		
 		double[] maxValues = new double[objectives.size()];
 

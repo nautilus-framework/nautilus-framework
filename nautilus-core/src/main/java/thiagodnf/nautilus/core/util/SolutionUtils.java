@@ -9,6 +9,28 @@ import org.uma.jmetal.solution.Solution;
 import thiagodnf.nautilus.core.model.GenericSolution;
 
 public class SolutionUtils {
+	
+	public static double getUserFeedback(GenericSolution solution) {
+
+		double sum = 0.0;
+		double total = 0.0;
+
+		for (Entry<Object, Object> entry : solution.getAttributes().entrySet()) {
+
+			String key = entry.getKey().toString();
+
+			if (key.startsWith(SolutionAttribute.FEEDBACK_FOR_VARIABLE)) {
+				sum += (Double) entry.getValue();
+				total++;
+			}
+		}
+
+		if (total == 0.0) {
+			return 0.0;
+		}
+
+		return sum / total;
+	}
 
 	public static GenericSolution clearUserFeedback(GenericSolution solution) {
 

@@ -9,7 +9,7 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.Normalizer;
 
-public abstract class Normalize {
+public abstract class AbstractNormalize {
 
 	public String getId() {
 		return Converter.toKey(getName());
@@ -21,7 +21,7 @@ public abstract class Normalize {
 	 * @param solutions a list of solutions
 	 * @return a copy of a given list of solutions with normalized objective values
 	 */
-	public List<? extends Solution<?>> normalize(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+	public List<Solution<?>> normalize(List<AbstractObjective> objectives, List<Solution<?>> solutions) {
 		
 		if (objectives.size() == 1) {
 			return solutions;
@@ -65,7 +65,7 @@ public abstract class Normalize {
 	 * @param solutions a list of solutions
 	 * @return a list of minimum values for each objective
 	 */
-	public abstract double[] getMinimumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) ;
+	public abstract double[] getMinimumValues(List<AbstractObjective> objectives, List<Solution<?>> solutions) ;
 	
 	/**
 	 * This method returns an array contains the maximum values 
@@ -74,5 +74,5 @@ public abstract class Normalize {
 	 * @param solutions a list of solutions
 	 * @return a list of maximum values for each objective
 	 */
-	public abstract double[] getMaximumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) ;
+	public abstract double[] getMaximumValues(List<AbstractObjective> objectives, List<Solution<?>> solutions) ;
 }

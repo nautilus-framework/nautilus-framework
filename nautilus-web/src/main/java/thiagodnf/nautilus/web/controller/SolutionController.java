@@ -67,6 +67,8 @@ public class SolutionController {
 		GenericSolution solution = solutions.get(solutionIndex);
 
 		solution.setAttribute(SolutionAttribute.VISUALIZED, true);
+		
+		execution = executionService.save(execution);
 
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, objectiveIds);
 		
