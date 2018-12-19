@@ -12,6 +12,7 @@
 		<module>nautilus-core</module>
 		<module>nautilus-plugin</module>
 		<module>nautilus-plugin-toy</module>
+		<module>nautilus-plugin-zdt</module>
 		<module>nautilus-web</module>
 	</modules>
 	<properties>

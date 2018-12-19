@@ -56,6 +56,12 @@ public class Parameters {
 	private Double mutationDistribution = 20.0;
 	
 	private String lastExecutionId;
+	
+	private List<List<Double>> referencePoints;
+	
+	@DecimalMin("0.0")
+	@DecimalMax("1.0")
+	private Double epsilon = 0.001;
 
 	public Parameters() {
 		this.objectiveIds = new ArrayList<>();
@@ -183,5 +189,21 @@ public class Parameters {
 
 	public void setAlgorithmId(String algorithmName) {
 		this.algorithmId = algorithmName;
+	}
+
+	public List<List<Double>> getReferencePoints() {
+		return referencePoints;
+	}
+
+	public void setReferencePoints(List<List<Double>> referencePoints) {
+		this.referencePoints = referencePoints;
+	}
+
+	public Double getEpsilon() {
+		return epsilon;
+	}
+
+	public void setEpsilon(Double epsilon) {
+		this.epsilon = epsilon;
 	}
 }

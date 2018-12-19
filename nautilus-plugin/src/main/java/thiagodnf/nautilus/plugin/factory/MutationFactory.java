@@ -9,6 +9,7 @@ import org.uma.jmetal.solution.Solution;
 import thiagodnf.nautilus.plugin.extension.MutationExtension;
 import thiagodnf.nautilus.plugin.extension.mutation.BitFlipMutationExtension;
 import thiagodnf.nautilus.plugin.extension.mutation.IntegerPolynomialMutationExtension;
+import thiagodnf.nautilus.plugin.extension.mutation.PolynomialMutationExtension;
 
 public class MutationFactory {
 	
@@ -17,6 +18,7 @@ public class MutationFactory {
 	public MutationFactory() {
 		extensions.add(new BitFlipMutationExtension());
 		extensions.add(new IntegerPolynomialMutationExtension());
+		extensions.add(new PolynomialMutationExtension());
 	}
 
 	public List<MutationExtension> getExtensions() {

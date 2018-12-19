@@ -110,6 +110,8 @@ public class OptimizeService {
 			builder.setPopulationSize(parameters.getPopulationSize());
 			builder.setMaxEvaluations(parameters.getMaxEvaluations());
 			builder.setProblem(problemExtension.getProblem(instanceData, objectives));
+			builder.setReferencePoints(Converter.toReferencePoints(parameters.getReferencePoints()));
+			builder.setEpsilon(parameters.getEpsilon());
 			
 			webSocketService.sendTitle(sessionId, "Loading last execution if it exists...");
 			
@@ -121,7 +123,7 @@ public class OptimizeService {
 			
 			// Algorithm
 			
-			List<? extends Solution<?>> rawSolutions = null;
+			List<Solution<?>> rawSolutions = null;
 			
 			webSocketService.sendTitle(sessionId, "Optimizing...");
 			
@@ -140,9 +142,9 @@ public class OptimizeService {
 			AlgorithmRunner algorithmRunner = new Executor(algorithm).execute();
 
 			if (algorithm instanceof GA) {
-				rawSolutions = (List<? extends Solution<?>>) Arrays.asList(algorithm.getResult());
+				rawSolutions = (List<Solution<?>>)(Object) Arrays.asList(algorithm.getResult());
 			} else {
-				rawSolutions = (List<? extends Solution<?>>) algorithm.getResult();
+				rawSolutions = (List<Solution<?>>) algorithm.getResult();
 			}
 
 			webSocketService.sendTitle(sessionId, "Converting to generic solutions...");

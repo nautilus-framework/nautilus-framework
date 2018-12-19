@@ -35,7 +35,7 @@ public class ErrorController {
 		
 		flashMessageService.error(ra, reason);
 		
-		return "redirect:/home";
+		return "redirect:"+ex.getRedirectTo();
 	}
 	
 	@ExceptionHandler(PageException.class)

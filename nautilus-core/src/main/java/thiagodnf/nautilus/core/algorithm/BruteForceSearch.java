@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.uma.jmetal.algorithm.Algorithm;
+import org.uma.jmetal.problem.BinaryProblem;
 import org.uma.jmetal.problem.IntegerProblem;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.IntegerSolution;
@@ -45,6 +46,10 @@ public class BruteForceSearch<S extends Solution<?>> implements Algorithm<List<S
 
 		if (problem.getNumberOfObjectives() > 5) {
 			throw new RuntimeException("The problem should have at most 5 objectives");
+		}
+		
+		if(!(problem instanceof IntegerProblem) && !(problem instanceof BinaryProblem)) {
+			throw new RuntimeException("This algorithm supports just Integer and Binary Problems");
 		}
 	}
 	

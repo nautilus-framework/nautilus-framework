@@ -8,6 +8,7 @@ import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.crossover.IntegerSBXCrossoverExtension;
+import thiagodnf.nautilus.plugin.extension.crossover.SBXCrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.crossover.SinglePointCrossoverExtension;
 
 public class CrossoverFactory {
@@ -17,6 +18,7 @@ public class CrossoverFactory {
 	public CrossoverFactory() {
 		extensions.add(new SinglePointCrossoverExtension());
 		extensions.add(new IntegerSBXCrossoverExtension());
+		extensions.add(new SBXCrossoverExtension());
 	}
 
 	public List<CrossoverExtension> getExtensions() {

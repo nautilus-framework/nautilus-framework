@@ -34,23 +34,18 @@
 		<div class="container page-navbar">
 			<div class="row">
 				<div class="col-12">
-	
-					<ul class="nav nav-tabs" role="tablist">
-						<li class="nav-item">
-							<a class="nav-link" href="#general" role="tab" data-toggle="tab">General</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#operators" role="tab" data-toggle="tab">Operators</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#objectives" role="tab" data-toggle="tab">Objectives</a>
-						</li>
-					</ul>
-			
+					<nav>
+						<div class="nav nav-tabs" id="nav-tab" role="tablist">
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#general">General</a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#operators">Operators</a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#objectives">Objectives</a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#preferences">Preferences</a>
+						</div>
+					</nav>
 					<form id="form-execute" class="needs-validation" th:object="${parameters}" novalidate autocomplete="off">
 						<!-- Tab panes -->
 						<div class="tab-content">
-							<div role="tabpanel" class="tab-pane" id="general">
+							<div role="tabpanel" class="tab-pane fade" id="general">
 								<input type="hidden" class="form-control" th:field="*{pluginId}" />
 								<input type="hidden" class="form-control" th:field="*{problemId}" />
 								<input type="hidden" class="form-control" th:field="*{filename}" />
@@ -157,6 +152,16 @@
 											</div>
 										</div>
 									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="preferences">
+								<div class="form-group">
+									<label for="referencePoints">Type the reference points (a RP by line)</label>
+								    <textarea class="form-control" rows="5" th:field="*{referencePoints}"></textarea>
+								</div>
+								<div class="form-group">
+									<label for="epsilon">Epsilon</label>
+									<input type="number" class="form-control" th:field="*{epsilon}" min="0.0" max="1.0" step="0.001" required/>
 								</div>
 							</div>
 						</div>

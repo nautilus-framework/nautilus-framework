@@ -36,6 +36,10 @@ public class RNSGAII<S extends Solution<?>> extends NSGAII<S>{
 		Preconditions.checkNotNull(builder.getReferencePoints(), "The reference point list should not be null");
 		Preconditions.checkArgument(!builder.getReferencePoints().isEmpty(), "The reference point list should not be empty");
 		
+		for (PointSolution rp : builder.getReferencePoints()) {
+			Preconditions.checkArgument(rp.getNumberOfObjectives() == builder.getProblem().getNumberOfObjectives(), "The reference point list should have points the same number of objectives to problem");
+		}
+		
 		this.referencePoints = builder.getReferencePoints();
 		this.epsilon = builder.getEpsilon();
 	}

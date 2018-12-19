@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
-import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.point.PointSolution;
 
 import thiagodnf.nautilus.core.algorithm.RNSGAII.PointSolutionUtils;
@@ -26,28 +25,6 @@ public class Converter {
 	
 	public static String toKey(String text) {
 		return text.replaceAll("[^A-Za-z0-9]", "-").toLowerCase();
-	}
-	
-	public static List<Integer> toIntegerList(List<Object> objects) {
-
-		List<Integer> binarySets = new ArrayList<>();
-
-		for (Object obj : objects) {
-			binarySets.add((Integer) obj);
-		}
-
-		return binarySets;
-	}
-	
-	public static List<BinarySet> toBinarySetList(List<Object> objects) {
-
-		List<BinarySet> binarySets = new ArrayList<>();
-
-		for (Object obj : objects) {
-			binarySets.add((BinarySet) obj);
-		}
-
-		return binarySets;
 	}
 	
 	public static GenericSolution toGenericSolution(Solution<?> solution) {
@@ -169,5 +146,16 @@ public class Converter {
 		}
 
 		return result;
+	}
+
+	public static List<PointSolution> toReferencePoints(List<List<Double>> referencePoints) {
+
+		List<PointSolution> pointSolutions = new ArrayList<>();
+
+		for (List<Double> referencePoint : referencePoints) {
+			pointSolutions.add(PointSolutionUtils.createSolution(toDoubleArray(referencePoint)));
+		}
+
+		return pointSolutions;
 	}
 }

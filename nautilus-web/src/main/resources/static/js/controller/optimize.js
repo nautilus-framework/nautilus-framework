@@ -54,11 +54,29 @@ function execute(array) {
 		obj["objectiveIds"] = [obj["objectiveIds"]];
 	}
 	
-	console.log(obj)
+	if(obj["referencePoints"]){
+		
+		var referencePoints = obj["referencePoints"].trim().split("\n");
+		
+		obj["referencePoints"] = []; 
+		
+		for(var i in referencePoints){
+			
+			var rp = referencePoints[i].trim();
+			
+			if(rp){
+				var points = rp.split(";").map(e => parseFloat(e)).filter(e => !isNaN(e));
+				
+				obj["referencePoints"].push(points);
+			}
+		}
+	}else{
+		obj["referencePoints"] = []; 
+	}
 	
 	obj = JSON.stringify(obj);
 	
-    webSocket.execute(obj);
+	webSocket.execute(obj);
 }
 
 function executeAgain(nextParameters ) {
