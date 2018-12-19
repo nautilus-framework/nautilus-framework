@@ -34,4 +34,19 @@ public class VariableUtils {
 
 		return variables;
 	}
+	
+	public static Object clone(Object object) {
+
+		if (object instanceof BinarySet) {
+			return ((BinarySet) object).clone();
+		} else if (object instanceof Integer) {
+			return new Integer(((Integer) object));
+		} else if (object instanceof Double) {
+			return new Double(((Double) object));
+		} else if (object instanceof String) {
+			return new String(((String) object));
+		} else {
+			return object;
+		}
+	}
 }

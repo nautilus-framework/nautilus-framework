@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -200,11 +199,9 @@ public class NSGAIII<S extends Solution<?>> implements Algorithm<List<S>>, Algor
 
     }
 
-	void initPopulation() {
+    protected void initPopulation() {
 
-		if (initialPopulation != null) {
-			population_ = initialPopulation;
-		} else {
+		if (this.initialPopulation == null) {
 
 			population_ = new ArrayList<>(populationSize_);
 
@@ -213,6 +210,13 @@ public class NSGAIII<S extends Solution<?>> implements Algorithm<List<S>>, Algor
 				problem_.evaluate(newSolution);
 				population_.add(newSolution);
 			}
+		} else {
+
+			while (initialPopulation.size() != populationSize_) {
+				((List<S>) this.initialPopulation).add(problem_.createSolution());
+			}
+
+			population_ = initialPopulation;
 		}
 	}
 

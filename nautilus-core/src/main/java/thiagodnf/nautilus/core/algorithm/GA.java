@@ -30,6 +30,10 @@ public class GA<S extends Solution<?>> extends org.uma.jmetal.algorithm.singleob
 			builder.getSelection(), 
 			new SequentialSolutionListEvaluator<S>());
 		
+		if (builder.getProblem().getNumberOfObjectives() > 1) {
+			throw new RuntimeException("GA should optimize just one objective");
+		}
+		
 		this.initialPopulation = builder.getInitialPopulation();
 		this.maxEvaluations = builder.getMaxEvaluations();
 	}

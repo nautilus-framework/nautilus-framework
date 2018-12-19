@@ -28,7 +28,7 @@ public class Parameters {
 	
 	private String filename;
 	
-	private List<String> objectiveKeys;
+	private List<String> objectiveIds;
 	
 	@NotEmpty
 	private String selectionId;
@@ -58,7 +58,7 @@ public class Parameters {
 	private String lastExecutionId;
 
 	public Parameters() {
-		this.objectiveKeys = new ArrayList<>();
+		this.objectiveIds = new ArrayList<>();
 	}
 
 	public int getPopulationSize() {
@@ -77,12 +77,12 @@ public class Parameters {
 		this.maxEvaluations = maxEvaluations;
 	}
 	
-	public List<String> getObjectiveKeys() {
-		return objectiveKeys;
+	public List<String> getObjectiveIds() {
+		return objectiveIds;
 	}
 
-	public void setObjectiveKeys(List<String> objectiveKeys) {
-		this.objectiveKeys = objectiveKeys;
+	public void setObjectiveIds(List<String> objectiveIds) {
+		this.objectiveIds = objectiveIds;
 	}
 
 	public String toString() {

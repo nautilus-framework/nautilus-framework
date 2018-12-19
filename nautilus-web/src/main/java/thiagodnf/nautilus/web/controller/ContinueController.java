@@ -14,13 +14,11 @@ import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reducer.AbstractReducer;
-import thiagodnf.nautilus.core.util.SolutionListUtils;
+import thiagodnf.nautilus.core.reducer.AbstractReducer.RankingItem;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
-import thiagodnf.nautilus.web.service.CorrelationService;
 import thiagodnf.nautilus.web.service.ExecutionService;
-import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
@@ -31,12 +29,6 @@ public class ContinueController {
 	
 	@Autowired
 	private PluginService pluginService;
-	
-	@Autowired
-	private FileService fileService;
-	
-	@Autowired
-	private CorrelationService correlationService;
 	
 	@SuppressWarnings("unchecked")
 	@GetMapping("/continue/{executionId}")
@@ -55,16 +47,31 @@ public class ContinueController {
 		AbstractReducer reducer = pluginService.getReducers().get(settings.getReducerId());
 		
 		List<AbstractObjective> allObjectives = pluginService.getObjectiveExtension(pluginId, problemId).getObjectives();
-		List<AbstractObjective> selectedObjectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
+		List<AbstractObjective> selectedObjectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveIds());
 		
 		List<GenericSolution> solutions = execution.getSolutions();
 		
 		List<Solution<?>> normalizedSolutions = normalizer.normalize(selectedObjectives, (List<Solution<?>>)(Object) solutions);
 				
+		List<RankingItem> rankingItems = reducer.execute(allObjectives, selectedObjectives, normalizedSolutions);
+		
+		Parameters nextParameters = execution.getParameters();
+		
+		nextParameters.getObjectiveIds().clear();
+		
+		for (RankingItem item : rankingItems) {
+
+			if (item.selected) {
+				nextParameters.getObjectiveIds().add(item.objectiveId);
+			}
+		}
+
+		nextParameters.setLastExecutionId(executionId);
+		
 		model.addAttribute("execution", execution);
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
-		model.addAttribute("rankings", reducer.execute(allObjectives, selectedObjectives, normalizedSolutions));
+		model.addAttribute("rankings", rankingItems);
 		
 		return "continue";
 	}

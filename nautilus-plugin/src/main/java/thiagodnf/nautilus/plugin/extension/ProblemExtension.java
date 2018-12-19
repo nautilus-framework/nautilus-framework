@@ -12,6 +12,8 @@ public interface ProblemExtension extends ExtensionPoint {
 
 	public Problem<?> getProblem(InstanceData data, List<AbstractObjective> objectives);
 	
+	public Class<?> supports();
+	
 	public String getName();
 	
 	public String getId();

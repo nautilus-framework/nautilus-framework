@@ -41,6 +41,20 @@ public class RNSGAII<S extends Solution<?>> extends NSGAII<S>{
 	}
 	
 	@Override
+	protected List<S> createInitialPopulation() {
+
+		if (this.initialPopulation == null) {
+			return super.createInitialPopulation();
+		}
+
+		while (initialPopulation.size() != maxPopulationSize) {
+			((List<S>) this.initialPopulation).add(problem.createSolution());
+		}
+
+		return (List<S>) initialPopulation;
+	}
+	
+	@Override
 	protected List<S> replacement(List<S> population, List<S> offspringPopulation) {
 
 		List<S> jointPopulation = new ArrayList<>();

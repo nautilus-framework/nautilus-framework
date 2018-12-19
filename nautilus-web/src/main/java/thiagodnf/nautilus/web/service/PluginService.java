@@ -36,16 +36,15 @@ import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.ByVariablesOrderDoesNotMatterDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.ByVariablesOrderMattersDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.DontDuplicatesRemover;
+import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.normalize.DontNormalize;
-import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reducer.AbstractReducer;
 import thiagodnf.nautilus.core.reducer.AlphaReducer;
 import thiagodnf.nautilus.core.reducer.KeepCurrentObjectivesReducer;
 import thiagodnf.nautilus.core.reducer.KeepOriginalObjectivesReducer;
-import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.FormatterExtension;
@@ -145,11 +144,9 @@ public class PluginService {
 
 			for (ProblemExtension extension : getProblemExtensions(plugin.getPluginId())) {
 
-				String problemId = Converter.toKey(extension.getName());
-				
-				LOGGER.info("Creating folder for {}/{}", plugin.getPluginId(), problemId);
+				LOGGER.info("Creating folder for {}/{}", plugin.getPluginId(), extension.getId());
 
-				fileService.createPluginDirectory(plugin.getPluginId(), problemId);
+				fileService.createPluginDirectory(plugin.getPluginId(), extension.getId());
 			}
 		}
 		
@@ -260,7 +257,7 @@ public class PluginService {
 	public ProblemExtension getProblemExtension(String pluginId, String problemId) {
 		return getProblemExtensions(pluginId)
 				.stream()
-				.filter(p -> Converter.toKey(p.getName()).equalsIgnoreCase(problemId))
+				.filter(p -> p.getId().equalsIgnoreCase(problemId))
 				.findFirst()
 				.orElseThrow(ProblemNotFoundException::new);
 	}

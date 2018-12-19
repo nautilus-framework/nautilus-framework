@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.uma.jmetal.solution.Solution;
-import org.uma.jmetal.util.binarySet.BinarySet;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 
 import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.core.util.SolutionUtils;
+import thiagodnf.nautilus.core.util.VariableUtils;
 
 public class GenericSolution implements Solution<Object> {
 	
@@ -56,12 +56,7 @@ public class GenericSolution implements Solution<Object> {
 		}
 
 		for (int i = 0; i < getNumberOfVariables(); i++) {
-
-			if (solution.getVariableValue(i) instanceof BinarySet) {
-				setVariableValue(i, ((BinarySet) solution.getVariableValue(i)).clone());
-			} else {
-				setVariableValue(i, solution.getVariableValue(i));
-			}
+			setVariableValue(i, VariableUtils.clone(solution.getVariableValue(i)));
 		}
 		
 		this.type = new String(solution.type);

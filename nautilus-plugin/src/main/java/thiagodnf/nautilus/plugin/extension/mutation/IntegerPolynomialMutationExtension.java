@@ -3,10 +3,12 @@ package thiagodnf.nautilus.plugin.extension.mutation;
 import org.pf4j.Extension;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.impl.mutation.IntegerPolynomialMutation;
+import org.uma.jmetal.problem.IntegerProblem;
 import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.MutationExtension;
+import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 
 @Extension
 public class IntegerPolynomialMutationExtension implements MutationExtension {
@@ -25,4 +27,18 @@ public class IntegerPolynomialMutationExtension implements MutationExtension {
 	public String getId() {
 		return Converter.toKey(getName());
 	}	
+	
+	@Override
+	public boolean supports(ProblemExtension extension) {
+
+		if (extension == null || extension.supports() == null) {
+			return false;
+		}
+
+		if (IntegerProblem.class.equals(extension.supports())) {
+			return true;
+		}
+
+		return false;
+	}
 }

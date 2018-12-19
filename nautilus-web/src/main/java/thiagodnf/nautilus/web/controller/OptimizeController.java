@@ -1,49 +1,26 @@
 package thiagodnf.nautilus.web.controller;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.Future;
 
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.Solution;
-import org.uma.jmetal.util.AlgorithmRunner;
-import org.uma.jmetal.util.JMetalException;
 
-import thiagodnf.nautilus.core.algorithm.Builder;
-import thiagodnf.nautilus.core.algorithm.GA;
-import thiagodnf.nautilus.core.listener.AlgorithmListener;
-import thiagodnf.nautilus.core.listener.OnProgressListener;
-import thiagodnf.nautilus.core.model.GenericSolution;
-import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.util.Converter;
-import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
-import thiagodnf.nautilus.plugin.extension.ProblemExtension;
-import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
-import thiagodnf.nautilus.plugin.factory.CrossoverFactory;
-import thiagodnf.nautilus.plugin.factory.MutationFactory;
-import thiagodnf.nautilus.plugin.factory.SelectionFactory;
-import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
-import thiagodnf.nautilus.web.service.ExecutionService;
-import thiagodnf.nautilus.web.service.FileService;
+import thiagodnf.nautilus.web.service.OptimizeService;
+import thiagodnf.nautilus.web.service.OptimizeService.ErrorStats;
+import thiagodnf.nautilus.web.service.OptimizeService.Stats;
+import thiagodnf.nautilus.web.service.OptimizeService.SuccessStats;
 import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.service.WebSocketService;
 
@@ -55,13 +32,10 @@ public class OptimizeController {
 	private PluginService pluginService;
 	
 	@Autowired
-	private FileService fileService;
-	
-	@Autowired
-	private ExecutionService executionService;
-	
-	@Autowired
 	private WebSocketService webSocketService;
+	
+	@Autowired
+	private OptimizeService asyncService;
 	
 	@GetMapping("")
 	public String optimize(Model model, 
@@ -90,195 +64,36 @@ public class OptimizeController {
 		return "optimize";
 	}
 	
-	@SuppressWarnings({ "rawtypes" })
-	public List<? extends Solution<?>> getInitialPopulation(Problem<?> problem, Execution execution) {
-
-		if (execution == null) {
-			return null;
-		}
-
-		List<? extends Solution<?>> initialPopulation = new ArrayList<>();
-
-//		for (thiagodnf.nautilus.core.model.Solution sol : execution.getSolutions()) {
-//			initialPopulation.add(Converter.toJMetalSolutionWithOutObjectives(problem, sol));
-//		}
-
-		return initialPopulation;
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Async
 	@MessageMapping("/hello.{sessionId}")
-    public Future<?> execute(
+    public Future<?> teste(
     		@Valid Parameters parameters, 
-    		@DestinationVariable String sessionId) throws InterruptedException {
+    		@DestinationVariable String sessionId) {
 		
-        //try {
-        	System.out.println(parameters);
-        	
-			String lastExecutionId = parameters.getLastExecutionId();
-
-			Execution lastExecution = null;
-
-			if (lastExecutionId != null) {
+		CompletableFuture<Stats> future = asyncService.execute(parameters,sessionId);
+		
+		future.thenRun(() -> {
+			
+			try {
+				Stats stats = future.join();
 				
-				webSocketService.sendTitle(sessionId, "Loading last execution...");
-				
-				lastExecution = executionService.findById(lastExecutionId);
+				if(stats instanceof SuccessStats) {
+					webSocketService.sendTitle(sessionId, "Done. Redirecting...");
+					webSocketService.sendProgress(sessionId, 100);
+					webSocketService.sendDone(sessionId, stats.content);
+				}else if(stats instanceof ErrorStats) {
+					webSocketService.sendException(sessionId, stats.content);
+				}
+			}catch(CompletionException ex) {
+				System.out.println("oi");
+				ex.printStackTrace();
 			}
-			
-			webSocketService.sendTitle(sessionId, "Initializing...");
-        	
-        	Thread.currentThread().setName("optimizing-" + sessionId);
-        	
-        	String pluginId = parameters.getPluginId();
-			String problemId = parameters.getProblemId();
-			String filename = parameters.getFilename();
-			
-//			if(parameters.getPopulationSize() == 100) {
-//				throw new RuntimeException("Testando");
-//			}
-			
-			Path instance = fileService.getInstanceFile(pluginId, problemId, filename);
-			
-			List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
-        	
-			ProblemExtension problemExtension = pluginService.getProblemExtension(pluginId, problemId);
-			InstanceDataExtension instanceDataExtension = pluginService.getInstanceDataExtension(pluginId);
-			
-			InstanceData instanceData = instanceDataExtension.getInstanceData(instance);
-			
-			// Factories
-			
-			AlgorithmFactory algorithmFactory = pluginService.getAlgorithmFactory(pluginId);
-			SelectionFactory selectionFactory = pluginService.getSelectionFactory(pluginId);
-			CrossoverFactory crossoverFactory = pluginService.getCrossoverFactory(pluginId);
-			MutationFactory mutationFactory = pluginService.getMutationFactory(pluginId);
-			
-			// Builder
-			
-			Builder builder = new Builder();
-			
-			builder.setPopulationSize(parameters.getPopulationSize());
-			builder.setMaxEvaluations(parameters.getMaxEvaluations());
-			builder.setProblem(problemExtension.getProblem(instanceData, objectives));
-			builder.setInitialPopulation(getInitialPopulation(builder.getProblem(), lastExecution));
-        	
-			builder.setSelection(selectionFactory.getSelection(parameters.getSelectionId()));
-			builder.setCrossover(crossoverFactory.getCrossover(parameters.getCrossoverId(), parameters.getCrossoverProbability(), parameters.getCrossoverDistribution()));
-			builder.setMutation(mutationFactory.getMutation(parameters.getMutationId(), parameters.getMutationProbability(), parameters.getMutationDistribution()));
-			
-			// Algorithm
-			
-			List<? extends Solution<?>> rawSolutions = null;
-			
-			webSocketService.sendTitle(sessionId, "Optimizing...");
-			
-			AlgorithmRunner algorithmRunner = null;
-			
-			long computingTime = 0L;
-					
-			if(objectives.size() == 1) {
-				
-				GA<? extends Solution<?>> ga = new GA<>(builder);
-				
-				ga.setOnProgressListener(new OnProgressListener() {
-					
-					@Override
-					public void onProgress(double progress) {
-						webSocketService.sendProgress(sessionId, progress);
-					}
-				});
-				
-				algorithmRunner = new AlgorithmRunner.Executor(ga).execute() ;
-				
-				rawSolutions = Arrays.asList(ga.getResult());
-				
-			}else {
-				
-				Algorithm algorithm = algorithmFactory.getAlgorithm(parameters.getAlgorithmId(), builder);
-			    
-				AlgorithmListener alg = (AlgorithmListener) algorithm;
-				
-				alg.setOnProgressListener(new OnProgressListener() {
-					
-					@Override
-					public void onProgress(double progress) {
-						webSocketService.sendProgress(sessionId, progress);
-					}
-				});
-				
-				long initTime = System.currentTimeMillis();
-				execute(algorithm);
-				computingTime = System.currentTimeMillis() - initTime;
-			    
-			    rawSolutions = (List<? extends Solution<?>>) algorithm.getResult();
-			}
-		    
-		   	webSocketService.sendTitle(sessionId, "Converting to generic solutions...");
-		   	
-		   	List<GenericSolution> solutions = Converter.toGenericSolutions(rawSolutions);
-		   	
-			webSocketService.sendTitle(sessionId, "Setting ids");
-
-			for (int i = 0; i < solutions.size(); i++) {
-				solutions.get(i).setAttribute("id", String.valueOf(i));
-			}
-		   	
-			webSocketService.sendTitle(sessionId, "Preparing the results...");
-			
-		   	Execution execution = new Execution();
-		   			
-			execution.setSolutions(solutions);
-			execution.setExecutionTime(computingTime);
-			execution.setParameters(parameters);
-	
-			webSocketService.sendTitle(sessionId, "Saving the execution to database...");
-			
-			execution = executionService.save(execution);
-	
-			webSocketService.sendTitle(sessionId, "Done. Redirecting...");
-			webSocketService.sendProgress(sessionId, 100);
-			webSocketService.sendDone(sessionId, execution.getId());
-			
-//		} catch (Exception e) {
-//			System.out.println(ExceptionUtils.getStackTrace(e));
-//			webSocketService.sendException(sessionId, e.getMessage());
-//			throw new InterruptedException();
-//		}
-        
-        return new AsyncResult<>("Success");
-    }
+		});
+		
+		return null;
+	}
 	
 	@MessageExceptionHandler
 	public void handleException(Throwable exception, @DestinationVariable String sessionId) {
-		System.out.println("oi2");
 		webSocketService.sendException(sessionId, exception.getMessage());
-    }
-	
-	public void execute(Algorithm<?> algorithm) {
-		System.out.println("executing..");
-		
-		algorithm.run();
-		
-//		Thread thread = new Thread(algorithm);
-//		thread.start();
-//		
-//		try {
-//			thread.join();
-//		} catch (InterruptedException e) {
-//			System.out.println(" oi1");
-//			throw new JMetalException("Error in thread.join()", e);
-//		} catch (RuntimeException e) {
-//			System.out.println(" oi2");
-//			throw new JMetalException("Error in thread.join()", e);
-//		} catch (Exception e) {
-//			System.out.println(" oi3");
-//			throw new JMetalException("Error in thread.join()", e);
-//		}
-//		
-//		thread.
-//		
-//		System.out.println(" ok");
 	}
 }

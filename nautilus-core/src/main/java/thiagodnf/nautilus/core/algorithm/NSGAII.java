@@ -5,7 +5,6 @@ import java.util.List;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.comparator.DominanceComparator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
-import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 import thiagodnf.nautilus.core.listener.AlgorithmListener;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
@@ -17,7 +16,7 @@ public class NSGAII<S extends Solution<?>> extends org.uma.jmetal.algorithm.mult
 	
 	private OnProgressListener onProgressListener;
 	
-	private List<S> initialPopulation;
+	protected List<S> initialPopulation;
 	
 	public NSGAII(Builder builder) {
 		super(builder.getProblem(), 
@@ -40,14 +39,7 @@ public class NSGAII<S extends Solution<?>> extends org.uma.jmetal.algorithm.mult
 		}
 
 		while (initialPopulation.size() != maxPopulationSize) {
-			
-			int index = JMetalRandom.getInstance().nextInt(0, initialPopulation.size() - 1);
-			
-			S random = (S) initialPopulation.get(index).copy();
-			
-			((List<S>) this.initialPopulation).add(random);
-			
-			//((List<S>) this.initialPopulation).add(problem.createSolution());
+			((List<S>) this.initialPopulation).add(problem.createSolution());
 		}
 
 		return (List<S>) initialPopulation;

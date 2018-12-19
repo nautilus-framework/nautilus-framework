@@ -7,7 +7,7 @@
 		descriptor = ${plugin.getDescriptor()},
 		pluginId = ${descriptor.getPluginId()},
 		pluginName = ${descriptor.getPluginDescription()},
-		problemId = ${#converter.toKey(problem.name)}">
+		problemId = ${problem.id}">
 
 		<div th:replace="fragments/navbar :: default('home')"></div>
 		
@@ -89,7 +89,8 @@
 									<div class="form-group col-4">
 										<label for="crossoverName">Crossover</label>
 										<select class="form-control" th:field="*{crossoverId}">
-											<option th:each="crossover : ${crossoverFactory.getExtensions()}" 
+											<option th:each="crossover : ${crossoverFactory.getExtensions()}"  
+												th:if="${crossover.supports(problem)}"
 									    		th:value="${crossover.id}"
 									    		th:text="${crossover.name}" 
 								    		/>
@@ -109,7 +110,8 @@
 									<div class="form-group col-4">
 										<label for="mutationName">Mutation</label>
 										<select class="form-control" th:field="*{mutationId}">
-											<option th:each="mutation : ${mutationFactory.getExtensions()}" 
+											<option th:each="mutation : ${mutationFactory.getExtensions()}"
+												th:if="${mutation.supports(problem)}" 
 									    		th:value="${mutation.id}"
 									    		th:text="${mutation.name}" 
 								    		/>
@@ -142,8 +144,8 @@
 														<div class="checkbox">
 															<label class="no-select">
 																<input type="checkbox" 
-																	class="objectiveKeys"
-																	name="objectiveKeys" 
+																	class="objectiveIds"
+																	name="objectiveIds" 
 																	th:checked="${objective.isChecked()}"
 																	th:value="${objective.getId()}" 
 																	th:text="${objective.getName()}"
@@ -170,8 +172,8 @@
 		</div>
 	
 		<div th:replace="fragments/footer :: footer"></div>
-		<div th:replace="fragments/modal-progressbar :: progressbar"></div>
-		<div th:replace="fragments/modal-console :: console"></div>
+		<div th:replace="fragments/modal :: progressbar"></div>
+		<div th:replace="fragments/modal :: console"></div>
 		<script type="text/javascript" th:src="@{/js/controller/optimize.js}"></script>
 	</body>
 

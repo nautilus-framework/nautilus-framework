@@ -50,8 +50,8 @@ function execute(array) {
 		}
 	})
 
-	if(!Array.isArray(obj["objectiveKeys"])){
-		obj["objectiveKeys"] = [obj["objectiveKeys"]];
+	if(!Array.isArray(obj["objectiveIds"])){
+		obj["objectiveIds"] = [obj["objectiveIds"]];
 	}
 	
 	console.log(obj)

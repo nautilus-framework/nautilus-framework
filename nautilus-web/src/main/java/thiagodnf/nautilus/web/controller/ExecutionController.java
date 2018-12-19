@@ -63,7 +63,7 @@ public class ExecutionController {
 		AbstractColorize colorizer = pluginService.getColorizers().get(settings.getColorizeId());
 		AbstractCorrelation correlation = pluginService.getCorrelationers().get(settings.getCorrelationId());
 		
-		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveKeys());
+		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveIds());
 		
 		List<GenericSolution> solutions = execution.getSolutions();
 		

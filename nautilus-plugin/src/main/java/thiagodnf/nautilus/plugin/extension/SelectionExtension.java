@@ -10,6 +10,8 @@ public interface SelectionExtension extends ExtensionPoint {
 
 	public SelectionOperator<List<? extends Solution<?>>, ? extends Solution<?>> getSelection();
 	
+	public boolean supports(ProblemExtension extension);
+	
 	public String getName();
 	
 	public String getId();

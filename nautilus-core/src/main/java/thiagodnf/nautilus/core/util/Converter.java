@@ -6,11 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.uma.jmetal.problem.BinaryProblem;
-import org.uma.jmetal.problem.IntegerProblem;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.BinarySolution;
-import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.point.PointSolution;
@@ -89,96 +85,15 @@ public class Converter {
 		return PointSolutionUtils.createSolution(solution.getObjectives());
 	}
 	
-//	public static List<thiagodnf.nautilus.core.model.Solution> toSolutions(List<? extends Solution<?>> population) {
-//
-//		List<thiagodnf.nautilus.core.model.Solution> solutions = new ArrayList<>();
-//
-//		for (Solution<?> s : population) {
-//
-//			solutions.add(toSolution(s));
-//			
-//			thiagodnf.nautilus.core.model.Solution solution = new thiagodnf.nautilus.core.model.Solution();
-//
-//			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
-//				solution.getObjectives().add(s.getObjective(i));
-//			}
-//
-//			for (int i = 0; i < s.getNumberOfVariables(); i++) {
-//
-//				if (s instanceof IntegerSolution) {
-//					solution.getVariables().add(new Variable(s.getVariableValueString(i)));
-//				} else if (s instanceof BinarySolution) {
-//
-//					BinarySet binarySet = (BinarySet) s.getVariableValue(i);
-//
-//					for (int j = 0; j < binarySet.getBinarySetLength(); j++) {
-//						solution.getVariables().add(new Variable(binarySet.get(j)));
-//					}
-//
-//					solution.getProperties().put("binaryset-size-for-variable_" + i, String.valueOf(binarySet.getBinarySetLength()));
-//				}
-//			}
-//			
-//			solution.getProperties().put("number-of-variables", String.valueOf(s.getNumberOfVariables()));
-//
-//			solution.setType(s.getClass().getName());
-//
-//			solutions.add(solution);
-//		}
-//
-//		return solutions;
-//	}
-	
-//	@SuppressWarnings({ "rawtypes", "unchecked" })
-//	public static Solution toJMetalSolutionWithOutObjectives(Problem problem, thiagodnf.nautilus.core.model.Solution solution) {
-//		
-//		Solution newSolution = (Solution) problem.createSolution();
-//		
-//		if (newSolution instanceof IntegerSolution) {
-//			for (int i = 0; i < solution.getVariables().size(); i++) {
-//				newSolution.setVariableValue(i, Integer.valueOf(solution.getVariables().get(i).getValue()));
-//			}
-//		} else if (newSolution instanceof BinarySolution) {
-//			
-//			int numberOfVariables = Integer.valueOf(solution.getProperties().get("number-of-variables"));
-//
-//			int index = 0;
-//			
-//			for (int i = 0; i < numberOfVariables; i++) {
-//
-//				int nbits = Integer.valueOf(solution.getProperties().get("binaryset-size-for-variable_" + i));
-//				
-//				BinarySet binarySet = new BinarySet(nbits);
-//
-//				for (int j = 0; j < nbits; j++) {
-//					binarySet.set(j, Boolean.valueOf(solution.getVariables().get(index++).getValue()));
-//				}
-//				
-//				newSolution.setVariableValue(i, binarySet);
-//			}
-//		}
-//		
-//		return newSolution;
-//	}
-	
-	public static Solution<?> toJMetalSolutionWithOutObjectives(Problem<?> problem, Solution<?> solution) {
-		
-		Solution<?> newSolution = (Solution<?>) problem.createSolution();
+	@SuppressWarnings("unchecked")
+	public static Solution<?> toJMetalSolutionWithOutObjectives(Problem<?> problem, GenericSolution solution) {
+
+		Solution<Object> newSolution = (Solution<Object>) problem.createSolution();
 
 		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-
-			if (problem instanceof IntegerProblem) {
-				((IntegerSolution) newSolution).setVariableValue(i, (Integer) solution.getVariableValue(i));
-			}
-			if (problem instanceof BinaryProblem) {
-				((BinarySolution) newSolution).setVariableValue(i, (BinarySet) solution.getVariableValue(i));
-			}
+			newSolution.setVariableValue(i, VariableUtils.clone(solution.getVariableValue(i)));
 		}
-		
-//		for (Entry<String, String> entry : solution.getProperties().entrySet()) {
-//			newSolution.setAttribute(entry.getKey(), entry.getValue());
-//		}
-		
+
 		return newSolution;
 	}
 	
@@ -192,7 +107,7 @@ public class Converter {
 		}
 
 		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-			newSolution.setVariableValue(i, solution.getVariables().get(i));
+			newSolution.setVariableValue(i, solution.getVariableValue(i));
 		}
 
 		for (Entry<Object, Object> entry : solution.getAttributes().entrySet()) {
@@ -203,11 +118,11 @@ public class Converter {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List<? extends Solution<?>> toJMetalSolutions(Problem problem, List<thiagodnf.nautilus.core.model.GenericSolution> population) {
+	public static List<? extends Solution<?>> toJMetalSolutions(Problem problem, List<GenericSolution> population) {
 
 		List solutions = new ArrayList<>();
 
-		for (thiagodnf.nautilus.core.model.GenericSolution solution : population) {
+		for (GenericSolution solution : population) {
 			solutions.add(toJMetalSolution(problem, solution));
 		}
 
@@ -255,36 +170,4 @@ public class Converter {
 
 		return result;
 	}
-
-//	public static List<? extends Solution<?>> clearAttributes(Problem<?> problem, List<? extends Solution<?>> rawSolutions) {
-//		
-//		List<Solution<?>> solutions = new ArrayList<>();
-//		
-//		for(Solution<?> rawSolution : rawSolutions) {
-//			solutions.add(toSolutionsWithOutAttributes(problem, rawSolution));
-//		}
-//		
-//		return solutions;
-//	}
-	
-//	public static Solution<?> toSolutionsWithOutAttributes(Problem<?> problem, Solution<?> solution) {
-//
-//		Solution<?> newSolution = (Solution<?>) problem.createSolution();
-//
-//		for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
-//			newSolution.setObjective(i, solution.getObjective(i));
-//		}
-//
-//		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-//
-//			if (problem instanceof IntegerProblem) {
-//				((IntegerSolution) newSolution).setVariableValue(i, (Integer) solution.getVariableValue(i));
-//			}
-//			if (problem instanceof BinaryProblem) {
-//				((BinarySolution) newSolution).setVariableValue(i, (BinarySet) solution.getVariableValue(i));
-//			}
-//		}
-//
-//		return newSolution;
-//	}
 }

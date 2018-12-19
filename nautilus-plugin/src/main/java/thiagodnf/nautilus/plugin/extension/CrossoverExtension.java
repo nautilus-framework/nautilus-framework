@@ -8,6 +8,8 @@ public interface CrossoverExtension extends ExtensionPoint {
 
 	public CrossoverOperator<? extends Solution<?>> getCrossover(double probability, double distributionIndex);
 	
+	public boolean supports(ProblemExtension extension);
+		
 	public String getName();
 	
 	public String getId();

@@ -11,4 +11,6 @@ public interface MutationExtension extends ExtensionPoint {
 	public String getName();
 	
 	public String getId();
+	
+	public boolean supports(ProblemExtension extension);
 }

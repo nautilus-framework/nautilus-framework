@@ -62,7 +62,7 @@ public class SolutionController {
 		
 		String pluginId = parameters.getPluginId();
 		String problemId = parameters.getProblemId();
-		List<String> objectiveIds = parameters.getObjectiveKeys();
+		List<String> objectiveIds = parameters.getObjectiveIds();
 		
 		GenericSolution solution = solutions.get(solutionIndex);
 

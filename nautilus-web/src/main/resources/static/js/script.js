@@ -90,7 +90,7 @@ $(function(){
 		});
 	});
 	
-	$(".objectiveKeys").click(function(e){
+	$(".objectiveIds").click(function(e){
 		
 		var parent = $(this).parent().parent().parent().parent().parent();
 		

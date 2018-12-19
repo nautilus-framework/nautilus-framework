@@ -16,6 +16,7 @@ public class WebSocketOnDisconnected implements ApplicationListener<SessionDisco
 
 	@Override
 	public void onApplicationEvent(SessionDisconnectEvent event) {
+		
 		StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
 
 		String sessionId = sha.getSessionId();
@@ -25,10 +26,10 @@ public class WebSocketOnDisconnected implements ApplicationListener<SessionDisco
 		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
 
 		for (Thread t : threadSet) {
-			if (t.getName().equalsIgnoreCase("optimizing-" + sessionId)) {
+			
+			if (t.getName().startsWith("optimizing-")) {
 				t.interrupt();
 			}
-
 		}
 	}
 }

@@ -38,6 +38,14 @@ public class BruteForceSearch<S extends Solution<?>> implements Algorithm<List<S
 		this.population = new ArrayList<>();
 		this.problem = builder.getProblem();
 		this.evaluator = new SequentialSolutionListEvaluator<S>();
+		
+		if (problem.getNumberOfVariables() > 10) {
+			throw new RuntimeException("The problem should have at most 10 variables");
+		}
+
+		if (problem.getNumberOfObjectives() > 5) {
+			throw new RuntimeException("The problem should have at most 5 objectives");
+		}
 	}
 	
 	@Override
@@ -67,14 +75,6 @@ public class BruteForceSearch<S extends Solution<?>> implements Algorithm<List<S
 	
 	public List<S> createSolutionsForIntegerProblem() {
 		
-		if (problem.getNumberOfVariables() > 10) {
-			throw new RuntimeException("The problem should have at most 10 variables");
-		}
-
-		if (problem.getNumberOfObjectives() > 5) {
-			throw new RuntimeException("The problem should have at most 5 objectives");
-		}
-
 		List<S> population = new ArrayList<>();
 		
 		String[] numbers = generateForInteger(problem.getNumberOfVariables(), problem.getNumberOfObjectives());

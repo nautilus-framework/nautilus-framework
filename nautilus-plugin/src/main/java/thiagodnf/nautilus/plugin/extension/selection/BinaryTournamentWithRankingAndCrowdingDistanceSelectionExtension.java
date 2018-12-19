@@ -9,6 +9,7 @@ import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 
 import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.plugin.extension.SelectionExtension;
 
 @Extension
@@ -28,5 +29,15 @@ public class BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension im
 	@Override
 	public String getId() {
 		return Converter.toKey(getName());
+	}
+
+	@Override
+	public boolean supports(ProblemExtension extension) {
+		
+		if (extension == null || extension.supports() == null) {
+			return false;
+		}
+
+		return true;
 	}		
 }
