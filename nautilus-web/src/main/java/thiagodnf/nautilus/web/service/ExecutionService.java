@@ -21,7 +21,6 @@ public class ExecutionService {
 		return this.executionRepository.save(execution);
 	}
 	
-	@Cacheable("executions")
 	public Execution findById(String executionId) {
 		return this.executionRepository.findById(executionId)
 				.orElseThrow(ExecutionNotFoundException::new);
