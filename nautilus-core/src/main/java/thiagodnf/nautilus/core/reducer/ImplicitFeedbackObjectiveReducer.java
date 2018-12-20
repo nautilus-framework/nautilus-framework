@@ -5,14 +5,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.model.GenericSolution;
+import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.core.util.SolutionUtils;
 
-public class AlphaReducer extends AbstractReducer {
+public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 
 	private double alpha = 0.5;
 	
@@ -20,11 +22,13 @@ public class AlphaReducer extends AbstractReducer {
 	
 	@Override
 	public String getName() {
-		return "Alpha Reducer";
+		return "By Implicit Feedback";
 	}
 
 	@Override
-	public List<RankingItem> execute(List<AbstractObjective> allObjectives, 
+	public List<RankingItem> execute(Problem<?> problem,
+			InstanceData data, 
+			List<AbstractObjective> allObjectives, 
 			List<AbstractObjective> selectedObjectives,
 			List<Solution<?>> solutions) {
 		

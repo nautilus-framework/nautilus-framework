@@ -3,6 +3,7 @@ package thiagodnf.nautilus.web.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import thiagodnf.nautilus.web.exception.ExecutionNotFoundException;
@@ -20,6 +21,7 @@ public class ExecutionService {
 		return this.executionRepository.save(execution);
 	}
 	
+	@Cacheable("executions")
 	public Execution findById(String executionId) {
 		return this.executionRepository.findById(executionId)
 				.orElseThrow(ExecutionNotFoundException::new);

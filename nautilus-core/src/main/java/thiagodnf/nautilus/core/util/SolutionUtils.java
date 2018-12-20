@@ -50,6 +50,7 @@ public class SolutionUtils {
 		}
 
 		solution.getAttributes().remove(SolutionAttribute.SELECTED);
+		solution.getAttributes().remove(SolutionAttribute.FEEDBACK);
 
 		return solution;
 	}

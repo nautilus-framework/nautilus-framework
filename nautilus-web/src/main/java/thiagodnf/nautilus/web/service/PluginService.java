@@ -42,9 +42,11 @@ import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.normalize.DontNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reducer.AbstractReducer;
-import thiagodnf.nautilus.core.reducer.AlphaReducer;
-import thiagodnf.nautilus.core.reducer.KeepCurrentObjectivesReducer;
+import thiagodnf.nautilus.core.reducer.ImplicitFeedbackObjectiveReducer;
+import thiagodnf.nautilus.core.reducer.DontReduceObjectivesReducer;
 import thiagodnf.nautilus.core.reducer.KeepOriginalObjectivesReducer;
+import thiagodnf.nautilus.core.reducer.RandomlyObjectivesReducer;
+import thiagodnf.nautilus.core.reducer.VariableBasedReducer;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
@@ -114,9 +116,11 @@ public class PluginService {
 		
 		LOGGER.info("Done. Adding Reducers");
 		
-		addReducer(new AlphaReducer());
-		addReducer(new KeepCurrentObjectivesReducer());
+		addReducer(new ImplicitFeedbackObjectiveReducer());
+		addReducer(new DontReduceObjectivesReducer());
 		addReducer(new KeepOriginalObjectivesReducer());
+		addReducer(new VariableBasedReducer());
+		addReducer(new RandomlyObjectivesReducer());
 	}
 	
 	public void loadPluginsFromDirectory() {

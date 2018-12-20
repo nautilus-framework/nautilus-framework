@@ -3,19 +3,23 @@ package thiagodnf.nautilus.core.reducer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 
+import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
-public class KeepCurrentObjectivesReducer extends AbstractReducer {
+public class DontReduceObjectivesReducer extends AbstractReducer {
 
 	@Override
 	public String getName() {
-		return "Keep Current Objectives";
+		return "Don't Reduce";
 	}
 
 	@Override
-	public List<RankingItem> execute(List<AbstractObjective> allObjectives, 
+	public List<RankingItem> execute(Problem<?> problem,
+			InstanceData data,
+			List<AbstractObjective> allObjectives, 
 			List<AbstractObjective> selectedObjectives,
 			List<Solution<?>> solutions) {
 

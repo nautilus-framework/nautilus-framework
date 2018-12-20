@@ -55,7 +55,7 @@ public class SolutionController {
 		List<GenericSolution> solutions = execution.getSolutions();
 
 		if (solutionIndex < 0 || solutionIndex >= solutions.size()) {
-			throw new SolutionNotFoundException();
+			throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
 		}
 		
 		Parameters parameters = execution.getParameters();
@@ -100,7 +100,7 @@ public class SolutionController {
 		List<GenericSolution> solutions = execution.getSolutions();
 		
 		if (solutionIndex < 0 || solutionIndex >= solutions.size()) {
-			throw new SolutionNotFoundException();
+			throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
 		}
 		
 		GenericSolution solution = solutions.get(solutionIndex);
@@ -113,6 +113,10 @@ public class SolutionController {
 				solution.getAttributes().put(key, Double.valueOf(parameters.get(key)));
 			}
 		}
+		
+		double feedback = SolutionUtils.getUserFeedback(solution);
+		
+		solution.setAttribute(SolutionAttribute.FEEDBACK, feedback);
 
 		execution = executionService.save(execution);
 

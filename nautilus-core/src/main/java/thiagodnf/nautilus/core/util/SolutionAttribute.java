@@ -9,4 +9,6 @@ public class SolutionAttribute {
 	public static final String SELECTED = "selected";
 	
 	public static final String DISTANCE = "distance";
+	
+	public static final String FEEDBACK = "feedback";
 }
