@@ -114,12 +114,9 @@ public class PluginService {
 		
 		LOGGER.info("Done. Adding Reducers");
 		
-		
 		addReducer(new AlphaReducer());
 		addReducer(new KeepCurrentObjectivesReducer());
 		addReducer(new KeepOriginalObjectivesReducer());
-		
-		LOGGER.info("Done");
 	}
 	
 	public void loadPluginsFromDirectory() {
