@@ -20,6 +20,14 @@ public class F2ForZDT3Objective extends AbstractObjective {
 
 		return h * g;
 	}
+	
+	public double getMinimumValue() {
+		return -1.0;
+	}
+
+	public double getMaximumValue() {
+		return 1.0;
+	}
 
 	/**
 	 * Returns the value of the ZDT2 function G.
