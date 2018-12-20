@@ -36,7 +36,7 @@ public class InstanceFileController {
 			@PathVariable("problemId") String problemId, 
 			@PathVariable("filename") String filename){
 		
-		InstanceDataExtension extension = pluginService.getInstanceDataExtension(pluginId);
+		InstanceDataExtension extension = pluginService.getInstanceDataExtension(pluginId, problemId);
 		
 		Path path = fileService.getInstanceFile(pluginId, problemId, filename);
 		

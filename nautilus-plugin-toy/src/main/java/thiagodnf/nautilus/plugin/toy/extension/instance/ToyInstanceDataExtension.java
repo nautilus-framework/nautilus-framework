@@ -11,6 +11,7 @@ import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.gui.Tab;
 import thiagodnf.nautilus.plugin.gui.TableTabContent;
 import thiagodnf.nautilus.plugin.toy.encoding.instance.TXTInstanceData;
+import thiagodnf.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 
 @Extension
 public class ToyInstanceDataExtension implements InstanceDataExtension {
@@ -18,6 +19,13 @@ public class ToyInstanceDataExtension implements InstanceDataExtension {
 	@Override
 	public InstanceData getInstanceData(Path path) {
 		return new TXTInstanceData(path);
+	}
+	
+	@Override
+	public List<String> getProblemIds() {
+		return Arrays.asList(
+			new ToyProblemExtension().getId()
+		);
 	}
 
 	@Override
@@ -37,4 +45,6 @@ public class ToyInstanceDataExtension implements InstanceDataExtension {
 
 		return new Tab("Content", table);
 	}
+
+	
 }

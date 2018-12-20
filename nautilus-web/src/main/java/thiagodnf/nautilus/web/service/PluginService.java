@@ -47,7 +47,6 @@ import thiagodnf.nautilus.core.reducer.KeepCurrentObjectivesReducer;
 import thiagodnf.nautilus.core.reducer.KeepOriginalObjectivesReducer;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
-import thiagodnf.nautilus.plugin.extension.FormatterExtension;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.extension.MutationExtension;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
@@ -57,6 +56,7 @@ import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
 import thiagodnf.nautilus.plugin.factory.CrossoverFactory;
 import thiagodnf.nautilus.plugin.factory.MutationFactory;
 import thiagodnf.nautilus.plugin.factory.SelectionFactory;
+import thiagodnf.nautilus.web.exception.InstanceDataNotFoundException;
 import thiagodnf.nautilus.web.exception.PluginNotFoundException;
 import thiagodnf.nautilus.web.exception.ProblemNotFoundException;
 
@@ -220,6 +220,10 @@ public class PluginService {
 		return plugin;
 	}
 	
+	public List<ObjectiveExtension> getObjectiveExtensions(String pluginId) {
+		return pluginManager.getExtensions(ObjectiveExtension.class, pluginId);
+	}
+	
 	public List<InstanceDataExtension> getInstanceDataExtensions(String pluginId) {
 		return pluginManager.getExtensions(InstanceDataExtension.class, pluginId);
 	}
@@ -244,11 +248,12 @@ public class PluginService {
 		return pluginManager.getExtensions(MutationExtension.class, pluginId);
 	}
 	
-	public InstanceDataExtension getInstanceDataExtension(String pluginId) {
+	public InstanceDataExtension getInstanceDataExtension(String pluginId, String problemId) {
 		return getInstanceDataExtensions(pluginId)
 				.stream()
+				.filter(p -> p.getProblemIds().contains(problemId))
 				.findFirst()
-				.orElseThrow(() -> new RuntimeException("The instance data extension was not found"));
+				.orElseThrow(InstanceDataNotFoundException::new);
 	}
 	
 	public ProblemExtension getProblemExtension(String pluginId, String problemId) {
@@ -260,15 +265,11 @@ public class PluginService {
 	}
 	
 	public ObjectiveExtension getObjectiveExtension(String pluginId, String problemId) {
-		return pluginManager.getExtensions(ObjectiveExtension.class, pluginId)
+		return getObjectiveExtensions(pluginId)
 				.stream()
 				.filter(e -> e.getProblemId().equalsIgnoreCase(problemId))
 				.findFirst()
 				.orElseThrow(() -> new RuntimeException("Objective Extension was not found"));
-	}
-	
-	public List<FormatterExtension> getFormatters(String pluginId) {
-		return pluginManager.getExtensions(FormatterExtension.class, pluginId);
 	}
 	
 	public Map<String, List<AbstractObjective>> getObjectivesByGroups(String pluginId, String problemId) {
@@ -288,17 +289,6 @@ public class PluginService {
 
 		return map;
 	}
-	
-//	public String formatInstanceFile(String pluginId, String problemId, String content) {
-//
-//		List<FormatterExtension> formatters = getFormatters(pluginId);
-//
-//		if (formatters.isEmpty()) {
-//			return "The formatter was not defined";
-//		}
-//
-//		return formatters.get(0).formatInstanceFile(problemId, content);
-//	}
 	
 	public List<AbstractObjective> getObjectivesByIds(String pluginId, String problemId, List<String> objectiveIds){
 		

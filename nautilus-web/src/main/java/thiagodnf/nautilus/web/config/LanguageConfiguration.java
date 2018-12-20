@@ -22,6 +22,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
  * @version 1.0.0
  * @since 2017-12-14
  */
+@SuppressWarnings("deprecation")
 @Configuration
 public class LanguageConfiguration extends WebMvcConfigurerAdapter {
 

@@ -8,7 +8,7 @@ import org.pf4j.Extension;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
-import thiagodnf.nautilus.plugin.zdt.encoding.objective.F1ForZDT1Objective;
+import thiagodnf.nautilus.plugin.zdt.encoding.objective.F1Objective;
 import thiagodnf.nautilus.plugin.zdt.encoding.objective.F2ForZDT1Objective;
 import thiagodnf.nautilus.plugin.zdt.extension.problem.ZDT1ProblemExtension;
 
@@ -20,7 +20,7 @@ public class ZDT1ObjectiveExtension implements ObjectiveExtension {
 
 		List<AbstractObjective> objectives = new ArrayList<>();
 
-		objectives.add(new F1ForZDT1Objective());
+		objectives.add(new F1Objective());
 		objectives.add(new F2ForZDT1Objective());
 
 		return objectives;

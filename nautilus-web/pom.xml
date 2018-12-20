@@ -8,8 +8,15 @@
 		<version>1.0.0</version>
 	</parent>
 	<artifactId>nautilus-web</artifactId>
-	<name>Nautilus Server</name>
-	<description>A spring boot application</description>
+	<name>Nautilus Web</name>
+	<description>A Spring Boot Server</description>
+	<properties>
+		<java.version>1.8</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sonar.test.exclusions>src/test/**</sonar.test.exclusions>
+	</properties>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

@@ -58,4 +58,9 @@ public class F2ForZDT2Objective extends AbstractObjective {
 	public String getGroupName() {
 		return "General";
 	}
+	
+	@Override
+	public boolean isDisabled() {
+		return true;
+	}
 }

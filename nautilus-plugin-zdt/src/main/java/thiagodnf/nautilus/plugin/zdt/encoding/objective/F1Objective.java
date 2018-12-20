@@ -6,7 +6,7 @@ import org.uma.jmetal.solution.Solution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
-public class F1ForZDT2Objective extends AbstractObjective {
+public class F1Objective extends AbstractObjective {
 
 	@Override
 	public double calculate(InstanceData data, Solution<?> sol) {
@@ -24,5 +24,10 @@ public class F1ForZDT2Objective extends AbstractObjective {
 	@Override
 	public String getGroupName() {
 		return "General";
+	}
+	
+	@Override
+	public boolean isDisabled() {
+		return true;
 	}
 }

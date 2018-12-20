@@ -9,6 +9,8 @@ public abstract class AbstractObjective {
 
 	private boolean isChecked = true;
 	
+	private boolean isDisabled = false;
+	
 	public boolean isMaximize() {
 		return false;
 	}
@@ -40,6 +42,14 @@ public abstract class AbstractObjective {
 
 	public void setChecked(boolean status) {
 		this.isChecked = status;
+	}
+	
+	public boolean isDisabled() {
+		return isDisabled;
+	}
+
+	public void setDisabled(boolean status) {
+		this.isDisabled = status;
 	}
 	
 	public double evaluate(InstanceData data, Solution<?> sol) {

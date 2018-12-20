@@ -92,7 +92,7 @@ public class OptimizeService {
 			List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveIds());
         	
 			ProblemExtension problemExtension = pluginService.getProblemExtension(pluginId, problemId);
-			InstanceDataExtension instanceDataExtension = pluginService.getInstanceDataExtension(pluginId);
+			InstanceDataExtension instanceDataExtension = pluginService.getInstanceDataExtension(pluginId, problemId);
 			
 			InstanceData instanceData = instanceDataExtension.getInstanceData(instance);
 			

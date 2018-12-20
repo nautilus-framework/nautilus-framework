@@ -13,4 +13,6 @@ public interface InstanceDataExtension extends ExtensionPoint {
 	public InstanceData getInstanceData(Path path);
 	
 	public List<Tab> getTabs(InstanceData data);
+	
+	public List<String> getProblemIds();
 }

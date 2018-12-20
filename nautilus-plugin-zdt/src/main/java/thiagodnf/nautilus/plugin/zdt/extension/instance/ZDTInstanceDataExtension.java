@@ -11,13 +11,25 @@ import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.gui.Tab;
 import thiagodnf.nautilus.plugin.gui.TableTabContent;
 import thiagodnf.nautilus.plugin.zdt.encoding.instance.TXTInstanceData;
+import thiagodnf.nautilus.plugin.zdt.extension.problem.ZDT1ProblemExtension;
+import thiagodnf.nautilus.plugin.zdt.extension.problem.ZDT2ProblemExtension;
+import thiagodnf.nautilus.plugin.zdt.extension.problem.ZDT3ProblemExtension;
 
 @Extension
-public class ZDT1InstanceDataExtension implements InstanceDataExtension {
+public class ZDTInstanceDataExtension implements InstanceDataExtension {
 
 	@Override
 	public InstanceData getInstanceData(Path path) {
 		return new TXTInstanceData(path);
+	}
+	
+	@Override
+	public List<String> getProblemIds() {
+		return Arrays.asList(
+			new ZDT1ProblemExtension().getId(),
+			new ZDT2ProblemExtension().getId(),
+			new ZDT3ProblemExtension().getId()
+		);
 	}
 
 	@Override
