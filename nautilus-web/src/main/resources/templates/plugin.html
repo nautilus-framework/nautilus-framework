@@ -46,7 +46,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="problem,i : ${problems}" th:with="problemId=${#converter.toKey(problem.name)}">
+									<tr th:each="problem,i : ${problems}" th:with="problemId = ${problem.id}">
 										<td th:text="${i.count}"></td>
 										<td>
 											<a th:href="@{/problem/{pluginId}/{problemId}(pluginId=${pluginId},problemId=${problemId})}"

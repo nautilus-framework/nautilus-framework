@@ -7,7 +7,7 @@
 		descriptor = ${plugin.getDescriptor()},
 		pluginId = ${descriptor.getPluginId()},
 		pluginName = ${descriptor.getPluginDescription()},
-		problemId = ${#converter.toKey(problem.name)}">
+		problemId = ${problem.id}">
 
 		<div th:replace="fragments/navbar :: default('home')"></div>
 		
