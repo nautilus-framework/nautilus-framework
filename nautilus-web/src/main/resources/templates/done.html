@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<head th:replace="fragments/head :: default(${'Done'})"></head>
-<body>
+
+	<body th:with="
+		descriptor = ${plugin.getDescriptor()},
+		pluginId = ${descriptor.getPluginId()},
+		pluginName = ${descriptor.getPluginDescription()},
+		executionName = ${execution.getSettings().getName()}">
+	
 	<div th:replace="fragments/navbar :: default('Home')"></div>
 	
 	<div class="page-header">
@@ -11,9 +17,9 @@
 					<h6 class="title">
 						<a th:href="@{/}">Home</a> 
 						<span class="path-divider">/</span>
-						<a th:href="@{/plugin/} + ${pluginId}"	th:text="${plugin.getDescriptor().getPluginDescription()}"></a>
-						<span class="path-divider">/</span>
-						<a th:href="@{/problem/} + ${pluginId} + @{/} + ${problemId}" th:text="${problem.getName()}"></a>
+						<a th:href="@{/plugin/} + ${pluginId}" th:text="${pluginName}"></a>
+						<span class="path-divider">/</span> 
+						<a th:href="@{/execution/}+${execution.getId()}" th:text="${#strings.isEmpty(executionName)} ? ${execution.getId()} : ${executionName}"></a>
 						<span class="path-divider">/</span>
 						<a th:href="@{#}">Done</a> 
 					</h6>
@@ -29,17 +35,14 @@
 					<thead>
 						<tr>
 							<th width="50px">#</th>
-							<th th:text="${header.getName()}"></th>
-							<th th:each="value : ${header.getValues()}" th:text="${value}"></th>
+							<th>Indicator</th>
+							<th width="150px">Value</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="row, i : ${rows}">
 							<td th:text="${i.index}"></td>
 							<td th:text="${row.getName()}"></td>
-							
-							
-							
 							<td th:each="value : ${row.getValues()}" th:text="${#numbers.formatDecimal(value, 1, 5)}"></td>
 						</tr>
 					</tbody>

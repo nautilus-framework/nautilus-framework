@@ -49,6 +49,7 @@ import thiagodnf.nautilus.core.reducer.RandomlyObjectivesReducer;
 import thiagodnf.nautilus.core.reducer.VariableBasedReducer;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
+import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.extension.MutationExtension;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
@@ -56,6 +57,7 @@ import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.plugin.extension.SelectionExtension;
 import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
 import thiagodnf.nautilus.plugin.factory.CrossoverFactory;
+import thiagodnf.nautilus.plugin.factory.IndicatorFactory;
 import thiagodnf.nautilus.plugin.factory.MutationFactory;
 import thiagodnf.nautilus.plugin.factory.SelectionFactory;
 import thiagodnf.nautilus.web.exception.InstanceDataNotFoundException;
@@ -252,6 +254,10 @@ public class PluginService {
 		return pluginManager.getExtensions(MutationExtension.class, pluginId);
 	}
 	
+	public List<IndicatorExtension> getIndicatorExtensions(String pluginId) {
+		return pluginManager.getExtensions(IndicatorExtension.class, pluginId);
+	}
+	
 	public InstanceDataExtension getInstanceDataExtension(String pluginId, String problemId) {
 		return getInstanceDataExtensions(pluginId)
 				.stream()
@@ -348,6 +354,19 @@ public class PluginService {
 		MutationFactory factory = new MutationFactory();
 
 		for (MutationExtension extension : getMutationExtensions(pluginId)) {
+			factory.getExtensions().add(extension);
+		}
+
+		Collections.sort(factory.getExtensions(), Ordering.usingToString());
+
+		return factory;
+	}
+	
+	public IndicatorFactory getIndicatorFactory(String pluginId) {
+
+		IndicatorFactory factory = new IndicatorFactory();
+
+		for (IndicatorExtension extension : getIndicatorExtensions(pluginId)) {
 			factory.getExtensions().add(extension);
 		}
 

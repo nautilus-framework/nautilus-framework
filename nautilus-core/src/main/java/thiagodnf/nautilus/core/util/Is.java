@@ -30,7 +30,7 @@ public class Is {
 		return equal(Doubles.asList(a), Doubles.asList(b));
 	}
 	
-	public static boolean equal(List<Double> a, List<Double> b) {
+	public static boolean equal(List<?> a, List<?> b) {
 
 		Preconditions.checkNotNull(a, "The list 'a' should not be null");
 		Preconditions.checkNotNull(b, "The list 'b' should not be null");

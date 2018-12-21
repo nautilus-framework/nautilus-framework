@@ -58,8 +58,19 @@ public class Converter {
 		return newSolutions;
 	}
 	
-	public static PointSolution toPointSolution(GenericSolution solution) {
+	public static PointSolution toPointSolution(Solution<?> solution) {
 		return PointSolutionUtils.createSolution(solution.getObjectives());
+	}
+	
+	public static List<PointSolution> toPointSolutions(List<? extends Solution<?>> solutions) {
+
+		List<PointSolution> newSolutions = new ArrayList<>();
+
+		for (Solution<?> solution : solutions) {
+			newSolutions.add(toPointSolution(solution));
+		}
+
+		return newSolutions;
 	}
 	
 	@SuppressWarnings("unchecked")

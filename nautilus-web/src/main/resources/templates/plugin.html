@@ -59,6 +59,7 @@
 						<div class="tab-pane fade" id="executions">
 							<div class="tab-pane-toolbar">
 								<button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#modal-upload-execution">Upload Execution</button>
+								<button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#modal-generate-approx-pareto-front">Generate Approx Pareto-front</button>
 							</div>
 							<table id="execution-table" class="table table-striped table-hover table-sm table-datatable-with-option">
 								<thead>
@@ -103,6 +104,7 @@
 		</div>
 	
 		<div th:replace="fragments/modal :: upload-execution"></div>
+		<div th:replace="fragments/modal :: generate-approx-pareto-front"></div>
 		<div th:replace="fragments/footer :: footer"></div>
 	</body>
 

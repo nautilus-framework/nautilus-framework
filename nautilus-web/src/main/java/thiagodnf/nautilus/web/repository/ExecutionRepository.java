@@ -11,7 +11,7 @@ import thiagodnf.nautilus.web.model.Settings;
 
 public interface ExecutionRepository extends MongoRepository<Execution, String> {
 
-	interface IdsAndDatesOnly {
+	interface ExecutionSimplified {
 
 		String getId();
 		
@@ -22,9 +22,11 @@ public interface ExecutionRepository extends MongoRepository<Execution, String> 
 		Settings getSettings();
 	}
 	
-	List<IdsAndDatesOnly> findByParametersProblemId(String problemId);
+	List<ExecutionSimplified> findByParametersProblemId(String problemId);
 	
-	List<IdsAndDatesOnly> findByParametersPluginIdAndParametersProblemId(String pluginId, String problemId);
+	List<ExecutionSimplified> findByParametersPluginIdAndParametersProblemIdAndSettingsName(String pluginId, String problemId, String name);
 	
-	List<IdsAndDatesOnly> findByParametersPluginId(String pluginId);
+	List<ExecutionSimplified> findByParametersPluginIdAndParametersProblemId(String pluginId, String problemId);
+	
+	List<ExecutionSimplified> findByParametersPluginId(String pluginId);
 }

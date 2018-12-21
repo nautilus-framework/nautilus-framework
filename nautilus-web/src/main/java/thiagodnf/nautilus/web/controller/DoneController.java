@@ -1,20 +1,33 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
+import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.front.Front;
+import org.uma.jmetal.util.front.imp.ArrayFront;
+import org.uma.jmetal.util.front.util.FrontNormalizer;
+import org.uma.jmetal.util.front.util.FrontUtils;
+import org.uma.jmetal.util.point.PointSolution;
 
+import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
+import thiagodnf.nautilus.plugin.factory.IndicatorFactory;
+import thiagodnf.nautilus.web.model.Execution;
+import thiagodnf.nautilus.web.model.Parameters;
+import thiagodnf.nautilus.web.model.Settings;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
-@RequestMapping("/done/{pluginId:.+}/{problemId:.+}")
+@RequestMapping("/done/{executionId:.+}")
 public class DoneController {
 	
 	@Autowired
@@ -23,13 +36,37 @@ public class DoneController {
 	@Autowired
 	private PluginService pluginService;
 	
-	@PostMapping("")
+	@GetMapping("")
 	public String show(Model model, 
-			@PathVariable("pluginId") String pluginId,
-			@PathVariable("problemId") String problemId,
-			@RequestParam(value = "use-all-objectives", required = false) boolean useAllObjectives,
-			@RequestParam("executions") List<String> executionIds,
-			@RequestParam("quality-indicators") List<String> qualityIndicators){
+			@PathVariable("executionId") String executionId){
+		
+		Execution execution = executionService.findById(executionId);
+		Parameters parameters = execution.getParameters();
+		
+		String pluginId = parameters.getPluginId();
+		String problemId = parameters.getProblemId();
+		
+//		Front referenceFront = new ArrayFront(paretoFrontFile);
+//		FrontNormalizer frontNormalizer = new FrontNormalizer(referenceFront);
+//
+//		Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
+//		Front normalizedFront = frontNormalizer.normalize(new ArrayFront(population));
+//		List<PointSolution> normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront);
+
+		Map<String, Double> map = new HashMap<>();
+
+		for (IndicatorExtension extension : pluginService.getIndicatorFactory(pluginId).getExtensions()) {
+			map.put(extension.getName(), extension.getIndicator(null).evaluate(null));
+		}
+		
+		
+//		String outputString = "\n";
+//		outputString += "Hypervolume (N) : "+ new PISAHypervolume<PointSolution>(normalizedReferenceFront).evaluate(normalizedPopulation) + "\n";
+		
+		
+		
+		
+		
 //		
 //		List<Execution> executions = new ArrayList<>();
 //
@@ -195,8 +232,11 @@ public class DoneController {
 //	    
 //	    model.addAttribute("header", header);
 //	    model.addAttribute("rows", rows);
-//	    model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
-//		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
+		
+		model.addAttribute("map", map);
+		model.addAttribute("execution", execution);
+		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
+		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
 //	   
 		return "done";
 	}

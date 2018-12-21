@@ -25,6 +25,16 @@ public class ToyObjectiveExtension implements ObjectiveExtension {
 		objectives.add(new NumberOfObjective(4));
 		objectives.add(new NumberOfObjective(5));
 		objectives.add(new NumberOfObjective(6));
+		objectives.add(new NumberOfObjective(7));
+		objectives.add(new NumberOfObjective(8));
+		objectives.add(new NumberOfObjective(9));
+		objectives.add(new NumberOfObjective(10));
+		objectives.add(new NumberOfObjective(11));
+		objectives.add(new NumberOfObjective(12));
+		objectives.add(new NumberOfObjective(13));
+		objectives.add(new NumberOfObjective(14));
+		objectives.add(new NumberOfObjective(15));
+		objectives.add(new NumberOfObjective(16));
 
 		return objectives;
 	}
