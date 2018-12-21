@@ -8,7 +8,7 @@ body {
 
 .page-header{
 	height: 55px;
-	background-color: #fafbfc;
+	background-color: #FCFBFA;
 	border-bottom: 1px solid #dee2e6;
 	margin-bottom: 20px;
 }
@@ -65,7 +65,7 @@ body {
 }
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
-	border-top-color: #e36209;
+	border-top-color: #F95100;
 	border-top-width: 2px;
 }
 
@@ -84,7 +84,9 @@ body {
 	border: 1px solid #c8e1ff;
 }
 
-
+a{
+	color: rgb(0, 135, 191	);
+}
 
 
 
@@ -96,7 +98,9 @@ body {
 	margin-bottom: 20px;	
 }
 
-
+.bg-dark{
+	background-color: RGB(32, 57, 81) !important;
+}
 
 
 
