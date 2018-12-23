@@ -46,7 +46,6 @@ public class NIntegerSolution extends NSolution<Integer> implements IntegerSolut
 		this.upperBounds = upperBounds;
 
 		initializeIntegerVariables();
-		initializeObjectiveValues();
 	}
 	
 	public NIntegerSolution(int numberOfObjectives, int numberOfVariables) {

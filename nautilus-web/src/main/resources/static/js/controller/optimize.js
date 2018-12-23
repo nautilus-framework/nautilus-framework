@@ -8,6 +8,7 @@ webSocket.onDisconnectedListener(function(){
 
 webSocket.onProgressListener(function(progress){
 	progressBar.setProgress(progress);
+	updateTitle(progress);
 })
 
 webSocket.onTitleChangedListener(function(title){

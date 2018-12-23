@@ -1,11 +1,15 @@
 package thiagodnf.nautilus.core.encoding.solution;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
+
+import com.google.common.base.Preconditions;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
 
@@ -13,6 +17,8 @@ public class NBinarySolution extends NSolution<BinarySet> implements BinarySolut
 
 	private static final long serialVersionUID = -4755282254256775513L;
 
+	protected List<Integer> bitsPerVariable;
+	
 	public NBinarySolution() {
 		super();
 	}
@@ -31,6 +37,7 @@ public class NBinarySolution extends NSolution<BinarySet> implements BinarySolut
 			setVariableValue(i, (BinarySet) solution.getVariableValue(i).clone());
 		}
 
+		setBitsPerVariable(new ArrayList<>(solution.getBitsPerVariable()));
 		setAttributes(new HashMap<Object, Object>(solution.getAttributes()));
 	}
 	
@@ -39,12 +46,17 @@ public class NBinarySolution extends NSolution<BinarySet> implements BinarySolut
 	 * 
 	 * @param numberOfObjectives The number of objectives
 	 * @param numberOfVariables The number of variables
+	 * @param bitsPerVariable 
 	 */
-	public NBinarySolution(int numberOfObjectives, int numberOfVariables) {
+	public NBinarySolution(int numberOfObjectives, int numberOfVariables, List<Integer> bitsPerVariable) {
 		super(numberOfObjectives, numberOfVariables);
 
+		Preconditions.checkNotNull(bitsPerVariable, "The bits per variable should not be null");
+		Preconditions.checkArgument(bitsPerVariable.size() == numberOfVariables, "The bits per variable shound have the same number of variables");
+		
+		this.bitsPerVariable = bitsPerVariable;
+		
 		initializeBinaryVariables();
-		initializeObjectiveValues();
 	}
 		
 	@Override
@@ -59,36 +71,44 @@ public class NBinarySolution extends NSolution<BinarySet> implements BinarySolut
 
 	@Override
 	public int getTotalNumberOfBits() {
+		
 		int sum = 0;
 
 		for (int i = 0; i < getNumberOfVariables(); i++) {
-			sum += getVariableValue(i).getBinarySetLength();
+			sum += getNumberOfBits(i);
 		}
 
 		return sum;
 	}
 	
+	public List<Integer> getBitsPerVariable() {
+		return bitsPerVariable;
+	}
+
+	public void setBitsPerVariable(List<Integer> bitsPerVariable) {
+		this.bitsPerVariable = bitsPerVariable;
+	}
+
 	protected void initializeBinaryVariables() {
 		
 		for (int i = 0; i < getNumberOfVariables(); i++) {
-			setVariableValue(i, createNewBitSet(getNumberOfBits(i)));
+			setVariableValue(i, createNewBitSet(bitsPerVariable.get(i)));
 		}
 	}
 	
 	protected BinarySet createNewBitSet(int numberOfBits) {
-		
+
 		BinarySet bitSet = new BinarySet(numberOfBits);
 
 		for (int i = 0; i < numberOfBits; i++) {
 
-			double rnd = JMetalRandom.getInstance().nextDouble();
-			
-			if (rnd < 0.5) {
+			if (JMetalRandom.getInstance().nextDouble() < 0.5) {
 				bitSet.set(i);
 			} else {
 				bitSet.clear(i);
 			}
 		}
+
 		return bitSet;
 	}
 }

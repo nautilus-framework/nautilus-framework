@@ -46,7 +46,6 @@ public class NDoubleSolution extends NSolution<Double> implements DoubleSolution
 		this.upperBounds = upperBounds;
 
 		initializeDoubleVariables();
-		initializeObjectiveValues();
 	}
 	
 	public NDoubleSolution(int numberOfObjectives, int numberOfVariables) {

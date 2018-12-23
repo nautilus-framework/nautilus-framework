@@ -35,19 +35,16 @@ public abstract class NSolution <T> implements Solution<T> {
 
 		this.objectives = new double[numberOfObjectives];
 		this.variables = new ArrayList<>(numberOfVariables);
+		
+		for (int i = 0; i < getNumberOfObjectives(); i++) {
+			objectives[i] = 0.0;
+		}
 
 		for (int i = 0; i < numberOfVariables; i++) {
 			variables.add(i, null);
 		}
 
 		this.attributes = new HashMap<>();
-	}
-	
-	protected void initializeObjectiveValues() {
-
-		for (int i = 0; i < getNumberOfObjectives(); i++) {
-			objectives[i] = 0.0;
-		}
 	}
 	
 	public List<T> getVariables() {

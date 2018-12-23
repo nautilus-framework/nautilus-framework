@@ -16,6 +16,8 @@ class ProgressBar {
 				that.onCloseListener()
 			}
 		})
+		
+		this.title = document.title;
 	}
 	
 	show(){
@@ -41,6 +43,7 @@ class ProgressBar {
 			this.progressBar.text(progress+"%");
 			this.progressBar.css("width", progress+"%");
 			this.progressBar.attr("aria-valuenow", progress);
+			this.updateTitle(progress+"%"+" - "+this.title)
 		}
 		
 		this.lastProgress = progress;		
@@ -48,6 +51,10 @@ class ProgressBar {
 	
 	onCancelListener(callback){
 		this.onCloseListener = callback
+	}
+	
+	updateTitle(title){
+		document.title = title;
 	}
 }
 

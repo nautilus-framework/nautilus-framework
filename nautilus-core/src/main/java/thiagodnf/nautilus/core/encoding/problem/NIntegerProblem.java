@@ -7,8 +7,14 @@ import org.uma.jmetal.solution.IntegerSolution;
 
 import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.solution.NIntegerSolution;
+import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public abstract class NIntegerProblem extends NProblem<IntegerSolution> implements IntegerProblem {
+
+	public NIntegerProblem(InstanceData data, List<AbstractObjective> objectives) {
+		super(data, objectives);
+	}
 
 	private static final long serialVersionUID = 9124593199794358192L;
 
@@ -40,6 +46,13 @@ public abstract class NIntegerProblem extends NProblem<IntegerSolution> implemen
 	
 	protected List<Integer> getUpperBounds() {
 		return upperBounds;
+	}
+	
+	@Override
+	public void evaluate(IntegerSolution solution) {
+		for (int i = 0; i < objectives.size(); i++) {
+			solution.setObjective(i, objectives.get(i).evaluate(instance, solution));
+		}
 	}
 	
 	@Override

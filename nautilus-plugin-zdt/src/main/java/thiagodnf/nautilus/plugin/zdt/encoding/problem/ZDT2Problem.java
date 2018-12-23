@@ -3,8 +3,6 @@ package thiagodnf.nautilus.plugin.zdt.encoding.problem;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.uma.jmetal.solution.DoubleSolution;
-
 import thiagodnf.nautilus.core.encoding.problem.NDoubleProblem;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
@@ -14,20 +12,14 @@ public class ZDT2Problem extends NDoubleProblem {
 
 	private static final long serialVersionUID = -7233594822176588853L;
 
-	private List<AbstractObjective> objectives;
-	
-	private InstanceData data;
-	
 	/**
 	 * Creates a new instance of problem ZDT1.
 	 *
 	 * @param numberOfVariables Number of variables.
 	 */
 	public ZDT2Problem(InstanceData data, List<AbstractObjective> objectives) {
-
-		this.data = data;
-		this.objectives = objectives;
-
+		super(data, objectives);
+		
 		TXTInstanceData d = (TXTInstanceData) data;
 
 		// JMetal's Settings
@@ -44,17 +36,5 @@ public class ZDT2Problem extends NDoubleProblem {
 
 		setLowerBounds(lowerLimit);
 		setUpperBounds(upperLimit);
-	}
-	
-	@Override
-	public void evaluate(DoubleSolution solution) {
-	
-		for (int i = 0; i < objectives.size(); i++) {
-			solution.setObjective(i, objectives.get(i).evaluate(data, solution));
-		}
-	}
-
-	public List<AbstractObjective> getObjectives() {
-		return objectives;
-	}	
+	}		
 }
