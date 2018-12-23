@@ -10,18 +10,16 @@ import java.util.Map;
 import org.uma.jmetal.problem.BinaryProblem;
 import org.uma.jmetal.problem.IntegerProblem;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.BinarySolution;
-import org.uma.jmetal.solution.IntegerSolution;
-import org.uma.jmetal.solution.Solution;
 
 import com.google.common.base.Preconditions;
 
 import thiagodnf.nautilus.core.correlation.AbstractCorrelation.CorrelationItem;
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
+import thiagodnf.nautilus.core.encoding.solution.NIntegerSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Normalizer;
-import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.core.util.SolutionUtils;
 
@@ -64,9 +62,10 @@ public class VariableBasedReducer extends AbstractReducer {
 		
 		double r[] = new double[selectedObjectives.size()];
 		
-		for (Solution<?> selectedSolution : selectedSolutions) {
+		for (NSolution<?> selectedSolution : selectedSolutions) {
 
-			double feedback = (double) selectedSolution.getAttribute(SolutionAttribute.FEEDBACK);
+			double feedback = selectedSolution.getUserFeedback();
+			
 			List<String> variables = SolutionUtils.getVariablesAsList(selectedSolution);
 			
 			for (String variable : variables) {
@@ -118,7 +117,7 @@ public class VariableBasedReducer extends AbstractReducer {
 		return rankings;
 	}
 	
-	public List<CorrelationItem> correlateVariables(InstanceData data, List<AbstractObjective> objectives, List<? extends Solution<?>> solutions, int min, int max){
+	public List<CorrelationItem> correlateVariables(InstanceData data, List<AbstractObjective> objectives, List<NSolution<?>> solutions, int min, int max){
 		
 		Preconditions.checkNotNull(solutions, "The solution list should not be null");
 		Preconditions.checkNotNull(objectives, "The objective list should not be null");
@@ -139,19 +138,19 @@ public class VariableBasedReducer extends AbstractReducer {
 		return items;
 	}
 	
-	public double calculateSolution(int value, InstanceData data, AbstractObjective objective, List<? extends Solution<?>> solutions) {
+	public double calculateSolution(int value, InstanceData data, AbstractObjective objective, List<NSolution<?>> solutions) {
 		
 		double sum = 0.0;
 		
-		for (Solution<?> solution : solutions) {
+		for (NSolution<?> solution : solutions) {
 
-			Solution<?> orginalSolution = solution;
-			Solution<?> shiftedSolution = null;
+			NSolution<?> orginalSolution = solution;
+			NSolution<?> shiftedSolution = null;
 
-			if (solution instanceof IntegerSolution) {
-				shiftedSolution = shift(value, (IntegerSolution) orginalSolution);
-			} else if (solution instanceof BinarySolution) {
-				shiftedSolution = shift(value, (BinarySolution) orginalSolution);
+			if (solution instanceof NIntegerSolution) {
+				shiftedSolution = shift(value, (NIntegerSolution) orginalSolution);
+			} else if (solution instanceof NBinarySolution) {
+				shiftedSolution = shift(value, (NBinarySolution) orginalSolution);
 			}
 			
 			double originalValue = objective.evaluate(data, orginalSolution);
@@ -172,9 +171,9 @@ public class VariableBasedReducer extends AbstractReducer {
 		return (double) sum / (double) solutions.size();
 	}
 	
-	public Solution<?> shift(int value, IntegerSolution sol) {
+	public NSolution<?> shift(int value, NIntegerSolution sol) {
 
-		IntegerSolution solution = (IntegerSolution) sol.copy();
+		NIntegerSolution solution = (NIntegerSolution) sol.copy();
 
 		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
 
@@ -187,9 +186,9 @@ public class VariableBasedReducer extends AbstractReducer {
 		return solution;
 	}
 	
-	public Solution<?> shift(int value, BinarySolution sol) {
+	public NSolution<?> shift(int value, NBinarySolution sol) {
 
-		BinarySolution solution = (BinarySolution) sol.copy();
+		NBinarySolution solution = (NBinarySolution) sol.copy();
 
 		solution.getVariableValue(0).set(value);
 

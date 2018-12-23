@@ -3,8 +3,7 @@ package thiagodnf.nautilus.core.correlation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.uma.jmetal.solution.Solution;
-
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 
@@ -63,7 +62,7 @@ public abstract class AbstractCorrelation {
 		return getName();
 	}
 	
-	public List<CorrelationItem> execute(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
+	public List<CorrelationItem> execute(List<AbstractObjective> objectives, List<NSolution<?>> solutions) {
 		
 		List<CorrelationItem> items = new ArrayList<>();
 		

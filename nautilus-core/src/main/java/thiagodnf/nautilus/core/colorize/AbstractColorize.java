@@ -2,8 +2,6 @@ package thiagodnf.nautilus.core.colorize;
 
 import java.util.List;
 
-import org.uma.jmetal.solution.Solution;
-
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.Normalizer;
@@ -68,7 +66,7 @@ public abstract class AbstractColorize {
 		return getName();
 	}
 	
-	public abstract double getDistance(Solution<?> s, Solution<?> selectedSolutions) ;
+	public abstract double getDistance(NSolution<?> s, NSolution<?> selectedSolutions) ;
 	
 	public abstract String getName() ;
 }

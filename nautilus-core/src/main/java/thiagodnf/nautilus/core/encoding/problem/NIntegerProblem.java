@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.problem;
+package thiagodnf.nautilus.core.encoding.problem;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.uma.jmetal.problem.IntegerProblem;
 import org.uma.jmetal.solution.IntegerSolution;
 
 import thiagodnf.nautilus.core.encoding.NProblem;
-import thiagodnf.nautilus.plugin.solution.NIntegerSolution;
+import thiagodnf.nautilus.core.encoding.solution.NIntegerSolution;
 
 public abstract class NIntegerProblem extends NProblem<IntegerSolution> implements IntegerProblem {
 

@@ -12,13 +12,12 @@ import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
-import thiagodnf.nautilus.core.util.SolutionUtils;
 
 public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 
 	private double alpha = 0.5;
 	
-	private double range = 0.1;
+	private double epsilon = 0.1;
 	
 	@Override
 	public String getName() {
@@ -32,31 +31,29 @@ public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 			List<AbstractObjective> selectedObjectives,
 			List<NSolution<?>> solutions) {
 		
-		List<NSolution<?>> selectedSolutions = SolutionListUtils.getVisualizedSolutions(solutions);
+		List<NSolution<?>> visualizedSolutions = SolutionListUtils.getVisualizedSolutions(solutions);
 		
 		double[] rankingForUserSelection = new double[selectedObjectives.size()];
 
-		for (Solution<?> solution : selectedSolutions) {
+		for (Solution<?> solution : visualizedSolutions) {
 			
 			for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
 				rankingForUserSelection[i] += solution.getObjective(i);
 			}
 		}
 		
-		rankingForUserSelection = mean(rankingForUserSelection, selectedSolutions.size());
+		rankingForUserSelection = mean(rankingForUserSelection, visualizedSolutions.size());
 
 		double[] rankingForUserFeedback = new double[selectedObjectives.size()];
 
-		for (NSolution<?> solution : selectedSolutions) {
-
-			double normalizedValue = SolutionUtils.getUserFeedback(solution);
+		for (NSolution<?> solution : visualizedSolutions) {
 
 			for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
-				rankingForUserFeedback[i] += solution.getObjective(i) * normalizedValue;
+				rankingForUserFeedback[i] += solution.getObjective(i) * solution.getUserFeedback();
 			}
 		}
 		
-		rankingForUserFeedback = mean(rankingForUserFeedback, selectedSolutions.size());
+		rankingForUserFeedback = mean(rankingForUserFeedback, visualizedSolutions.size());
 		
 		double[] general = new double[selectedObjectives.size()];
 		
@@ -78,7 +75,7 @@ public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 		
 		for (RankingItem ranking : rankings) {
 			
-			if (minRanking - ranking.getValue() <= range) {
+			if (minRanking - ranking.getValue() <= epsilon) {
 				ranking.selected = true;
 				minRanking = ranking.getValue();
 			}

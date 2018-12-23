@@ -1,11 +1,11 @@
 package thiagodnf.nautilus.core.colorize;
 
-import org.uma.jmetal.solution.Solution;
+import thiagodnf.nautilus.core.encoding.NSolution;
 
 public class DontColorize extends AbstractColorize {
 
 	@Override
-	public double getDistance(Solution<?> s, Solution<?> selected) {
+	public double getDistance(NSolution<?> s, NSolution<?> selected) {
 		return 0.0;		
 	}
 

@@ -3,14 +3,14 @@ package thiagodnf.nautilus.plugin.zdt.encoding.problem;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 
+import thiagodnf.nautilus.core.encoding.problem.NDoubleProblem;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.zdt.encoding.instance.TXTInstanceData;
 
-public class ZDT1Problem extends AbstractDoubleProblem {
+public class ZDT1Problem extends NDoubleProblem {
 
 	private static final long serialVersionUID = -7233594822176588853L;
 
@@ -42,8 +42,8 @@ public class ZDT1Problem extends AbstractDoubleProblem {
 			upperLimit.add(1.0);
 		}
 
-		setLowerLimit(lowerLimit);
-		setUpperLimit(upperLimit);
+		setLowerBounds(lowerLimit);
+		setUpperBounds(upperLimit);
 	}
 	
 	@Override

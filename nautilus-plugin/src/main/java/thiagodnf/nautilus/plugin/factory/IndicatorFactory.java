@@ -26,7 +26,7 @@ public class IndicatorFactory {
 		return extensions;
 	}
 
-	public QualityIndicator<List<Solution<?>>, Double> getAlgorithm(String name, Front referenceParetoFront) {
+	public QualityIndicator<List<Solution<?>>, Double> getIndicator(String name, Front referenceParetoFront) {
 
 		for (IndicatorExtension extension : getExtensions()) {
 

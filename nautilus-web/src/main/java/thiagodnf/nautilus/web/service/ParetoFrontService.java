@@ -12,6 +12,7 @@ import org.uma.jmetal.util.SolutionListUtils;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.web.model.Execution;
+import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.repository.ExecutionRepository.ExecutionSimplified;
 
 @Service
@@ -91,7 +92,11 @@ public class ParetoFrontService {
 		
 		Execution execution = new Execution();
 		
-		execution.setParameters(executions.get(0).getParameters());
+		Parameters parameters = executions.get(0).getParameters();
+		
+		parameters.setPopulationSize(nonDominateds.size());
+		
+		execution.setParameters(parameters);
 		execution.setSolutions(nonDominateds);
 		execution.getSettings().setName(name);
 		

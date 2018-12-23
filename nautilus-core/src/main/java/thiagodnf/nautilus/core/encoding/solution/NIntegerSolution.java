@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.solution;
+package thiagodnf.nautilus.core.encoding.solution;
 
 import java.util.ArrayList;
 import java.util.Collections;
