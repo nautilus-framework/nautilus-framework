@@ -3,14 +3,14 @@ package thiagodnf.nautilus.plugin.toy.encoding.problem;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.uma.jmetal.problem.impl.AbstractIntegerProblem;
 import org.uma.jmetal.solution.IntegerSolution;
 
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.plugin.problem.NIntegerProblem;
 import thiagodnf.nautilus.plugin.toy.encoding.instance.TXTInstanceData;
 
-public class ToyProblem extends AbstractIntegerProblem {
+public class ToyProblem extends NIntegerProblem {
 
 	private static final long serialVersionUID = -7233594822176588853L;
 
@@ -37,8 +37,8 @@ public class ToyProblem extends AbstractIntegerProblem {
 			upperLimit.add(d.getUpperBound());
 		}
 
-		setLowerLimit(lowerLimit);
-		setUpperLimit(upperLimit);
+		setLowerBounds(lowerLimit);
+		setUpperBounds(upperLimit);
 	}
 	
 	@Override

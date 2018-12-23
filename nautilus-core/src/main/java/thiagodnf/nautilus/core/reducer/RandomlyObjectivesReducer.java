@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
@@ -23,7 +23,7 @@ public class RandomlyObjectivesReducer extends AbstractReducer {
 			InstanceData data,
 			List<AbstractObjective> allObjectives, 
 			List<AbstractObjective> selectedObjectives,
-			List<Solution<?>> solutions) {
+			List<NSolution<?>> solutions) {
 
 		List<RankingItem> rankings = new ArrayList<>();
 

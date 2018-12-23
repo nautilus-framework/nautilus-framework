@@ -3,26 +3,25 @@ package thiagodnf.nautilus.core.normalize;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.uma.jmetal.solution.Solution;
-
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class DontNormalize extends AbstractNormalize {
 
-	public double[] getMinimumValues(List<AbstractObjective> objectives, List<Solution<?>> solutions) {
+	public double[] getMinimumValues(List<AbstractObjective> objectives, List<NSolution<?>> solutions) {
 		return new double[solutions.get(0).getNumberOfObjectives()];
 	}
 	
-	public double[] getMaximumValues(List<AbstractObjective> objectives, List<Solution<?>> solutions) {
+	public double[] getMaximumValues(List<AbstractObjective> objectives, List<NSolution<?>> solutions) {
 		return new double[solutions.get(0).getNumberOfObjectives()];
 	}
 	
-	public List<Solution<?>> normalize(List<AbstractObjective> objectives, List<Solution<?>> solutions) {
+	public List<NSolution<?>> normalize(List<AbstractObjective> objectives, List<NSolution<?>> solutions) {
 
-		List<Solution<?>> copiedSolutions = new ArrayList<>(solutions.size());
+		List<NSolution<?>> copiedSolutions = new ArrayList<>(solutions.size());
 
-		for (Solution<?> solution : solutions) {
-			copiedSolutions.add(solution.copy());
+		for (NSolution<?> solution : solutions) {
+			copiedSolutions.add((NSolution<?>) solution.copy());
 		}
 
 		return copiedSolutions;

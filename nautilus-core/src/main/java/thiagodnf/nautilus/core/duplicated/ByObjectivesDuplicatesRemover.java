@@ -1,6 +1,6 @@
 package thiagodnf.nautilus.core.duplicated;
 
-import org.uma.jmetal.solution.Solution;
+import thiagodnf.nautilus.core.encoding.NSolution;
 
 public class ByObjectivesDuplicatesRemover extends AbstractDuplicatesRemover {
 
@@ -10,7 +10,7 @@ public class ByObjectivesDuplicatesRemover extends AbstractDuplicatesRemover {
 	}
 
 	@Override
-	public boolean equals(Solution<?> s1, Solution<?> s2) {
+	public boolean equals(NSolution<?> s1, NSolution<?> s2) {
 		
 		if (s1.getNumberOfObjectives() != s2.getNumberOfObjectives()) {
 			return false;

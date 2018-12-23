@@ -3,10 +3,10 @@ package thiagodnf.nautilus.core.reducer;
 import java.util.List;
 
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.Solution;
 
 import com.google.gson.Gson;
 
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
@@ -53,7 +53,7 @@ public abstract class AbstractReducer {
 		return getName();
 	}
 	
-	public abstract List<RankingItem> execute(Problem<?> problem, InstanceData data, List<AbstractObjective> allObjectives, List<AbstractObjective> selectedObjectives, List<Solution<?>> solutions);
+	public abstract List<RankingItem> execute(Problem<?> problem, InstanceData data, List<AbstractObjective> allObjectives, List<AbstractObjective> selectedObjectives, List<NSolution<?>> solutions);
 	
 	public abstract String getName() ;
 }

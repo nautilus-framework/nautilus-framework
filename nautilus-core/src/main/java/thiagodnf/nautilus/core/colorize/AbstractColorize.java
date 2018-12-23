@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.model.GenericSolution;
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.Normalizer;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
@@ -16,18 +16,18 @@ public abstract class AbstractColorize {
 		return Converter.toKey(getName());
 	}
 	
-	public List<Solution<?>> execute(List<Solution<?>> solutions) {
+	public List<NSolution<?>> execute(List<NSolution<?>> solutions) {
 		
-		List<Solution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(solutions);
+		List<NSolution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(solutions);
 		
-		for (Solution<?> solution : solutions) {
+		for (NSolution<?> solution : solutions) {
 			solution.setAttribute(SolutionAttribute.DISTANCE, calculate(solution, selectedSolutions));
 		}
 		
 		return solutions;
 	}	
 	
-	public String calculate(Solution<?> s, List<Solution<?>> selectedSolutions) {
+	public String calculate(NSolution<?> s, List<NSolution<?>> selectedSolutions) {
 		
 		if (selectedSolutions.isEmpty()) {
 			return "0.0";
@@ -35,9 +35,9 @@ public abstract class AbstractColorize {
 
 		double minDistance = Double.MAX_VALUE;
 
-		Solution<?> closeSolution = null;
+		NSolution<?> closeSolution = null;
 
-		for (Solution<?> selected : selectedSolutions) {
+		for (NSolution<?> selected : selectedSolutions) {
 
 			double distance = getDistance(s, selected);
 
@@ -49,11 +49,7 @@ public abstract class AbstractColorize {
 		
 		minDistance = Normalizer.normalize(minDistance, 0, Math.sqrt(2));
 
-		double feedback = 0.0;
-
-		if (closeSolution instanceof GenericSolution) {
-			feedback = ((GenericSolution) closeSolution).getUserFeedback();
-		}
+		double feedback = closeSolution.getUserFeedback();
 
 		double distance = 0.0;
 

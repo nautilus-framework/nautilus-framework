@@ -9,6 +9,8 @@ import javax.validation.constraints.NotEmpty;
 
 import com.google.gson.Gson;
 
+import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIExtension;
+
 public class Parameters {
 	
 	@DecimalMin("10")
@@ -22,7 +24,7 @@ public class Parameters {
 	private String pluginId;
 	
 	@NotEmpty
-	private String algorithmId;
+	private String algorithmId = new NSGAIIExtension().getId();
 	
 	private String problemId;
 	

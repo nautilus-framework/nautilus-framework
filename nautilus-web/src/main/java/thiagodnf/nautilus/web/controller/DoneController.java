@@ -1,8 +1,6 @@
 package thiagodnf.nautilus.web.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,20 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
 import org.uma.jmetal.solution.Solution;
-import org.uma.jmetal.util.front.Front;
-import org.uma.jmetal.util.front.imp.ArrayFront;
-import org.uma.jmetal.util.front.util.FrontNormalizer;
-import org.uma.jmetal.util.front.util.FrontUtils;
-import org.uma.jmetal.util.point.PointSolution;
 
-import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
-import thiagodnf.nautilus.plugin.factory.IndicatorFactory;
+import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
-import thiagodnf.nautilus.web.model.Settings;
+import thiagodnf.nautilus.web.repository.ExecutionRepository.ExecutionSimplified;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.ParetoFrontService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
@@ -36,6 +28,9 @@ public class DoneController {
 	@Autowired
 	private PluginService pluginService;
 	
+	@Autowired
+	private ParetoFrontService paretoFrontService;
+	
 	@GetMapping("")
 	public String show(Model model, 
 			@PathVariable("executionId") String executionId){
@@ -45,6 +40,45 @@ public class DoneController {
 		
 		String pluginId = parameters.getPluginId();
 		String problemId = parameters.getProblemId();
+		String filename = parameters.getFilename();
+		
+		String objectives = parameters
+				.getObjectiveIds()
+				.stream()
+				.sorted()
+				.reduce((a,b) -> a + "-" + b).get();
+		
+		String paretoFrontName = paretoFrontService.getParetoFrontName(problemId, filename, objectives);
+
+		List<ExecutionSimplified> paretoFronts = executionService.findByName(pluginId, problemId, paretoFrontName);
+
+		if (paretoFronts.isEmpty()) {
+			return "redirect/execution/" + executionId;
+		} else if (paretoFronts.size() > 1) {
+			return "redirect/execution/" + executionId;
+		}
+
+		Execution paretoFront = executionService.findById(paretoFronts.get(0).getId());
+		
+		//List<Solution<?>> jmetalSolutions = Converter.toJMetalSolutions(execution.getSolutions());
+		
+//		System.out.println(jmetalSolutions);
+//		
+//		List<Solution<?>> jmetalParetoFront = Converter.toJMetalSolutions(paretoFront.getSolutions());
+//		
+//		
+//		
+//		
+//		System.out.println(jmetalSolutions);
+//		System.out.println(jmetalParetoFront);
+		
+//		model.addAttribute("map", map);
+		model.addAttribute("execution", execution);
+		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
+		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
+	   
+		return "done";
+		
 		
 //		Front referenceFront = new ArrayFront(paretoFrontFile);
 //		FrontNormalizer frontNormalizer = new FrontNormalizer(referenceFront);
@@ -53,15 +87,11 @@ public class DoneController {
 //		Front normalizedFront = frontNormalizer.normalize(new ArrayFront(population));
 //		List<PointSolution> normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront);
 
-		Map<String, Double> map = new HashMap<>();
-
-		for (IndicatorExtension extension : pluginService.getIndicatorFactory(pluginId).getExtensions()) {
-			map.put(extension.getName(), extension.getIndicator(null).evaluate(null));
-		}
-		
-		
-//		String outputString = "\n";
-//		outputString += "Hypervolume (N) : "+ new PISAHypervolume<PointSolution>(normalizedReferenceFront).evaluate(normalizedPopulation) + "\n";
+//		Map<String, Double> map = new HashMap<>();
+//
+//		for (IndicatorExtension extension : pluginService.getIndicatorFactory(pluginId).getExtensions()) {
+//			map.put(extension.getName(), extension.getIndicator(null).evaluate(null));
+//		}
 		
 		
 		
@@ -233,12 +263,7 @@ public class DoneController {
 //	    model.addAttribute("header", header);
 //	    model.addAttribute("rows", rows);
 		
-		model.addAttribute("map", map);
-		model.addAttribute("execution", execution);
-		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
-		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
-//	   
-		return "done";
+		
 	}
 	
 //	@SuppressWarnings({ "unchecked", "rawtypes" })

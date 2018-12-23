@@ -3,15 +3,12 @@ package thiagodnf.nautilus.core.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.point.PointSolution;
 
 import thiagodnf.nautilus.core.algorithm.RNSGAII.PointSolutionUtils;
-import thiagodnf.nautilus.core.model.GenericSolution;
 
 public class Converter {
 	
@@ -25,37 +22,6 @@ public class Converter {
 	
 	public static String toKey(String text) {
 		return text.replaceAll("[^A-Za-z0-9]", "-").toLowerCase();
-	}
-	
-	public static GenericSolution toGenericSolution(Solution<?> solution) {
-		
-		int numberOfObjectives = solution.getNumberOfObjectives();
-		int numberOfVariables = solution.getNumberOfVariables();
-		
-		GenericSolution newSolution = new GenericSolution(numberOfObjectives, numberOfVariables);
-
-		for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
-			newSolution.setObjective(i, solution.getObjective(i));
-		}
-
-		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-			newSolution.setVariableValue(i, solution.getVariableValue(i));
-		}
-		
-		newSolution.setType(solution.getClass().getName());
-
-		return newSolution;
-	}
-	
-	public static List<GenericSolution> toGenericSolutions(List<? extends Solution<?>> solutions) {
-
-		List<GenericSolution> newSolutions = new ArrayList<>();
-
-		for (Solution<?> solution : solutions) {
-			newSolutions.add(toGenericSolution(solution));
-		}
-
-		return newSolutions;
 	}
 	
 	public static PointSolution toPointSolution(Solution<?> solution) {
@@ -73,50 +39,6 @@ public class Converter {
 		return newSolutions;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static Solution<?> toJMetalSolutionWithOutObjectives(Problem<?> problem, GenericSolution solution) {
-
-		Solution<Object> newSolution = (Solution<Object>) problem.createSolution();
-
-		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-			newSolution.setVariableValue(i, VariableUtils.clone(solution.getVariableValue(i)));
-		}
-
-		return newSolution;
-	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Solution<?> toJMetalSolution(Problem problem, GenericSolution solution) {
-
-		Solution newSolution = (Solution) problem.createSolution();
-
-		for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
-			newSolution.setObjective(i, solution.getObjective(i));
-		}
-
-		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-			newSolution.setVariableValue(i, solution.getVariableValue(i));
-		}
-
-		for (Entry<Object, Object> entry : solution.getAttributes().entrySet()) {
-			newSolution.setAttribute(entry.getKey(), entry.getValue());
-		}
-
-		return newSolution;
-	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static List<? extends Solution<?>> toJMetalSolutions(Problem problem, List<GenericSolution> population) {
-
-		List solutions = new ArrayList<>();
-
-		for (GenericSolution solution : population) {
-			solutions.add(toJMetalSolution(problem, solution));
-		}
-
-		return solutions;
-	}
-
 	public static double[][] toDoubleMatrix(String[][] matrix) {
 		
 		double[][] result = new double[matrix.length][];

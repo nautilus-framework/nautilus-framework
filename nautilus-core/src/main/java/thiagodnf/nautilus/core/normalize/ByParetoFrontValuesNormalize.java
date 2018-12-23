@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.uma.jmetal.solution.Solution;
 
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class ByParetoFrontValuesNormalize extends AbstractNormalize {
@@ -15,7 +16,7 @@ public class ByParetoFrontValuesNormalize extends AbstractNormalize {
 	 * @param solutions a list of solutions
 	 * @return a list of minimum values for each objective
 	 */
-	public double[] getMinimumValues(List<AbstractObjective> objectives, List<Solution<?>> solutions) {
+	public double[] getMinimumValues(List<AbstractObjective> objectives, List<NSolution<?>> solutions) {
 
 		int numberOfObjectives = solutions.get(0).getNumberOfObjectives();
 
@@ -45,7 +46,7 @@ public class ByParetoFrontValuesNormalize extends AbstractNormalize {
 	 * @param solutions a list of solutions
 	 * @return a list of maximum values for each objective
 	 */
-	public double[] getMaximumValues(List<AbstractObjective> objectives, List<Solution<?>> solutions) {
+	public double[] getMaximumValues(List<AbstractObjective> objectives, List<NSolution<?>> solutions) {
 
 		int numberOfObjectives = solutions.get(0).getNumberOfObjectives();
 

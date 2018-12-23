@@ -3,29 +3,28 @@ package thiagodnf.nautilus.core.duplicated;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.uma.jmetal.solution.Solution;
-
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractDuplicatesRemover {
 
-	public List<Solution<?>> execute(List<? extends Solution<?>> solutions) {
+	public List<NSolution<?>> execute(List<NSolution<?>> solutions) {
 		
-		List<Solution<?>> nonRepeated = new ArrayList<>();
+		List<NSolution<?>> nonRepeated = new ArrayList<>();
 
-		for (Solution<?> solution : solutions) {
+		for (NSolution<?> solution : solutions) {
 
 			if (!contains(nonRepeated, solution)) {
-				nonRepeated.add(solution.copy());
+				nonRepeated.add((NSolution<?>) solution.copy());
 			}
 		}
 
 		return nonRepeated;
 	}
 	
-	public boolean contains(List<? extends Solution<?>> solutions, Solution<?> s2) {
+	public boolean contains(List<NSolution<?>> solutions, NSolution<?> s2) {
 
-		for (Solution<?> s1 : solutions) {
+		for (NSolution<?> s1 : solutions) {
 
 			if (equals(s1, s2)) {
 				return true;
@@ -43,7 +42,7 @@ public abstract class AbstractDuplicatesRemover {
 		return getName();
 	}
 	
-	public abstract boolean equals(Solution<?> s1, Solution<?> s2);
+	public abstract boolean equals(NSolution<?> s1, NSolution<?> s2);
 	
 	public abstract String getName() ;
 }

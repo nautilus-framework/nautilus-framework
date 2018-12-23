@@ -2,8 +2,7 @@ package thiagodnf.nautilus.core.duplicated;
 
 import java.util.List;
 
-import org.uma.jmetal.solution.Solution;
-
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.util.SolutionUtils;
 
 public class ByVariablesOrderMattersDuplicatesRemover extends AbstractDuplicatesRemover {
@@ -14,7 +13,7 @@ public class ByVariablesOrderMattersDuplicatesRemover extends AbstractDuplicates
 	}
 
 	@Override
-	public boolean equals(Solution<?> s1, Solution<?> s2) {
+	public boolean equals(NSolution<?> s1, NSolution<?> s2) {
 
 		if (s1.getNumberOfVariables() != s2.getNumberOfVariables()) {
 			return false;

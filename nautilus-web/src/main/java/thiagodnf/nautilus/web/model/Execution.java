@@ -10,7 +10,7 @@ import org.springframework.data.annotation.Id;
 
 import com.google.gson.Gson;
 
-import thiagodnf.nautilus.core.model.GenericSolution;
+import thiagodnf.nautilus.core.encoding.NSolution;
 
 public class Execution {
 
@@ -26,7 +26,7 @@ public class Execution {
 	private Parameters parameters;
 	
 	@NotNull
-	private List<GenericSolution> solutions;
+	private List<NSolution<?>> solutions;
 	
 	@NotNull
 	private Settings settings;
@@ -60,16 +60,16 @@ public class Execution {
 
 	public void setParameters(Parameters parameters) {
 		this.parameters = parameters;
-	}
-
-	public List<GenericSolution> getSolutions() {
+	}	
+	
+	public List<NSolution<?>> getSolutions() {
 		return solutions;
 	}
 
-	public void setSolutions(List<GenericSolution> solutions) {
-		this.solutions = solutions;
+	public void setSolutions(List<NSolution<?>> solutionsTwo) {
+		this.solutions = solutionsTwo;
 	}
-	
+
 	public Date getDate() {
 		return date;
 	}

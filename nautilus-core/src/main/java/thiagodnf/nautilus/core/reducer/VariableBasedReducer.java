@@ -17,6 +17,7 @@ import org.uma.jmetal.solution.Solution;
 import com.google.common.base.Preconditions;
 
 import thiagodnf.nautilus.core.correlation.AbstractCorrelation.CorrelationItem;
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Normalizer;
@@ -36,7 +37,7 @@ public class VariableBasedReducer extends AbstractReducer {
 			InstanceData data,
 			List<AbstractObjective> allObjectives, 
 			List<AbstractObjective> selectedObjectives,
-			List<Solution<?>> solutions) {
+			List<NSolution<?>> solutions) {
 		
 		int min = 1;
 		int max = 100;
@@ -59,7 +60,7 @@ public class VariableBasedReducer extends AbstractReducer {
 			map.put(item.getName(), item);
 		}
 		
-		List<Solution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(solutions); 
+		List<NSolution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(solutions); 
 		
 		double r[] = new double[selectedObjectives.size()];
 		

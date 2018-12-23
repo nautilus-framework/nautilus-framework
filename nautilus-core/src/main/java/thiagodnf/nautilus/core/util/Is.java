@@ -4,13 +4,10 @@ import java.util.List;
 
 import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.solution.IntegerSolution;
-import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Doubles;
-
-import thiagodnf.nautilus.core.model.GenericSolution;
 
 public class Is {
 	
@@ -96,39 +93,5 @@ public class Is {
 		}
 
 		return true;
-	}
-
-	public static boolean binarySolution(Solution<?> s) {
-
-		if (s instanceof GenericSolution) {
-
-			try {
-
-				Class<?> cls = Class.forName(((GenericSolution) s).getType());
-
-				return BinarySolution.class.isAssignableFrom(cls);
-			} catch (Exception e) {
-				return false;
-			}
-		}
-
-		return s instanceof BinarySolution;
-	}
-	
-	public static boolean integerSolution(Solution<?> s) {
-
-		if (s instanceof GenericSolution) {
-
-			try {
-
-				Class<?> cls = Class.forName(((GenericSolution) s).getType());
-
-				return IntegerSolution.class.isAssignableFrom(cls);
-			} catch (Exception e) {
-				return false;
-			}
-		}
-
-		return s instanceof IntegerSolution;
 	}
 }

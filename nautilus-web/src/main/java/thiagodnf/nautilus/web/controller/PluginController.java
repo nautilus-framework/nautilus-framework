@@ -19,6 +19,7 @@ import thiagodnf.nautilus.web.model.GenerateParetoFront;
 import thiagodnf.nautilus.web.model.UploadExecution;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FlashMessageService;
+import thiagodnf.nautilus.web.service.ParetoFrontService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
@@ -35,6 +36,9 @@ public class PluginController {
 	
 	@Autowired
 	private ExecutionService executionService;
+	
+	@Autowired
+	private ParetoFrontService paretoFrontService;
 	
 	@GetMapping("/{pluginId:.+}")
 	public String view(Model model, 
@@ -79,7 +83,7 @@ public class PluginController {
 			flashMessageService.error(ra, result.getAllErrors());
 		} else {
 			
-			executionService.generateApproxParetoFront(pluginId, generateParetoFront.getProblemId());
+			paretoFrontService.generateApproxParetoFront(pluginId, generateParetoFront.getProblemId());
 			
 			flashMessageService.success(ra, "msg.generate.approx.pareto-front.success");
 		}

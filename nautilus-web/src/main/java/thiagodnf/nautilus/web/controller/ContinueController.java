@@ -9,16 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.model.GenericSolution;
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reducer.AbstractReducer;
 import thiagodnf.nautilus.core.reducer.AbstractReducer.RankingItem;
-import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.model.Execution;
@@ -40,7 +38,6 @@ public class ContinueController {
 	@Autowired
 	private FileService fileService;
 	
-	@SuppressWarnings("unchecked")
 	@GetMapping("/continue/{executionId}")
 	public String continueExecution(Model model, 
 			@PathVariable("executionId") String executionId) {
@@ -67,11 +64,8 @@ public class ContinueController {
 		ProblemExtension problemExtension = pluginService.getProblemExtension(pluginId, problemId);
 		Problem<?> problem = problemExtension.getProblem(data, selectedObjectives);
 		
-		List<GenericSolution> solutions = execution.getSolutions();
-		
-		List<Solution<?>> jmetalSolutions = (List<Solution<?>>) Converter.toJMetalSolutions(problem, solutions);
-		
-		List<Solution<?>> normalizedSolutions = normalizer.normalize(selectedObjectives, jmetalSolutions);
+		List<NSolution<?>> solutions = execution.getSolutions();
+		List<NSolution<?>> normalizedSolutions = normalizer.normalize(selectedObjectives, solutions);
 		
 		List<RankingItem> rankingItems = reducer.execute(problem, data, allObjectives, selectedObjectives, normalizedSolutions);
 		

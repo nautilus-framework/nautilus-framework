@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.colorize.AbstractColorize;
 import thiagodnf.nautilus.core.correlation.AbstractCorrelation;
 import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
-import thiagodnf.nautilus.core.model.GenericSolution;
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionUtils;
@@ -44,7 +43,6 @@ public class ExecutionController {
 	@Autowired
 	private FlashMessageService flashMessageService;
 	
-	@SuppressWarnings("unchecked")
 	@GetMapping("")
 	public String view(Model model, 
 			@PathVariable("executionId") String executionId) {
@@ -65,11 +63,11 @@ public class ExecutionController {
 		
 		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveIds());
 		
-		List<GenericSolution> solutions = execution.getSolutions();
+		List<NSolution<?>> solutions = execution.getSolutions();
 		
-		List<Solution<?>> normalizedSolutions = normalizer.normalize(objectives, (List<Solution<?>>)(Object) solutions);
-		List<Solution<?>> distinctSolutions = duplicatesRemover.execute(normalizedSolutions);
-		List<Solution<?>> colorfulSolutions = colorizer.execute(distinctSolutions);
+		List<NSolution<?>> normalizedSolutions = normalizer.normalize(objectives, solutions);
+		List<NSolution<?>> distinctSolutions = duplicatesRemover.execute(normalizedSolutions);
+		List<NSolution<?>> colorfulSolutions = colorizer.execute(distinctSolutions);
 		
 		model.addAttribute("correlations", correlation.execute(objectives, normalizedSolutions));
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
@@ -144,7 +142,7 @@ public class ExecutionController {
 			
 		Execution execution = executionService.findById(executionId);
 
-		for (GenericSolution solution : execution.getSolutions()) {
+		for (NSolution<?> solution : execution.getSolutions()) {
 			SolutionUtils.clearUserFeedback(solution);
 		}
 

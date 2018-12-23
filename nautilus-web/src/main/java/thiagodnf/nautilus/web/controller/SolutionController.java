@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import thiagodnf.nautilus.core.model.GenericSolution;
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.util.SolutionUtils;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
+import thiagodnf.nautilus.core.util.SolutionUtils;
 import thiagodnf.nautilus.web.exception.SolutionNotFoundException;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
@@ -52,7 +52,7 @@ public class SolutionController {
 		
 		Execution execution = executionService.findById(executionId);
 		
-		List<GenericSolution> solutions = execution.getSolutions();
+		List<NSolution<?>> solutions = execution.getSolutions();
 
 		if (solutionIndex < 0 || solutionIndex >= solutions.size()) {
 			throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
@@ -64,7 +64,7 @@ public class SolutionController {
 		String problemId = parameters.getProblemId();
 		List<String> objectiveIds = parameters.getObjectiveIds();
 		
-		GenericSolution solution = solutions.get(solutionIndex);
+		NSolution<?> solution = solutions.get(solutionIndex);
 
 		solution.setAttribute(SolutionAttribute.VISUALIZED, true);
 		
@@ -97,13 +97,13 @@ public class SolutionController {
 		
 		Execution execution = executionService.findById(executionId);
 
-		List<GenericSolution> solutions = execution.getSolutions();
+		List<NSolution<?>> solutions = execution.getSolutions();
 		
 		if (solutionIndex < 0 || solutionIndex >= solutions.size()) {
 			throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
 		}
 		
-		GenericSolution solution = solutions.get(solutionIndex);
+		NSolution<?> solution = solutions.get(solutionIndex);
 		
 		solution.setAttribute(SolutionAttribute.SELECTED, true);
 
@@ -131,13 +131,13 @@ public class SolutionController {
 		
 		Execution execution = executionService.findById(executionId);
 
-		List<GenericSolution> solutions = execution.getSolutions();
+		List<NSolution<?>> solutions = execution.getSolutions();
 		
 		if (solutionIndex < 0 || solutionIndex >= solutions.size()) {
 			throw new SolutionNotFoundException();
 		}
 		
-		GenericSolution solution = solutions.get(solutionIndex);
+		NSolution<?> solution = solutions.get(solutionIndex);
 
 		SolutionUtils.clearUserFeedback(solution);
 		

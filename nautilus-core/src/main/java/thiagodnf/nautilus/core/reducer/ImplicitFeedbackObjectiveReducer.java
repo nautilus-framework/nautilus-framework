@@ -8,7 +8,7 @@ import java.util.List;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.model.GenericSolution;
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
@@ -30,9 +30,9 @@ public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 			InstanceData data, 
 			List<AbstractObjective> allObjectives, 
 			List<AbstractObjective> selectedObjectives,
-			List<Solution<?>> solutions) {
+			List<NSolution<?>> solutions) {
 		
-		List<Solution<?>> selectedSolutions = SolutionListUtils.getVisualizedSolutions(solutions);
+		List<NSolution<?>> selectedSolutions = SolutionListUtils.getVisualizedSolutions(solutions);
 		
 		double[] rankingForUserSelection = new double[selectedObjectives.size()];
 
@@ -47,9 +47,9 @@ public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 
 		double[] rankingForUserFeedback = new double[selectedObjectives.size()];
 
-		for (Solution<?> solution : selectedSolutions) {
+		for (NSolution<?> solution : selectedSolutions) {
 
-			double normalizedValue = SolutionUtils.getUserFeedback((GenericSolution) solution);
+			double normalizedValue = SolutionUtils.getUserFeedback(solution);
 
 			for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
 				rankingForUserFeedback[i] += solution.getObjective(i) * normalizedValue;

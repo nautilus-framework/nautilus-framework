@@ -6,11 +6,11 @@ import java.util.Map.Entry;
 
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.model.GenericSolution;
+import thiagodnf.nautilus.core.encoding.NSolution;
 
 public class SolutionUtils {
 	
-	public static double getUserFeedback(GenericSolution solution) {
+	public static double getUserFeedback(NSolution<?> solution) {
 
 		double sum = 0.0;
 		double total = 0.0;
@@ -31,8 +31,8 @@ public class SolutionUtils {
 
 		return sum / total;
 	}
-
-	public static GenericSolution clearUserFeedback(GenericSolution solution) {
+	
+	public static NSolution<?> clearUserFeedback(NSolution<?> solution) {
 
 		List<String> keysToRemove = new ArrayList<>();
 

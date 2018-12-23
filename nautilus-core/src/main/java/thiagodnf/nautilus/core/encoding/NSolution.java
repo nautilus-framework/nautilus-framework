@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.core.model;
+package thiagodnf.nautilus.core.encoding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,34 +12,29 @@ import com.google.gson.Gson;
 
 import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.core.util.SolutionUtils;
-import thiagodnf.nautilus.core.util.VariableUtils;
 
-public class GenericSolution implements Solution<Object> {
+public abstract class NSolution <T> implements Solution<T> {
 	
-	private static final long serialVersionUID = 1635059184622430041L;
+	private static final long serialVersionUID = -6306703378886449928L;
 
-	private double[] objectives;
+	protected double[] objectives;
 	
-	private List<Object> variables;
+	protected List<T> variables;
 	
-	private Map<Object, Object> attributes;
+	protected Map<Object, Object> attributes;
 	
-	private String type;
-	
-	public GenericSolution() {
+	public NSolution() {
 		this.variables = new ArrayList<>();
 		this.attributes = new HashMap<>();
-		this.type = "";
 	}
 	
-	public GenericSolution(int numberOfObjectives, int numberOfVariables) {
-		
+	public NSolution(int numberOfObjectives, int numberOfVariables) {
+
 		Preconditions.checkArgument(numberOfObjectives >= 1, "The number of objectives should be >= 1");
 		Preconditions.checkArgument(numberOfVariables >= 1, "The number of variables should be >= 1");
-		
+
 		this.objectives = new double[numberOfObjectives];
 		this.variables = new ArrayList<>(numberOfVariables);
-		this.type = ""; 
 
 		for (int i = 0; i < numberOfVariables; i++) {
 			variables.add(i, null);
@@ -48,30 +43,18 @@ public class GenericSolution implements Solution<Object> {
 		this.attributes = new HashMap<>();
 	}
 	
-	public GenericSolution(GenericSolution solution) {
-		this(solution.getNumberOfObjectives(), solution.getNumberOfVariables());
-				
+	protected void initializeObjectiveValues() {
+
 		for (int i = 0; i < getNumberOfObjectives(); i++) {
-			setObjective(i, solution.getObjective(i));
+			objectives[i] = 0.0;
 		}
-
-		for (int i = 0; i < getNumberOfVariables(); i++) {
-			setVariableValue(i, VariableUtils.clone(solution.getVariableValue(i)));
-		}
-		
-		this.type = new String(solution.type);
-		this.attributes = new HashMap<>(solution.attributes);
-	}
-
-	public GenericSolution copy() {
-		return new GenericSolution(this);
 	}
 	
-	public List<Object> getVariables() {
+	public List<T> getVariables() {
 		return variables;
 	}
 
-	public void setVariables(List<Object> variables) {
+	public void setVariables(List<T> variables) {
 		this.variables = variables;
 	}
 	
@@ -86,6 +69,10 @@ public class GenericSolution implements Solution<Object> {
 	public int getNumberOfVariables() {
 		return variables.size();
 	}
+	
+	public void setObjectives(double[] objectives) {
+		this.objectives = objectives;
+	}
 
 	@Override
 	public double[] getObjectives() {
@@ -93,12 +80,12 @@ public class GenericSolution implements Solution<Object> {
 	}
 
 	@Override
-	public Object getVariableValue(int index) {
+	public T getVariableValue(int index) {
 		return variables.get(index);
 	}
 
 	@Override
-	public void setVariableValue(int index, Object value) {
+	public void setVariableValue(int index, T value) {
 		variables.set(index, value);
 	}
 
@@ -135,13 +122,6 @@ public class GenericSolution implements Solution<Object> {
 		return objectives[index];
 	}
 	
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
 	
 	public double getUserFeedback() {
 		return SolutionUtils.getUserFeedback(this);

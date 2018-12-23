@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import thiagodnf.nautilus.core.model.GenericSolution;
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FileService;
@@ -72,9 +72,9 @@ public class DownloadController {
 		
 		StringBuffer buffer = new StringBuffer();
 		
-		List<GenericSolution> solutions = execution.getSolutions();
+		List<NSolution<?>> solutions = execution.getSolutions();
 		
-		for (GenericSolution s : solutions) {
+		for (NSolution<?> s : solutions) {
 
 			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
 				buffer.append(s.getObjective(i));
@@ -111,9 +111,9 @@ public class DownloadController {
 		
 		StringBuffer buffer = new StringBuffer();
 		
-		List<GenericSolution> solutions = execution.getSolutions();
+		List<NSolution<?>> solutions = execution.getSolutions();
 		
-		for (GenericSolution s : solutions) {
+		for (NSolution<?> s : solutions) {
 
 			for (int i = 0; i < s.getNumberOfVariables(); i++) {
 				

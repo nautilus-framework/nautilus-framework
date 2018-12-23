@@ -12,15 +12,14 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.AlgorithmRunner.Executor;
 
 import thiagodnf.nautilus.core.algorithm.Builder;
 import thiagodnf.nautilus.core.algorithm.GA;
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.listener.AlgorithmListener;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
-import thiagodnf.nautilus.core.model.GenericSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
@@ -123,7 +122,7 @@ public class OptimizeService {
 			
 			// Algorithm
 			
-			List<Solution<?>> rawSolutions = null;
+			List<NSolution<?>> rawSolutions = null;
 			
 			webSocketService.sendTitle(sessionId, "Optimizing...");
 			
@@ -142,28 +141,25 @@ public class OptimizeService {
 			AlgorithmRunner algorithmRunner = new Executor(algorithm).execute();
 
 			if (algorithm instanceof GA) {
-				rawSolutions = (List<Solution<?>>)(Object) Arrays.asList(algorithm.getResult());
+				rawSolutions = (List<NSolution<?>>)(Object) Arrays.asList(algorithm.getResult());
 			} else {
-				rawSolutions = (List<Solution<?>>) algorithm.getResult();
+				rawSolutions = (List<NSolution<?>>) algorithm.getResult();
 			}
 
-			webSocketService.sendTitle(sessionId, "Converting to generic solutions...");
-		   	
-		   	List<GenericSolution> solutions = Converter.toGenericSolutions(rawSolutions);
-		   	
-			webSocketService.sendTitle(sessionId, "Setting ids");
+			webSocketService.sendTitle(sessionId, "Setting ids to solutions...");
 
-			for (int i = 0; i < solutions.size(); i++) {
-				solutions.get(i).setAttribute("id", String.valueOf(i));
+			for (int i = 0; i < rawSolutions.size(); i++) {
+				rawSolutions.get(i).getAttributes().clear();
+				rawSolutions.get(i).setAttribute("id", String.valueOf(i));
 			}
 		   	
 			webSocketService.sendTitle(sessionId, "Preparing the results...");
 			
 		   	Execution execution = new Execution();
 		   			
-			execution.setSolutions(solutions);
-			execution.setExecutionTime(algorithmRunner.getComputingTime());
+			execution.setSolutions(rawSolutions);
 			execution.setParameters(parameters);
+			execution.setExecutionTime(algorithmRunner.getComputingTime());
 	
 			webSocketService.sendTitle(sessionId, "Saving the execution to database...");
 			
@@ -175,7 +171,7 @@ public class OptimizeService {
 		}
     }
 	
-	public List<? extends Solution<?>> getInitialPopulation(Problem<?> problem, String previousExecutionId) {
+	public List<NSolution<?>> getInitialPopulation(Problem<?> problem, String previousExecutionId) {
 
 		if (Strings.isBlank(previousExecutionId)) {
 			return null;
@@ -183,10 +179,15 @@ public class OptimizeService {
 
 		Execution previousExecution = executionService.findById(previousExecutionId);
 
-		List<Solution<?>> initialPopulation = new ArrayList<>();
+		List<NSolution<?>> initialPopulation = new ArrayList<>();
 
-		for (GenericSolution sol : previousExecution.getSolutions()) {
-			initialPopulation.add(Converter.toJMetalSolutionWithOutObjectives(problem, sol));
+		for (NSolution<?> sol : previousExecution.getSolutions()) {
+
+			NSolution<?> copy = (NSolution<?>) sol.copy();
+
+			copy.setObjectives(new double[problem.getNumberOfObjectives()]);
+
+			initialPopulation.add(copy);
 		}
 
 		return initialPopulation;
