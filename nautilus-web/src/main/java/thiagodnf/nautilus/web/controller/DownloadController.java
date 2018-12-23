@@ -41,6 +41,7 @@ public class DownloadController {
 	@Autowired
 	private PluginService pluginService;
 	
+	
 	@GetMapping("/execution/{executionId:.+}/json")
 	@ResponseBody
 	public ResponseEntity<Resource> downloadExecutionAsJsonFile(
