@@ -49,7 +49,7 @@ public class DownloadController {
 		LOGGER.info("Downloading as json file the execution id " + executionId);
 
 		Execution execution = executionService.findById(executionId);
-
+		
 		String content = execution.toString();
 
 		Resource file = new ByteArrayResource(content.getBytes());

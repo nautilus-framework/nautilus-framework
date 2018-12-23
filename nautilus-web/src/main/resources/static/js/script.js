@@ -59,6 +59,8 @@ $(function(){
 	    errorClass: 'invalid-feedback',
 	});
 	
+	bsCustomFileInput.init()
+	
 	
 	$(".checkbox-select-all").each(function(index, value){
 		

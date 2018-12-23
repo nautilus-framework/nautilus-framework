@@ -16,9 +16,9 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<div class="form-group">
-								<label for="file">Select the instance file</label> 
-								<input id="file" type="file" name="file" class="form-control-file" /> 
+							<div class="custom-file">
+								<label for="file" class="custom-file-label">Select the instance file</label> 
+								<input id="file" type="file" name="file" class="form-control-file custom-file-input" /> 
 								<span class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
 							</div>
 						</div>
@@ -42,9 +42,9 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<div class="form-group">
-								<label for="file">Select the instance file</label> 
-								<input id="file" type="file" name="file" class="form-control-file" /> 
+							<div class="custom-file">
+								<label for="file" class="custom-file-label">Select the instance file</label> 
+								<input id="file" type="file" name="file" class="form-control-file custom-file-input" /> 
 								<span class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
 							</div>
 						</div>
@@ -68,10 +68,11 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<div class="form-group">
-								<label for="file">Select the instance file</label> 
-								<input id="file" type="file" name="file" class="form-control-file" /> 
-								<span class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
+							<div class="custom-file">
+							<input id="file" type="file" name="file" class="form-control-file custom-file-input" /> 
+								<label for="file" class="custom-file-label">Select the instance file</label> 
+								
+								<span class="text-danger " th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
 							</div>
 						</div>
 						<div class="modal-footer">
