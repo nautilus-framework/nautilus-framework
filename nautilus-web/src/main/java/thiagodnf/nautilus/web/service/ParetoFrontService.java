@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.uma.jmetal.util.SolutionListUtils;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.repository.ExecutionRepository.ExecutionSimplified;
@@ -85,7 +86,7 @@ public class ParetoFrontService {
 		
 		for (int i = 0; i < nonDominateds.size(); i++) {
 			nonDominateds.get(i).getAttributes().clear();
-			nonDominateds.get(i).setAttribute("id", String.valueOf(i));
+			nonDominateds.get(i).setAttribute(SolutionAttribute.ID, String.valueOf(i));
 		}
 		
 		String name = getParetoFrontName(problemId, filename, objectives);

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.web.model.GenerateParetoFront;
 import thiagodnf.nautilus.web.model.UploadExecution;
+import thiagodnf.nautilus.web.model.UploadRealParetoFront;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.ParetoFrontService;
@@ -51,6 +52,7 @@ public class PluginController {
 		model.addAttribute("executions", executionService.findByPluginId(pluginId));
 		model.addAttribute("uploadExecution", new UploadExecution());
 		model.addAttribute("generateParetoFront", new GenerateParetoFront());
+		model.addAttribute("uploadRealParetoFront", new UploadRealParetoFront());
 		
 		return "plugin";
 	}

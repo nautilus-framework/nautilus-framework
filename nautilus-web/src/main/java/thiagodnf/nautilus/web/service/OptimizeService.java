@@ -23,6 +23,7 @@ import thiagodnf.nautilus.core.listener.OnProgressListener;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
@@ -150,7 +151,7 @@ public class OptimizeService {
 
 			for (int i = 0; i < rawSolutions.size(); i++) {
 				rawSolutions.get(i).getAttributes().clear();
-				rawSolutions.get(i).setAttribute("id", String.valueOf(i));
+				rawSolutions.get(i).setAttribute(SolutionAttribute.ID, String.valueOf(i));
 			}
 		   	
 			webSocketService.sendTitle(sessionId, "Preparing the results...");
