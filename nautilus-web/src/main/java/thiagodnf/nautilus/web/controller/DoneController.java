@@ -4,22 +4,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.uma.jmetal.util.front.Front;
 import org.uma.jmetal.util.front.imp.ArrayFront;
 import org.uma.jmetal.util.front.util.FrontNormalizer;
 import org.uma.jmetal.util.front.util.FrontUtils;
 
-import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
+import thiagodnf.nautilus.plugin.factory.IndicatorFactory;
 import thiagodnf.nautilus.web.model.Execution;
+import thiagodnf.nautilus.web.model.GenerateIndicator;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.repository.ExecutionRepository.ExecutionSimplified;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.ParetoFrontService;
 import thiagodnf.nautilus.web.service.PluginService;
 
@@ -36,10 +42,21 @@ public class DoneController {
 	@Autowired
 	private ParetoFrontService paretoFrontService;
 	
+	@Autowired
+	private FlashMessageService flashMessageService;
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@GetMapping("")
+	@PostMapping("")
 	public String show(Model model, 
-			@PathVariable("executionId") String executionId){
+			@PathVariable("executionId") String executionId,
+			@Valid GenerateIndicator generateIndicator, 
+			BindingResult result,
+			RedirectAttributes ra){
+		
+		if (result.hasErrors()) {
+			flashMessageService.error(ra, result.getAllErrors());
+			return "redirect:/execution/" + executionId;
+		}
 		
 		Execution execution = executionService.findById(executionId);
 		Parameters parameters = execution.getParameters();
@@ -75,11 +92,13 @@ public class DoneController {
 		Front normalizedExecutionFront = frontNormalizer.normalize(executionFront);
 		
 		List normalizedExecution = FrontUtils.convertFrontToSolutionList(normalizedExecutionFront);
+		
+		IndicatorFactory factory = pluginService.getIndicatorFactory(pluginId);
 
 		Map<String, Double> map = new HashMap<>();
 
-		for (IndicatorExtension extension : pluginService.getIndicatorFactory(pluginId).getExtensions()) {
-			map.put(extension.getName(), extension.getIndicator(normalizedParetoFront).evaluate(normalizedExecution));
+		for (String indicatorId : generateIndicator.getIndicatorIds()) {
+			map.put(indicatorId, factory.getIndicator(indicatorId, normalizedParetoFront).evaluate(normalizedExecution));
 		}
 		
 		model.addAttribute("indicators", map);

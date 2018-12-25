@@ -22,6 +22,7 @@ import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionUtils;
 import thiagodnf.nautilus.web.model.Execution;
+import thiagodnf.nautilus.web.model.GenerateIndicator;
 import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.model.Settings;
 import thiagodnf.nautilus.web.service.ExecutionService;
@@ -81,6 +82,8 @@ public class ExecutionController {
 		model.addAttribute("correlationers", pluginService.getCorrelationers());
 		model.addAttribute("reducers", pluginService.getReducers());
 		model.addAttribute("settings", execution.getSettings());
+		model.addAttribute("indicators", pluginService.getIndicatorFactory(pluginId));
+		model.addAttribute("generateIndicator", new GenerateIndicator());
 		
 		return "execution";
 	}

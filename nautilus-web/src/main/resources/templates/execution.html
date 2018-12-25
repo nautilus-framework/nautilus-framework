@@ -24,7 +24,7 @@
 						</h6>
 					</div>
 					<div class="col-4 float-right">
-						<a class="btn btn-success float-right" th:href="@{/done/} + ${execution.getId()}">Done</a>
+						<a class="btn btn-success float-right" href="#" data-toggle="modal" data-target="#modal-select-indicators">Done</a>
 						<a class="btn btn-outline-secondary float-right" th:href="@{/continue/} + ${execution.getId()}">Continue</a>
 					</div>
 				</div>
@@ -304,6 +304,7 @@
 		</div>
 	
 		<div th:replace="fragments/footer :: footer"></div>
+		<div th:replace="fragments/modal :: select-indicators"></div>
 		<script type="text/javascript" th:src="@{/js/controller/execution.js}"></script>
 	</body>
 
