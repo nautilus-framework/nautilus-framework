@@ -10,14 +10,14 @@ import org.uma.jmetal.util.front.Front;
 
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
+import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 
 @Extension
 public class SpreadExtension implements IndicatorExtension {
 
 	@Override
-	public List<String> getProblemIds() {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean supports(ProblemExtension extension) {
+		return true;
 	}
 
 	@Override
@@ -33,5 +33,10 @@ public class SpreadExtension implements IndicatorExtension {
 	@Override
 	public QualityIndicator<List<Solution<?>>, Double> getIndicator(Front referenceParetoFront) {
 		return new Spread<Solution<?>>(referenceParetoFront);
+	}
+	
+	@Override
+	public String toString() {
+		return getId();
 	}
 }

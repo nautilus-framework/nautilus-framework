@@ -367,7 +367,7 @@ public class PluginService {
 		IndicatorFactory factory = new IndicatorFactory();
 
 		for (IndicatorExtension extension : getIndicatorExtensions(pluginId)) {
-			factory.getExtensions().add(extension);
+			factory.add(extension);
 		}
 
 		Collections.sort(factory.getExtensions(), Ordering.usingToString());

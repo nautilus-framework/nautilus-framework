@@ -213,8 +213,9 @@
 										<input type="checkbox" 
 											class="indicatorIds"
 											name="indicatorIds" 
+											th:if="${indicator.supports(problem)}"
 											th:value="${indicator.getId()}" 
-											th:text="${indicator.getName()}"
+											th:text="' '+${indicator.getName()}"
 										/>
 									</label>
 								</div>

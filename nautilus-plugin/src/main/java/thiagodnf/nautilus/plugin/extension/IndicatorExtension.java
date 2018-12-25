@@ -11,9 +11,11 @@ public interface IndicatorExtension extends ExtensionPoint {
 
 	public QualityIndicator<List<Solution<?>>, Double> getIndicator(Front referenceParetoFront);
 	
-	public List<String> getProblemIds();
+	public boolean supports(ProblemExtension extension);
 	
 	public String getName();
 	
 	public String getId();
+	
+	public String toString();
 }

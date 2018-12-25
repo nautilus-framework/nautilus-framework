@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.pf4j.Extension;
 import org.uma.jmetal.qualityindicator.QualityIndicator;
-import org.uma.jmetal.qualityindicator.impl.InvertedGenerationalDistance;
+import org.uma.jmetal.qualityindicator.impl.Epsilon;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.front.Front;
 
@@ -13,11 +13,16 @@ import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 
 @Extension
-public class IGDExtension implements IndicatorExtension {
+public class EpsilonExtension implements IndicatorExtension {
+
+	@Override
+	public boolean supports(ProblemExtension extension) {
+		return true;
+	}
 
 	@Override
 	public String getName() {
-		return "IGD";
+		return "Epsilon";
 	}
 
 	@Override
@@ -27,12 +32,7 @@ public class IGDExtension implements IndicatorExtension {
 
 	@Override
 	public QualityIndicator<List<Solution<?>>, Double> getIndicator(Front referenceParetoFront) {
-		return new InvertedGenerationalDistance<Solution<?>>(referenceParetoFront);
-	}
-
-	@Override
-	public boolean supports(ProblemExtension extension) {
-		return true;
+		return new Epsilon<Solution<?>>(referenceParetoFront);
 	}
 	
 	@Override

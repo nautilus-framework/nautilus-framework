@@ -19,6 +19,7 @@ import org.uma.jmetal.util.front.imp.ArrayFront;
 import org.uma.jmetal.util.front.util.FrontNormalizer;
 import org.uma.jmetal.util.front.util.FrontUtils;
 
+import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
 import thiagodnf.nautilus.plugin.factory.IndicatorFactory;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.GenerateIndicator;
@@ -76,9 +77,9 @@ public class DoneController {
 		List<ExecutionSimplified> paretoFronts = executionService.findByName(pluginId, problemId, paretoFrontName);
 
 		if (paretoFronts.isEmpty()) {
-			return "redirect/execution/" + executionId;
+			return "redirect:/execution/" + executionId;
 		} else if (paretoFronts.size() > 1) {
-			return "redirect/execution/" + executionId;
+			return "redirect:/execution/" + executionId;
 		}
 
 		Execution pareto = executionService.findById(paretoFronts.get(0).getId());
@@ -98,7 +99,10 @@ public class DoneController {
 		Map<String, Double> map = new HashMap<>();
 
 		for (String indicatorId : generateIndicator.getIndicatorIds()) {
-			map.put(indicatorId, factory.getIndicator(indicatorId, normalizedParetoFront).evaluate(normalizedExecution));
+
+			IndicatorExtension extension = factory.getExtension(indicatorId);
+
+			map.put(extension.getName(), extension.getIndicator(normalizedParetoFront).evaluate(normalizedExecution));
 		}
 		
 		model.addAttribute("indicators", map);
