@@ -10,6 +10,7 @@ import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
 
@@ -21,6 +22,8 @@ public class NBinarySolution extends NSolution<BinarySet> implements BinarySolut
 	
 	public NBinarySolution() {
 		super();
+		
+		this.bitsPerVariable = new ArrayList<>();
 	}
 	
 	/**
@@ -110,5 +113,9 @@ public class NBinarySolution extends NSolution<BinarySet> implements BinarySolut
 		}
 
 		return bitSet;
+	}
+	
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 }

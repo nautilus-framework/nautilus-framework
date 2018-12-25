@@ -19,8 +19,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.uma.jmetal.util.binarySet.BinarySet;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.encoding.serializer.BinarySetSerializer;
+import thiagodnf.nautilus.core.encoding.serializer.NSolutionSerializer;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FileService;
@@ -51,7 +57,12 @@ public class DownloadController {
 
 		Execution execution = executionService.findById(executionId);
 		
-		String content = execution.toString();
+		Gson gson = new GsonBuilder()
+				.registerTypeAdapter(NSolution.class, new NSolutionSerializer())
+				.registerTypeAdapter(BinarySet.class, new BinarySetSerializer())
+				.create();
+		
+		String content = gson.toJson(execution);
 
 		Resource file = new ByteArrayResource(content.getBytes());
 

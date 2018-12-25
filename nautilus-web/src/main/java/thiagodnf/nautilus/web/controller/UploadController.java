@@ -19,10 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.uma.jmetal.problem.DoubleProblem;
+import org.uma.jmetal.util.binarySet.BinarySet;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.encoding.serializer.BinarySetDeserializer;
+import thiagodnf.nautilus.core.encoding.serializer.NSolutionDeserializer;
 import thiagodnf.nautilus.core.encoding.solution.NDoubleSolution;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
@@ -127,6 +131,12 @@ public class UploadController {
 		if (result.hasErrors()) {
 			flashMessageService.error(ra, result.getAllErrors());
 		}else {
+
+			Gson gson = new GsonBuilder()
+					.registerTypeAdapter(NSolution.class, new NSolutionDeserializer())
+					.registerTypeAdapter(BinarySet.class, new BinarySetDeserializer())
+					.create();
+			
 			try {
 
 				MultipartFile file = uploadExecution.getFile();
@@ -139,7 +149,7 @@ public class UploadController {
 					throw new RuntimeException(e);
 				} 
 
-				Execution execution = new Gson().fromJson(content, Execution.class);
+				Execution execution = gson.fromJson(content, Execution.class);
 
 				if (executionService.existsById(execution.getId())) {
 					throw new ExecutionAlreadyExistsException();

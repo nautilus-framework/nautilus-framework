@@ -8,7 +8,6 @@ import java.util.Map;
 import org.uma.jmetal.solution.Solution;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
 
 import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.core.util.SolutionUtils;
@@ -53,10 +52,6 @@ public abstract class NSolution <T> implements Solution<T> {
 
 	public void setVariables(List<T> variables) {
 		this.variables = variables;
-	}
-	
-	public String toString() {
-		return new Gson().toJson(this);
 	}
 	
 	public int getNumberOfObjectives() {
@@ -136,4 +131,6 @@ public abstract class NSolution <T> implements Solution<T> {
 
 		return (double) getAttribute(SolutionAttribute.FEEDBACK_FOR_VARIABLE + index);
 	}
+	
+	public abstract String toString();
 }

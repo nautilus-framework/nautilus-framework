@@ -9,6 +9,7 @@ import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
 
@@ -22,6 +23,9 @@ public class NIntegerSolution extends NSolution<Integer> implements IntegerSolut
 
 	public NIntegerSolution() {
 		super();
+		
+		this.lowerBounds = new ArrayList<>();
+		this.upperBounds = new ArrayList<>();
 	}
 	
 	/**
@@ -124,5 +128,9 @@ public class NIntegerSolution extends NSolution<Integer> implements IntegerSolut
 	@Override
 	public String getVariableValueString(int index) {
 		return getVariableValue(index).toString();
+	}
+	
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 }
