@@ -25,9 +25,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.encoding.serializer.BinarySetDeserializer;
-import thiagodnf.nautilus.core.encoding.serializer.NSolutionDeserializer;
 import thiagodnf.nautilus.core.encoding.solution.NDoubleSolution;
+import thiagodnf.nautilus.core.serializer.BinarySetDeserializer;
+import thiagodnf.nautilus.core.serializer.NSolutionDeserializer;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;

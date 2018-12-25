@@ -25,8 +25,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.encoding.serializer.BinarySetSerializer;
-import thiagodnf.nautilus.core.encoding.serializer.NSolutionSerializer;
+import thiagodnf.nautilus.core.serializer.BinarySetSerializer;
+import thiagodnf.nautilus.core.serializer.NSolutionSerializer;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FileService;

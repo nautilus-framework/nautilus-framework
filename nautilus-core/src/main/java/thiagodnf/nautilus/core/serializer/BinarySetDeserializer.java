@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.core.encoding.serializer;
+package thiagodnf.nautilus.core.serializer;
 
 import java.lang.reflect.Type;
 
