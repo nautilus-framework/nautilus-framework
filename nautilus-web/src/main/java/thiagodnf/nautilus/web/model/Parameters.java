@@ -14,7 +14,7 @@ import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIExtension;
 public class Parameters {
 	
 	@DecimalMin("10")
-	@DecimalMax("1000")
+	@DecimalMax("100000")
 	private int populationSize = 100;
 	
 	@DecimalMin("10")

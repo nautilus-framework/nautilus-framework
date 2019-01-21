@@ -74,6 +74,7 @@
 										<th width="50px">#</th>
 										<th>Title</th>
 										<th width="200px">Problem Id</th>
+										<th width="200px">Instance File</th>
 										<th width="200px">Date</th>
 										<th width="10px"></th>
 									</tr>
@@ -85,6 +86,7 @@
 											<a  th:href="@{/execution/} + ${execution.getId()}" th:text="${#strings.isEmpty(executionName)} ? ${execution.getId()} : ${executionName}"></a>
 										</td>
 										<td th:text="${execution.getParameters().getProblemId()}"></td>			
+										<td th:text="${execution.getParameters().getFilename()}"></td>
 										<td class="dates" th:text="${#formatter.date(execution.getDate())}"></td>
 										<td>
 											<div class="dropdown float-right">

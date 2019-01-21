@@ -83,8 +83,14 @@ public abstract class AbstractCorrelation {
 					x[k] = solutions.get(k).getObjective(i);
 					y[k] = solutions.get(k).getObjective(j);
 				}
+				
+				double value = getCorrelation(x, y);
 
-				item.getValues().add(getCorrelation(x, y));
+				if (Double.isNaN(value)) {
+					value = 0.0;
+				}
+
+				item.getValues().add(value);
 			}
 
 			items.add(item);

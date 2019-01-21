@@ -13,6 +13,7 @@ import thiagodnf.nautilus.plugin.extension.algorithm.GAExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIIExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.RNSGAIIExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.RandomSearchExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.SPEA2Extension;
 
 public class AlgorithmFactory {
@@ -26,6 +27,7 @@ public class AlgorithmFactory {
 		getExtensions().add(new NSGAIIIExtension());
 		getExtensions().add(new BruteForceSearchExtension());
 		getExtensions().add(new GAExtension());
+		getExtensions().add(new RandomSearchExtension());
 	}
 
 	public List<AlgorithmExtension> getExtensions() {
