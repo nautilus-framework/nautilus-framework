@@ -46,16 +46,16 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 
 	protected Tab getFeaturesTab(TXTInstanceData data) {
 
-		TableTabContent table = new TableTabContent(Arrays.asList("Feature", "Status", "Cost"));
+		TableTabContent table = new TableTabContent(Arrays.asList("Feature", "Cost", "Defects", "Importance"));
 
 		String[] features = data.getFeatures();
-		List<String> mandatory = Arrays.asList(data.getMandatoryFeatures());
 
 		for (int i = 0; i < data.getNumberOfFeatures(); i++) {
 			table.getRows().add(Arrays.asList(
 					features[i],
-					mandatory.contains(features[i])? "Mandatory" : "Optional",
-					"" + data.getCost()[i]
+					"" + data.getCost()[i],
+					"" + data.getDefects()[i],
+					"" + data.getImportance()[i]
 			));
 		}
 
@@ -64,11 +64,15 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 
 	protected Tab getProductsTab(TXTInstanceData data) {
 
-		TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Feature", "Cost"));
+		TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Feature", "Cost", "Defects", "Importance"));
 
 		for (int i = 0; i < data.getNumberOfProducts(); i++) {
-			table.getRows()
-					.add(Arrays.asList("Product " + i, data.getProduct(i).toString(), "" + data.getProductCost(i)));
+			table.getRows().add(Arrays.asList("Product " + i, 
+				data.getProduct(i).toString(), 
+				"" + data.getProductCost(i),
+				"" + data.getProductDefect(i),
+				"" + data.getProductImportance(i)
+			));
 		}
 
 		return new Tab("Products", table);

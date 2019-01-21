@@ -37,7 +37,13 @@ public class TXTInstanceData extends InstanceData {
 	
 	private double[][] similarityAmongOptionalFeatures;
 	
-	private String[] mandatoryFeatures;
+	private double[] defects;
+	
+	private double sumOfDefects;
+	
+	private double[] importance;
+	
+	private double sumOfImportance;
 
 	public TXTInstanceData(Path path) {
 
@@ -61,45 +67,19 @@ public class TXTInstanceData extends InstanceData {
 		reader.readLine(); // Ignore Comment
 		this.costs = reader.getDoubleVerticalArray(numberOfFeatures);
 		reader.readLine(); // Ignore Comment
-		this.mandatoryFeatures = reader.getStringHorizontalArray();
+		this.defects = reader.getDoubleVerticalArray(numberOfFeatures);
+		reader.readLine(); // Ignore Comment
+		this.importance = reader.getDoubleVerticalArray(numberOfFeatures);
 		
 		this.similarity = calculateSimilarity(numberOfProducts);
-		this.similarityAmongOptionalFeatures = calculateSimilarityAmongOptionalFeatures(numberOfProducts);
-
+		
 		for (int i = 0; i < getNumberOfProducts(); i++) {
 			this.sumOfCosts += getProductCost(i);
+			this.sumOfDefects += getProductDefect(i);
+			this.sumOfImportance += getProductImportance(i);
 		}
 	}
 	
-	public double[][] calculateSimilarityAmongOptionalFeatures(int size) {
-
-		Preconditions.checkArgument(size >= 0, "The size should not be >= 0");
-		
-		double[][] similarity = new double[size][size];
-
-		for (int i = 0; i < size; i++) {
-
-			for (int j = i; j < size; j++) {
-
-				if (i != j) {
-					
-					List<String> features1 = getProduct(i);
-					List<String> features2 = getProduct(j);
-
-					for (String mandatoryFeature : mandatoryFeatures) {
-						features1.remove(mandatoryFeature);
-						features2.remove(mandatoryFeature);
-					}
-
-					similarity[i][j] = SimilarityUtils.getJaccardIndex(features1, features2);
-					similarity[j][i] = similarity[i][j];
-				}
-			}
-		}
-
-		return similarity;
-	}
-
 	public double[][] calculateSimilarity(int size) {
 
 		Preconditions.checkArgument(size >= 0, "The size should not be >= 0");
@@ -202,6 +182,43 @@ public class TXTInstanceData extends InstanceData {
 
 		return sum;
 	}
+	
+	public double getProductDefect(int productIndex) {
+
+		double sum = 0.0;
+
+		for (int i = 0; i < getNumberOfFeatures(); i++) {
+
+			if (getFeaturesProducts()[i][productIndex] == 1) {
+
+				sum += getDefects()[i];
+			}
+		}
+
+		return sum;
+	}
+	
+	public double getProductImportance(int productIndex) {
+
+		double sum = 0.0;
+
+		for (int i = 0; i < getNumberOfFeatures(); i++) {
+
+			if (getFeaturesProducts()[i][productIndex] == 1) {
+
+				sum += getImportance()[i];
+			}
+		}
+
+		return sum;
+	}
+	
+	
+	
+	
+	
+	
+	
 
 	public List<String> getProduct(int productIndex) {
 
@@ -241,12 +258,6 @@ public class TXTInstanceData extends InstanceData {
 		return sumOfCosts;
 	}
 	
-	public String[] getMandatoryFeatures() {
-		return mandatoryFeatures;
-	}
-	
-	
-	
 	public double[][] getSimilarityAmongOptionalFeatures() {
 		return similarityAmongOptionalFeatures;
 	}
@@ -259,11 +270,47 @@ public class TXTInstanceData extends InstanceData {
 		this.similarityAmongOptionalFeatures = similarityAmongOptionalFeatures;
 	}
 
-	public void setMandatoryFeatures(String[] mandatoryFeatures) {
-		this.mandatoryFeatures = mandatoryFeatures;
-	}
-
 	public void setSumOfCosts(double sumOfCosts) {
 		this.sumOfCosts = sumOfCosts;
+	}
+
+	public double[] getCosts() {
+		return costs;
+	}
+
+	public void setCosts(double[] costs) {
+		this.costs = costs;
+	}
+
+	public double[] getDefects() {
+		return defects;
+	}
+
+	public void setDefects(double[] defects) {
+		this.defects = defects;
+	}
+
+	public double getSumOfDefects() {
+		return sumOfDefects;
+	}
+
+	public void setSumOfDefects(double sumOfDefects) {
+		this.sumOfDefects = sumOfDefects;
+	}
+
+	public double[] getImportance() {
+		return importance;
+	}
+
+	public void setImportance(double[] importance) {
+		this.importance = importance;
+	}
+
+	public double getSumOfImportance() {
+		return sumOfImportance;
+	}
+
+	public void setSumOfImportance(double sumOfImportance) {
+		this.sumOfImportance = sumOfImportance;
 	}
 }

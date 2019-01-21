@@ -13,6 +13,9 @@ import thiagodnf.nautilus.plugin.spl.encoding.objective.CostObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.NumberOfProductsObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.SimilarityObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.UncoveredPairsObjective;
+import thiagodnf.nautilus.plugin.spl.encoding.objective.UnimportantFeaturesObjective;
+import thiagodnf.nautilus.plugin.spl.encoding.objective.UnknownDefectsObjective;
+import thiagodnf.nautilus.plugin.spl.encoding.objective.UnselectedFeaturesObjective;
 import thiagodnf.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
 
 @Extension
@@ -28,6 +31,9 @@ public class SPLObjectiveExtension implements ObjectiveExtension {
 		objectives.add(new UncoveredPairsObjective());
 		objectives.add(new SimilarityObjective());
 		objectives.add(new CostObjective());
+		objectives.add(new UnselectedFeaturesObjective());
+		objectives.add(new UnknownDefectsObjective());
+		objectives.add(new UnimportantFeaturesObjective());
 		
 		return objectives;
 	}
