@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature-model xsi:noNamespaceSchemaLocation="http://www.tdg-seville.info/benavides/featuremodelling/feature-model.xsd">
+	<feature name="CAS">
+		<binaryRelation name="R1">
+			<cardinality min="1" max="1" />
+			<solitaryFeature name="TRAFIC-MESSAGE-CHANEL"></solitaryFeature>
+		</binaryRelation>
+		<binaryRelation name="R2">
+			<cardinality min="0" max="1" />
+			<solitaryFeature name="WHEEL-CONTROL"></solitaryFeature>
+		</binaryRelation>
+		<binaryRelation name="R3">
+			<cardinality min="0" max="1" />
+			<solitaryFeature name="NAVIGATION-SYSTEM">
+				<binaryRelation name="R7">
+					<cardinality min="0" max="1" />
+					<solitaryFeature name="MAP-DATA-VIA-CD"></solitaryFeature>
+				</binaryRelation>
+				<binaryRelation name="R8">
+					<cardinality min="0" max="1" />
+					<solitaryFeature name="MAP-DATA-VIA-USB"></solitaryFeature>
+				</binaryRelation>
+			</solitaryFeature>
+		</binaryRelation>
+		<binaryRelation name="R4">
+			<cardinality min="1" max="1" />
+			<solitaryFeature name="PLAYBACK">
+				<binaryRelation name="R9">
+					<cardinality min="0" max="1" />
+					<solitaryFeature name="USB"></solitaryFeature>
+				</binaryRelation>
+				<setRelation name="R10">
+					<cardinality min="1" max="1" />
+					<groupedFeature name="CD"></groupedFeature>
+					<groupedFeature name="CASSETE"></groupedFeature>
+					<groupedFeature name="DVD"></groupedFeature>
+				</setRelation>
+			</solitaryFeature>
+		</binaryRelation>
+		<binaryRelation name="R5">
+			<cardinality min="1" max="1" />
+			<solitaryFeature name="CONTROL">
+				<binaryRelation name="R13">
+					<cardinality min="1" max="1" />
+					<solitaryFeature name="TITLE-CHANEL-SELECTION"></solitaryFeature>
+				</binaryRelation>
+				<binaryRelation name="R14">
+					<cardinality min="1" max="1" />
+					<solitaryFeature name="FORWARD-BACKWARD"></solitaryFeature>
+				</binaryRelation>
+				<binaryRelation name="R15">
+					<cardinality min="1" max="1" />
+					<solitaryFeature name="VOLUME"></solitaryFeature>
+				</binaryRelation>
+				<binaryRelation name="R16">
+					<cardinality min="1" max="1" />
+					<solitaryFeature name="SWITCH"></solitaryFeature>
+				</binaryRelation>
+			</solitaryFeature>
+		</binaryRelation>
+		<binaryRelation name="R6">
+			<cardinality min="0" max="1" />
+			<solitaryFeature name="MEDIA-FORMAT">
+				<binaryRelation name="R11">
+					<cardinality min="0" max="1" />
+					<solitaryFeature name="MP3"></solitaryFeature>
+				</binaryRelation>
+				<setRelation name="R12">
+					<cardinality min="1" max="2" />
+					<groupedFeature name="AAC"></groupedFeature>
+					<groupedFeature name="WMA"></groupedFeature>
+					<groupedFeature name="WAV"></groupedFeature>
+				</setRelation>
+			</solitaryFeature>
+		</binaryRelation>
+	</feature>
+	<excludes name="RY" feature="USB" excludes="CASSETE" />
+	<requires name="RX" feature="MAP-DATA-VIA-CD" requires="CD" />
+	<requires name="RZ" feature="MAP-DATA-VIA-USB" requires="USB" />
+</feature-model>
