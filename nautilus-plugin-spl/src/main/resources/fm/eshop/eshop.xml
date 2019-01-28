@@ -35,7 +35,7 @@
 			<cardinality min="1" max="1" />
 			<solitaryFeature name="Payment">
 				<setRelation name="R10">
-					<cardinality min="0" max="2" />
+					<cardinality min="1" max="2" />
 					<groupedFeature name="BankDraft"></groupedFeature>
 					<groupedFeature name="CreditCard">
 						<setRelation name="R11">
