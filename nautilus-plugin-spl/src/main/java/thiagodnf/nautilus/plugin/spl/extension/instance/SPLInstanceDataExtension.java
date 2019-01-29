@@ -46,7 +46,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 
 	protected Tab getFeaturesTab(TXTInstanceData data) {
 
-		TableTabContent table = new TableTabContent(Arrays.asList("Feature", "Cost", "Defects", "Importance"));
+		TableTabContent table = new TableTabContent(Arrays.asList("Feature", "Cost", "Importance"));
 
 		String[] features = data.getFeatures();
 
@@ -63,7 +63,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 
 	protected Tab getProductsTab(TXTInstanceData data) {
 
-		TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Feature", "Cost", "Defects", "Importance"));
+		TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Feature", "Cost", "Importance"));
 
 		for (int i = 0; i < data.getNumberOfProducts(); i++) {
 			table.getRows().add(Arrays.asList("Product " + i, 
