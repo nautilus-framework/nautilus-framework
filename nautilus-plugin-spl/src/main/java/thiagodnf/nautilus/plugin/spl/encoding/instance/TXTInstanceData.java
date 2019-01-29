@@ -37,10 +37,6 @@ public class TXTInstanceData extends InstanceData {
 	
 	private double[][] similarityAmongOptionalFeatures;
 	
-	private double[] defects;
-	
-	private double sumOfDefects;
-	
 	private double[] importance;
 	
 	private double sumOfImportance;
@@ -67,15 +63,12 @@ public class TXTInstanceData extends InstanceData {
 		reader.readLine(); // Ignore Comment
 		this.costs = reader.getDoubleVerticalArray(numberOfFeatures);
 		reader.readLine(); // Ignore Comment
-		this.defects = reader.getDoubleVerticalArray(numberOfFeatures);
-		reader.readLine(); // Ignore Comment
 		this.importance = reader.getDoubleVerticalArray(numberOfFeatures);
 		
 		this.similarity = calculateSimilarity(numberOfProducts);
 		
 		for (int i = 0; i < getNumberOfProducts(); i++) {
 			this.sumOfCosts += getProductCost(i);
-			this.sumOfDefects += getProductDefect(i);
 			this.sumOfImportance += getProductImportance(i);
 		}
 	}
@@ -183,21 +176,6 @@ public class TXTInstanceData extends InstanceData {
 		return sum;
 	}
 	
-	public double getProductDefect(int productIndex) {
-
-		double sum = 0.0;
-
-		for (int i = 0; i < getNumberOfFeatures(); i++) {
-
-			if (getFeaturesProducts()[i][productIndex] == 1) {
-
-				sum += getDefects()[i];
-			}
-		}
-
-		return sum;
-	}
-	
 	public double getProductImportance(int productIndex) {
 
 		double sum = 0.0;
@@ -213,13 +191,6 @@ public class TXTInstanceData extends InstanceData {
 		return sum;
 	}
 	
-	
-	
-	
-	
-	
-	
-
 	public List<String> getProduct(int productIndex) {
 
 		List<String> features = new ArrayList<>();
@@ -280,22 +251,6 @@ public class TXTInstanceData extends InstanceData {
 
 	public void setCosts(double[] costs) {
 		this.costs = costs;
-	}
-
-	public double[] getDefects() {
-		return defects;
-	}
-
-	public void setDefects(double[] defects) {
-		this.defects = defects;
-	}
-
-	public double getSumOfDefects() {
-		return sumOfDefects;
-	}
-
-	public void setSumOfDefects(double sumOfDefects) {
-		this.sumOfDefects = sumOfDefects;
 	}
 
 	public double[] getImportance() {

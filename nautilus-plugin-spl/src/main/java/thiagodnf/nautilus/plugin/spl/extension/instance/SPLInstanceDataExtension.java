@@ -54,7 +54,6 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 			table.getRows().add(Arrays.asList(
 					features[i],
 					"" + data.getCost()[i],
-					"" + data.getDefects()[i],
 					"" + data.getImportance()[i]
 			));
 		}
@@ -70,7 +69,6 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 			table.getRows().add(Arrays.asList("Product " + i, 
 				data.getProduct(i).toString(), 
 				"" + data.getProductCost(i),
-				"" + data.getProductDefect(i),
 				"" + data.getProductImportance(i)
 			));
 		}
