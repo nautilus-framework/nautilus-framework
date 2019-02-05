@@ -40,6 +40,13 @@
 			<!-- !!! VERY IMPORTANT -->
 			<scope>provided</scope>
 		</dependency>
+		<!-- JUnit Test Framework -->
+		<dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter-engine</artifactId>
+		    <version>5.1.0</version>
+		    <scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

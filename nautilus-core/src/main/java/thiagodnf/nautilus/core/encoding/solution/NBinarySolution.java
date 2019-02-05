@@ -1,6 +1,7 @@
 package thiagodnf.nautilus.core.encoding.solution;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,6 +61,17 @@ public class NBinarySolution extends NSolution<BinarySet> implements BinarySolut
 		this.bitsPerVariable = bitsPerVariable;
 		
 		initializeBinaryVariables();
+	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param numberOfObjectives The number of objectives
+	 * @param numberOfVariables The number of variables
+	 * @param bitsForVariables The number of bits for all variables
+	 */
+	public NBinarySolution(int numberOfObjectives, int numberOfVariables, int bitsForVariables) {
+		this(numberOfObjectives, numberOfVariables, Collections.nCopies(numberOfVariables, bitsForVariables));
 	}
 		
 	@Override

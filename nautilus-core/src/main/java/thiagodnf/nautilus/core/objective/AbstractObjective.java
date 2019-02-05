@@ -31,6 +31,10 @@ public abstract class AbstractObjective {
 		return getId();
 	}
 	
+	public int getOrder() {
+		return 1;
+	}
+	
 	/**
 	 * It returns if this objective is going to be  'selected' in the screen
 	 * 

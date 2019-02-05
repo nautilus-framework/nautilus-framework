@@ -9,6 +9,7 @@ import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.point.PointSolution;
 
 import thiagodnf.nautilus.core.algorithm.RNSGAII.PointSolutionUtils;
+import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
 
 public class Converter {
 	
@@ -90,5 +91,23 @@ public class Converter {
 		}
 
 		return pointSolutions;
+	}
+	
+	public static NBinarySolution toBinarySolution(int numberOfObjectives, String binaryString) {
+
+		NBinarySolution solution = new NBinarySolution(numberOfObjectives, 1, binaryString.length());
+
+		String[] parts = binaryString.split("");
+
+		for (int i = 0; i < parts.length; i++) {
+
+			if (parts[i].equalsIgnoreCase("0")) {
+				solution.getVariableValue(0).set(i, false);
+			} else {
+				solution.getVariableValue(0).set(i, true);
+			}
+		}
+
+		return solution;
 	}
 }
