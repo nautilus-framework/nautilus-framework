@@ -49,6 +49,20 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<resources>
+	        <resource>
+	            <directory>src/main/resources</directory>
+	            <excludes>
+	                <exclude>**/*.txt</exclude>
+                 	<exclude>**/*.xml</exclude>
+                 	<exclude>**/*.jpg</exclude>
+                 	<exclude>**/*.pdf</exclude>
+                 	<exclude>**/*.png</exclude>
+                 	<exclude>**/*.svg</exclude>
+                 	<exclude>**/*.bib</exclude>
+	            </excludes>
+	        </resource>
+	    </resources>
 		<plugins>
 			<!-- Define the name used to define the eclipse project -->
 			<plugin>
