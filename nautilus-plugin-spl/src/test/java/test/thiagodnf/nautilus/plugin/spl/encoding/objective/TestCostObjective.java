@@ -14,17 +14,17 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.spl.encoding.instance.TXTInstanceData;
-import thiagodnf.nautilus.plugin.spl.encoding.objective.NumberOfProductsObjective;
+import thiagodnf.nautilus.plugin.spl.encoding.objective.CostObjective;
 import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
 
-public class TestNumberOfProductsObjective {
+public class TestCostObjective {
 
 	private static Path path = Paths.get("src")
 			.resolve("test")
 			.resolve("resources")
 			.resolve("instance-test.txt");
 	
-	private AbstractObjective objective = new NumberOfProductsObjective();
+	private AbstractObjective objective = new CostObjective();
 	
 	public static TXTInstanceData getInstanceData() {
 
@@ -43,21 +43,21 @@ public class TestNumberOfProductsObjective {
 	@Test
 	public void shouldReturnZeroIfThereIsNoSelectedProducts() {
 		
-		assertEquals(0.0, evaluate("00000"));
+		assertEquals(0.0, evaluate("00000"), 0.00001);
 	}
 
 	@Test
 	public void shouldReturnOneIfAllOfThemWereSelectedProducts() {
 		
-		assertEquals(1.0, evaluate("11111"));
+		assertEquals(1.0, evaluate("11111"), 0.00001);
 	}
 	
 	@Test
 	public void shouldReturnTheCorrectValues() {
-		
-		assertEquals(0.6, evaluate("00111"), 0.00001);
-		assertEquals(0.2, evaluate("10000"), 0.00001);
-		assertEquals(0.4, evaluate("10010"), 0.00001);
+
+		assertEquals(13.0 / 33.0, evaluate("01001"), 0.00001);
+		assertEquals(3.0 / 33.0, evaluate("10000"), 0.00001);
+		assertEquals(11.0 / 33.0, evaluate("10101"), 0.00001);
 	}
 	
 	@Test

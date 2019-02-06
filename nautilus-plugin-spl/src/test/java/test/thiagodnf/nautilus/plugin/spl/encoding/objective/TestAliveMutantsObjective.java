@@ -33,34 +33,32 @@ public class TestAliveMutantsObjective {
 		return (TXTInstanceData) instanceDataExtension.getInstanceData(path);
 	}
 	
+	private double evaluate(String binaryString) {
+
+		NBinarySolution solution = Converter.toBinarySolution(1, binaryString);
+
+		return objective.evaluate(getInstanceData(), solution);
+	}
+	
 	@Test
 	public void shouldReturnOneIfThereIsNoSelectedProducts() {
 		
-		NBinarySolution solution = Converter.toBinarySolution(1, "00000");
-		
-		double value = objective.evaluate(getInstanceData(), solution);
-		
-		assertEquals(1.0, value);
+		assertEquals(1.0, evaluate("00000"), 0.00001);
 	}
 	
 	@Test
 	public void shouldReturnZeroIfAllProductsWereSelected() {
 		
-		NBinarySolution solution = Converter.toBinarySolution(1, "11111");
-		
-		double value = objective.evaluate(getInstanceData(), solution);
-		
-		assertEquals(0.0, value);
+		assertEquals(0.0, evaluate("11111"), 0.00001);
 	}
 	
 	@Test
-	public void shouldReturnSixtyPercentIfJustProductThreeWasSelected() {
+	public void shouldReturnTheCorrectValues() {
 		
-		NBinarySolution solution = Converter.toBinarySolution(1, "00010");
-		
-		double value = objective.evaluate(getInstanceData(), solution);
-		
-		assertEquals(0.6, value);
+		assertEquals(0.6, evaluate("00010"), 0.00001);
+		assertEquals(0.2, evaluate("00001"), 0.00001);
+		assertEquals(0.2, evaluate("10001"), 0.00001);
+		assertEquals(0.4, evaluate("01010"), 0.00001);
 	}
 	
 	@Test
@@ -76,7 +74,7 @@ public class TestAliveMutantsObjective {
 		assertNotNull(objective.getName());
 		assertNotNull(objective.getGroupName());
 
-		assertNotEquals(0.0, objective.getName());
-		assertNotEquals(0.0, objective.getGroupName());
+		assertNotEquals(0.0, objective.getName().length());
+		assertNotEquals(0.0, objective.getGroupName().length());
 	}
 }

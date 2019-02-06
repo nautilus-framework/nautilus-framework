@@ -14,17 +14,17 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.spl.encoding.instance.TXTInstanceData;
-import thiagodnf.nautilus.plugin.spl.encoding.objective.NumberOfProductsObjective;
+import thiagodnf.nautilus.plugin.spl.encoding.objective.SimilarityObjective;
 import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
 
-public class TestNumberOfProductsObjective {
+public class TestSimilarityObjective {
 
 	private static Path path = Paths.get("src")
 			.resolve("test")
 			.resolve("resources")
 			.resolve("instance-test.txt");
 	
-	private AbstractObjective objective = new NumberOfProductsObjective();
+	private AbstractObjective objective = new SimilarityObjective();
 	
 	public static TXTInstanceData getInstanceData() {
 
@@ -41,23 +41,23 @@ public class TestNumberOfProductsObjective {
 	}
 	
 	@Test
-	public void shouldReturnZeroIfThereIsNoSelectedProducts() {
+	public void shouldReturnOneIfThereIsNoSelectedProducts() {
 		
-		assertEquals(0.0, evaluate("00000"));
+		assertEquals(1.0, evaluate("00000"));
 	}
 
 	@Test
-	public void shouldReturnOneIfAllOfThemWereSelectedProducts() {
+	public void shouldReturnTheCorrectValueIfAllOfThemWereSelectedProducts() {
 		
-		assertEquals(1.0, evaluate("11111"));
+		assertEquals((7.4 * 2) / ((5) * (5 - 1)), evaluate("11111"), 0.0001);
 	}
 	
 	@Test
 	public void shouldReturnTheCorrectValues() {
-		
-		assertEquals(0.6, evaluate("00111"), 0.00001);
-		assertEquals(0.2, evaluate("10000"), 0.00001);
-		assertEquals(0.4, evaluate("10010"), 0.00001);
+
+		assertEquals(0.75 , evaluate("11000"), 0.00001);
+		assertEquals(1.0, evaluate("10000"), 0.00001);
+		assertEquals((2.5 * 2) / 6.0, evaluate("10101"), 0.00001);
 	}
 	
 	@Test

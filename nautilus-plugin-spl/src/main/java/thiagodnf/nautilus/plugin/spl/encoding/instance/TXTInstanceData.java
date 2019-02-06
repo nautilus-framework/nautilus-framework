@@ -3,6 +3,7 @@ package thiagodnf.nautilus.plugin.spl.encoding.instance;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
@@ -40,6 +41,10 @@ public class TXTInstanceData extends InstanceData {
 	private double[] importance;
 	
 	private double sumOfImportance;
+	
+	private double[] productCost;
+	
+	private double[] productImportance;
 
 	public TXTInstanceData(Path path) {
 
@@ -65,15 +70,24 @@ public class TXTInstanceData extends InstanceData {
 		reader.readLine(); // Ignore Comment
 		this.importance = reader.getDoubleVerticalArray(numberOfFeatures);
 		
+		this.sumOfCosts = 0.0;
+		this.sumOfImportance = 0.0;
+		this.productCost = new double[getNumberOfProducts()];
+		this.productImportance = new double[getNumberOfProducts()];
+		
 		this.similarity = calculateSimilarity(numberOfProducts);
 		
 		for (int i = 0; i < getNumberOfProducts(); i++) {
-			this.sumOfCosts += getProductCost(i);
-			this.sumOfImportance += getProductImportance(i);
+
+			this.productCost[i] = calculateProductCost(i);
+			this.productImportance[i] = calculateProductImportance(i);
+
+			this.sumOfCosts += productCost[i];
+			this.sumOfImportance += productImportance[i];
 		}
 	}
 	
-	public double[][] calculateSimilarity(int size) {
+	protected double[][] calculateSimilarity(int size) {
 
 		Preconditions.checkArgument(size >= 0, "The size should not be >= 0");
 
@@ -81,13 +95,14 @@ public class TXTInstanceData extends InstanceData {
 
 		for (int i = 0; i < size; i++) {
 
+			List<String> features1 = getProduct(i);
+
 			for (int j = i; j < size; j++) {
 
 				if (i != j) {
-					
-					List<String> features1 = getProduct(i);
+
 					List<String> features2 = getProduct(j);
-					
+
 					similarity[i][j] = SimilarityUtils.getJaccardIndex(features1, features2);
 					similarity[j][i] = similarity[i][j];
 				}
@@ -95,6 +110,42 @@ public class TXTInstanceData extends InstanceData {
 		}
 
 		return similarity;
+	}
+	
+	protected double calculateProductCost(int productIndex) {
+
+		Preconditions.checkArgument(productIndex >= 0, "The productIndex should be >= 0");
+		Preconditions.checkArgument(productIndex < getNumberOfProducts(), "The productIndex should be < the number of products");
+		
+		double sum = 0.0;
+
+		for (int i = 0; i < getNumberOfFeatures(); i++) {
+
+			if (getFeaturesProducts()[i][productIndex] == 1) {
+
+				sum += getCost()[i];
+			}
+		}
+
+		return sum;
+	}
+	
+	protected double calculateProductImportance(int productIndex) {
+
+		Preconditions.checkArgument(productIndex >= 0, "The productIndex should be >= 0");
+		Preconditions.checkArgument(productIndex < getNumberOfProducts(), "The productIndex should be < the number of products");
+		
+		double sum = 0.0;
+
+		for (int i = 0; i < getNumberOfFeatures(); i++) {
+
+			if (getFeaturesProducts()[i][productIndex] == 1) {
+
+				sum += getImportance()[i];
+			}
+		}
+
+		return sum;
 	}
 
 	public int getNumberOfProducts() {
@@ -160,35 +211,14 @@ public class TXTInstanceData extends InstanceData {
 	public void setPairsProducts(int[][] pairsProducts) {
 		this.pairsProducts = pairsProducts;
 	}
-
+	
+	
 	public double getProductCost(int productIndex) {
-
-		double sum = 0.0;
-
-		for (int i = 0; i < getNumberOfFeatures(); i++) {
-
-			if (getFeaturesProducts()[i][productIndex] == 1) {
-
-				sum += getCost()[i];
-			}
-		}
-
-		return sum;
+		return this.productCost[productIndex];
 	}
 	
 	public double getProductImportance(int productIndex) {
-
-		double sum = 0.0;
-
-		for (int i = 0; i < getNumberOfFeatures(); i++) {
-
-			if (getFeaturesProducts()[i][productIndex] == 1) {
-
-				sum += getImportance()[i];
-			}
-		}
-
-		return sum;
+		return this.productImportance[productIndex];
 	}
 	
 	public List<String> getProduct(int productIndex) {
