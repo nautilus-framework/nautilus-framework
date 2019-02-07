@@ -10,7 +10,7 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.plugin.spl.encoding.instance.OldTXTInstanceData;
+import thiagodnf.nautilus.plugin.spl.encoding.instance.AbstractTXTInstanceData;
 
 public class SPLProblem extends NBinaryProblem {
 
@@ -24,7 +24,7 @@ public class SPLProblem extends NBinaryProblem {
 		List<Integer> bitsPerVariable = new ArrayList<>(getNumberOfVariables());
 
 		for (int i = 0; i < getNumberOfVariables(); i++) {
-			bitsPerVariable.add(((OldTXTInstanceData) getInstance()).getNumberOfProducts());
+			bitsPerVariable.add(((AbstractTXTInstanceData) getInstance()).getNumberOfProducts());
 		}
 		
 		setBitsPerVariable(bitsPerVariable);
