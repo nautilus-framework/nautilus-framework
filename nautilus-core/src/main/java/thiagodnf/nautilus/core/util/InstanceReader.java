@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import org.apache.commons.io.FileUtils;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
@@ -18,9 +18,7 @@ public class InstanceReader {
 	
 	protected File filename;
 	
-	protected String content;
-	
-	protected String[] lines;
+	protected List<String> lines;
 	
 	protected String separator = ",";
 	
@@ -31,18 +29,26 @@ public class InstanceReader {
 	 * 
 	 * @param path  the file should be read
 	 */
-	public InstanceReader(Path path) {
+	public InstanceReader(Path path, String separator) {
 		
 		Preconditions.checkNotNull(path, "The path should not be null");
 		Preconditions.checkArgument(Files.exists(path), "The path does not exists");
 
+		this.separator = separator;
+		
 		try {
-			this.content = FileUtils.readFileToString(path.toFile());
+			
+			this.lines = Files.readAllLines(path)
+					.stream()
+					.map(i -> i.trim())
+					.collect(Collectors.toList());
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
 		}
-
-		this.lines = this.content.split("\n");
+	}
+	
+	public InstanceReader(Path path) {
+		this(path, ",");
 	}
 	
 	/**
@@ -51,7 +57,7 @@ public class InstanceReader {
 	 * @return the number of lines
 	 */
 	public int getNumberOfLines(){
-		return this.lines.length;
+		return this.lines.size();
 	}
 	
 	/**
@@ -161,13 +167,17 @@ public class InstanceReader {
 		return matrix;
 	}
 	
+	public void ignoreLine() {
+		readLine();
+	}
+	
 	public String readLine() {
-		
-		if(index >= getNumberOfLines()){
-			return null;
+
+		if (index >= getNumberOfLines()) {
+			throw new IllegalArgumentException("There is no line for reading");
 		}
-				
-		return this.lines[index++].trim();
+
+		return this.lines.get(index++).trim();
 	}
 	
 	public List<String> readLines(int numberOfLines) {
@@ -179,5 +189,42 @@ public class InstanceReader {
 		}
 
 		return lines;
+	}
+	
+	public List<String> readStringValues() {
+
+		String[] parts = readLine().split(separator);
+
+		return Arrays.asList(parts);
+	}
+	
+	public List<Integer> readIntegerValues() {
+
+		List<String> values = readStringValues();
+
+		List<Integer> integerList = new ArrayList<>();
+
+		for (String value : values) {
+			integerList.add(Integer.valueOf(value));
+		}
+
+		return integerList;
+	}
+	
+	public List<Double> readDoubleValues() {
+
+		List<String> values = readStringValues();
+
+		List<Double> doubleList = new ArrayList<>();
+
+		for (String value : values) {
+			doubleList.add(Double.valueOf(value));
+		}
+
+		return doubleList;
+	}
+	
+	public int readIntegerValue() {
+		return readIntegerValues().get(0);
 	}
 }

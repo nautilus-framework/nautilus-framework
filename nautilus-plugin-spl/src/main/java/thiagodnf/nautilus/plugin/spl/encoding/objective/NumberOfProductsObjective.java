@@ -6,7 +6,7 @@ import org.uma.jmetal.util.binarySet.BinarySet;
 
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.plugin.spl.encoding.instance.TXTInstanceData;
+import thiagodnf.nautilus.plugin.spl.encoding.instance.AbstractTXTInstanceData;
 
 public class NumberOfProductsObjective extends AbstractObjective {
 	
@@ -15,30 +15,19 @@ public class NumberOfProductsObjective extends AbstractObjective {
 
 		BinarySolution solution = (BinarySolution) sol;
 		
-		TXTInstanceData data = (TXTInstanceData) instanceData;
+		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
 		
 		BinarySet binarySet = solution.getVariableValue(0) ;
 		
 		int numbersOfProducts = 0;
 
 		for (int i = 0; i < binarySet.getBinarySetLength(); i++) {
-			
 			if (binarySet.get(i)) {
 				numbersOfProducts++;
 			}
 		}
 	    
-		return (double) numbersOfProducts / (double) data.getNumberOfProducts();
-	}
-	
-	@Override
-	public double getMinimumValue() {
-		return 0.0;
-	}
-	
-	@Override
-	public double getMaximumValue() {
-		return 1.0;
+		return (double) numbersOfProducts / (double) instance.getNumberOfProducts();
 	}
 	
 	@Override

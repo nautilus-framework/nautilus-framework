@@ -10,10 +10,10 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
 import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
+import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
-import thiagodnf.nautilus.plugin.spl.encoding.instance.TXTInstanceData;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.AliveMutantsObjective;
 import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
 
@@ -26,11 +26,11 @@ public class TestAliveMutantsObjective {
 	
 	private AbstractObjective objective = new AliveMutantsObjective();
 	
-	public static TXTInstanceData getInstanceData() {
+	public static InstanceData getInstanceData() {
 
 		InstanceDataExtension instanceDataExtension = new SPLInstanceDataExtension();
 
-		return (TXTInstanceData) instanceDataExtension.getInstanceData(path);
+		return instanceDataExtension.getInstanceData(path);
 	}
 	
 	private double evaluate(String binaryString) {

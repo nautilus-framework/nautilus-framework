@@ -11,7 +11,8 @@ import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.gui.Tab;
 import thiagodnf.nautilus.plugin.gui.TableTabContent;
-import thiagodnf.nautilus.plugin.spl.encoding.instance.TXTInstanceData;
+import thiagodnf.nautilus.plugin.spl.encoding.instance.NewTXTInstanceData;
+import thiagodnf.nautilus.plugin.spl.encoding.instance.OldTXTInstanceData;
 import thiagodnf.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
 
 @Extension
@@ -19,7 +20,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 
 	@Override
 	public InstanceData getInstanceData(Path path) {
-		return new TXTInstanceData(path);
+		return new NewTXTInstanceData(path);
 	}
 	
 	@Override
@@ -32,7 +33,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 	@Override
 	public List<Tab> getTabs(InstanceData data) {
 
-		TXTInstanceData c = (TXTInstanceData) data;
+		OldTXTInstanceData c = (OldTXTInstanceData) data;
 
 		List<Tab> tabs = new ArrayList<>();
 
@@ -44,7 +45,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 		return tabs;
 	}
 
-	protected Tab getFeaturesTab(TXTInstanceData data) {
+	protected Tab getFeaturesTab(OldTXTInstanceData data) {
 
 		TableTabContent table = new TableTabContent(Arrays.asList("Feature", "Cost", "Importance"));
 
@@ -53,7 +54,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 		for (int i = 0; i < data.getNumberOfFeatures(); i++) {
 			table.getRows().add(Arrays.asList(
 					features[i],
-					"" + data.getCost()[i],
+					"" + data.getCosts()[i],
 					"" + data.getImportance()[i]
 			));
 		}
@@ -61,7 +62,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 		return new Tab("Features", table);
 	}
 
-	protected Tab getProductsTab(TXTInstanceData data) {
+	protected Tab getProductsTab(OldTXTInstanceData data) {
 
 		TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Feature", "Cost", "Importance"));
 
@@ -76,7 +77,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 		return new Tab("Products", table);
 	}
 	
-	protected Tab getPairwiseCoverageTab(TXTInstanceData data) {
+	protected Tab getPairwiseCoverageTab(OldTXTInstanceData data) {
 
 		TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Covered", "Uncovered", "# of Uncovered"));
 
@@ -99,7 +100,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 		return new Tab("Pairwise Coverate", table);
 	}
 	
-	protected Tab getMutationCoverageTab(TXTInstanceData data) {
+	protected Tab getMutationCoverageTab(OldTXTInstanceData data) {
 
 		TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Dead", "Alive", "# of Alive"));
 

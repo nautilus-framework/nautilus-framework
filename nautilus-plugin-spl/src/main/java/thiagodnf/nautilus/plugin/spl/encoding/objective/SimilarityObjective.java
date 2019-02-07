@@ -6,7 +6,7 @@ import org.uma.jmetal.util.binarySet.BinarySet;
 
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.plugin.spl.encoding.instance.TXTInstanceData;
+import thiagodnf.nautilus.plugin.spl.encoding.instance.AbstractTXTInstanceData;
 
 public class SimilarityObjective extends AbstractObjective {
 	
@@ -17,7 +17,7 @@ public class SimilarityObjective extends AbstractObjective {
 		
 		BinarySet binarySet = solution.getVariableValue(0) ;
 		
-		TXTInstanceData data = (TXTInstanceData) instanceData;
+		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
 		
 		double sum = 0.0;
 		double count = 0.0;
@@ -31,7 +31,7 @@ public class SimilarityObjective extends AbstractObjective {
 					if (binarySet.get(j)) {
                        
 						if (i != j) {
-                            sum += data.getSimilarity(i, j);
+                            sum += instance.getSimilarity(i, j);
                             count++;
                         }
                     }
@@ -44,16 +44,6 @@ public class SimilarityObjective extends AbstractObjective {
 		}
 
 		return (double) sum / (double) count;
-	}
-	
-	@Override
-	public double getMinimumValue() {
-		return 0.0;
-	}
-	
-	@Override
-	public double getMaximumValue() {
-		return 1.0;
 	}
 	
 	@Override

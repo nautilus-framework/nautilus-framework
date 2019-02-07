@@ -3,7 +3,6 @@ package thiagodnf.nautilus.plugin.spl.encoding.instance;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
@@ -12,7 +11,7 @@ import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.util.InstanceReader;
 import thiagodnf.nautilus.core.util.SimilarityUtils;
 
-public class TXTInstanceData extends InstanceData {
+public class OldTXTInstanceData extends InstanceData {
 
 	private int numberOfProducts;
 
@@ -36,8 +35,6 @@ public class TXTInstanceData extends InstanceData {
 
 	private double[][] similarity;
 	
-	private double[][] similarityAmongOptionalFeatures;
-	
 	private double[] importance;
 	
 	private double sumOfImportance;
@@ -46,7 +43,7 @@ public class TXTInstanceData extends InstanceData {
 	
 	private double[] productImportance;
 
-	public TXTInstanceData(Path path) {
+	public OldTXTInstanceData(Path path) {
 
 		Preconditions.checkNotNull(path, "The path should not be null");
 		Preconditions.checkArgument(Files.exists(path), "The path does not exists");
@@ -123,7 +120,7 @@ public class TXTInstanceData extends InstanceData {
 
 			if (getFeaturesProducts()[i][productIndex] == 1) {
 
-				sum += getCost()[i];
+				sum += getCosts()[i];
 			}
 		}
 
@@ -247,30 +244,10 @@ public class TXTInstanceData extends InstanceData {
 		return this.similarity;
 	}
 
-	public double[] getCost() {
-		return costs;
-	}
-
-	public void setCost(double[] cost) {
-		this.costs = cost;
-	}
-
 	public double getSumOfCosts() {
 		return sumOfCosts;
 	}
 	
-	public double[][] getSimilarityAmongOptionalFeatures() {
-		return similarityAmongOptionalFeatures;
-	}
-	
-	public double getSimilarityAmongOptionalFeatures(int i, int j) {
-		return getSimilarityAmongOptionalFeatures()[i][j];
-	}
-
-	public void setSimilarityAmongOptionalFeatures(double[][] similarityAmongOptionalFeatures) {
-		this.similarityAmongOptionalFeatures = similarityAmongOptionalFeatures;
-	}
-
 	public void setSumOfCosts(double sumOfCosts) {
 		this.sumOfCosts = sumOfCosts;
 	}
