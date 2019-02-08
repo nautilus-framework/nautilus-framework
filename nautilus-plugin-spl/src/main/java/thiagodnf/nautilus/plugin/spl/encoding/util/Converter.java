@@ -110,23 +110,7 @@ public class Converter {
 
 	public static void main(String[] args) {
 		
-//		Path input = Paths.get("src", "test", "resources", "old-eshop.txt");
-//		
-//		Path output = Paths.get("src", "test", "resources", "eshop.txt");
-//
-//		InstanceDataExtension instanceDataExtension = new SPLInstanceDataExtension();
-//
-//		OldTXTInstanceData instance = (OldTXTInstanceData) instanceDataExtension.getInstanceData(input);
-//		
-//		String content = toNewInstanceFormat(instance);
-//
-//		try {
-//			FileUtils.write(output.toFile(), content);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-//		System.out.println("Done");
+
 		
 		
 		
