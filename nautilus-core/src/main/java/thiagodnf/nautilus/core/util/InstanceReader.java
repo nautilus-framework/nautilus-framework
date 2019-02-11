@@ -174,7 +174,7 @@ public class InstanceReader {
 	public String readLine() {
 
 		if (index >= getNumberOfLines()) {
-			throw new IllegalArgumentException("There is no line for reading");
+			return null;
 		}
 
 		return this.lines.get(index++).trim();

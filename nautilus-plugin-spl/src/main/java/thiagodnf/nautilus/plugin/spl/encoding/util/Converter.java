@@ -1,21 +1,25 @@
 package thiagodnf.nautilus.plugin.spl.encoding.util;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import thiagodnf.nautilus.plugin.spl.encoding.instance.NewTXTInstanceData;
+import org.apache.commons.io.FileUtils;
+
 import thiagodnf.nautilus.plugin.spl.encoding.instance.OldTXTInstanceData;
 
 public class Converter {
 	
-	public static String toNewInstanceFormat(OldTXTInstanceData instance) {
+	public static String getPartOne(OldTXTInstanceData instance) {
 		
-		StringBuffer buffer = new StringBuffer();
+		System.out.println("Processing part 1...");
+		
+		StringBuilder buffer = new StringBuilder();
 		
 		buffer.append("#number-of-products").append("\n");
 		buffer.append(instance.getNumberOfProducts()).append("\n");
@@ -101,35 +105,69 @@ public class Converter {
 			}
 		}
 		
+		buffer.append("\n");
+		
 		return buffer.toString();
 	}
 	
-	private static Path oldPath = Paths.get("src", "test", "resources", "old-eshop.txt");
-	
-	private static Path newPath = Paths.get("src", "test", "resources", "eshop.txt");
+	public static void getPartTwo(File output, OldTXTInstanceData instance) {
+		
+		System.out.println("Processing part 2...");
+		
+		write(output, "#similarities\n", true);
+		
+		double[][] similarity = instance.getSimilarity();
 
-	public static void main(String[] args) {
-		
+		for (int i = 0; i < similarity.length; i++) {
 
-		
-		
-		
-		for(int i=0;i<30;i++) {
-//			runOld();
-			runNew();
+			for (int j = i; j < similarity[i].length; j++) {
+
+				if (i != j) {
+					
+					BigDecimal bd = new BigDecimal(similarity[i][j]);
+
+					bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+					String content = i + " " + j + " " + bd.doubleValue();
+					
+					if (j + 1 != similarity[i].length) {
+						//lines.add(i + " " + j + " " + bd.doubleValue() + "");
+						write(output, content+"\n", true);
+					} else {
+						write(output, content, true);
+					}
+						
+						
+				}
+			}
+
+			if (i + 1 != similarity.length) {
+				write(output, "\n", true);
+			}
 		}
 		
+		//lines.remove(lines.size()-1);
+		
+		//return lines;
+		
+//		String result = "";
+//		
+//		for(String line : lines) {
+//			result += line;
+//		}
+//		
+//		return result;
 	}
 	
-	public static void runOld() {
-		double startOld = System.currentTimeMillis();
-		new OldTXTInstanceData(oldPath);
-		System.out.println("Old: " + (System.currentTimeMillis() - startOld));
+	public static void write(File output, String content) {
+		write(output, content, true);
 	}
-	
-	public static void runNew() {
-		double startNew = System.currentTimeMillis();
-		new NewTXTInstanceData(newPath);
-		System.out.println("New: " + (System.currentTimeMillis() - startNew));
+
+	public static void write(File output, String content, boolean append) {
+		try {
+			FileUtils.write(output, content, append);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -30,7 +30,7 @@ public class NSGAIIRunner {
 	
 	public static void main(String[] args) {
 		
-		System.out.println("Running...");
+		System.out.println("Loading...");
 		
 		List<AbstractObjective> objectives = new SPLObjectiveExtension().getObjectives();
 		InstanceData instance = new SPLInstanceDataExtension().getInstanceData(path);
@@ -44,9 +44,11 @@ public class NSGAIIRunner {
 
 	    Algorithm<List<BinarySolution>> algorithm = new NSGAIIBuilder<BinarySolution>(problem, crossover, mutation)
 	        .setSelectionOperator(selection)
-	        .setMaxEvaluations(1000)
+	        .setMaxEvaluations(10000)
 	        .setPopulationSize(100)
 	        .build() ;
+	    
+	    System.out.println("Optimizing...");
 	    
 	    new AlgorithmRunner.Executor(algorithm).execute() ;
 	    
@@ -55,9 +57,6 @@ public class NSGAIIRunner {
 	    for(BinarySolution solution : population) {
 	    	System.out.println(Arrays.toString(solution.getObjectives()));
 	    }
-	    
-	    System.out.println(population);
-	    
 	    
 	    System.out.println("Done");
 	}

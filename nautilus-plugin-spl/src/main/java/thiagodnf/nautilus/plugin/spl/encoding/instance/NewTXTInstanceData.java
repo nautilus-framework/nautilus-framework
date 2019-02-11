@@ -111,6 +111,28 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 		}
 		
 		this.similarity = calculateSimilarity(numberOfProducts);
+		
+//		reader.ignoreLine();
+//		
+//		this.similarity = new double[numberOfProducts][numberOfProducts];
+//		
+//		String line = reader.readLine();
+//		
+//		while(line != null) {
+//		
+//			String[] parts = line.split(" ");
+//			
+//			int i = Integer.valueOf(parts[0]);
+//			int j = Integer.valueOf(parts[1]);
+//			double val = Double.valueOf(parts[2]);
+//			
+//			this.similarity[i][j] = val;
+//			this.similarity[j][i] = this.similarity[i][j];
+//			
+//			line = reader.readLine();
+//		}
+		
+		System.out.println("File read");
 	}
 	
 	@Override

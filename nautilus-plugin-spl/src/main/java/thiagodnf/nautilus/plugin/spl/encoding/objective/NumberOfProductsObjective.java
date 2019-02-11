@@ -19,15 +19,19 @@ public class NumberOfProductsObjective extends AbstractObjective {
 		
 		BinarySet binarySet = solution.getVariableValue(0) ;
 		
-		int numbersOfProducts = 0;
-
-		for (int i = 0; i < binarySet.getBinarySetLength(); i++) {
-			if (binarySet.get(i)) {
-				numbersOfProducts++;
-			}
-		}
-	    
-		return (double) numbersOfProducts / (double) instance.getNumberOfProducts();
+//		Old Code. Before We ran over all bit inside the bitset to get
+//		the number of bits set as true. Now, you don't need to do that. 
+//		You need just to get the cardinality of it.
+//		
+//		int numbersOfProducts = 0;
+//
+//		for (int i = 0; i < binarySet.getBinarySetLength(); i++) {
+//			if (binarySet.get(i)) {
+//				numbersOfProducts++;
+//			}
+//		}
+		
+		return (double) binarySet.cardinality() / (double) instance.getNumberOfProducts();
 	}
 	
 	@Override
