@@ -132,7 +132,7 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 //			line = reader.readLine();
 //		}
 		
-		System.out.println("File read");
+//		System.out.println("File read");
 	}
 	
 	@Override

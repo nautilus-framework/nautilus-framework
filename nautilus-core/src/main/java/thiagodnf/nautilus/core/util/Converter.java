@@ -6,10 +6,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.point.PointSolution;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import thiagodnf.nautilus.core.algorithm.RNSGAII.PointSolutionUtils;
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
+import thiagodnf.nautilus.core.serializer.BinarySetDeserializer;
+import thiagodnf.nautilus.core.serializer.BinarySetSerializer;
+import thiagodnf.nautilus.core.serializer.NSolutionDeserializer;
+import thiagodnf.nautilus.core.serializer.NSolutionSerializer;
 
 public class Converter {
 	
@@ -109,5 +118,39 @@ public class Converter {
 		}
 
 		return solution;
+	}
+	
+	public static double round(double value, int places) {
+	    
+		if (places < 0) throw new IllegalArgumentException();
+
+	    long factor = (long) Math.pow(10, places);
+	  
+	    value = value * factor;
+	    
+	    long tmp = Math.round(value);
+	    
+	    return (double) tmp / factor;
+	}
+	
+	public static String toJson(Object object) {
+		
+		Gson gson = new GsonBuilder()
+				.serializeSpecialFloatingPointValues()
+				.registerTypeAdapter(NSolution.class, new NSolutionSerializer())
+				.registerTypeAdapter(BinarySet.class, new BinarySetSerializer())
+				.create();
+		
+		return gson.toJson(object);
+	}
+	
+	public static <T> T fromJson(String content, Class<T> classOfT) {
+		
+		Gson gson = new GsonBuilder()
+				.registerTypeAdapter(NSolution.class, new NSolutionDeserializer())
+				.registerTypeAdapter(BinarySet.class, new BinarySetDeserializer())
+				.create();
+		
+		return gson.fromJson(content, classOfT);
 	}
 }
