@@ -16,7 +16,7 @@ public class ByParetoFrontValuesNormalize extends AbstractNormalize {
 	 * @param solutions a list of solutions
 	 * @return a list of minimum values for each objective
 	 */
-	public double[] getMinimumValues(List<AbstractObjective> objectives, List<NSolution<?>> solutions) {
+	public double[] getMinimumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
 
 		int numberOfObjectives = solutions.get(0).getNumberOfObjectives();
 
@@ -46,7 +46,7 @@ public class ByParetoFrontValuesNormalize extends AbstractNormalize {
 	 * @param solutions a list of solutions
 	 * @return a list of maximum values for each objective
 	 */
-	public double[] getMaximumValues(List<AbstractObjective> objectives, List<NSolution<?>> solutions) {
+	public double[] getMaximumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
 
 		int numberOfObjectives = solutions.get(0).getNumberOfObjectives();
 

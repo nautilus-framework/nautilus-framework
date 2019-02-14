@@ -1,7 +1,10 @@
 package thiagodnf.nautilus.core.normalize;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
@@ -51,6 +54,26 @@ public abstract class AbstractNormalize {
 		return normalizedSolutions;
 	}
 	
+	public Solution<?> normalize(List<AbstractObjective> objectives, Solution<?> solution) {
+		return this.normalize(
+			objectives, 
+			solution, 
+			getMinimumValues(objectives, Arrays.asList(solution)),
+			getMaximumValues(objectives, Arrays.asList(solution))
+		);
+	}
+	
+	public Solution<?> normalize(List<AbstractObjective> objectives, Solution<?> solution, double[] minValues, double[] maxValues) {
+		
+		Solution<?> copy = (Solution<?>) solution.copy();
+
+		for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
+			copy.setObjective(i, Normalizer.normalize(solution.getObjective(i), minValues[i], maxValues[i]));
+		}
+
+		return copy;
+	}
+	
 	public String toString() {
 		return getName();
 	}
@@ -64,7 +87,7 @@ public abstract class AbstractNormalize {
 	 * @param solutions a list of solutions
 	 * @return a list of minimum values for each objective
 	 */
-	public abstract double[] getMinimumValues(List<AbstractObjective> objectives, List<NSolution<?>> solutions) ;
+	public abstract double[] getMinimumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) ;
 	
 	/**
 	 * This method returns an array contains the maximum values 
@@ -73,5 +96,5 @@ public abstract class AbstractNormalize {
 	 * @param solutions a list of solutions
 	 * @return a list of maximum values for each objective
 	 */
-	public abstract double[] getMaximumValues(List<AbstractObjective> objectives, List<NSolution<?>> solutions) ;
+	public abstract double[] getMaximumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) ;
 }
