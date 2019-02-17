@@ -7,10 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
 
 public class InstanceReader {
 
@@ -20,10 +22,11 @@ public class InstanceReader {
 	
 	protected List<String> lines;
 	
-	protected String separator = ",";
+	protected String separator = " ";
 	
 	protected int index = 0;
 	
+	protected Splitter splitter = Splitter.on(separator);
 	/**
 	 * Constructor 
 	 * 
@@ -159,9 +162,26 @@ public class InstanceReader {
 		String[][] matrix = new String[numberOfLines][];
 
 		List<String> lines = readLines(numberOfLines);
-
+		
 		for (int i = 0; i < lines.size(); i++) {
-			matrix[i] = lines.get(i).split(separator);
+			
+			List<String> parts = new LinkedList<>();
+			
+			Iterable<String> it = splitter.split(lines.get(i));
+			
+			for(String s: it){
+				parts.add(s);
+			}
+			
+			String[] m = new String[parts.size()];
+
+			for (int j = 0; j < parts.size(); j++) {
+				m[j] = parts.get(j);
+			}
+			
+			matrix[i] = m;
+			
+//			matrix[i] = lines.get(i).split(separator);
 		}
 
 		return matrix;

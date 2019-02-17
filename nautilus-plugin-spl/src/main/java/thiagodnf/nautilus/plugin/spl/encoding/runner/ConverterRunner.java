@@ -16,7 +16,7 @@ public class ConverterRunner {
 		
 		System.out.println("Converting...");
 		
-		String file = "drupal";
+		String file = "smarthome";
 		
 		Path input = Paths.get("src", "main", "resources", "old-instances", "old-" + file + ".txt");
 
