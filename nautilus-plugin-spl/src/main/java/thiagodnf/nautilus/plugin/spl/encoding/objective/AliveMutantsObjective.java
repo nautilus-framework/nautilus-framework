@@ -13,22 +13,45 @@ import thiagodnf.nautilus.plugin.spl.encoding.instance.AbstractTXTInstanceData;
 
 public class AliveMutantsObjective extends AbstractObjective {
 
+	protected Set<Integer> deadMutants;
+	
+//	@Override
+//	public double calculate(InstanceData instanceData, Solution<?> sol) {
+//return 0.0;
+//		BinarySolution solution = (BinarySolution) sol;
+//		
+//		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
+//
+//		BinarySet binarySet = solution.getVariableValue(0) ;
+//		
+//		Set<Integer> deadMutants = new HashSet<>();
+//
+//		for (int i = 0; i < binarySet.getBinarySetLength(); i++) {
+//			if (binarySet.get(i)) {
+//				deadMutants.addAll(instance.getMutants(i));
+//			}
+//		}
+//
+//		return 1.0 - (double) deadMutants.size() / (double) instance.getNumberOfMutants();
+//	}
+	
+	@Override
+	public void beforeProcess(InstanceData instanceData) {
+		this.deadMutants = new HashSet<>();
+	}
+	
+	@Override
+	public void process(InstanceData instanceData, Solution<?> sol, int i) {
+		
+		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
+		
+		deadMutants.addAll(instance.getMutants(i));
+	}
+	
 	@Override
 	public double calculate(InstanceData instanceData, Solution<?> sol) {
 
-		BinarySolution solution = (BinarySolution) sol;
-		
 		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
-
-		BinarySet binarySet = solution.getVariableValue(0) ;
-		
-		Set<Integer> deadMutants = new HashSet<>();
-
-		for (int i = 0; i < binarySet.getBinarySetLength(); i++) {
-			if (binarySet.get(i)) {
-				deadMutants.addAll(instance.getMutants(i));
-			}
-		}
 
 		return 1.0 - (double) deadMutants.size() / (double) instance.getNumberOfMutants();
 	}

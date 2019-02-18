@@ -66,10 +66,23 @@ public abstract class AbstractObjective {
 
 		return value;
 	}
+	
+	public void beforeProcess(InstanceData instanceData) {
+		
+	}
+	
+	public double calculate(InstanceData instanceData) {
+		return 0.0;
+	}
+	
 
 	public abstract String getName();
 	
 	public abstract String getGroupName();
 	
-	public abstract double calculate(InstanceData data, Solution<?> solution);	
+	public abstract double calculate(InstanceData data, Solution<?> solution);
+
+	public void process(InstanceData instance, Solution<?> sol, int i) {
+		// TODO Auto-generated method stub
+	}		
 }

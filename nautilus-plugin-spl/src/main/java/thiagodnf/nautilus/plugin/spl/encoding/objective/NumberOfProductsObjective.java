@@ -10,14 +10,18 @@ import thiagodnf.nautilus.plugin.spl.encoding.instance.AbstractTXTInstanceData;
 
 public class NumberOfProductsObjective extends AbstractObjective {
 	
-	@Override
-	public double calculate(InstanceData instanceData, Solution<?> sol) {
-
-		BinarySolution solution = (BinarySolution) sol;
+	protected int numbersOfProducts;
+	
+//	@Override
+//	public double calculate(InstanceData instanceData, Solution<?> sol) {
+//
+//		return 0.0;
 		
-		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
-		
-		BinarySet binarySet = solution.getVariableValue(0) ;
+//		BinarySolution solution = (BinarySolution) sol;
+//		
+//		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
+//		
+//		BinarySet binarySet = solution.getVariableValue(0) ;
 		
 //		Old Code. Before We ran over all bit inside the bitset to get
 //		the number of bits set as true. Now, you don't need to do that. 
@@ -31,7 +35,25 @@ public class NumberOfProductsObjective extends AbstractObjective {
 //			}
 //		}
 		
-		return (double) binarySet.cardinality() / (double) instance.getNumberOfProducts();
+//		return (double) binarySet.cardinality() / (double) instance.getNumberOfProducts();
+//	}
+	
+	@Override
+	public void beforeProcess(InstanceData instanceData) {
+		this.numbersOfProducts = 0;
+	}
+	
+	@Override
+	public void process(InstanceData instanceData, Solution<?> sol, int i) {
+		numbersOfProducts++;
+	}
+	
+	@Override
+	public double calculate(InstanceData instanceData, Solution<?> sol) {
+		
+		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
+		
+		return (double) numbersOfProducts / (double) instance.getNumberOfProducts();
 	}
 	
 	@Override
