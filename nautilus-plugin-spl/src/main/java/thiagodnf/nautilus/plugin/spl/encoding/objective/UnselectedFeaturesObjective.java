@@ -37,7 +37,7 @@ public class UnselectedFeaturesObjective extends AbstractObjective {
 //	}
 	
 	@Override
-	public void beforeProcess(InstanceData instanceData) {
+	public void beforeProcess(InstanceData instanceData, Solution<?> sol) {
 		this.selectedFeatures = new HashSet<>();
 	}
 	

@@ -1,6 +1,7 @@
 package thiagodnf.nautilus.plugin.spl.encoding.objective;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.solution.Solution;
@@ -15,6 +16,8 @@ public class SimilarityObjective extends AbstractObjective {
 	protected double sum;
 	
 	protected double count;
+	
+	protected List<Integer> selectedProducts;
 	
 //	@Override
 //	public double calculate(InstanceData instanceData, Solution<?> sol) {
@@ -55,35 +58,55 @@ public class SimilarityObjective extends AbstractObjective {
 //	}
 	
 	@Override
-	public void beforeProcess(InstanceData instanceData) {
+	public void beforeProcess(InstanceData instanceData, Solution<?> sol) {
 		this.sum = 0.0;
 		this.count = 0.0;
+		this.selectedProducts = new ArrayList<>();
 	}
 	
 	@Override
 	public void process(InstanceData instanceData, Solution<?> sol, int i) {
 		
-		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
+		this.selectedProducts.add(i);
 		
-		BinarySolution solution = (BinarySolution) sol;
-		
-		BinarySet binarySet = solution.getVariableValue(0) ;
-		
-		for (int j = i; j < binarySet.getBinarySetLength(); j++) {
-            
-			if (binarySet.get(j)) {
-               
-				if (i != j) {
-                    sum += instance.getSimilarity(i, j);
-                    count++;
-                }
-            }
-        }
+//		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
+//		
+//		BinarySolution solution = (BinarySolution) sol;
+//		
+//		BinarySet binarySet = solution.getVariableValue(0) ;
+//		
+//		for (int j = i; j < binarySet.getBinarySetLength(); j++) {
+//            
+//			if (binarySet.get(j)) {
+//               
+//				if (i != j) {
+//                    sum += instance.getSimilarity(i, j);
+//                    count++;
+//                }
+//            }
+//        }
 	}
 	
 	@Override
 	public double calculate(InstanceData instanceData, Solution<?> sol) {
 
+		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
+		
+		for (int i = 0; i < selectedProducts.size(); i++) {
+
+			for (int j = i; j < selectedProducts.size(); j++) {
+
+				if (i != j) {
+					
+					int prodI = selectedProducts.get(i);
+					int prodJ = selectedProducts.get(j);
+					
+					sum += instance.getSimilarity(prodI, prodJ);
+					count++;
+				}
+			}
+		}
+		
 		if (count == 0.0) {
 			return 1.0;
 		}

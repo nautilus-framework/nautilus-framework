@@ -1,12 +1,8 @@
 package thiagodnf.nautilus.plugin.spl.encoding.instance;
 
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.valid4j.Assertive.ensure;
 import static org.valid4j.Assertive.require;
 
 import java.nio.file.Files;
@@ -111,28 +107,6 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 		}
 		
 		this.similarity = calculateSimilarity(numberOfProducts);
-		
-//		reader.ignoreLine();
-//		
-//		this.similarity = new double[numberOfProducts][numberOfProducts];
-//		
-//		String line = reader.readLine();
-//		
-//		while(line != null) {
-//		
-//			String[] parts = line.split(" ");
-//			
-//			int i = Integer.valueOf(parts[0]);
-//			int j = Integer.valueOf(parts[1]);
-//			double val = Double.valueOf(parts[2]);
-//			
-//			this.similarity[i][j] = val;
-//			this.similarity[j][i] = this.similarity[i][j];
-//			
-//			line = reader.readLine();
-//		}
-		
-//		System.out.println("File read");
 	}
 	
 	@Override
@@ -162,17 +136,10 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 	
 	@Override
 	public List<Integer> getProduct(int index) {
-
-		require(index, greaterThanOrEqualTo(0));
-		require(index, lessThan(getNumberOfProducts()));
-		
 		return products.get(index);
 	}
 	
 	public List<String> getProductWithFeatures(int index) {
-
-		require(index, greaterThanOrEqualTo(0));
-		require(index, lessThan(getNumberOfProducts()));
 
 		List<String> features = new ArrayList<>();
 
@@ -180,16 +147,10 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 			features.add(getFeatures().get(featureId));
 		}
 
-		ensure(features, not(nullValue()));
-		ensure(features, not(empty()));
-
 		return features;
 	}
 	
 	protected double calculateProductCost(int index) {
-
-		require(index, greaterThanOrEqualTo(0));
-		require(index, lessThan(getNumberOfProducts()));
 
 		double sum = 0.0;
 
@@ -197,15 +158,10 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 			sum += costs.get(featureId);
 		}
 
-		ensure(sum, greaterThanOrEqualTo(0.0));
-		
 		return sum;
 	}
 	
 	protected double calculateProductImportance(int index) {
-
-		require(index, greaterThanOrEqualTo(0));
-		require(index, lessThan(getNumberOfProducts()));
 
 		double sum = 0.0;
 
@@ -213,14 +169,10 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 			sum += importances.get(featureId);
 		}
 
-		ensure(sum, greaterThanOrEqualTo(0.0));
-
 		return sum;
 	}
 	
 	protected double[][] calculateSimilarity(int size) {
-
-		require(size, greaterThanOrEqualTo(0));
 
 		double[][] similarity = new double[size][size];
 
@@ -245,10 +197,6 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 
 	@Override
 	public double getProductCost(int index) {
-
-		require(index, greaterThanOrEqualTo(0));
-		require(index, lessThan(getNumberOfProducts()));
-
 		return this.productCosts.get(index);
 	}
 
@@ -259,10 +207,6 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 
 	@Override
 	public double getProductImportance(int index) {
-		
-		require(index, greaterThanOrEqualTo(0));
-		require(index, lessThan(getNumberOfProducts()));
-
 		return this.productImportances.get(index);
 	}
 
@@ -273,30 +217,16 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 	
 	@Override
 	public double getSimilarity(int i, int j) {
-		
-		require(i, greaterThanOrEqualTo(0));
-		require(i, lessThan(getNumberOfProducts()));
-		require(j, greaterThanOrEqualTo(0));
-		require(j, lessThan(getNumberOfProducts()));
-		
 		return this.similarity[i][j];
 	}
 
 	@Override
 	public List<Integer> getMutants(int index) {
-		
-		require(index, greaterThanOrEqualTo(0));
-		require(index, lessThan(getNumberOfProducts())); 
-		
 		return this.mutants.get(index);
 	}
 
 	@Override
 	public List<Integer> getPairs(int index) {
-	
-		require(index, greaterThanOrEqualTo(0));
-		require(index, lessThan(getNumberOfProducts())); 
-		
 		return this.pairs.get(index);
 	}
 }

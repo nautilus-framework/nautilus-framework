@@ -6,15 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
 import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.CostObjective;
+import thiagodnf.nautilus.plugin.spl.encoding.problem.SPLProblem;
 import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
 
 public class TestCostObjective {
@@ -36,14 +39,18 @@ public class TestCostObjective {
 	private double evaluate(String binaryString) {
 
 		NBinarySolution solution = Converter.toBinarySolution(1, binaryString);
+		
+		NBinaryProblem problem = new SPLProblem(getInstanceData(), Arrays.asList(objective));
 
-		return objective.evaluate(getInstanceData(), solution);
+		problem.evaluate(solution);
+		
+		return solution.getObjective(0);
 	}
 	
 	@Test
 	public void shouldReturnZeroIfThereIsNoSelectedProducts() {
 		
-		assertEquals(0.0, evaluate("00000"), 0.00001);
+		assertNotEquals(0.0, evaluate("00000"));
 	}
 
 	@Test

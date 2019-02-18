@@ -36,7 +36,7 @@ public class AliveMutantsObjective extends AbstractObjective {
 //	}
 	
 	@Override
-	public void beforeProcess(InstanceData instanceData) {
+	public void beforeProcess(InstanceData instanceData, Solution<?> sol) {
 		this.deadMutants = new HashSet<>();
 	}
 	

@@ -67,7 +67,15 @@ public abstract class AbstractObjective {
 		return value;
 	}
 	
-	public void beforeProcess(InstanceData instanceData) {
+	public void beforeProcess(InstanceData instanceData, Solution<?> sol) {
+		
+	}
+	
+	public void process(InstanceData instance, Solution<?> sol, int i) {
+		
+	}
+	
+	public void afterProcess(InstanceData instanceData, Solution<?> sol) {
 		
 	}
 	
@@ -82,7 +90,5 @@ public abstract class AbstractObjective {
 	
 	public abstract double calculate(InstanceData data, Solution<?> solution);
 
-	public void process(InstanceData instance, Solution<?> sol, int i) {
-		// TODO Auto-generated method stub
-	}		
+			
 }

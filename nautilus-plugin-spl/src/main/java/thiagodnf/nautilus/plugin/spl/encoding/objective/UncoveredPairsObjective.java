@@ -37,7 +37,7 @@ public class UncoveredPairsObjective extends AbstractObjective {
 //	}
 	
 	@Override
-	public void beforeProcess(InstanceData instanceData) {
+	public void beforeProcess(InstanceData instanceData, Solution<?> sol) {
 		this.coveredPairs = new HashSet<>();
 	}
 	

@@ -37,7 +37,7 @@ public class CostObjective extends AbstractObjective {
 //	}
 	
 	@Override
-	public void beforeProcess(InstanceData instanceData) {
+	public void beforeProcess(InstanceData instanceData, Solution<?> sol) {
 		this.sum = 0.0;
 	}
 	
@@ -51,7 +51,10 @@ public class CostObjective extends AbstractObjective {
 	
 	@Override
 	public double calculate(InstanceData instanceData, Solution<?> sol) {
-		return sum;
+		
+		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
+		
+		return (double) sum / (double) instance.getSumOfCosts();
 	}
 	
 	@Override

@@ -39,7 +39,7 @@ public class NumberOfProductsObjective extends AbstractObjective {
 //	}
 	
 	@Override
-	public void beforeProcess(InstanceData instanceData) {
+	public void beforeProcess(InstanceData instanceData, Solution<?> sol) {
 		this.numbersOfProducts = 0;
 	}
 	
