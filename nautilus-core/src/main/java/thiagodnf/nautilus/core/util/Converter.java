@@ -1,8 +1,5 @@
 package thiagodnf.nautilus.core.util;
 
-import static org.hamcrest.Matchers.notNullValue;
-import static org.valid4j.Assertive.require;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -159,7 +156,7 @@ public class Converter {
 	
 	public static String getObjectivesValuesAsString(Solution<?> solution, String separator) {
 		
-		require(solution, notNullValue());
+//		require(solution, notNullValue());
 		
 		return Arrays.stream(solution.getObjectives())
 				.mapToObj(i -> String.valueOf(i))

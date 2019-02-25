@@ -3,7 +3,14 @@ package thiagodnf.nautilus.plugin.spl.encoding.instance;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.valid4j.Assertive.require;
+//import static org.valid4j.Assertive.require;
+
+//import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+//import static org.hamcrest.Matchers.lessThan;
+import static org.jvalidation.Assertive.require;
+import static org.jvalidation.Matchers.greaterThanOrEqualTo;
+import static org.jvalidation.Matchers.lessThan;
+import static org.jvalidation.Matchers.between;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,8 +55,8 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 	
 	public NewTXTInstanceData(Path path) {
 
-		require(path, not(nullValue()));
-		require(Files.exists(path), equalTo(true));
+//		require(path, not(nullValue()));
+//		require(Files.exists(path), equalTo(true));
 		
 		this.products = new ArrayList<>();
 		this.mutants = new ArrayList<>();
@@ -217,6 +224,10 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 	
 	@Override
 	public double getSimilarity(int i, int j) {
+		
+		require(i, between(0, getNumberOfProducts() - 1));
+		require(j, between(0, getNumberOfProducts() - 1));
+	
 		return this.similarity[i][j];
 	}
 

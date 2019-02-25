@@ -49,6 +49,8 @@ public abstract class NBinaryProblem extends NProblem<BinarySolution> implements
 	@Override
 	public void evaluate(BinarySolution solution) {
 
+		long startTime = System.currentTimeMillis();
+		
 		BinarySet binarySet = solution.getVariableValue(0);
 
 		for (int i = 0; i < objectives.size(); i++) {
@@ -72,6 +74,10 @@ public abstract class NBinaryProblem extends NProblem<BinarySolution> implements
 		for (int i = 0; i < objectives.size(); i++) {
 			solution.setObjective(i, objectives.get(i).evaluate(instance, solution));
 		}
+		
+		long endTime = System.currentTimeMillis() - startTime;
+		
+		System.out.println(endTime);
 	}
 	
 	@Override
