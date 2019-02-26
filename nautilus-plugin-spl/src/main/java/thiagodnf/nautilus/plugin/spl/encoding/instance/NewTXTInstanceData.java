@@ -33,6 +33,8 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 	
 	protected List<String> features;
 	
+	protected List<String> mandatoryFeatures;
+	
 	protected List<List<Integer>> products;
 	
 	protected List<List<Integer>> mutants;
@@ -80,6 +82,9 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 		
 		reader.ignoreLine();
 		this.features = reader.readStringValues();
+		
+		reader.ignoreLine();
+		this.mandatoryFeatures = reader.readStringValues();
 		
 		reader.ignoreLine();
 		for (int i = 0; i < getNumberOfProducts(); i++) {
@@ -225,8 +230,8 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 	@Override
 	public double getSimilarity(int i, int j) {
 		
-		require(i, between(0, getNumberOfProducts() - 1));
-		require(j, between(0, getNumberOfProducts() - 1));
+//		require(i, between(0, getNumberOfProducts() - 1));
+//		require(j, between(0, getNumberOfProducts() - 1));
 	
 		return this.similarity[i][j];
 	}

@@ -8,6 +8,8 @@
 202
 #features
 EShop Catalogue Info Description Payment BankDraft CreditCard Visa AmericanExpress Security High GUI PC Banners Offers Price Search Advanced Medium Basic Image Mobile
+#mandatory-features
+EShop Payment GUI Catalogue Info
 #products
 0 1 4 5 11 12
 0 1 4 5 11 12 14

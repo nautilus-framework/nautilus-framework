@@ -5,6 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.uma.jmetal.problem.BinaryProblem;
+import org.uma.jmetal.problem.IntegerProblem;
+import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.BinarySolution;
+import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.point.PointSolution;
@@ -162,5 +167,21 @@ public class Converter {
 				.mapToObj(i -> String.valueOf(i))
 				.reduce((i, a) -> i + separator + a)
 				.get();
+	}
+	
+	
+	public static Solution<?> toSolutionWithOutObjectives(Problem<?> problem, Solution<?> solution) {
+
+		Solution<?> newSolution = (Solution<?>) problem.createSolution();
+
+		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
+			if(problem instanceof IntegerProblem) {
+				((IntegerSolution) newSolution).setVariableValue(i, ((IntegerSolution) solution).getVariableValue(i));
+			}else if(problem instanceof BinaryProblem) {
+				((BinarySolution) newSolution).setVariableValue(i, ((BinarySolution)solution).getVariableValue(i));
+			}
+		}
+
+		return newSolution;
 	}
 }
