@@ -8,6 +8,8 @@
 5
 #features
 TEST User DAPI Interface GUI
+#mandatory-features
+TEST User
 #products
 0 1 4
 0 1 2 4
