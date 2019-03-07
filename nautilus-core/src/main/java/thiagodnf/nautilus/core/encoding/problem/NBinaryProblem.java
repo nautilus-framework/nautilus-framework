@@ -49,7 +49,7 @@ public abstract class NBinaryProblem extends NProblem<BinarySolution> implements
 	@Override
 	public void evaluate(BinarySolution solution) {
 
-		//long startTime = System.currentTimeMillis();
+//		long startTime = System.currentTimeMillis();
 		
 		BinarySet binarySet = solution.getVariableValue(0);
 

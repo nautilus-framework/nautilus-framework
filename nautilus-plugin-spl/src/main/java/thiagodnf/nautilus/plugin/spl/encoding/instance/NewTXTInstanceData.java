@@ -8,9 +8,6 @@ import static org.hamcrest.Matchers.nullValue;
 //import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 //import static org.hamcrest.Matchers.lessThan;
 import static org.jvalidation.Assertive.require;
-import static org.jvalidation.Matchers.greaterThanOrEqualTo;
-import static org.jvalidation.Matchers.lessThan;
-import static org.jvalidation.Matchers.between;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -230,9 +227,9 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 	@Override
 	public double getSimilarity(int i, int j) {
 		
-//		require(i, between(0, getNumberOfProducts() - 1));
-//		require(j, between(0, getNumberOfProducts() - 1));
-	
+//		require(i).isInteger().between(0, getNumberOfProducts() - 1);
+//		require(j).isInteger().between(0, getNumberOfProducts() - 1);
+
 		return this.similarity[i][j];
 	}
 

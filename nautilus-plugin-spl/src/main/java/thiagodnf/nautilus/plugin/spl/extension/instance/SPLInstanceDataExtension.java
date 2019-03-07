@@ -33,7 +33,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 	@Override
 	public List<Tab> getTabs(InstanceData data) {
 
-		OldTXTInstanceData c = (OldTXTInstanceData) data;
+		NewTXTInstanceData c = (NewTXTInstanceData) data;
 
 		List<Tab> tabs = new ArrayList<>();
 
@@ -45,24 +45,24 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 		return tabs;
 	}
 
-	protected Tab getFeaturesTab(OldTXTInstanceData data) {
+	protected Tab getFeaturesTab(NewTXTInstanceData data) {
 
 		TableTabContent table = new TableTabContent(Arrays.asList("Feature", "Cost", "Importance"));
 
-		String[] features = data.getFeatures();
+		List<String> features = data.getFeatures();
 
 		for (int i = 0; i < data.getNumberOfFeatures(); i++) {
 			table.getRows().add(Arrays.asList(
-					features[i],
-					"" + data.getCosts()[i],
-					"" + data.getImportance()[i]
+					features.get(i),
+					"" + data.getProductCost(i),
+					"" + data.getProductImportance(i)
 			));
 		}
 
 		return new Tab("Features", table);
 	}
 
-	protected Tab getProductsTab(OldTXTInstanceData data) {
+	protected Tab getProductsTab(NewTXTInstanceData data) {
 
 		TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Feature", "Cost", "Importance"));
 
@@ -77,7 +77,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 		return new Tab("Products", table);
 	}
 	
-	protected Tab getPairwiseCoverageTab(OldTXTInstanceData data) {
+	protected Tab getPairwiseCoverageTab(NewTXTInstanceData data) {
 
 		TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Covered", "Uncovered", "# of Uncovered"));
 
@@ -87,7 +87,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 			List<String> unCovered = new ArrayList<>();
 
 			for (int j = 0; j < data.getNumberOfPairs(); j++) {
-				if (data.getPairsProducts()[j][i] == 1) {
+				if (data.getPairs(i).contains(j)) {
 					covered.add(String.valueOf(j));
 				} else {
 					unCovered.add(String.valueOf(j));
@@ -100,7 +100,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 		return new Tab("Pairwise Coverate", table);
 	}
 	
-	protected Tab getMutationCoverageTab(OldTXTInstanceData data) {
+	protected Tab getMutationCoverageTab(NewTXTInstanceData data) {
 
 		TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Dead", "Alive", "# of Alive"));
 
@@ -110,7 +110,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 			List<String> unCovered = new ArrayList<>();
 
 			for (int j = 0; j < data.getNumberOfMutants(); j++) {
-				if (data.getMutantsProducts()[j][i] == 1) {
+				if (data.getMutants(i).contains(j)) {
 					covered.add(String.valueOf(j));
 				} else {
 					unCovered.add(String.valueOf(j));
