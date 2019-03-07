@@ -1,6 +1,7 @@
 package thiagodnf.nautilus.core.objective;
 
 import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.binarySet.BinarySet;
 
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.util.Converter;
@@ -54,6 +55,30 @@ public abstract class AbstractObjective {
 
 	public void setDisabled(boolean status) {
 		this.isDisabled = status;
+	}
+	
+	public double evaluateAll(InstanceData instance, Solution<?> solution) {
+		
+		BinarySet binarySet = (BinarySet) solution.getVariableValue(0);
+
+		beforeProcess(instance, solution);
+		
+		for (int i = 0; i < binarySet.getBinarySetLength(); i++) {
+
+			if (binarySet.get(i)) {
+				process(instance, solution, i);
+			}
+		}
+
+		afterProcess(instance, solution);
+		
+		double value = calculate(instance, solution);
+		
+		if (isMaximize()) {
+			return -1.0 * value;
+		}
+
+		return value;
 	}
 	
 	public double evaluate(InstanceData data, Solution<?> sol) {

@@ -153,8 +153,8 @@ public class VariableBasedReducer extends AbstractReducer {
 				shiftedSolution = shift(value, (NBinarySolution) orginalSolution);
 			}
 			
-			double originalValue = objective.evaluate(data, orginalSolution);
-			double newValue = objective.evaluate(data, shiftedSolution);
+			double originalValue = objective.evaluateAll(data, orginalSolution);
+			double newValue = objective.evaluateAll(data, shiftedSolution);
 
 			originalValue = Normalizer.normalize(originalValue, objective.getMinimumValue(), objective.getMaximumValue());
 			newValue = Normalizer.normalize(newValue, objective.getMinimumValue(), objective.getMaximumValue());
