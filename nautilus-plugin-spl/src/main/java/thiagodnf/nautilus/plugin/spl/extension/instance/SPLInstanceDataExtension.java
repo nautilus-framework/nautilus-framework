@@ -54,8 +54,8 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 		for (int i = 0; i < data.getNumberOfFeatures(); i++) {
 			table.getRows().add(Arrays.asList(
 					features.get(i),
-					"" + data.getProductCost(i),
-					"" + data.getProductImportance(i)
+					"" + data.getCosts().get(i),
+					"" + data.getImportances().get(i)
 			));
 		}
 

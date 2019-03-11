@@ -242,4 +242,20 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 	public List<Integer> getPairs(int index) {
 		return this.pairs.get(index);
 	}
+
+	public List<Double> getCosts() {
+		return costs;
+	}
+
+	public void setCosts(List<Double> costs) {
+		this.costs = costs;
+	}
+
+	public List<Double> getImportances() {
+		return importances;
+	}
+
+	public void setImportances(List<Double> importances) {
+		this.importances = importances;
+	}
 }
