@@ -47,11 +47,6 @@
 		    <version>5.1.0</version>
 		    <scope>test</scope>
 		</dependency>
-		<dependency>
-		  <groupId>org.jvalidation</groupId>
-		  <artifactId>jvalidation</artifactId>
-		  <version>1.0.0</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -138,10 +133,4 @@
             </plugin>
 		</plugins>
 	</build>
-	<repositories>
-	    <repository>
-	        <id>jvalidation-github</id>
-	        <url>https://github.com/jvalidation/mvn-repo/raw/master/releases</url>
-	    </repository>
-	</repositories>
 </project>
