@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+	<head th:replace="fragments/head :: default(Solution)"></head>
+
+	<body>
+	
+		<div th:replace="fragments/navbar :: default('home')"></div>
+	
+		<div class="page-header">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<h6 class="title">
+							<a th:href="@{/}">Home</a> 
+							<span class="path-divider">/</span>
+							<a href="#" th:text="Spartakus"></a>
+						</h6>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="row">
+						<div class="col-4">
+							<div class="form-group">
+								<label for="instances">Instances</label>
+								<select class="form-control" id="instances">
+									<option value="james">James</option>
+									<option value="cas">CAS</option>
+									<option value="ws">WS</option>
+									<option value="eshop">EShop</option>
+									<option value="drupal">Drupal</option>
+									<option value="smarthome">Smarthome</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-4">
+							<div class="form-group">
+								<label for="dimension">Dimension</label>
+								<select class="form-control" id="dimension">
+									<option value="2d">2 Objectives</option>
+									<option value="3d">3 Objecitves</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-4">
+							<br>
+							<button type="submit" id="btn-show" class="btn btn-success">Show</button>
+						</div>
+					</div>
+					
+					<div class="nav nav-tabs" id="nav-tab-qa" role="tablist">
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#quality-attributes">Quality Attributes</a>
+						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#correlation">Correlation</a>
+					</div>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane fade" id="quality-attributes">
+							<div class="form-group">
+								<label for="qa">Quality Attribute</label>
+								<select class="form-control" id="qa">
+									<option value="metric-r-hypervolume">R-Hypervolume</option>
+									<option value="metric-r-igd">R-IGD</option>
+									<option value="metric-r-spread">R-Spread</option>
+									<option value="metric-number-of-solutions"># of Solutions</option>
+									<option value="metric-number-of-solutions-in-roi"># of Solutions In ROI</option>
+									<option value="metric-computing-time">Computing Time</option>
+									<option value="metric-min-ed-value">Min ED Value</option>
+								</select>
+							</div>
+							<div id="canvas-qa"></div>
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="correlation">
+							correlation
+						</div>
+					</div>
+					
+						
+				</div>	
+			</div>
+		</div>
+	
+		<div th:replace="fragments/footer :: footer"></div>
+		<script type="text/javascript" th:src="@{/spartakus/script.js}"></script>
+	</body>
+
+</html>
