@@ -45,7 +45,7 @@ public abstract class AbstractNormalize {
 			NSolution<?> copy = (NSolution<?>) solution.copy();
 
 			for (int i = 0; i < numberOfObjectives; i++) {
-				copy.setObjective(i, Normalizer.normalize(solution.getObjective(i), minValues[i], maxValues[i]));
+				copy.setObjective(i, normalize(solution.getObjective(i), minValues[i], maxValues[i]));
 			}
 
 			normalizedSolutions.add(copy);
@@ -54,6 +54,10 @@ public abstract class AbstractNormalize {
 		return normalizedSolutions;
 	}
 	
+	protected double normalize(double value, double min, double max) {
+		return Normalizer.normalize(value, min, max);
+	}
+
 	public Solution<?> normalize(List<AbstractObjective> objectives, Solution<?> solution) {
 		return this.normalize(
 			objectives, 

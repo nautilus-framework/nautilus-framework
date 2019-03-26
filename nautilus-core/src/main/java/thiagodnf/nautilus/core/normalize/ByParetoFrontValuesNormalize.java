@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.util.Normalizer;
 
 public class ByParetoFrontValuesNormalize extends AbstractNormalize {
 
@@ -67,6 +67,16 @@ public class ByParetoFrontValuesNormalize extends AbstractNormalize {
 		}
 
 		return maximumValues;
+	}
+	
+	@Override
+	protected double normalize(double value, double min, double max) {
+		
+		if (min == max) {
+			return min;
+		}
+		
+		return Normalizer.normalize(value, min, max);
 	}
 
 	@Override

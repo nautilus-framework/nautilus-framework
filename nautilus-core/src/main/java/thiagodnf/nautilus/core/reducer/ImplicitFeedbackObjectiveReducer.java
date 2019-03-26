@@ -1,6 +1,7 @@
 package thiagodnf.nautilus.core.reducer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -38,7 +39,7 @@ public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 		for (Solution<?> solution : visualizedSolutions) {
 			
 			for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
-				rankingForUserSelection[i] += solution.getObjective(i);
+				rankingForUserSelection[i] += (solution.getObjective(i)+1);
 			}
 		}
 		
@@ -49,7 +50,7 @@ public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 		for (NSolution<?> solution : visualizedSolutions) {
 
 			for (int i = 0; i < solution.getNumberOfObjectives(); i++) {
-				rankingForUserFeedback[i] += solution.getObjective(i) * solution.getUserFeedback();
+				rankingForUserFeedback[i] += (solution.getObjective(i)+1) * solution.getUserFeedback();
 			}
 		}
 		
@@ -67,17 +68,31 @@ public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 			rankings.add(new RankingItem(selectedObjectives.get(i).getId(), general[i]));
 		}
 		
-		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue).reversed());
+		double sum = rankings.stream().map(e -> e.getValue()).reduce(Double::sum).get();
+		double average = (double) sum / (double) rankings.size();
+		
+		System.out.println("-------------------");
+		System.out.println(Arrays.toString(rankingForUserSelection));
+		System.out.println(Arrays.toString(rankingForUserFeedback));
+		System.out.println("sum: "+sum);
+		System.out.println("average: "+average);
+		
+//		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue).reversed());
+		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue));
 		
 		rankings.get(0).selected = true;
 		
-		double minRanking = rankings.get(0).getValue();
+		//double minRanking = rankings.get(0).getValue();
 		
 		for (RankingItem ranking : rankings) {
 			
-			if (minRanking - ranking.getValue() <= epsilon) {
+//			if (minRanking - ranking.getValue() <= epsilon) {
+//				ranking.selected = true;
+//				minRanking = ranking.getValue();
+//			}
+			
+			if (ranking.getValue() <= average) {
 				ranking.selected = true;
-				minRanking = ranking.getValue();
 			}
 		}
 		
