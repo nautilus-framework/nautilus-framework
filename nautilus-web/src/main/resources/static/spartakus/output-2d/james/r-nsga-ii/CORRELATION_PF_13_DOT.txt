@@ -1,0 +1,39 @@
+digraph g1 {
+layout="circo";
+size="12,12!" ratio=fill;
+node [shape = circle, fixedsize=true, width=1, color="#7cb5ec"];
+0 [label="number
+of
+products", style=filled, fillcolor="#7cb5ec50" ]
+1 [label="alive
+mutants", style=filled, fillcolor="#7cb5ec50" ]
+2 [label="uncovered
+pairs", style=filled, fillcolor="#7cb5ec50" ]
+3 [label="similarity", style=filled, fillcolor="#7cb5ec50" ]
+4 [label="cost", style=filled, fillcolor="#7cb5ec50" ]
+5 [label="unselected
+features", style=filled, fillcolor="#7cb5ec50" ]
+6 [label="unimportant
+features", style=filled, fillcolor="#7cb5ec50" ]
+0 -> 1[label= "-0.93",penwidth= "2.0",color= "#f45b5b",dir="both"];
+0 -> 2[label= "-0.93",penwidth= "2.0",color= "#f45b5b",dir="both"];
+0 -> 3[label= "0.93",penwidth= "2.0",color= "#90ed7d",dir="both"];
+0 -> 4[label= "1.0",penwidth= "2.0",color= "#90ed7d",dir="both"];
+0 -> 5[label= "-0.93",penwidth= "2.0",color= "#f45b5b",dir="both"];
+0 -> 6[label= "0.68",penwidth= "2.0",color= "#90ed7d",dir="both"];
+1 -> 2[label= "1.0",penwidth= "2.0",color= "#90ed7d",dir="both"];
+1 -> 3[label= "-1.0",penwidth= "2.0",color= "#f45b5b",dir="both"];
+1 -> 4[label= "-0.93",penwidth= "2.0",color= "#f45b5b",dir="both"];
+1 -> 5[label= "1.0",penwidth= "2.0",color= "#90ed7d",dir="both"];
+1 -> 6[label= "-0.9",penwidth= "2.0",color= "#f45b5b",dir="both"];
+2 -> 3[label= "-1.0",penwidth= "2.0",color= "#f45b5b",dir="both"];
+2 -> 4[label= "-0.93",penwidth= "2.0",color= "#f45b5b",dir="both"];
+2 -> 5[label= "1.0",penwidth= "2.0",color= "#90ed7d",dir="both"];
+2 -> 6[label= "-0.9",penwidth= "2.0",color= "#f45b5b",dir="both"];
+3 -> 4[label= "0.93",penwidth= "2.0",color= "#90ed7d",dir="both"];
+3 -> 5[label= "-1.0",penwidth= "2.0",color= "#f45b5b",dir="both"];
+3 -> 6[label= "0.9",penwidth= "2.0",color= "#90ed7d",dir="both"];
+4 -> 5[label= "-0.93",penwidth= "2.0",color= "#f45b5b",dir="both"];
+4 -> 6[label= "0.68",penwidth= "2.0",color= "#90ed7d",dir="both"];
+5 -> 6[label= "-0.9",penwidth= "2.0",color= "#f45b5b",dir="both"];
+}
