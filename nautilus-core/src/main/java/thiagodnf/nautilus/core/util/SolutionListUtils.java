@@ -7,7 +7,15 @@ import thiagodnf.nautilus.core.encoding.NSolution;
 
 public class SolutionListUtils {
 	
-	public static List<NSolution<?>> getSelectedSolutions(List<NSolution<?>> solutions) {
+	@SuppressWarnings("unchecked")
+	public static List<String> getObjectives(NSolution<?> solution){
+		
+		String value = (String) solution.getAttribute(SolutionAttribute.OPTIMIZED_OBJECTIVES);
+		
+		return Converter.fromJson(value, List.class);
+	}
+	
+	public static List<NSolution<?>> getSelectedSolutions(List<? extends NSolution<?>> solutions) {
 
 		List<NSolution<?>> selectedSolutions = new ArrayList<>();
 

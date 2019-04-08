@@ -13,4 +13,6 @@ public class SolutionAttribute {
 	public static final String DISTANCE = "distance";
 	
 	public static final String FEEDBACK = "feedback";
+	
+	public static final String OPTIMIZED_OBJECTIVES = "optimized-objectives";
 }
