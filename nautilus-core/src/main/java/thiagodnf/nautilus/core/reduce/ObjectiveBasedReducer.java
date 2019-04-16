@@ -55,14 +55,14 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 			matrix[i] = selected.get(i).getObjectives();
 		}
 		
-		// Sum + 1
-		
-		for (int i = 0; i < matrix.length; i++) {
-
-			for (int j = 0; j < matrix[i].length; j++) {
-				matrix[i][j]++;
-			}
-		}
+//		// Sum + 1
+//		
+//		for (int i = 0; i < matrix.length; i++) {
+//
+//			for (int j = 0; j < matrix[i].length; j++) {
+//				matrix[i][j]++;
+//			}
+//		}
 		
 		// Provide the feedback
 		
@@ -95,7 +95,7 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 			rankings.add(new RankingItem(objectives.get(i), preferences[i]));
 		}
 		
-		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue));
+		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue).reversed());
 		
 		rankings.get(0).setSelected(true);
 		
@@ -115,7 +115,7 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 		
 		for (RankingItem item : items) {
 			
-			if (item.getValue() <= average) {
+			if (item.getValue() >= average) {
 				item.setSelected(true);
 			}
 		}
