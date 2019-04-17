@@ -30,6 +30,14 @@ public class Builder {
 	
 	private double epsilon;
 	
+	private String algorithm;
+	
+	private List<String> objectives;
+	
+	private String instanceNme;
+	
+	private String problemName;
+	
 	public Problem getProblem() {
 		return problem;
 	}
@@ -100,5 +108,37 @@ public class Builder {
 
 	public void setEpsilon(double epsilon) {
 		this.epsilon = epsilon;
+	}
+
+	public String getAlgorithm() {
+		return algorithm;
+	}
+
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
+	}
+
+	public List<String> getObjectives() {
+		return objectives;
+	}
+
+	public void setObjectives(List<String> objectives) {
+		this.objectives = objectives;
+	}
+
+	public String getInstanceNme() {
+		return instanceNme;
+	}
+
+	public void setInstanceNme(String instanceNme) {
+		this.instanceNme = instanceNme;
+	}
+
+	public String getProblemName() {
+		return problemName;
+	}
+
+	public void setProblemName(String problemName) {
+		this.problemName = problemName;
 	}
 }

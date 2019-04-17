@@ -36,7 +36,7 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 		return null;
 	}
 	
-	public List<RankingItem> execute(Problem<?> problem, List<? extends NSolution<?>> population){
+	public List<String> execute(Problem<?> problem, List<? extends NSolution<?>> population){
 		
 		List<String> objectives = SolutionListUtils.getObjectives(population.get(0));
 
@@ -101,7 +101,18 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 		
 		byAverage(rankings);
 		
-		return rankings;
+		List<String> nextObjectiveIds = new ArrayList<>();
+		
+		for (RankingItem item : rankings) {
+			
+			System.out.println(item);
+			
+			if (item.isSelected()) {
+				nextObjectiveIds.add(item.getObjectiveId());
+			}
+		}
+		
+		return nextObjectiveIds;
 	}
 	
 	public void byAverage(List<RankingItem> items) {
