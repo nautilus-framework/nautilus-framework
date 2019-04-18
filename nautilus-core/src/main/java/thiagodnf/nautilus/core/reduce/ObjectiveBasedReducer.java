@@ -38,42 +38,39 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 	
 	public List<String> execute(Problem<?> problem, List<? extends NSolution<?>> population){
 		
-		List<String> objectives = SolutionListUtils.getObjectives(population.get(0));
+		List<String> optimizedObjectives = SolutionListUtils.getObjectives(population.get(0));
 
-		List<NSolution<?>> selected = SolutionListUtils.getSelectedSolutions(population);
+		List<NSolution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(population);
 		
-		for(NSolution<?> solution : selected) {
+		int numberOfObjectives = selectedSolutions.get(0).getNumberOfObjectives();
+		
+		double[] preferences = new double[selectedSolutions.size()];
+
+		for (int i = 0; i < selectedSolutions.size(); i++) {
+			preferences[i] = SolutionUtils.getUserFeedback(selectedSolutions.get(i));
+		}
+		
+		double sumOfPreferences = Arrays.stream(preferences).sum();
+		
+		System.out.println(toStringObjectives(optimizedObjectives));
+		for(NSolution<?> solution : selectedSolutions) {
 			System.out.println(toString(solution));
 		}
 		
+		double[][] matrix = new double[selectedSolutions.size()][numberOfObjectives];
 		
-		int numberOfObjectives = selected.get(0).getNumberOfObjectives();
-		
-		double[][] matrix = new double[selected.size()][numberOfObjectives];
-		
-		for (int i = 0; i < selected.size(); i++) {
-			matrix[i] = selected.get(i).getObjectives();
+		for (int i = 0; i < selectedSolutions.size(); i++) {
+			matrix[i] = selectedSolutions.get(i).getObjectives();
 		}
-		
-//		// Sum + 1
-//		
-//		for (int i = 0; i < matrix.length; i++) {
-//
-//			for (int j = 0; j < matrix[i].length; j++) {
-//				matrix[i][j]++;
-//			}
-//		}
-		
-		// Provide the feedback
 		
 		for (int i = 0; i < matrix.length; i++) {
 
 			for (int j = 0; j < matrix[i].length; j++) {
-				matrix[i][j] *= SolutionUtils.getUserFeedback(selected.get(i));
+				matrix[i][j] *= preferences[i];
 			}
 		}
 		
-		double[] preferences = new double[numberOfObjectives];
+		double[] sums = new double[numberOfObjectives];
 		
 		for (int j = 0; j < numberOfObjectives; j++) {
 
@@ -83,23 +80,32 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 				sum += matrix[i][j];
 			}
 
-			preferences[j] = sum;
+			sums[j] = sum;
+		}
+		
+		
+		// Divide
+		
+		for(int i=0;i<sums.length;i++) {
+			sums[i] = sums[i]/sumOfPreferences;
 		}
 		
 		System.out.println(Arrays.toString(preferences));
+		System.out.println(Arrays.toString(sums));
 		
 		
 		List<RankingItem> rankings = new ArrayList<>();
 		
-		for (int i = 0; i < preferences.length; i++) {
-			rankings.add(new RankingItem(objectives.get(i), preferences[i]));
+		for (int i = 0; i < sums.length; i++) {
+			rankings.add(new RankingItem(optimizedObjectives.get(i), sums[i]));
 		}
 		
 		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue).reversed());
 		
 		rankings.get(0).setSelected(true);
 		
-		byAverage(rankings);
+		//byAverage(rankings);
+		byEpsilon(rankings);
 		
 		List<String> nextObjectiveIds = new ArrayList<>();
 		
@@ -113,6 +119,28 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 		}
 		
 		return nextObjectiveIds;
+	}
+	
+	public void byEpsilon(List<RankingItem> items) {
+		
+		double epsion = 0.1;
+		double lastValue = items.get(0).value;
+		
+		// Remove the already selected objective;
+		
+		items = items.stream().filter(e -> !e.isSelected()).collect(Collectors.toList());
+
+		for (RankingItem item : items) {
+
+			double currentValue = item.value;
+
+			double diff = Math.abs(currentValue - lastValue);
+			
+			if (diff <= epsion) {
+				item.setSelected(true);
+				lastValue = currentValue;
+			}
+		}
 	}
 	
 	public void byAverage(List<RankingItem> items) {
@@ -130,6 +158,24 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 				item.setSelected(true);
 			}
 		}
+	}
+	
+	
+	public String toStringObjectives(List<String> objectives) {
+		
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append("feedback,");
+		
+		for(int i=0;i<objectives.size();i++) {
+			builder.append(objectives.get(i));
+			
+			if(i+1 != objectives.size()) {
+				builder.append(",");
+			}
+		}
+		
+		return builder.toString();
 	}
 	
 	public String toString(NSolution<?> solution) {
