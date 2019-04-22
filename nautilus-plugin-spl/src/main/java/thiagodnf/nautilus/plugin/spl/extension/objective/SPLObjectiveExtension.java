@@ -35,6 +35,23 @@ public class SPLObjectiveExtension implements ObjectiveExtension {
 		
 		return objectives;
 	}
+	
+	public List<AbstractObjective> getObjectives(List<String> objectiveIds) {
+
+		List<AbstractObjective> selected = new ArrayList<>();
+
+		for (AbstractObjective objective : getObjectives()) {
+
+			for (String id : objectiveIds) {
+
+				if (objective.getId().equalsIgnoreCase(id)) {
+					selected.add(objective);
+				}
+			}
+		}
+
+		return selected;
+	}
 
 	@Override
 	public String getProblemId() {

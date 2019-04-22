@@ -8,12 +8,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.BinarySolution;
+import org.uma.jmetal.solution.IntegerSolution;
+import org.uma.jmetal.util.binarySet.BinarySet;
 
+import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
+import thiagodnf.nautilus.core.encoding.problem.NIntegerProblem;
 import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.reducer.AbstractReducer.RankingItem;
 import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.core.util.Normalizer;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.core.util.SolutionUtils;
@@ -36,76 +43,221 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 		return null;
 	}
 	
-	public List<String> execute(Problem<?> problem, List<? extends NSolution<?>> population){
-		
-		List<String> optimizedObjectives = SolutionListUtils.getObjectives(population.get(0));
+	
+	
+	
+	
+	
+	public double[][] correlationForBinary(NProblem<?> problem) {
 
+		NBinaryProblem p = (NBinaryProblem) problem;
+		
+		int num = p.getNumberOfBits(0);
+
+		double[][] correlation = new double[num+1][p.getNumberOfObjectives()];
+
+		for (int i = 0; i <= num; i++) {
+
+			BinarySolution sol = (BinarySolution) problem.createSolution();
+
+			BinarySet bin = new BinarySet(num);
+			
+			// Clear Variables
+			for (int j = 0; j < num; j++) {
+				bin.set(j, false);
+			}
+			
+			bin.set(i, true);
+			
+			sol.setVariableValue(0, bin);
+			
+			p.evaluate(sol);
+			
+			correlation[i] = sol.getObjectives();
+		}
+		
+		System.out.println(toString(correlation));
+		System.out.println("-------");
+		System.out.println(toString(normalizeByColumns(correlation, p.getNumberOfObjectives())));
+		System.out.println("-----------");
+		
+		return normalizeByColumns(correlation, p.getNumberOfObjectives());
+	}
+	
+	
+	
+	
+	public double[][] correlationForInteger(NProblem<?> problem) {
+
+		NIntegerProblem p = (NIntegerProblem) problem;
+
+		int min = p.getLowerBound(0);
+		int max = p.getUpperBound(0);
+		
+		double[][] correlation = new double[(max-min)+1][p.getNumberOfObjectives()];
+
+		for (int i = min; i <= max; i++) {
+
+			IntegerSolution sol = (IntegerSolution) problem.createSolution();
+
+			// Clear Variables
+			for (int j = 0; j < sol.getNumberOfVariables(); j++) {
+				sol.setVariableValue(j, 0);
+			}
+			
+			sol.setVariableValue(0, i);
+
+			p.evaluate(sol);
+			
+			correlation[i-1] = sol.getObjectives();
+		}
+		
+//		System.out.println(toString(correlation));
+//		System.out.println("-------");
+//		System.out.println(toString(normalizeByColumns(correlation, p.getNumberOfObjectives())));
+//		System.out.println("-----------");
+		
+		return normalizeByColumns(correlation, p.getNumberOfObjectives());
+	}
+	
+	public double[][] normalizeByColumns(double[][] matrix, int numberOfColumns) {
+		
+		double[][] m = new double[matrix.length][numberOfColumns];
+				
+		for (int j = 0; j < numberOfColumns; j++) {
+
+			double[] column = getColumn(matrix, j);
+			
+			double min = Arrays.stream(column).min().getAsDouble();
+			double max = Arrays.stream(column).max().getAsDouble();
+			
+			for (int i = 0; i < column.length; i++) {
+				m[i][j] = Normalizer.normalize(column[i], 1, 0, min, max);
+			}
+		}
+		
+		return m;
+	}
+	
+	public double[] getColumn(double[][] matrix, int columnId) {
+
+		if (columnId < 0) {
+			throw new IllegalArgumentException("The columnId should be >= 0");
+		}
+		
+		double[] column = new double[matrix.length];
+
+		for (int i = 0; i < matrix.length; i++) {
+			column[i] = matrix[i][columnId];
+		}
+
+		return column;
+	}
+	
+	public String toString(double[][] matrix) {
+
+		StringBuilder builder = new StringBuilder();
+
+		for (int i = 0; i < matrix.length; i++) {
+
+			for (int j = 0; j < matrix[i].length; j++) {
+
+				builder.append(Converter.round(matrix[i][j],1));
+
+				if (j + 1 != matrix[i].length) {
+					builder.append(",");
+				}
+			}
+
+			if (i + 1 != matrix.length) {
+				builder.append("\n");
+			}
+		}
+
+		return builder.toString();
+	}
+	
+	
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<String> executeByVariables(Problem<?> problem, List<? extends NSolution<?>> population){
+		
+		List<String> optimizedObjectivesAsString = SolutionListUtils.getObjectives(population.get(0));
+		
 		List<NSolution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(population);
 		
 		int numberOfObjectives = selectedSolutions.get(0).getNumberOfObjectives();
 		
-		double[] preferences = new double[selectedSolutions.size()];
-
-		for (int i = 0; i < selectedSolutions.size(); i++) {
-			preferences[i] = SolutionUtils.getUserFeedback(selectedSolutions.get(i));
-		}
+		double[][] correlation = correlationForBinary((NProblem<?>) problem);
 		
-		double sumOfPreferences = Arrays.stream(preferences).sum();
-		
-		System.out.println(toStringObjectives(optimizedObjectives));
 		for(NSolution<?> solution : selectedSolutions) {
-			System.out.println(toString(solution));
+			System.out.println(toStringVariable(solution));
 		}
+		System.out.println("-----------");
 		
-		double[][] matrix = new double[selectedSolutions.size()][numberOfObjectives];
 		
-		for (int i = 0; i < selectedSolutions.size(); i++) {
-			matrix[i] = selectedSolutions.get(i).getObjectives();
-		}
 		
-		for (int i = 0; i < matrix.length; i++) {
+		
+//		System.out.println(toString(correlation));
+		
+		
+		
+		
+		
+		
+		double[] grade = new double[optimizedObjectivesAsString.size()];
 
-			for (int j = 0; j < matrix[i].length; j++) {
-				matrix[i][j] *= preferences[i];
+		for (int i = 0; i < grade.length; i++) {
+			grade[i] = 1;
+		}
+		
+		for (NSolution<?> solution : selectedSolutions) {
+
+			double feedback = SolutionUtils.getUserFeedback(solution);
+			
+			for (int i = 0; i < solution.getNumberOfVariables(); i++) {
+
+//				int variable = (int) solution.getVariableValue(i) - 1;
+//				
+//				for (int j = 0; j < grade.length; j++) {
+//					grade[j] += correlation[variable][j] * feedback;
+//				}
 			}
 		}
 		
-		double[] sums = new double[numberOfObjectives];
+		System.out.println(Arrays.toString(grade));
 		
-		for (int j = 0; j < numberOfObjectives; j++) {
-
-			double sum = 0.0;
-
-			for (int i = 0; i < matrix.length; i++) {
-				sum += matrix[i][j];
+		double minGrade = Arrays.stream(grade).min().getAsDouble();
+		double maxGrade = Arrays.stream(grade).max().getAsDouble();
+		
+		for (int i = 0; i < grade.length; i++) {
+			if(minGrade == maxGrade) {
+				grade[i] = Normalizer.normalize(grade[i], 1, 0, minGrade+0.000001, maxGrade);
+			}else {
+				grade[i] = Normalizer.normalize(grade[i], 1, 0, minGrade, maxGrade);
 			}
+		}
+		
+		System.out.println(Arrays.toString(grade));
 
-			sums[j] = sum;
-		}
-		
-		
-		// Divide
-		
-		for(int i=0;i<sums.length;i++) {
-			sums[i] = sums[i]/sumOfPreferences;
-		}
-		
-		System.out.println(Arrays.toString(preferences));
-		System.out.println(Arrays.toString(sums));
-		
-		
 		List<RankingItem> rankings = new ArrayList<>();
 		
-		for (int i = 0; i < sums.length; i++) {
-			rankings.add(new RankingItem(optimizedObjectives.get(i), sums[i]));
+		for (int i = 0; i < grade.length; i++) {
+			rankings.add(new RankingItem(optimizedObjectivesAsString.get(i), grade[i]));
 		}
 		
-		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue).reversed());
+//		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue).reversed());
+		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue));
 		
-		rankings.get(0).setSelected(true);
+		for (RankingItem item : rankings) {
+			item.setSelected(true);
+		}
 		
-		//byAverage(rankings);
-		byEpsilon(rankings);
+		if(minGrade != maxGrade) {
+			byNormalized(rankings);
+		}
 		
 		List<String> nextObjectiveIds = new ArrayList<>();
 		
@@ -119,6 +271,160 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 		}
 		
 		return nextObjectiveIds;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public List<String> execute(Problem<?> problem, List<? extends NSolution<?>> population){
+		
+		List<String> optimizedObjectivesAsString = SolutionListUtils.getObjectives(population.get(0));
+		
+		List<NSolution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(population);
+		
+		int numberOfObjectives = selectedSolutions.get(0).getNumberOfObjectives();
+		
+		double[] preferences = new double[selectedSolutions.size()];
+
+		for (int i = 0; i < selectedSolutions.size(); i++) {
+			preferences[i] = SolutionUtils.getUserFeedback(selectedSolutions.get(i));
+		}
+		
+		double sumOfPreferences = Arrays.stream(preferences).sum();
+		
+		List<AbstractObjective> objectives = ((NProblem) problem).getObjectives();
+		
+		System.out.println(toStringObjectives(optimizedObjectivesAsString));
+		for(NSolution<?> solution : selectedSolutions) {
+			//System.out.println(PopulationUtils.toString(solution));
+		}
+		System.out.println("-----------");
+		
+		selectedSolutions = new ByParetoFrontValuesNormalize().normalize(objectives, selectedSolutions);
+		
+		
+		System.out.println(toStringObjectives(optimizedObjectivesAsString));
+		for(NSolution<?> solution : selectedSolutions) {
+			//System.out.println(PopulationUtils.toString(solution));
+		}
+		System.out.println("-----------");
+		
+		for(NSolution<?> solution : selectedSolutions) {
+			System.out.println(toStringVariable(solution));
+		}
+		System.out.println("-----------");
+		
+		double[] minFeedback = new double[optimizedObjectivesAsString.size()];
+		double[] maxFeedback = new double[optimizedObjectivesAsString.size()];	
+		
+		for (int i = 0; i < optimizedObjectivesAsString.size(); i++) {
+
+			List<Double> min = new ArrayList<>();
+			List<Double> max = new ArrayList<>();
+
+			for (NSolution<?> solution : selectedSolutions) {
+
+				double preference = SolutionUtils.getUserFeedback(solution);
+				double value = solution.getObjective(i);
+				
+				if (value == 0.0) {
+					min.add(preference);
+				} else if (value == 1.0) {
+					max.add(preference);
+				}
+			}
+			
+			if (min.isEmpty()) {
+				minFeedback[i] = 0;
+			} else {
+				minFeedback[i] = min.stream().mapToDouble(a -> a).average().getAsDouble();
+			}
+			if (max.isEmpty()) {
+				maxFeedback[i] = 0;
+			} else {
+				maxFeedback[i] = max.stream().mapToDouble(a -> a).average().getAsDouble();
+			}
+		}
+		
+		System.out.println(Arrays.toString(minFeedback));
+		System.out.println(Arrays.toString(maxFeedback));
+		
+		double[] grade = new double[optimizedObjectivesAsString.size()];
+		
+		for (int i = 0; i < optimizedObjectivesAsString.size(); i++) {
+			if(minFeedback[i] < maxFeedback[i]) {
+				grade[i] = Math.min(minFeedback[i], maxFeedback[i]);
+			}else {
+				grade[i] = Math.max(minFeedback[i], maxFeedback[i]);
+			}
+		}
+		
+		System.out.println(Arrays.toString(grade));
+		
+		double minGrade = Arrays.stream(grade).min().getAsDouble();
+		double maxGrade = Arrays.stream(grade).max().getAsDouble();
+		
+		for (int i = 0; i < grade.length; i++) {
+			
+			if(minGrade == maxGrade) {
+				grade[i] = minGrade;
+			}else {
+				grade[i] = Normalizer.normalize(grade[i], 0, 1, minGrade, maxGrade);
+			}
+		}
+		
+		System.out.println(Arrays.toString(grade));
+		
+		List<RankingItem> rankings = new ArrayList<>();
+		
+		for (int i = 0; i < grade.length; i++) {
+			rankings.add(new RankingItem(optimizedObjectivesAsString.get(i), grade[i]));
+		}
+		
+//		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue).reversed());
+		Collections.sort(rankings, Comparator.comparing(RankingItem::getValue));
+		
+		for (RankingItem item : rankings) {
+			item.setSelected(true);
+		}
+		
+		
+		//byAverage(rankings);
+		//byEpsilon(rankings);
+		
+		if(minGrade != maxGrade) {
+			byNormalized(rankings);
+		}
+		
+		List<String> nextObjectiveIds = new ArrayList<>();
+		
+		for (RankingItem item : rankings) {
+			
+			System.out.println(item);
+			
+			if (item.isSelected()) {
+				nextObjectiveIds.add(item.getObjectiveId());
+			}
+		}
+		
+		return nextObjectiveIds;
+	}
+	
+	public void byNormalized(List<RankingItem> items) {
+		
+		for (RankingItem item : items) {
+
+			if(item.value == 1.0) {
+				item.setSelected(false);
+			}
+		}
 	}
 	
 	public void byEpsilon(List<RankingItem> items) {
@@ -178,24 +484,22 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 		return builder.toString();
 	}
 	
-	public String toString(NSolution<?> solution) {
-		
-		double[] objectives = solution.getObjectives();
-		
+	public String toStringVariable(NSolution<?> solution) {
+	
 		StringBuilder builder = new StringBuilder();
 		
-		double feedback = (double) solution.getAttribute(SolutionAttribute.FEEDBACK);
-		
-		builder.append(Converter.round(feedback, 2)).append(",");
-		
-		for (int i = 0; i < objectives.length; i++) {
-			
-			builder.append(Converter.round(objectives[i], 2));
-			
-			if(i+1 != objectives.length) {
-				builder.append(",");
-			}
-		}
+//		double feedback = (double) solution.getAttribute(SolutionAttribute.FEEDBACK);
+//		
+//		builder.append(Converter.round(feedback, 2)).append(",");
+//		
+//		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
+//			
+//			builder.append(solution.getVariableValue(i));
+//			
+//			if(i+1 != solution.getNumberOfVariables()) {
+//				builder.append(",");
+//			}
+//		}
 
 		return builder.toString();
 	}
