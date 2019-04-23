@@ -21,7 +21,6 @@ import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.Normalizer;
-import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.core.util.SolutionUtils;
 
@@ -303,18 +302,18 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 		
 		System.out.println(toStringObjectives(optimizedObjectivesAsString));
 		for(NSolution<?> solution : selectedSolutions) {
-			//System.out.println(PopulationUtils.toString(solution));
+			System.out.println(toString(solution));
 		}
 		System.out.println("-----------");
 		
-		selectedSolutions = new ByParetoFrontValuesNormalize().normalize(objectives, selectedSolutions);
-		
-		
-		System.out.println(toStringObjectives(optimizedObjectivesAsString));
-		for(NSolution<?> solution : selectedSolutions) {
-			//System.out.println(PopulationUtils.toString(solution));
-		}
-		System.out.println("-----------");
+//		selectedSolutions = new ByParetoFrontValuesNormalize().normalize(objectives, selectedSolutions);
+//		
+//		
+//		System.out.println(toStringObjectives(optimizedObjectivesAsString));
+//		for(NSolution<?> solution : selectedSolutions) {
+//			//System.out.println(PopulationUtils.toString(solution));
+//		}
+//		System.out.println("-----------");
 		
 		for(NSolution<?> solution : selectedSolutions) {
 			System.out.println(toStringVariable(solution));
@@ -503,7 +502,28 @@ public class ObjectiveBasedReducer extends AbstractReduce{
 
 		return builder.toString();
 	}
+		
+	public static String toString(NSolution<?> solution) {
+		
+		double[] objectives = solution.getObjectives();
+		
+		StringBuilder builder = new StringBuilder();
+		
+		double feedback =SolutionUtils.getUserFeedback(solution);
+		
+		builder.append(Converter.round(feedback, 2)).append(",");
+		
+		for (int i = 0; i < objectives.length; i++) {
 			
+			builder.append(Converter.round(objectives[i], 2));
+			
+			if(i+1 != objectives.length) {
+				builder.append(",");
+			}
+		}
+
+		return builder.toString();
+	}
 
 	@Override
 	public String getName() {
