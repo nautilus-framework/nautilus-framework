@@ -15,13 +15,17 @@ public abstract class AbstractCorrelation {
 		
 		private List<Double> values;
 
+		public CorrelationItem(String name, List<Double> values) {
+			this.name = name;
+			this.values = values;
+		}
+		
 		public CorrelationItem(int name) {
 			this(String.valueOf(name));
 		}
 		
 		public CorrelationItem(String name) {
-			this.name = name;
-			this.values = new ArrayList<>();
+			this(name, new ArrayList<>());
 		}
 		
 		public CorrelationItem(CorrelationItem item) {
