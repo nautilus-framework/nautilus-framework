@@ -53,7 +53,7 @@ public abstract class AbstractReducer {
 		return getName();
 	}
 	
-	public abstract List<RankingItem> execute(Problem<?> problem, InstanceData data, List<AbstractObjective> allObjectives, List<AbstractObjective> selectedObjectives, List<NSolution<?>> solutions);
+	public abstract List<RankingItem> execute(Problem<?> problem, InstanceData data, List<AbstractObjective> allObjectives, List<AbstractObjective> optimizedObjectives, List<NSolution<?>> solutions);
 	
 	public abstract String getName() ;
 }

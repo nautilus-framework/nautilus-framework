@@ -16,15 +16,24 @@ public class SolutionListUtils {
 	}
 	
 	public static List<NSolution<?>> getSelectedSolutions(List<? extends NSolution<?>> solutions) {
+		return getSelectedSolutions(solutions, true);
+	}
+	
+	public static List<NSolution<?>> getSelectedSolutions(List<? extends NSolution<?>> solutions, boolean isCopied) {
 
 		List<NSolution<?>> selectedSolutions = new ArrayList<>();
 
 		for (NSolution<?> sol : solutions) {
-			
+
 			Object value = sol.getAttribute(SolutionAttribute.SELECTED);
 
 			if (value != null && (boolean) value == true) {
-				selectedSolutions.add((NSolution<?>) sol.copy());
+
+				if (isCopied) {
+					selectedSolutions.add((NSolution<?>) sol.copy());
+				} else {
+					selectedSolutions.add(sol);
+				}
 			}
 		}
 

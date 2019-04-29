@@ -12,6 +12,7 @@ import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.util.Converter;
 
 public class NIntegerSolution extends NSolution<Integer> implements IntegerSolution {
 
@@ -131,6 +132,6 @@ public class NIntegerSolution extends NSolution<Integer> implements IntegerSolut
 	}
 	
 	public String toString() {
-		return new Gson().toJson(this);
+		return Converter.toJson(this);
 	}
 }
