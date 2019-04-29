@@ -14,6 +14,7 @@ import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
+import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reducer.AbstractReducer;
 import thiagodnf.nautilus.core.reducer.AbstractReducer.RankingItem;
@@ -55,7 +56,7 @@ public class ContinueController {
 		InstanceDataExtension instanceDataExtension = pluginService.getInstanceDataExtension(pluginId, problemId);
 		InstanceData data = instanceDataExtension.getInstanceData(instance);
 		
-		AbstractNormalize normalizer = new ByMaxAndMinValuesNormalize();
+		AbstractNormalize normalizer = new ByParetoFrontValuesNormalize();
 		AbstractReducer reducer = pluginService.getReducers().get(settings.getReducerId());
 		
 		List<AbstractObjective> allObjectives = pluginService.getObjectiveExtension(pluginId, problemId).getObjectives();

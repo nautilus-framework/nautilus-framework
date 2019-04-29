@@ -226,8 +226,8 @@ function plot4D(tableHeader, rows, normalize){
 	chart.setSolutionIndexes(getSolutionIndexes(rows));
 	chart.setXAxisName(tableHeader)
 	chart.setSeries(series)
-	chart.setOnClickListener(function(solutionIndex){
-		openSolution(solutionIndex);
+	chart.setOnClickListener(function(solutionIndex, objectiveIndex){
+		openSolution(solutionIndex, objectiveIndex);
 	})
 	
 	if(!normalize){
@@ -237,7 +237,7 @@ function plot4D(tableHeader, rows, normalize){
 	chart.plot("execution-chart");
 }
 
-function openSolution(solutionIndex){
+function openSolution(solutionIndex, objectiveIndex){
 
 	var hash = window.location.hash;
 	
@@ -247,7 +247,7 @@ function openSolution(solutionIndex){
 	
 	executionId = executionId.replace(hash,'');
 	
-	window.location.href = "/solution/" + executionId+ "/" + solutionIndex;
+	window.location.href = "/solution/" + executionId+ "/" + solutionIndex+"/"+objectiveIndex;
 }
 
 $(function(){

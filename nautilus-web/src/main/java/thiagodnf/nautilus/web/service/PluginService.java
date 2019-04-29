@@ -42,7 +42,7 @@ import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.normalize.DontNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reducer.AbstractReducer;
-import thiagodnf.nautilus.core.reducer.BestAndWorstObjectivesReducer;
+import thiagodnf.nautilus.core.reducer.ConfiabilityBasedReduction;
 import thiagodnf.nautilus.core.reducer.ImplicitFeedbackObjectiveReducer;
 import thiagodnf.nautilus.core.reducer.InfluenceOfVariableBasedReducer;
 import thiagodnf.nautilus.core.reducer.DontReduceObjectivesReducer;
@@ -126,7 +126,7 @@ public class PluginService {
 		addReducer(new VariableBasedReducer());
 		addReducer(new RandomlyObjectivesReducer());
 		addReducer(new InfluenceOfVariableBasedReducer());
-		addReducer(new BestAndWorstObjectivesReducer());
+		addReducer(new ConfiabilityBasedReduction());
 	}
 	
 	public void loadPluginsFromDirectory() {

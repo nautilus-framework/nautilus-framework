@@ -128,6 +128,10 @@ $(function(){
 		}]
 	});
 	
+	$('.table-datatable-without-search').dataTable( {
+	  "searching": false
+	});
+	
 	$('a[data-toggle="tab"]').click(function(e) {
 		e.preventDefault();
 		

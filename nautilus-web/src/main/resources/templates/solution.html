@@ -24,7 +24,7 @@
 							<span class="path-divider">/</span> 
 							<a th:href="@{/execution/}+${execution.getId()}" th:text="${#strings.isEmpty(executionName)} ? ${execution.getId()} : ${executionName}"></a>
 							<span class="path-divider">/</span>
-							<a th:href="@{/solution/} + ${executionId} + @{/} + ${solutionIndex}" th:text="'Solution '+${solutionIndex}"></a> 
+							<a th:href="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/} + ${feedbackForObjectiveIndex}" th:text="'Solution '+${solutionIndex}"></a> 
 						</h6>
 					</div>
 				</div>
@@ -42,45 +42,68 @@
 					<!-- Tab panes -->
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane fade" id="variables">
-							<div class="slider-on-tab float-right">
-								<input type="text" name="general-feedback"
-									class="slider-colorful slider-master" id="general-feedback"
-									data-provide="slider" data-slider-min="-1" data-slider-max="1"
-									data-slider-step="0.1"
-									th:attr="data-slider-value=${0}"
-									data-slider-tooltip="hide" />
+							<div class="row">
+								<div class="col-8">
+									<table id="table-variables"
+										class="table table-striped table-hover table-sm"
+										style="width: 100%">
+										<thead>
+											<tr>
+												<th>Variable</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="value,i : ${variables}">
+												<td width="100%" th:text="${value}"/>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="col-4">
+									
+										<div class="card">
+										  <div class="card-header">Feedback</div>
+										  <div class="card-body">
+										  	<p th:text="${feedbackForObjective.getName()}"/>
+										  	<form action="#" th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/} + ${feedbackForObjectiveIndex} + @{/save/feedback}" method="post">
+											  	<input type="hidden" th:value="${feedbackForObjectiveIndex}" name="objective-index">
+											  	<select class="form-control" name="feedback">
+											  		<option value="-1">Bad</option>
+												  	<option value="0" selected>No Opinion</option>
+												  	<option value="1">Good</option>
+												</select>
+												<hr />
+												<button type="submit" class="btn btn-success" id="btn-feedback">Save</button>
+												<a class="btn btn-outline-secondary" th:href="@{/execution/} + ${executionId}">Back</a>
+												</form>
+											</div>
+										</div>
+										
+									
+									<br>
+									<div class="card">
+										<div class="card-header">Objectives</div>
+										<div class="card-body">
+											<table id="solution-objective-table"
+												class="table table-striped table-hover table-sm table-datatable-without-search"
+												style="width: 100%">
+												<thead>
+													<tr>
+														<th>Objective</th>
+														<th>Value</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="instance : ${objectivesMap}">
+														<td th:text="${instance.key}"></td>
+														<td th:text="${instance.value}"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
 							</div>
-							<form action="#" th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/save/feedback}" method="post">
-								<table id="table-variables"
-									class="table table-striped table-hover table-sm"
-									style="width: 100%">
-									<thead>
-										<tr>
-											<th>Variable</th>
-											<th>Feedback</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="value,i : ${variables}">
-											<td width="100%" th:text="${value}"/>
-											<td th:with="feedback = ${solution.getVariableUserFeedback(i.index)}">
-												<input type="text"
-													th:name="'feedback-for-variable-' + ${i.index}"
-													class="slider-colorful slider-slave variable-feedback"
-													data-provide="slider" 
-													data-slider-min="-1"
-													data-slider-max="1" 
-													data-slider-step="0.1"
-													th:attr="data-slider-value = ${feedback == null? 0.0 : feedback}"
-													data-slider-tooltip="hide" />
-											</td>
-										</tr>
-									</tbody>
-								</table>
-								<hr />
-								<button type="submit" class="btn btn-success" id="btn-feedback">Save</button>
-								<a class="btn btn-outline-secondary" th:href="@{/execution/} + ${executionId}">Back</a>
-							</form>
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="objectives">
 							<table id="execution-table"

@@ -85,16 +85,6 @@ body {
 }
 
 
-
-
-.slider.slider-horizontal{
-	width: 100px;
-}
-
-.slider-on-tab{
-	margin-bottom: 20px;	
-}
-
 .bg-dark{
 	background-color: RGB(32, 57, 81) !important;
 }
@@ -157,4 +147,8 @@ body {
 
 .modal {
   overflow-y:scroll;
+}
+
+.slider{
+	width: 100%;
 }

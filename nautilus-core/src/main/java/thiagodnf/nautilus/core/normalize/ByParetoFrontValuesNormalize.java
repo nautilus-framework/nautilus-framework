@@ -24,7 +24,7 @@ public class ByParetoFrontValuesNormalize extends AbstractNormalize {
 
 		for (int i = 0; i < numberOfObjectives; i++) {
 
-			double minValue = Double.MAX_VALUE;
+			double minValue = Double.POSITIVE_INFINITY;
 
 			for (Solution<?> solution : solutions) {
 

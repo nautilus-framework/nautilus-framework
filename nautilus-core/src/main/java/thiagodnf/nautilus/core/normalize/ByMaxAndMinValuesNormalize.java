@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class ByMaxAndMinValuesNormalize extends AbstractNormalize {

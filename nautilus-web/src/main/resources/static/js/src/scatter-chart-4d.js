@@ -76,8 +76,9 @@ class ScatterChart4D {
 				        	if(that.onClickListener){
 				        		
 				        		var solutionIndex = that.solutionIndexes[this.series.index];
+				        		var objectiveIndex = this.x;
 				        		
-				        		that.onClickListener(solutionIndex)
+				        		that.onClickListener(solutionIndex, objectiveIndex)
 				        	}
 				        },
 				      }

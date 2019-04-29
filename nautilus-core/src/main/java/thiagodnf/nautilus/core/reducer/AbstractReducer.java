@@ -13,6 +13,38 @@ import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractReducer {
 	
+	public static class Interaction {
+		
+		protected int objectiveIndex;
+		
+		protected int solutionIndex;
+		
+		public Interaction(int objectiveIndex, int solutionIndex) {
+			this.objectiveIndex = objectiveIndex;
+			this.solutionIndex = solutionIndex;
+		}
+
+		public int getSolutionIndex() {
+			return solutionIndex;
+		}
+
+		public void setSolutionIndex(int solutionIndex) {
+			this.solutionIndex = solutionIndex;
+		}
+
+		public int getObjectiveIndex() {
+			return objectiveIndex;
+		}
+
+		public void setObjectiveIndex(int objectiveIndex) {
+			this.objectiveIndex = objectiveIndex;
+		}
+		
+		public String toString() {
+			return Converter.toJson(this);
+		}
+	}
+	
 	public class RankingItem {
 
 		public String objectiveId;

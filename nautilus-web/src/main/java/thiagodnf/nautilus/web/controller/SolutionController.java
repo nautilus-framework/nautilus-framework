@@ -29,7 +29,7 @@ import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
-@RequestMapping("/solution/{executionId:.+}/{solutionIndex:.+}")
+@RequestMapping("/solution/{executionId:.+}/{solutionIndex:.+}/{objectiveIndex:.+}")
 public class SolutionController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(SolutionController.class);
@@ -46,7 +46,8 @@ public class SolutionController {
 	@GetMapping("")
 	public String view(Model model, 
 			@PathVariable("executionId") String executionId, 
-			@PathVariable("solutionIndex") int solutionIndex) {
+			@PathVariable("solutionIndex") int solutionIndex,
+			@PathVariable("objectiveIndex") int objectiveIndex) {
 		
 		LOGGER.info("Displaying SolutionIndex {} in ExecutionId {}", solutionIndex, executionId);
 		
@@ -78,11 +79,17 @@ public class SolutionController {
 			objectivesMap.put(objectives.get(i).getName(), solution.getObjective(i));
 		}
 		
+		if (objectiveIndex < 0 || objectiveIndex >= objectives.size()) {
+			throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
+		}
+		
 		model.addAttribute("objectivesMap", objectivesMap);
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("solution", solution);
 		model.addAttribute("variables", SolutionUtils.getVariablesAsList(solution));
 		model.addAttribute("execution", execution);
+		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
+		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
 		
 		return "solution";
 	}
@@ -91,6 +98,7 @@ public class SolutionController {
 	public String saveUserFeedback(ModelMap model,
 			@PathVariable("executionId") String executionId, 
 			@PathVariable("solutionIndex") int solutionIndex, 
+			@PathVariable("objectiveIndex") int objectiveIndex,
 			@RequestParam Map<String,String> parameters) {
 		
 		LOGGER.info("Saving feedback for SolutionIndex {} in ExecutionId {}", solutionIndex, executionId);
@@ -107,16 +115,11 @@ public class SolutionController {
 		
 		solution.setAttribute(SolutionAttribute.SELECTED, true);
 
-		for (String key : parameters.keySet()) {
-
-			if (key.startsWith(SolutionAttribute.FEEDBACK_FOR_VARIABLE)) {
-				solution.getAttributes().put(key, Double.valueOf(parameters.get(key)));
-			}
-		}
+		System.out.println(parameters);
+				
+		double feedback = Double.valueOf(parameters.get("feedback"));
 		
-		double feedback = SolutionUtils.getUserFeedback(solution);
-		
-		solution.setAttribute(SolutionAttribute.FEEDBACK, feedback);
+		solution.setAttribute(SolutionAttribute.FEEDBACK_FOR_OBJECTIVE+objectiveIndex, feedback);
 
 		execution = executionService.save(execution);
 
