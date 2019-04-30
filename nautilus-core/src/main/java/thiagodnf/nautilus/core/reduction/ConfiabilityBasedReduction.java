@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.core.reducer;
+package thiagodnf.nautilus.core.reduction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +16,7 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 
-public class ConfiabilityBasedReduction extends AbstractReducer {
+public class ConfiabilityBasedReduction extends AbstractReduction {
 
 	protected Map<String, Double> confiability;
 
@@ -46,17 +46,18 @@ public class ConfiabilityBasedReduction extends AbstractReducer {
 	
 	@Override
 	public String getName() {
-		return "Confiability-based Reduction";
+		return "By Confiability";
 	}
 
 	@Override
 	public List<RankingItem> execute(Problem<?> problem,
 			InstanceData data,
 			List<AbstractObjective> allObjectives, 
-			List<AbstractObjective> optimizedObjectives,
-			List<NSolution<?>> solutions) {
+			List<NSolution<?>> population) {
 		
-		List<NSolution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(solutions); 
+		List<String> optimizedObjectives = SolutionListUtils.getObjectives(population.get(0));
+		
+		List<NSolution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(population); 
 		
 		List<List<Double>> feedbacksForWorst = new ArrayList<>();
 		List<List<Double>> feedbacksForBest = new ArrayList<>();
@@ -100,7 +101,7 @@ public class ConfiabilityBasedReduction extends AbstractReducer {
 		List<RankingItem> rankings = new ArrayList<>();
 
 		for (int i = 0; i < best.length; i++) {
-			rankings.add(new RankingItem(optimizedObjectives.get(i).getName(), confiability.get(best[i] + "_" + worst[i])));
+			rankings.add(new RankingItem(optimizedObjectives.get(i), confiability.get(best[i] + "_" + worst[i])));
 		}
 		
 		for (RankingItem ranking : rankings) {

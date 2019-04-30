@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.core.reducer;
+package thiagodnf.nautilus.core.reduction;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 
-public abstract class AbstractReducer {
+public abstract class AbstractReduction {
 	
 	public static class Interaction {
 		
@@ -85,7 +85,7 @@ public abstract class AbstractReducer {
 		return getName();
 	}
 	
-	public abstract List<RankingItem> execute(Problem<?> problem, InstanceData data, List<AbstractObjective> allObjectives, List<AbstractObjective> optimizedObjectives, List<NSolution<?>> solutions);
+	public abstract List<RankingItem> execute(Problem<?> problem, InstanceData data, List<AbstractObjective> allObjectives, List<NSolution<?>> population);
 	
 	public abstract String getName() ;
 }

@@ -10,6 +10,7 @@ import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.AliveMutantsObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.CostObjective;
+import thiagodnf.nautilus.plugin.spl.encoding.objective.NewSimilarityObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.NumberOfProductsObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.SimilarityObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.UncoveredPairsObjective;
@@ -28,7 +29,8 @@ public class SPLObjectiveExtension implements ObjectiveExtension {
 		objectives.add(new NumberOfProductsObjective());
 		objectives.add(new AliveMutantsObjective());
 		objectives.add(new UncoveredPairsObjective());
-		objectives.add(new SimilarityObjective());
+//		objectives.add(new SimilarityObjective());
+		objectives.add(new NewSimilarityObjective());
 		objectives.add(new CostObjective());
 		objectives.add(new UnselectedFeaturesObjective());
 		objectives.add(new UnimportantFeaturesObjective());

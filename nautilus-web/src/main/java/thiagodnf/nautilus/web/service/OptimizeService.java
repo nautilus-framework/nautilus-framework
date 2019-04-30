@@ -152,6 +152,7 @@ public class OptimizeService {
 			for (int i = 0; i < rawSolutions.size(); i++) {
 				rawSolutions.get(i).getAttributes().clear();
 				rawSolutions.get(i).setAttribute(SolutionAttribute.ID, String.valueOf(i));
+				rawSolutions.get(i).setAttribute(SolutionAttribute.OPTIMIZED_OBJECTIVES, Converter.toJson(parameters.getObjectiveIds()));
 			}
 		   	
 			webSocketService.sendTitle(sessionId, "Preparing the results...");

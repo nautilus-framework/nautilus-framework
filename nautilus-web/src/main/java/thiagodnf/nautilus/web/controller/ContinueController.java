@@ -13,11 +13,10 @@ import org.uma.jmetal.problem.Problem;
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.normalize.AbstractNormalize;
-import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.reducer.AbstractReducer;
-import thiagodnf.nautilus.core.reducer.AbstractReducer.RankingItem;
+import thiagodnf.nautilus.core.reduction.AbstractReduction;
+import thiagodnf.nautilus.core.reduction.AbstractReduction.RankingItem;
 import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.model.Execution;
@@ -57,7 +56,7 @@ public class ContinueController {
 		InstanceData data = instanceDataExtension.getInstanceData(instance);
 		
 		AbstractNormalize normalizer = new ByParetoFrontValuesNormalize();
-		AbstractReducer reducer = pluginService.getReducers().get(settings.getReducerId());
+		AbstractReduction reduction = pluginService.getReducers().get(settings.getReducerId());
 		
 		List<AbstractObjective> allObjectives = pluginService.getObjectiveExtension(pluginId, problemId).getObjectives();
 		List<AbstractObjective> selectedObjectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveIds());
@@ -68,7 +67,7 @@ public class ContinueController {
 		List<NSolution<?>> solutions = execution.getSolutions();
 		List<NSolution<?>> normalizedSolutions = normalizer.normalize(selectedObjectives, solutions);
 		
-		List<RankingItem> rankingItems = reducer.execute(problem, data, allObjectives, selectedObjectives, normalizedSolutions);
+		List<RankingItem> rankingItems = reduction.execute(problem, data, allObjectives, normalizedSolutions);
 		
 		Parameters nextParameters = execution.getParameters();
 		

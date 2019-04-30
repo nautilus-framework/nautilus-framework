@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.core.reducer;
+package thiagodnf.nautilus.core.reduction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 
-public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
+public class ImplicitFeedbackObjectiveReducer extends AbstractReduction {
 
 	private double alpha = 0.5;
 	
@@ -29,12 +29,13 @@ public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 	public List<RankingItem> execute(Problem<?> problem,
 			InstanceData data, 
 			List<AbstractObjective> allObjectives, 
-			List<AbstractObjective> selectedObjectives,
-			List<NSolution<?>> solutions) {
+			List<NSolution<?>> population) {
 		
-		List<NSolution<?>> visualizedSolutions = SolutionListUtils.getVisualizedSolutions(solutions);
+		List<String> optimizedObjectives = SolutionListUtils.getObjectives(population.get(0));
 		
-		double[] rankingForUserSelection = new double[selectedObjectives.size()];
+		List<NSolution<?>> visualizedSolutions = SolutionListUtils.getVisualizedSolutions(population);
+		
+		double[] rankingForUserSelection = new double[optimizedObjectives.size()];
 
 		for (Solution<?> solution : visualizedSolutions) {
 			
@@ -45,7 +46,7 @@ public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 		
 		rankingForUserSelection = mean(rankingForUserSelection, visualizedSolutions.size());
 
-		double[] rankingForUserFeedback = new double[selectedObjectives.size()];
+		double[] rankingForUserFeedback = new double[optimizedObjectives.size()];
 
 		for (NSolution<?> solution : visualizedSolutions) {
 
@@ -56,16 +57,16 @@ public class ImplicitFeedbackObjectiveReducer extends AbstractReducer {
 		
 		rankingForUserFeedback = mean(rankingForUserFeedback, visualizedSolutions.size());
 		
-		double[] general = new double[selectedObjectives.size()];
+		double[] general = new double[optimizedObjectives.size()];
 		
-		for (int i = 0; i < selectedObjectives.size(); i++) {
+		for (int i = 0; i < optimizedObjectives.size(); i++) {
 			general[i] = alpha * rankingForUserSelection[i] + (1.0 - alpha) * rankingForUserFeedback[i];
 		}
 		
 		List<RankingItem> rankings = new ArrayList<>();
 		
 		for (int i = 0; i < general.length; i++) {
-			rankings.add(new RankingItem(selectedObjectives.get(i).getId(), general[i]));
+			rankings.add(new RankingItem(optimizedObjectives.get(i), general[i]));
 		}
 		
 		double sum = rankings.stream().map(e -> e.getValue()).reduce(Double::sum).get();

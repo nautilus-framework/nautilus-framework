@@ -1,17 +1,10 @@
 package thiagodnf.nautilus.plugin.spl.encoding.instance;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-//import static org.valid4j.Assertive.require;
-
-//import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-//import static org.hamcrest.Matchers.lessThan;
-
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.util.InstanceReader;
@@ -30,6 +23,10 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 	protected List<String> features;
 	
 	protected List<String> mandatoryFeatures;
+	
+	protected List<String> optionalFeatures;
+	
+	protected List<List<String>> productWithOptionalFeatures;
 	
 	protected List<List<Integer>> products;
 	
@@ -51,6 +48,8 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 	
 	protected double[][] similarity;
 	
+	protected Map<String, Integer> indexesForOptionalFeatures;
+	
 	public NewTXTInstanceData(Path path) {
 
 //		require(path, not(nullValue()));
@@ -61,6 +60,8 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 		this.pairs = new ArrayList<>();
 		this.productCosts = new ArrayList<>();
 		this.productImportances = new ArrayList<>();
+		this.productWithOptionalFeatures = new ArrayList<>();
+		this.indexesForOptionalFeatures = new HashMap<>();
 		
 		InstanceReader reader = new InstanceReader(path, " ");
 		
@@ -112,9 +113,22 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 
 			this.sumOfCosts += productCosts.get(i);
 			this.sumOfImportances += productImportances.get(i);
+			
+			this.productWithOptionalFeatures.add(calculateProductWithOptionalFeatures(i));
 		}
 		
-		this.similarity = calculateSimilarity(numberOfProducts);
+//		this.similarity = calculateSimilarity(numberOfProducts);
+		
+		this.optionalFeatures = calculateOptionalFeatures();
+
+		for (int i = 0; i < optionalFeatures.size(); i++) {
+			this.indexesForOptionalFeatures.put(optionalFeatures.get(i), i);
+		}
+	}
+	
+	@Override
+	public Map<String, Integer> getIndexesForOptionalFeatures() {
+		return indexesForOptionalFeatures;
 	}
 	
 	@Override
@@ -143,6 +157,11 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 	}	
 	
 	@Override
+	public List<String> getOptionalFeatures() {
+		return this.optionalFeatures;
+	}
+	
+	@Override
 	public List<Integer> getProduct(int index) {
 		return products.get(index);
 	}
@@ -153,6 +172,35 @@ public class NewTXTInstanceData extends InstanceData implements AbstractTXTInsta
 
 		for (Integer featureId : getProduct(index)) {
 			features.add(getFeatures().get(featureId));
+		}
+
+		return features;
+	}
+	
+	public List<String> getProductWithoutMandatoryFeatures(int index) {
+		return this.productWithOptionalFeatures.get(index);
+	}
+	
+	public List<String> calculateProductWithOptionalFeatures(int index) {
+
+		List<String> features = getProductWithFeatures(index);
+
+		for (String mandatory : mandatoryFeatures) {
+			features.remove(mandatory);
+		}
+
+		return features;
+	}
+	
+	protected List<String> calculateOptionalFeatures() {
+
+		List<String> features = new ArrayList<>();
+
+		for (String feature : getFeatures()) {
+
+			if (!mandatoryFeatures.contains(feature)) {
+				features.add(feature);
+			}
 		}
 
 		return features;

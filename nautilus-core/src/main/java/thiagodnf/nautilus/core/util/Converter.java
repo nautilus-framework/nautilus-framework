@@ -35,6 +35,10 @@ public class Converter {
 		return Arrays.stream(array).boxed().collect(Collectors.toList());
 	}
 	
+	public static List<String> toStringList(String[] array) {
+		return new ArrayList<>(Arrays.asList(array));
+	}
+	
 	public static String toKey(String text) {
 		return text.replaceAll("[^A-Za-z0-9]", "-").toLowerCase();
 	}

@@ -41,14 +41,12 @@ import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.normalize.DontNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.reducer.AbstractReducer;
-import thiagodnf.nautilus.core.reducer.ConfiabilityBasedReduction;
-import thiagodnf.nautilus.core.reducer.ImplicitFeedbackObjectiveReducer;
-import thiagodnf.nautilus.core.reducer.InfluenceOfVariableBasedReducer;
-import thiagodnf.nautilus.core.reducer.DontReduceObjectivesReducer;
-import thiagodnf.nautilus.core.reducer.KeepOriginalObjectivesReducer;
-import thiagodnf.nautilus.core.reducer.RandomlyObjectivesReducer;
-import thiagodnf.nautilus.core.reducer.VariableBasedReducer;
+import thiagodnf.nautilus.core.reduction.AbstractReduction;
+import thiagodnf.nautilus.core.reduction.ConfiabilityBasedReduction;
+import thiagodnf.nautilus.core.reduction.DontReduceObjectivesReducer;
+import thiagodnf.nautilus.core.reduction.ImplicitFeedbackObjectiveReducer;
+import thiagodnf.nautilus.core.reduction.KeepOriginalObjectivesReducer;
+import thiagodnf.nautilus.core.reduction.RandomlyObjectivesReducer;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
@@ -84,7 +82,7 @@ public class PluginService {
 	
 	private Map<String, AbstractCorrelation> correlationers = new TreeMap<>();
 	
-	private Map<String, AbstractReducer> reducers = new TreeMap<>();
+	private Map<String, AbstractReduction> reducers = new TreeMap<>();
 	
 	@PostConstruct
 	private void initIt() {
@@ -123,9 +121,7 @@ public class PluginService {
 		addReducer(new ImplicitFeedbackObjectiveReducer());
 		addReducer(new DontReduceObjectivesReducer());
 		addReducer(new KeepOriginalObjectivesReducer());
-		addReducer(new VariableBasedReducer());
 		addReducer(new RandomlyObjectivesReducer());
-		addReducer(new InfluenceOfVariableBasedReducer());
 		addReducer(new ConfiabilityBasedReduction());
 	}
 	
@@ -188,7 +184,7 @@ public class PluginService {
 		LOGGER.info("Added '{}' normalizer", duplicatesRemover.getId());
 	}
 	
-	private void addReducer(AbstractReducer reducer) {
+	private void addReducer(AbstractReduction reducer) {
 
 		this.reducers.put(reducer.getId(), reducer);
 		
@@ -211,7 +207,7 @@ public class PluginService {
 		return correlationers;
 	}
 	
-	public Map<String, AbstractReducer> getReducers() {
+	public Map<String, AbstractReduction> getReducers() {
 		return reducers;
 	}
 	

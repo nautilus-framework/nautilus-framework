@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.core.reducer;
+package thiagodnf.nautilus.core.reduction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,9 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.util.SolutionListUtils;
 
-public class RandomlyObjectivesReducer extends AbstractReducer {
+public class RandomlyObjectivesReducer extends AbstractReduction {
 
 	@Override
 	public String getName() {
@@ -22,19 +23,20 @@ public class RandomlyObjectivesReducer extends AbstractReducer {
 	public List<RankingItem> execute(Problem<?> problem,
 			InstanceData data,
 			List<AbstractObjective> allObjectives, 
-			List<AbstractObjective> selectedObjectives,
-			List<NSolution<?>> solutions) {
+			List<NSolution<?>> population) {
+		
+		List<String> optimizedObjectives = SolutionListUtils.getObjectives(population.get(0));
 
 		List<RankingItem> rankings = new ArrayList<>();
 
 		// Randomly select the objectives to next execution 
 		
-		for (AbstractObjective objective : selectedObjectives) {
+		for (String objectiveId : optimizedObjectives) {
 
 			if (JMetalRandom.getInstance().nextDouble() <= 0.5) {
-				rankings.add(new RankingItem(objective.getId(), 1.0, true));
+				rankings.add(new RankingItem(objectiveId, 1.0, true));
 			} else {
-				rankings.add(new RankingItem(objective.getId(), 1.0, false));
+				rankings.add(new RankingItem(objectiveId, 1.0, false));
 			}
 		}
 		
@@ -47,7 +49,7 @@ public class RandomlyObjectivesReducer extends AbstractReducer {
 				.collect(Collectors.toList());
 		
 		if (selectedRanking.isEmpty()) {
-			rankings.get(JMetalRandom.getInstance().nextInt(0, selectedObjectives.size() - 1)).selected = true;
+			rankings.get(JMetalRandom.getInstance().nextInt(0, optimizedObjectives.size() - 1)).selected = true;
 		}
 
 		return rankings;

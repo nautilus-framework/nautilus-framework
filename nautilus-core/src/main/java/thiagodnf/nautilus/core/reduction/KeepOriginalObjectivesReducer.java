@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.core.reducer;
+package thiagodnf.nautilus.core.reduction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,23 +9,22 @@ import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
-public class DontReduceObjectivesReducer extends AbstractReducer {
+public class KeepOriginalObjectivesReducer extends AbstractReduction {
 
 	@Override
 	public String getName() {
-		return "Don't Reduce";
+		return "Keep Original Objectives";
 	}
 
 	@Override
 	public List<RankingItem> execute(Problem<?> problem,
 			InstanceData data,
 			List<AbstractObjective> allObjectives, 
-			List<AbstractObjective> selectedObjectives,
-			List<NSolution<?>> solutions) {
+			List<NSolution<?>> population) {
 
 		List<RankingItem> rankings = new ArrayList<>();
 
-		for (AbstractObjective objective : selectedObjectives) {
+		for (AbstractObjective objective : allObjectives) {
 			rankings.add(new RankingItem(objective.getId(), 1.0, true));
 		}
 

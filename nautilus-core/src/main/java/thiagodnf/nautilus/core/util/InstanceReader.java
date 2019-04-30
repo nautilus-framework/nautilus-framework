@@ -215,7 +215,7 @@ public class InstanceReader {
 
 		String[] parts = readLine().split(separator);
 
-		return Arrays.asList(parts);
+		return new ArrayList<>(Arrays.asList(parts));
 	}
 	
 	public List<Integer> readIntegerValues() {

@@ -2,6 +2,7 @@ package thiagodnf.nautilus.plugin.spl.encoding.runner;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,19 +21,27 @@ import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.plugin.spl.encoding.objective.NumberOfProductsObjective;
+import thiagodnf.nautilus.plugin.spl.encoding.objective.SimilarityObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.problem.SPLProblem;
 import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
 import thiagodnf.nautilus.plugin.spl.extension.objective.SPLObjectiveExtension;
 
 public class NSGAIIRunner {
 
-	private static Path path = Paths.get("src", "main", "resources", "instances", "drupal.txt");
+	private static Path path = Paths.get("src", "main", "resources", "instances", "eshop.txt");
 	
 	public static void main(String[] args) {
 		
 		System.out.println("Loading...");
 		
 		List<AbstractObjective> objectives = new SPLObjectiveExtension().getObjectives();
+		
+//		List<AbstractObjective> objectives = new ArrayList<>();
+//		
+//		objectives.add(new NumberOfProductsObjective());
+//		objectives.add(new SimilarityObjective());
+		
 		InstanceData instance = new SPLInstanceDataExtension().getInstanceData(path);
 		
 		Problem<BinarySolution> problem = new SPLProblem(instance, objectives);
@@ -50,12 +59,15 @@ public class NSGAIIRunner {
 	    
 	    System.out.println("Optimizing...");
 	    
-	    new AlgorithmRunner.Executor(algorithm).execute() ;
+	    AlgorithmRunner runner = new AlgorithmRunner.Executor(algorithm).execute() ;
+	    
+	    System.out.println(runner.getComputingTime());
 	    
 	    List<BinarySolution> population = algorithm.getResult() ;
 	    
 	    for(BinarySolution solution : population) {
 	    	System.out.println(Arrays.toString(solution.getObjectives()));
+//	    	System.out.println(solution.getVariableValueString(0));
 	    }
 	    
 	    System.out.println("Done");

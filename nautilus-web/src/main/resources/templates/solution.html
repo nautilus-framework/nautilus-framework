@@ -36,7 +36,6 @@
 				<div class="col-12">
 					<div class="nav nav-tabs" id="nav-tab" role="tablist">
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#variables">Variables</a>
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#objectives">Objectives</a>
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings">Settings</a>
 					</div>
 					<!-- Tab panes -->
@@ -45,7 +44,7 @@
 							<div class="row">
 								<div class="col-8">
 									<table id="table-variables"
-										class="table table-striped table-hover table-sm"
+										class="table table-striped table-hover table-sm table-datatable"
 										style="width: 100%">
 										<thead>
 											<tr>
@@ -104,24 +103,6 @@
 									</div>
 								</div>
 							</div>
-						</div>
-						<div role="tabpanel" class="tab-pane fade" id="objectives">
-							<table id="execution-table"
-								class="table table-striped table-hover table-sm table-datatable"
-								style="width: 100%">
-								<thead>
-									<tr>
-										<th>Objective</th>
-										<th>Value</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr th:each="instance : ${objectivesMap}">
-										<td th:text="${instance.key}"></td>
-										<td th:text="${instance.value}"></td>
-									</tr>
-								</tbody>
-							</table>
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="settings">
 							<div class="card border-danger mb-3">
