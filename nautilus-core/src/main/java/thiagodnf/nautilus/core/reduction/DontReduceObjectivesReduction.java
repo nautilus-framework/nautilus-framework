@@ -3,14 +3,11 @@ package thiagodnf.nautilus.core.reduction;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.uma.jmetal.problem.Problem;
-
+import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 
-public class DontReduceObjectivesReducer extends AbstractReduction {
+public class DontReduceObjectivesReduction extends AbstractReduction {
 
 	@Override
 	public String getName() {
@@ -18,10 +15,7 @@ public class DontReduceObjectivesReducer extends AbstractReduction {
 	}
 
 	@Override
-	public List<RankingItem> execute(Problem<?> problem,
-			InstanceData data,
-			List<AbstractObjective> allObjectives, 
-			List<NSolution<?>> population) {
+	public List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population) {
 		
 		List<String> optimizedObjectives = SolutionListUtils.getObjectives(population.get(0));
 		

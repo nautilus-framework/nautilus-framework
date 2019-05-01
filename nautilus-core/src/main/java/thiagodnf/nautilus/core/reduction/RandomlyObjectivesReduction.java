@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
+import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 
-public class RandomlyObjectivesReducer extends AbstractReduction {
+public class RandomlyObjectivesReduction extends AbstractReduction {
 
 	@Override
 	public String getName() {
@@ -20,10 +18,7 @@ public class RandomlyObjectivesReducer extends AbstractReduction {
 	}
 
 	@Override
-	public List<RankingItem> execute(Problem<?> problem,
-			InstanceData data,
-			List<AbstractObjective> allObjectives, 
-			List<NSolution<?>> population) {
+	public List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population) {
 		
 		List<String> optimizedObjectives = SolutionListUtils.getObjectives(population.get(0));
 

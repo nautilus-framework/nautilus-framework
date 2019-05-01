@@ -2,7 +2,6 @@ package thiagodnf.nautilus.plugin.spl.encoding.runner;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,8 +20,6 @@ import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.plugin.spl.encoding.objective.NumberOfProductsObjective;
-import thiagodnf.nautilus.plugin.spl.encoding.objective.SimilarityObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.problem.SPLProblem;
 import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
 import thiagodnf.nautilus.plugin.spl.extension.objective.SPLObjectiveExtension;
@@ -36,11 +33,6 @@ public class NSGAIIRunner {
 		System.out.println("Loading...");
 		
 		List<AbstractObjective> objectives = new SPLObjectiveExtension().getObjectives();
-		
-//		List<AbstractObjective> objectives = new ArrayList<>();
-//		
-//		objectives.add(new NumberOfProductsObjective());
-//		objectives.add(new SimilarityObjective());
 		
 		InstanceData instance = new SPLInstanceDataExtension().getInstanceData(path);
 		

@@ -43,10 +43,9 @@ import thiagodnf.nautilus.core.normalize.DontNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reduction.AbstractReduction;
 import thiagodnf.nautilus.core.reduction.ConfiabilityBasedReduction;
-import thiagodnf.nautilus.core.reduction.DontReduceObjectivesReducer;
-import thiagodnf.nautilus.core.reduction.ImplicitFeedbackObjectiveReducer;
-import thiagodnf.nautilus.core.reduction.KeepOriginalObjectivesReducer;
-import thiagodnf.nautilus.core.reduction.RandomlyObjectivesReducer;
+import thiagodnf.nautilus.core.reduction.DontReduceObjectivesReduction;
+import thiagodnf.nautilus.core.reduction.ImplicitFeedbackObjectiveReduction;
+import thiagodnf.nautilus.core.reduction.RandomlyObjectivesReduction;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
@@ -116,12 +115,11 @@ public class PluginService {
 		addDuplicatesRemover(new ByVariablesOrderMattersDuplicatesRemover());
 		addDuplicatesRemover(new ByObjectivesDuplicatesRemover());
 		
-		LOGGER.info("Done. Adding Reducers");
+		LOGGER.info("Done. Adding Reductions");
 		
-		addReducer(new ImplicitFeedbackObjectiveReducer());
-		addReducer(new DontReduceObjectivesReducer());
-		addReducer(new KeepOriginalObjectivesReducer());
-		addReducer(new RandomlyObjectivesReducer());
+		addReducer(new ImplicitFeedbackObjectiveReduction());
+		addReducer(new DontReduceObjectivesReduction());
+		addReducer(new RandomlyObjectivesReduction());
 		addReducer(new ConfiabilityBasedReduction());
 	}
 	

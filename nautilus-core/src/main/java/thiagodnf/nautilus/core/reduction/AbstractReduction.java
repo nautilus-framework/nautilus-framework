@@ -2,13 +2,8 @@ package thiagodnf.nautilus.core.reduction;
 
 import java.util.List;
 
-import org.uma.jmetal.problem.Problem;
-
-import com.google.gson.Gson;
-
+import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractReduction {
@@ -47,11 +42,11 @@ public abstract class AbstractReduction {
 	
 	public class RankingItem {
 
-		public String objectiveId;
+		protected String objectiveId;
 
-		private double value;
+		protected double value;
 
-		public boolean selected;
+		protected boolean selected;
 		
 		public RankingItem(String objectiveId, double value) {
 			this(objectiveId, value, false);
@@ -71,9 +66,25 @@ public abstract class AbstractReduction {
 			return value;
 		}
 		
+		public String getObjectiveId() {
+			return objectiveId;
+		}
+
+		public void setObjectiveId(String objectiveId) {
+			this.objectiveId = objectiveId;
+		}
+
+		public boolean isSelected() {
+			return selected;
+		}
+
+		public void setSelected(boolean selected) {
+			this.selected = selected;
+		}
+
 		@Override
 		public String toString() {
-			return new Gson().toJson(this);
+			return Converter.toJson(this);
 		}		
 	}
 	
@@ -85,7 +96,7 @@ public abstract class AbstractReduction {
 		return getName();
 	}
 	
-	public abstract List<RankingItem> execute(Problem<?> problem, InstanceData data, List<AbstractObjective> allObjectives, List<NSolution<?>> population);
+	public abstract List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population);
 	
 	public abstract String getName() ;
 }

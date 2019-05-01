@@ -2,25 +2,25 @@ package thiagodnf.nautilus.web.model;
 
 import com.google.gson.Gson;
 
-import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
+import thiagodnf.nautilus.core.colorize.DontColorize;
 import thiagodnf.nautilus.core.correlation.DontCorrelation;
 import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
-import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
-import thiagodnf.nautilus.core.reduction.DontReduceObjectivesReducer;
+import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
+import thiagodnf.nautilus.core.reduction.ConfiabilityBasedReduction;
 
 public class Settings {
 
 	private boolean showLines = true;
 	
-	private String colorizeId = new ByEuclideanDistanceColorize().getId();
+	private String colorizeId = new DontColorize().getId();
 	
-	private String normalizeId = new ByMaxAndMinValuesNormalize().getId();
+	private String normalizeId = new ByParetoFrontValuesNormalize().getId();
 	
 	private String correlationId = new DontCorrelation().getId();
 	
 	private String duplicatesRemoverId = new ByObjectivesDuplicatesRemover().getId();
 	
-	private String reducerId = new DontReduceObjectivesReducer().getId();
+	private String reducerId = new ConfiabilityBasedReduction().getId();
 	
 	private String name;
 

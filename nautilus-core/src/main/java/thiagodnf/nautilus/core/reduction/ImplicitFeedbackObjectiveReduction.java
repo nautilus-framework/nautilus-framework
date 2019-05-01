@@ -6,15 +6,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 
+import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 
-public class ImplicitFeedbackObjectiveReducer extends AbstractReduction {
+public class ImplicitFeedbackObjectiveReduction extends AbstractReduction {
 
 	private double alpha = 0.5;
 	
@@ -26,10 +25,7 @@ public class ImplicitFeedbackObjectiveReducer extends AbstractReduction {
 	}
 
 	@Override
-	public List<RankingItem> execute(Problem<?> problem,
-			InstanceData data, 
-			List<AbstractObjective> allObjectives, 
-			List<NSolution<?>> population) {
+	public List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population) {
 		
 		List<String> optimizedObjectives = SolutionListUtils.getObjectives(population.get(0));
 		

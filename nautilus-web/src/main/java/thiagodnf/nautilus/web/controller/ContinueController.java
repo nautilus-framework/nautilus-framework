@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.uma.jmetal.problem.Problem;
 
+import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.InstanceData;
 import thiagodnf.nautilus.core.normalize.AbstractNormalize;
@@ -58,16 +58,15 @@ public class ContinueController {
 		AbstractNormalize normalizer = new ByParetoFrontValuesNormalize();
 		AbstractReduction reduction = pluginService.getReducers().get(settings.getReducerId());
 		
-		List<AbstractObjective> allObjectives = pluginService.getObjectiveExtension(pluginId, problemId).getObjectives();
 		List<AbstractObjective> selectedObjectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveIds());
 		
 		ProblemExtension problemExtension = pluginService.getProblemExtension(pluginId, problemId);
-		Problem<?> problem = problemExtension.getProblem(data, selectedObjectives);
+		NProblem<?> problem = (NProblem<?>) problemExtension.getProblem(data, selectedObjectives);
 		
 		List<NSolution<?>> solutions = execution.getSolutions();
 		List<NSolution<?>> normalizedSolutions = normalizer.normalize(selectedObjectives, solutions);
 		
-		List<RankingItem> rankingItems = reduction.execute(problem, data, allObjectives, normalizedSolutions);
+		List<RankingItem> rankingItems = reduction.execute(problem, normalizedSolutions);
 		
 		Parameters nextParameters = execution.getParameters();
 		
@@ -75,8 +74,8 @@ public class ContinueController {
 		
 		for (RankingItem item : rankingItems) {
 
-			if (item.selected) {
-				nextParameters.getObjectiveIds().add(item.objectiveId);
+			if (item.isSelected()) {
+				nextParameters.getObjectiveIds().add(item.getObjectiveId());
 			}
 		}
 
