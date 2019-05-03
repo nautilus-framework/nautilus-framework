@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reduction.AbstractReduction;
 import thiagodnf.nautilus.core.reduction.AbstractReduction.RankingItem;
-import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
+import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Parameters;
@@ -52,8 +52,8 @@ public class ContinueController {
 		String filename = parameters.getFilename();
 		
 		Path instance = fileService.getInstanceFile(pluginId, problemId, filename);
-		InstanceDataExtension instanceDataExtension = pluginService.getInstanceDataExtension(pluginId, problemId);
-		InstanceData data = instanceDataExtension.getInstanceData(instance);
+		InstanceExtension instanceDataExtension = pluginService.getInstanceDataExtension(pluginId, problemId);
+		Instance data = instanceDataExtension.getInstanceData(instance);
 		
 		AbstractNormalize normalizer = new ByParetoFrontValuesNormalize();
 		AbstractReduction reduction = pluginService.getReducers().get(settings.getReducerId());

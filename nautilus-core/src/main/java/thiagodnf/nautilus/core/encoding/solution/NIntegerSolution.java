@@ -9,7 +9,6 @@ import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.util.Converter;

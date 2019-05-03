@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.util.InstanceReader;
 import thiagodnf.nautilus.core.util.SimilarityUtils;
 
-public class NewTXTInstanceData extends InstanceData implements AbstractTXTInstanceData {
+public class NewTXTInstanceData extends Instance implements AbstractTXTInstanceData {
 	
 	protected int numberOfProducts;
 	

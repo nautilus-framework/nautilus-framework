@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.uma.jmetal.problem.Problem;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public abstract class NProblem<S> implements Problem<S>{
@@ -13,7 +13,7 @@ public abstract class NProblem<S> implements Problem<S>{
 
 	protected List<AbstractObjective> objectives;
 	
-	protected InstanceData instance;
+	protected Instance instance;
 	
 	private int numberOfVariables = 0;
 	
@@ -23,7 +23,7 @@ public abstract class NProblem<S> implements Problem<S>{
 	
 	private String name = null;
 	
-	public NProblem(InstanceData instance, List<AbstractObjective> objectives) {
+	public NProblem(Instance instance, List<AbstractObjective> objectives) {
 		this.instance = instance;
 		this.objectives = objectives;
 		
@@ -76,11 +76,11 @@ public abstract class NProblem<S> implements Problem<S>{
 		this.objectives = objectives;
 	}
 
-	public InstanceData getInstance() {
+	public Instance getInstance() {
 		return instance;
 	}
 
-	public void setInstance(InstanceData instance) {
+	public void setInstance(Instance instance) {
 		this.instance = instance;
 	}
 }

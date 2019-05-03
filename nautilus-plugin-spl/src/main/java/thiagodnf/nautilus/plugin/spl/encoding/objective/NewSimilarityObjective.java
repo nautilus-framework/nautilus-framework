@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.instance.AbstractTXTInstanceData;
 
@@ -25,7 +25,7 @@ public class NewSimilarityObjective extends AbstractObjective {
 	protected double[] counts;
 	
 	@Override
-	public void beforeProcess(InstanceData instanceData, Solution<?> sol) {
+	public void beforeProcess(Instance instanceData, Solution<?> sol) {
 		this.sum = 0.0;
 		this.count = 0.0;
 		this.indexes = new HashMap<>();
@@ -39,7 +39,7 @@ public class NewSimilarityObjective extends AbstractObjective {
 	}
 	
 	@Override
-	public void process(InstanceData instanceData, Solution<?> sol, int i) {
+	public void process(Instance instanceData, Solution<?> sol, int i) {
 		
 		this.selectedProducts.add(i);
 		
@@ -56,7 +56,7 @@ public class NewSimilarityObjective extends AbstractObjective {
 	}
 	
 	@Override
-	public double calculate(InstanceData instanceData, Solution<?> sol) {
+	public double calculate(Instance instanceData, Solution<?> sol) {
 
 		if (selectedProducts.size() == 0) {
 			return 0.0;

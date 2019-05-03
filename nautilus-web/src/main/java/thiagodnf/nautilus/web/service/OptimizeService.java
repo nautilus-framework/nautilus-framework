@@ -20,11 +20,11 @@ import thiagodnf.nautilus.core.algorithm.GA;
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.listener.AlgorithmListener;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
-import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
+import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
 import thiagodnf.nautilus.plugin.factory.CrossoverFactory;
@@ -92,9 +92,9 @@ public class OptimizeService {
 			List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveIds());
         	
 			ProblemExtension problemExtension = pluginService.getProblemExtension(pluginId, problemId);
-			InstanceDataExtension instanceDataExtension = pluginService.getInstanceDataExtension(pluginId, problemId);
+			InstanceExtension instanceDataExtension = pluginService.getInstanceDataExtension(pluginId, problemId);
 			
-			InstanceData instanceData = instanceDataExtension.getInstanceData(instance);
+			Instance instanceData = instanceDataExtension.getInstanceData(instance);
 			
 			// Factories
 			

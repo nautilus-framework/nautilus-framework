@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.pf4j.Extension;
 
-import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
+import thiagodnf.nautilus.core.model.Instance;
+import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.gui.Tab;
 import thiagodnf.nautilus.plugin.gui.TableTabContent;
 import thiagodnf.nautilus.plugin.zdt.encoding.instance.TXTInstanceData;
@@ -16,10 +16,10 @@ import thiagodnf.nautilus.plugin.zdt.extension.problem.ZDT2ProblemExtension;
 import thiagodnf.nautilus.plugin.zdt.extension.problem.ZDT3ProblemExtension;
 
 @Extension
-public class ZDTInstanceDataExtension implements InstanceDataExtension {
+public class ZDTInstanceDataExtension implements InstanceExtension {
 
 	@Override
-	public InstanceData getInstanceData(Path path) {
+	public Instance getInstanceData(Path path) {
 		return new TXTInstanceData(path);
 	}
 	
@@ -33,11 +33,11 @@ public class ZDTInstanceDataExtension implements InstanceDataExtension {
 	}
 
 	@Override
-	public List<Tab> getTabs(InstanceData data) {
+	public List<Tab> getTabs(Instance data) {
 		return Arrays.asList(getContentTab(data));
 	}
 
-	protected Tab getContentTab(InstanceData data) {
+	protected Tab getContentTab(Instance data) {
 
 		TXTInstanceData d = (TXTInstanceData) data;
 

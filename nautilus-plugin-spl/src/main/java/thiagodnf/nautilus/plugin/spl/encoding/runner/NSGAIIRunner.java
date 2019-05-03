@@ -18,7 +18,7 @@ import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.problem.SPLProblem;
 import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
@@ -34,7 +34,7 @@ public class NSGAIIRunner {
 		
 		List<AbstractObjective> objectives = new SPLObjectiveExtension().getObjectives();
 		
-		InstanceData instance = new SPLInstanceDataExtension().getInstanceData(path);
+		Instance instance = new SPLInstanceDataExtension().getInstanceData(path);
 		
 		Problem<BinarySolution> problem = new SPLProblem(instance, objectives);
 		

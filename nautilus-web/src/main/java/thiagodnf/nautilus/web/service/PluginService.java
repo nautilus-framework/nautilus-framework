@@ -49,7 +49,7 @@ import thiagodnf.nautilus.core.reduction.RandomlyObjectivesReduction;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
-import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
+import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.extension.MutationExtension;
 import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
@@ -228,8 +228,8 @@ public class PluginService {
 		return pluginManager.getExtensions(ObjectiveExtension.class, pluginId);
 	}
 	
-	public List<InstanceDataExtension> getInstanceDataExtensions(String pluginId) {
-		return pluginManager.getExtensions(InstanceDataExtension.class, pluginId);
+	public List<InstanceExtension> getInstanceDataExtensions(String pluginId) {
+		return pluginManager.getExtensions(InstanceExtension.class, pluginId);
 	}
 	
 	public List<ProblemExtension> getProblemExtensions(String pluginId) {
@@ -256,7 +256,7 @@ public class PluginService {
 		return pluginManager.getExtensions(IndicatorExtension.class, pluginId);
 	}
 	
-	public InstanceDataExtension getInstanceDataExtension(String pluginId, String problemId) {
+	public InstanceExtension getInstanceDataExtension(String pluginId, String problemId) {
 		return getInstanceDataExtensions(pluginId)
 				.stream()
 				.filter(p -> p.getProblemIds().contains(problemId))
@@ -373,7 +373,18 @@ public class PluginService {
 		return factory;
 	}
 
-	public void deletePlugin(String pluginId) {
+	/**
+	 * Delete a given plugin
+	 * 
+	 * @param pluginId
+	 * @return the deleted plugin wrapper
+	 */
+	public PluginWrapper deletePlugin(String pluginId) {
+		
+		PluginWrapper plugin = getPluginWrapper(pluginId);
+		
 		this.pluginManager.deletePlugin(pluginId);
+		
+		return plugin;
 	}
 }

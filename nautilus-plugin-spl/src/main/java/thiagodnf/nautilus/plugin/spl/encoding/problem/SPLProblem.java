@@ -8,7 +8,7 @@ import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.instance.AbstractTXTInstanceData;
 
@@ -16,7 +16,7 @@ public class SPLProblem extends NBinaryProblem {
 
 	private static final long serialVersionUID = 1233594822176588853L;
 
-	public SPLProblem(InstanceData instance, List<AbstractObjective> objectives) {
+	public SPLProblem(Instance instance, List<AbstractObjective> objectives) {
 		super(instance, objectives);
 		
 		setNumberOfVariables(1);

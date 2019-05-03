@@ -159,7 +159,7 @@ public class DownloadController {
 			@PathVariable("problemId") String problemId,
 			@PathVariable("filename") String filename) throws IOException {
 
-		LOGGER.info("Downloading the instance file " + filename);
+		LOGGER.info("Downloading the instance file: " + filename);
 
 		Resource file = fileService.getInstanceFileAsResource(pluginId, problemId, filename);
 		
@@ -178,7 +178,7 @@ public class DownloadController {
 	public ResponseEntity<Resource> downloadPlugin(
 			@PathVariable("pluginId") String pluginId){
 
-		LOGGER.info("Downloading the plugin {}", pluginId);
+		LOGGER.info("Downloading the plugin: {}", pluginId);
 		
 		PluginWrapper plugin = pluginService.getPluginWrapper(pluginId);
 

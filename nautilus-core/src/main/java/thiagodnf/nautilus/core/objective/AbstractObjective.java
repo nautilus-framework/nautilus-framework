@@ -3,7 +3,7 @@ package thiagodnf.nautilus.core.objective;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractObjective {
@@ -57,7 +57,7 @@ public abstract class AbstractObjective {
 		this.isDisabled = status;
 	}
 	
-	public double evaluateAll(InstanceData instance, Solution<?> solution) {
+	public double evaluateAll(Instance instance, Solution<?> solution) {
 		
 		BinarySet binarySet = (BinarySet) solution.getVariableValue(0);
 
@@ -81,7 +81,7 @@ public abstract class AbstractObjective {
 		return value;
 	}
 	
-	public double evaluate(InstanceData data, Solution<?> sol) {
+	public double evaluate(Instance data, Solution<?> sol) {
 
 		double value = calculate(data, sol);
 
@@ -92,19 +92,19 @@ public abstract class AbstractObjective {
 		return value;
 	}
 	
-	public void beforeProcess(InstanceData instanceData, Solution<?> sol) {
+	public void beforeProcess(Instance instanceData, Solution<?> sol) {
 		
 	}
 	
-	public void process(InstanceData instance, Solution<?> sol, int i) {
+	public void process(Instance instance, Solution<?> sol, int i) {
 		
 	}
 	
-	public void afterProcess(InstanceData instanceData, Solution<?> sol) {
+	public void afterProcess(Instance instanceData, Solution<?> sol) {
 		
 	}
 	
-	public double calculate(InstanceData instanceData) {
+	public double calculate(Instance instanceData) {
 		return 0.0;
 	}
 	
@@ -113,7 +113,7 @@ public abstract class AbstractObjective {
 	
 	public abstract String getGroupName();
 	
-	public abstract double calculate(InstanceData data, Solution<?> solution);
+	public abstract double calculate(Instance data, Solution<?> solution);
 
 			
 }

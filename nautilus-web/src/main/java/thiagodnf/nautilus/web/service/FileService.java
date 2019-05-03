@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import thiagodnf.nautilus.web.exception.FileAlreadyExistsException;
 import thiagodnf.nautilus.web.exception.FileIsEmptyException;
+import thiagodnf.nautilus.web.exception.FileNotFoundException;
+import thiagodnf.nautilus.web.exception.FileNotReadableException;
 
 @Service
 public class FileService {
@@ -119,17 +121,17 @@ public class FileService {
 	}
 	
 	public Resource loadAsResource(Path file) {
-		System.out.println(file);
+		
 		try {
 			
 			Resource resource = new UrlResource(file.toUri());
 
 			if (!resource.exists()) {
-				throw new RuntimeException("The file does not exist. Please choose a different one");
+				throw new FileNotFoundException();
 			}
 			
 			if (!resource.isReadable()) {
-				throw new RuntimeException("The file is not readable");
+				throw new FileNotReadableException();
 			}
 					
 			return resource;

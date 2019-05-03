@@ -1,5 +1,5 @@
 package thiagodnf.nautilus.core.model;
 
-public abstract class InstanceData {
+public abstract class Instance {
 
 }

@@ -8,15 +8,15 @@ import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.plugin.nrp.encoding.instance.TXTFileInstance;
+import thiagodnf.nautilus.plugin.nrp.encoding.instance.TXTInstance;
 
 public class NRPProblem extends NBinaryProblem {
 
 	private static final long serialVersionUID = 1233594822179588853L;
 
-	public NRPProblem(InstanceData instance, List<AbstractObjective> objectives) {
+	public NRPProblem(Instance instance, List<AbstractObjective> objectives) {
 		super(instance, objectives);
 		
 		setNumberOfVariables(1);
@@ -24,7 +24,7 @@ public class NRPProblem extends NBinaryProblem {
 		List<Integer> bitsPerVariable = new ArrayList<>(getNumberOfVariables());
 
 		for (int i = 0; i < getNumberOfVariables(); i++) {
-			bitsPerVariable.add(((TXTFileInstance) getInstance()).getNumberOfRequirements());
+			bitsPerVariable.add(((TXTInstance) getInstance()).getNumberOfRequirements());
 		}
 		
 		setBitsPerVariable(bitsPerVariable);

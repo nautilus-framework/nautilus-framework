@@ -7,7 +7,7 @@ import org.uma.jmetal.solution.DoubleSolution;
 
 import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.solution.NDoubleSolution;
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public abstract class NDoubleProblem extends NProblem<DoubleSolution> implements DoubleProblem {
@@ -18,7 +18,7 @@ public abstract class NDoubleProblem extends NProblem<DoubleSolution> implements
 	
 	private List<Double> upperBounds;
 	
-	public NDoubleProblem(InstanceData data, List<AbstractObjective> objectives) {
+	public NDoubleProblem(Instance data, List<AbstractObjective> objectives) {
 		super(data, objectives);
 	}
 

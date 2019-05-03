@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
+import thiagodnf.nautilus.core.model.Instance;
+import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.PluginService;
@@ -36,11 +36,11 @@ public class InstanceFileController {
 			@PathVariable("problemId") String problemId, 
 			@PathVariable("filename") String filename){
 		
-		InstanceDataExtension extension = pluginService.getInstanceDataExtension(pluginId, problemId);
+		InstanceExtension extension = pluginService.getInstanceDataExtension(pluginId, problemId);
 		
 		Path path = fileService.getInstanceFile(pluginId, problemId, filename);
 		
-		InstanceData data = extension.getInstanceData(path);
+		Instance data = extension.getInstanceData(path);
 		
 		model.addAttribute("filename", filename);
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));

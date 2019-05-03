@@ -7,12 +7,12 @@ import org.uma.jmetal.solution.IntegerSolution;
 
 import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.solution.NIntegerSolution;
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public abstract class NIntegerProblem extends NProblem<IntegerSolution> implements IntegerProblem {
 
-	public NIntegerProblem(InstanceData data, List<AbstractObjective> objectives) {
+	public NIntegerProblem(Instance data, List<AbstractObjective> objectives) {
 		super(data, objectives);
 	}
 

@@ -8,7 +8,7 @@ import org.uma.jmetal.util.binarySet.BinarySet;
 
 import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public abstract class NBinaryProblem extends NProblem<BinarySolution> implements BinaryProblem {
@@ -17,7 +17,7 @@ public abstract class NBinaryProblem extends NProblem<BinarySolution> implements
 
 	protected List<Integer> bitsPerVariable;
 	
-	public NBinaryProblem(InstanceData data, List<AbstractObjective> objectives) {
+	public NBinaryProblem(Instance data, List<AbstractObjective> objectives) {
 		super(data, objectives);
 	}
 

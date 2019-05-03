@@ -3,6 +3,8 @@ package thiagodnf.nautilus.plugin.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import thiagodnf.nautilus.core.util.Converter;
+
 public class TableTabContent extends TabContent {
 
 	private List<String> header;
@@ -14,6 +16,10 @@ public class TableTabContent extends TabContent {
 	public TableTabContent(List<String> header) {
 		this.header = header;
 		this.rows = new ArrayList<>();
+	}
+	
+	public TableTabContent(String... header) {
+		this(Converter.toStringList(header));
 	}
 	
 	public List<String> getHeader() {
@@ -34,6 +40,17 @@ public class TableTabContent extends TabContent {
 	
 	public boolean isShowRowId() {
 		return showRowId;
+	}
+	
+	public void addRow(Object... objects) {
+
+		List<String> cols = new ArrayList<>();
+
+		for (Object obj : objects) {
+			cols.add(obj.toString());
+		}
+
+		getRows().add(cols);
 	}
 
 	public void setShowRowId(boolean showRowId) {

@@ -5,14 +5,14 @@ import java.util.List;
 
 import org.pf4j.ExtensionPoint;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.plugin.gui.Tab;
 
-public interface InstanceDataExtension extends ExtensionPoint {
+public interface InstanceExtension extends ExtensionPoint {
 
-	public InstanceData getInstanceData(Path path);
+	public Instance getInstanceData(Path path);
 	
-	public List<Tab> getTabs(InstanceData data);
+	public List<Tab> getTabs(Instance data);
 	
 	public List<String> getProblemIds();
 }

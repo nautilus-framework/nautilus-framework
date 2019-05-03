@@ -90,7 +90,7 @@ public class UploadController {
 	}
 	
 	@PostMapping("/instance-file/{pluginId:.+}/{problemId:.+}")
-	public String uploadWithPost(
+	public String uploadInstanceFile(
 			@PathVariable("pluginId") String pluginId,
 			@PathVariable("problemId") String problemId,
 			@Valid UploadInstanceFile uploadInstanceFile, 

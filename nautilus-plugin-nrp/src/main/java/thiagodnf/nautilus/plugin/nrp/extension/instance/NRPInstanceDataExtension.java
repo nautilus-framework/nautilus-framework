@@ -7,19 +7,19 @@ import java.util.List;
 
 import org.pf4j.Extension;
 
-import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
+import thiagodnf.nautilus.core.model.Instance;
+import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.gui.Tab;
 import thiagodnf.nautilus.plugin.gui.TableTabContent;
-import thiagodnf.nautilus.plugin.nrp.encoding.instance.TXTFileInstance;
+import thiagodnf.nautilus.plugin.nrp.encoding.instance.TXTInstance;
 import thiagodnf.nautilus.plugin.nrp.extension.problem.NRPProblemExtension;
 
 @Extension
-public class NRPInstanceDataExtension implements InstanceDataExtension {
+public class NRPInstanceDataExtension implements InstanceExtension {
 
 	@Override
-	public InstanceData getInstanceData(Path path) {
-		return new TXTFileInstance(path);
+	public Instance getInstanceData(Path path) {
+		return new TXTInstance(path);
 	}
 	
 	@Override
@@ -30,9 +30,9 @@ public class NRPInstanceDataExtension implements InstanceDataExtension {
 	}
 	
 	@Override
-	public List<Tab> getTabs(InstanceData data) {
+	public List<Tab> getTabs(Instance data) {
 
-		TXTFileInstance c = (TXTFileInstance) data;
+		TXTInstance c = (TXTInstance) data;
 
 		List<Tab> tabs = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class NRPInstanceDataExtension implements InstanceDataExtension {
 		return tabs;
 	}
 
-	protected Tab getRequirementsTab(TXTFileInstance data) {
+	protected Tab getRequirementsTab(TXTInstance data) {
 
 		TableTabContent table = new TableTabContent(Arrays.asList("Requirement", "Cost", "Profit", "Importance"));
 

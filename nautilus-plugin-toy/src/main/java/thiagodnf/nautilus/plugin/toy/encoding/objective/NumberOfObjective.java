@@ -1,9 +1,9 @@
 package thiagodnf.nautilus.plugin.toy.encoding.objective;
 
-import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.encoding.solution.NIntegerSolution;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class NumberOfObjective extends AbstractObjective {
@@ -15,9 +15,9 @@ public class NumberOfObjective extends AbstractObjective {
 	}
 
 	@Override
-	public double calculate(InstanceData data, Solution<?> sol) {
+	public double calculate(Instance data, Solution<?> sol) {
 
-		IntegerSolution solution = (IntegerSolution) sol;
+		NIntegerSolution solution = (NIntegerSolution) sol;
 
 		int numbers = 0;
 

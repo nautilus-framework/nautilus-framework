@@ -7,11 +7,11 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.util.InstanceReader;
 import thiagodnf.nautilus.core.util.SimilarityUtils;
 
-public class OldTXTInstanceData extends InstanceData {
+public class OldTXTInstanceData extends Instance {
 
 	private int numberOfProducts;
 

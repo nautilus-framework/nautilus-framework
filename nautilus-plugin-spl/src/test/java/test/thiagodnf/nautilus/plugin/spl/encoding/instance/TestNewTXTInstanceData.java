@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
-import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
+import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.spl.encoding.instance.NewTXTInstanceData;
 import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
 
@@ -22,7 +22,7 @@ public class TestNewTXTInstanceData {
 	
 	public static NewTXTInstanceData getInstanceData() {
 
-		InstanceDataExtension instanceDataExtension = new SPLInstanceDataExtension();
+		InstanceExtension instanceDataExtension = new SPLInstanceDataExtension();
 
 		return (NewTXTInstanceData) instanceDataExtension.getInstanceData(path);
 	}

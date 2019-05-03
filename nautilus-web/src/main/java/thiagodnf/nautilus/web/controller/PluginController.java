@@ -64,9 +64,7 @@ public class PluginController {
 
 		LOGGER.info("Deleting the plugin {}", pluginId);
 		
-		PluginWrapper plugin = pluginService.getPluginWrapper(pluginId);
-
-		pluginService.deletePlugin(pluginId);
+		PluginWrapper plugin = pluginService.deletePlugin(pluginId);
 		
 		flashMessageService.success(ra, "msg.delete.plugin.success", plugin.getDescriptor().getPluginDescription());
 		

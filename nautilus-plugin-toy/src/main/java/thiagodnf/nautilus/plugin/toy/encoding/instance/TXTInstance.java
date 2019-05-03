@@ -5,18 +5,18 @@ import java.nio.file.Path;
 
 import com.google.common.base.Preconditions;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.util.InstanceReader;
 
-public class TXTInstanceData extends InstanceData {
+public class TXTInstance extends Instance {
 
-	private int lowerBound;
+	protected int lowerBound;
 	
-	private int upperBound;
+	protected int upperBound;
 	
-	private int numberOfVariables;
+	protected int numberOfVariables;
 	
-	public TXTInstanceData(Path path) {
+	public TXTInstance(Path path) {
 
 		Preconditions.checkNotNull(path, "The path should not be null");
 		Preconditions.checkArgument(Files.exists(path), "The path does not exists");

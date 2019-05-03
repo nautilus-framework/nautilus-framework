@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thiagodnf.nautilus.core.encoding.problem.NDoubleProblem;
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.zdt.encoding.instance.TXTInstanceData;
 
@@ -17,7 +17,7 @@ public class ZDT1Problem extends NDoubleProblem {
 	 *
 	 * @param numberOfVariables Number of variables.
 	 */
-	public ZDT1Problem(InstanceData data, List<AbstractObjective> objectives) {
+	public ZDT1Problem(Instance data, List<AbstractObjective> objectives) {
 		super(data, objectives);
 		
 		TXTInstanceData d = (TXTInstanceData) data;

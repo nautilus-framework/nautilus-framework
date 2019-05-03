@@ -7,7 +7,7 @@ import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.instance.AbstractTXTInstanceData;
 
@@ -37,12 +37,12 @@ public class UnselectedFeaturesObjective extends AbstractObjective {
 //	}
 	
 	@Override
-	public void beforeProcess(InstanceData instanceData, Solution<?> sol) {
+	public void beforeProcess(Instance instanceData, Solution<?> sol) {
 		this.selectedFeatures = new HashSet<>();
 	}
 	
 	@Override
-	public void process(InstanceData instanceData, Solution<?> sol,  int i) {
+	public void process(Instance instanceData, Solution<?> sol,  int i) {
 		
 		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
 		
@@ -50,7 +50,7 @@ public class UnselectedFeaturesObjective extends AbstractObjective {
 	}
 	
 	@Override
-	public double calculate(InstanceData instanceData, Solution<?> sol) {
+	public double calculate(Instance instanceData, Solution<?> sol) {
 
 		AbstractTXTInstanceData instance = (AbstractTXTInstanceData) instanceData;
 

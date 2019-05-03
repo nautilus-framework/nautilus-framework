@@ -4,12 +4,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.util.InstanceReader;
 import thiagodnf.nautilus.plugin.nrp.encoding.model.Requirement;
 import thiagodnf.nautilus.plugin.nrp.encoding.model.Task;
 
-public class TXTFileInstance extends InstanceData {
+public class TXTInstance extends Instance {
 	
 	protected int numberOfRequirements;
 	
@@ -31,7 +31,7 @@ public class TXTFileInstance extends InstanceData {
 	
 	protected List<Requirement> requirements;
 	
-	public TXTFileInstance(Path path) {
+	public TXTInstance(Path path) {
 		
 		this.requirements = new ArrayList<>();
 		this.requirementsCosts = new ArrayList<>();

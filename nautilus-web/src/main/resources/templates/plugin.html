@@ -46,10 +46,10 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="problem,i : ${problems}" th:with="problemId = ${problem.id}">
+									<tr th:each="problem,i : ${problems}">
 										<td th:text="${i.count}"></td>
 										<td>
-											<a th:href="@{/problem/{pluginId}/{problemId}(pluginId=${pluginId},problemId=${problemId})}"
+											<a th:href="@{|/problem/${pluginId}/${problem.id}}|"
 											th:text="${problem.getName()}"></a>
 										</td>
 									</tr>

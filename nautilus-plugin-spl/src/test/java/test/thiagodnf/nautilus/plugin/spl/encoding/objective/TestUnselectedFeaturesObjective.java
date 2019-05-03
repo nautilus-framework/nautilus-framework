@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 
 import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
 import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
-import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
+import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.UnselectedFeaturesObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.problem.SPLProblem;
 import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
@@ -29,9 +29,9 @@ public class TestUnselectedFeaturesObjective {
 	
 	private AbstractObjective objective = new UnselectedFeaturesObjective();
 	
-	public static InstanceData getInstanceData() {
+	public static Instance getInstanceData() {
 
-		InstanceDataExtension instanceDataExtension = new SPLInstanceDataExtension();
+		InstanceExtension instanceDataExtension = new SPLInstanceDataExtension();
 
 		return instanceDataExtension.getInstanceData(path);
 	}

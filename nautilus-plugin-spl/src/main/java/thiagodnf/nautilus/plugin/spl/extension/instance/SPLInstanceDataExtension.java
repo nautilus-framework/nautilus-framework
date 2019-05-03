@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.pf4j.Extension;
 
-import thiagodnf.nautilus.core.model.InstanceData;
-import thiagodnf.nautilus.plugin.extension.InstanceDataExtension;
+import thiagodnf.nautilus.core.model.Instance;
+import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.gui.Tab;
 import thiagodnf.nautilus.plugin.gui.TableTabContent;
 import thiagodnf.nautilus.plugin.spl.encoding.instance.NewTXTInstanceData;
@@ -16,10 +16,10 @@ import thiagodnf.nautilus.plugin.spl.encoding.instance.OldTXTInstanceData;
 import thiagodnf.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
 
 @Extension
-public class SPLInstanceDataExtension implements InstanceDataExtension {
+public class SPLInstanceDataExtension implements InstanceExtension {
 
 	@Override
-	public InstanceData getInstanceData(Path path) {
+	public Instance getInstanceData(Path path) {
 		return new NewTXTInstanceData(path);
 	}
 	
@@ -31,7 +31,7 @@ public class SPLInstanceDataExtension implements InstanceDataExtension {
 	}
 	
 	@Override
-	public List<Tab> getTabs(InstanceData data) {
+	public List<Tab> getTabs(Instance data) {
 
 		NewTXTInstanceData c = (NewTXTInstanceData) data;
 

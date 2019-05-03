@@ -5,10 +5,10 @@ import java.nio.file.Path;
 
 import com.google.common.base.Preconditions;
 
-import thiagodnf.nautilus.core.model.InstanceData;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.util.InstanceReader;
 
-public class TXTInstanceData extends InstanceData {
+public class TXTInstanceData extends Instance {
 
 	private int numberOfVariables;
 	
