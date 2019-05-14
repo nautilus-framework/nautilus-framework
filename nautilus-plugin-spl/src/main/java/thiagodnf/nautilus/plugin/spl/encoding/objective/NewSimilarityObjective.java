@@ -22,7 +22,7 @@ public class NewSimilarityObjective extends AbstractObjective {
 	
 	protected Map<String, Integer> indexes;
 	
-	protected double[] counts;
+	protected int[] counts;
 	
 	@Override
 	public void beforeProcess(Instance instanceData, Solution<?> sol) {
@@ -35,7 +35,7 @@ public class NewSimilarityObjective extends AbstractObjective {
 		
 		indexes = instance.getIndexesForOptionalFeatures();
 	
-		this.counts = new double[indexes.size()];
+		this.counts = new int[indexes.size()];
 	}
 	
 	@Override
@@ -62,13 +62,18 @@ public class NewSimilarityObjective extends AbstractObjective {
 			return 0.0;
 		}
 
-		double max = Arrays.stream(counts).max().getAsDouble();
+		double count = 0;
+		
+		for (int i = 0; i < counts.length; i++) {
 
-		if (max == 1.0) {
-			return 0.0;
+			if (counts[i] > 1) {
+				count++;
+			}
 		}
-
-		return (double) max / (double) selectedProducts.size();
+		
+		System.out.println((double) count / (double) counts.length);
+		
+		return (double) count / (double) counts.length;
 	}
 	
 	@Override
