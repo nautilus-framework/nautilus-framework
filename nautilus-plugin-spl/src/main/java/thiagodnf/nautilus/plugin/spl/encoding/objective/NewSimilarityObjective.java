@@ -71,8 +71,6 @@ public class NewSimilarityObjective extends AbstractObjective {
 			}
 		}
 		
-		System.out.println((double) count / (double) counts.length);
-		
 		return (double) count / (double) counts.length;
 	}
 	
