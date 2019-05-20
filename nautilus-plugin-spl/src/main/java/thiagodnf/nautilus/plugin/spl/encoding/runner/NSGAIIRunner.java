@@ -26,7 +26,7 @@ import thiagodnf.nautilus.plugin.spl.extension.objective.SPLObjectiveExtension;
 
 public class NSGAIIRunner {
 
-	private static Path path = Paths.get("src", "main", "resources", "instances", "eshop.txt");
+	private static Path path = Paths.get("src", "main", "resources", "instances", "drupal.txt");
 	
 	public static void main(String[] args) {
 		
@@ -45,7 +45,7 @@ public class NSGAIIRunner {
 
 	    Algorithm<List<BinarySolution>> algorithm = new NSGAIIBuilder<BinarySolution>(problem, crossover, mutation)
 	        .setSelectionOperator(selection)
-	        .setMaxEvaluations(10000)
+	        .setMaxEvaluations(67200)
 	        .setPopulationSize(100)
 	        .build() ;
 	    

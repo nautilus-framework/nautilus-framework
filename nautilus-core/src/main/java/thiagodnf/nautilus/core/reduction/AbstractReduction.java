@@ -4,19 +4,50 @@ import java.util.List;
 
 import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractReduction {
 	
-	public static class Interaction {
-		
-		protected int objectiveIndex;
+	public static class ItemForEvaluation {
 		
 		protected int solutionIndex;
 		
-		public Interaction(int objectiveIndex, int solutionIndex) {
-			this.objectiveIndex = objectiveIndex;
+		protected int objectiveIndex;
+		
+		protected double objectiveValue;
+		
+		protected double feedback;
+		
+		/** 
+		 * Constructor. Default value = 0.0
+		 * 
+		 * @param solutionIndex the solution index
+		 * @param objectiveIndex the objective index
+		 */
+		public ItemForEvaluation(int solutionIndex, int objectiveIndex) {
+			this(solutionIndex, objectiveIndex, 0.0);
+		}
+
+		/**
+		 * Constructor
+		 * 
+		 * @param solutionIndex the solution index
+		 * @param objectiveIndex the objective index
+		 * @param objectiveValue the objective value
+		 */
+		public ItemForEvaluation(int solutionIndex, int objectiveIndex, double objectiveValue) {
+
 			this.solutionIndex = solutionIndex;
+			this.objectiveIndex = objectiveIndex;
+			this.objectiveValue = objectiveValue;
+		}
+
+		/**
+		 * Constructor
+		 */
+		public ItemForEvaluation() {
+			this(-1, -1);
 		}
 
 		public int getSolutionIndex() {
@@ -33,6 +64,22 @@ public abstract class AbstractReduction {
 
 		public void setObjectiveIndex(int objectiveIndex) {
 			this.objectiveIndex = objectiveIndex;
+		}
+		
+		public double getObjectiveValue() {
+			return objectiveValue;
+		}
+
+		public void setObjectiveValue(double objectiveValue) {
+			this.objectiveValue = objectiveValue;
+		}
+
+		public double getFeedback() {
+			return feedback;
+		}
+
+		public void setFeedback(double feedback) {
+			this.feedback = feedback;
 		}
 		
 		public String toString() {
@@ -96,7 +143,7 @@ public abstract class AbstractReduction {
 		return getName();
 	}
 	
-	public abstract List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population);
+	public abstract List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation);
 	
 	public abstract String getName() ;
 }

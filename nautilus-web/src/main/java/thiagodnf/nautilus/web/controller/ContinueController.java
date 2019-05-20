@@ -66,7 +66,7 @@ public class ContinueController {
 		List<NSolution<?>> solutions = execution.getSolutions();
 		List<NSolution<?>> normalizedSolutions = normalizer.normalize(selectedObjectives, solutions);
 		
-		List<RankingItem> rankingItems = reduction.execute(problem, normalizedSolutions);
+		List<RankingItem> rankingItems = reduction.execute(problem, normalizedSolutions, null);
 		
 		Parameters nextParameters = execution.getParameters();
 		

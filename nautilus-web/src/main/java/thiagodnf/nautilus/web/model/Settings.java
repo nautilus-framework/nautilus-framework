@@ -6,7 +6,7 @@ import thiagodnf.nautilus.core.colorize.DontColorize;
 import thiagodnf.nautilus.core.correlation.DontCorrelation;
 import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
-import thiagodnf.nautilus.core.reduction.ConfiabilityBasedReduction;
+import thiagodnf.nautilus.core.reduction.ConfidenceBasedReduction;
 
 public class Settings {
 
@@ -20,7 +20,7 @@ public class Settings {
 	
 	private String duplicatesRemoverId = new ByObjectivesDuplicatesRemover().getId();
 	
-	private String reducerId = new ConfiabilityBasedReduction().getId();
+	private String reducerId = new ConfidenceBasedReduction().getId();
 	
 	private String name;
 

@@ -8,6 +8,7 @@ import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 
 public class RandomlyObjectivesReduction extends AbstractReduction {
@@ -18,7 +19,7 @@ public class RandomlyObjectivesReduction extends AbstractReduction {
 	}
 
 	@Override
-	public List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population) {
+	public List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation) {
 		
 		List<String> optimizedObjectives = SolutionListUtils.getObjectives(population.get(0));
 
