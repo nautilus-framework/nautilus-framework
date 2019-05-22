@@ -3,6 +3,8 @@ package thiagodnf.nautilus.core.util;
 public class SolutionAttribute {
 	
 	public static final String ID = "id";
+	
+	public static final String COMPUTING_TIME = "computing-time";
 
 	public static final String FEEDBACK_FOR_VARIABLE = "feedback-for-variable-";
 	
