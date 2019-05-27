@@ -39,10 +39,6 @@ $(function(){
 		return false;
 	});
 	
-	$(".boostrap-dual-listbox").bootstrapDualListbox({
-		
-	});
-	
 	var tz = moment.tz.guess();
 	
 	moment.tz.setDefault(tz);
@@ -154,7 +150,7 @@ $(function(){
 	if(hash){
 		$('a[href="' + hash + '"]').tab('show');
 	}else{
-		$('.nav-link:first').tab('show');
+		$('.nav-tabs .nav-link:first').tab('show');
 	}
 	
 	if(!isSafari()){

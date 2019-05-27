@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head></head>
+	<body>
+		
+		<form th:fragment="login" th:action="@{/login}" method="post" th:object="${user}">
+			<div class="form-group">
+				<label for="email">E-mail</label> 
+				<input type="email" class="form-control" th:field="*{email}" autocomplete="current-email" required autofocus/>
+				<span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+			</div>
+			<div class="form-group">
+				<label for="password">Password</label> 
+				<input type="password" class="form-control" th:field="*{password}" autocomplete="current-password" required/>
+				<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+				<span class="text-danger" th:if="${param.error}" th:text="#{msg.user.login.error}"></span>
+			</div>
+			<div class="form-group">
+				<input type="checkbox" id="remember-me" name="remember-me" />
+				<label for="remember-me" th:text="#{remember.me}"></label>
+			</div>
+			<button type="submit" class="btn btn-success">Login</button>
+			<a class="btn btn-light" th:href="@{/}" th:text="#{cancel}"></a>
+		</form>
+		
+	</body>
+</html>

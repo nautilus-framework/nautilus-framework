@@ -5,9 +5,44 @@
 	<head></head>
 	<body>
 		<div th:fragment="default(active)" class="navbar-container">
-			<nav  class="navbar navbar-dark bg-dark">
+			<nav  class="navbar navbar-expand-lg navbar-dark bg-dark">
 				<div class="container">
-					<a class="navbar-brand" th:href="@{/}">Nautilus</a>
+			
+					<a class="navbar-brand" th:href="@{/}" th:text="#{app.name}"></a>
+					
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+		    			<span class="navbar-toggler-icon"></span>
+		  			</button>
+		  			
+		  			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		  			
+		  				<ul class="navbar-nav mr-auto" sec:authorize="isAuthenticated()">
+						      <li class="nav-item active">
+						        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+						      </li>
+						      <li class="nav-item">
+						        <a class="nav-link" href="#">Link</a>
+						      </li>
+						</ul>
+							
+						<div sec:authorize="isAuthenticated()">
+							
+							<div th:replace="fragments/form/logout"></div>
+						
+							<div class="dropdown">
+								<a class="dropdown-toggle dropdown-toggle-white" data-toggle="dropdown" href="#">
+									<span sec:authentication="name"></span>
+									<span class="caret"></span>
+								</a>
+								<div class="dropdown-menu dropdown-menu-right">
+									<a class="dropdown-item" href="#" onclick="document.forms['form-logout'].submit()" th:text="#{logout}"></a>
+								</div>
+							</div>
+						</div>
+						<ul class="navbar-nav" sec:authorize="!isAuthenticated()">
+							<li><a class="btn btn-outline-warning" th:href="@{/login}">Login</a></li>
+						</ul>
+					</div>
 				</div>
 			</nav>
 			<div th:replace="fragments/flash-message :: flash-message"></div>
