@@ -3,20 +3,20 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<head th:replace="fragments/head :: default(null)"></head>
-	<body>
+	<body class="light-gray">
 		<div th:replace="fragments/navbar :: default('home')"></div>
 	
 		<div class="container">
 			<br>
-			<div class="row">
-				<div class="col-6">
-					<h4>Description</h4>
-				</div>
-				<div class="col-6">
-					<h4 th:text="#{sign.up}"></h4>
-					<div th:replace="fragments/form/signup :: signup"></div>
-				</div>
-			</div>
+			<h4>A preference-based objective reduction tool</h4>
+			<br/>
+			<ul>
+				<li><i class="fa fa-star-o fa-3x"></i> Several Optimization Algorithms</li>
+				<br>
+				<li><i class="fa fa-star-o fa-3x"></i> Amazing Pareto-front Visualization</li>
+				<br>
+				<li><i class="fa fa-star-o fa-3x"></i> User-driven Interaction</li>
+			</ul>
 		</div>
 	
 		<div th:replace="fragments/footer :: footer"></div>

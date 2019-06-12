@@ -5,29 +5,7 @@
 	<head></head>
 	<body>
 	
-		<form th:fragment="signup" th:action="@{/user/signup}" method="post" th:object="${user}">
-			<div class="form-group">
-				<label for="firstname" th:text="#{user.firstname}"></label> 
-				<input type="text" class="form-control" th:field="*{firstname}"/>
-				<span class="text-danger" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>
-			</div>
-			<div class="form-group">
-				<label for="lastname" th:text="#{user.lastname}"></label> 
-				<input type="text" class="form-control" th:field="*{lastname}"/>
-				<span class="text-danger" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>
-			</div>
-			<div class="form-group">
-				<label for="email" th:text="#{user.e-mail}"></label> 
-				<input type="email" class="form-control" th:field="*{email}"/>
-				<span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-			</div>
-			<div class="form-group">
-				<label for="password" th:text="#{user.password}"></label> 
-				<input type="password" class="form-control" th:field="*{password}"/>
-				<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
-			</div>
-			<button type="submit" class="btn btn-success" th:text="#{sign.up}"></button>
-		</form>
+		
 
 	</body>
 </html>

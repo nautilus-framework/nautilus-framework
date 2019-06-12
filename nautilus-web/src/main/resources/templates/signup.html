@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:replace="fragments/head :: default('Sign up')"></head>
+	<body class="light-gray">
+		<div th:replace="fragments/navbar :: default('home')"></div>
+		<br/>
+		<br/>
+		<div class="container">
+			<div class="row">
+				<div class="offset-md-4 col-md-4 offset-md-4">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="center" th:text="#{sign.up}"></h4>
+							<p class="center">Get started with your free account</p>
+							<hr/>
+							<form th:action="@{/user/save}" method="post" th:object="${user}">
+								<div class="form-group">
+									<label for="profile.firstname" th:text="#{user.firstname}"></label> 
+									<input type="text" class="form-control" th:field="*{profile.firstname}" autofocus autocomplete="given-name"/>
+									<span class="text-danger" th:if="${#fields.hasErrors('profile.firstname')}" th:errors="*{profile.firstname}"></span>
+								</div>
+								<div class="form-group">
+									<label for="profile.lastname" th:text="#{user.lastname}"></label> 
+									<input type="text" class="form-control" th:field="*{profile.lastname}" autocomplete="family-name"/>
+									<span class="text-danger" th:if="${#fields.hasErrors('profile.lastname')}" th:errors="*{profile.lastname}"></span>
+								</div>
+								<div class="form-group">
+									<label for="email" th:text="#{user.e-mail}"></label> 
+									<input type="email" class="form-control" th:field="*{email}" autocomplete="email"/>
+									<span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+								</div>
+								<div class="form-group">
+									<label for="password" th:text="#{user.password}"></label> 
+									<input type="password" class="form-control" th:field="*{password}"/>
+									<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+								</div>
+								<button type="submit" class="btn btn-primary btn-block" th:text="#{sign.up}"></button>
+								<br>
+								<p class="center"><a th:href="@{/login}">Already have an account?</a></p>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<div th:replace="fragments/footer :: footer"></div>
+	</body>
+</html>

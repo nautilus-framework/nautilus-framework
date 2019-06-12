@@ -17,11 +17,11 @@
 		  			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		  			
 		  				<ul class="navbar-nav mr-auto" sec:authorize="isAuthenticated()">
-						      <li class="nav-item active">
-						        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+						      <li class="nav-item" th:classappend="${active == 'home'} ? active : ''">
+						        <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
 						      </li>
-						      <li class="nav-item">
-						        <a class="nav-link" href="#">Link</a>
+						      <li class="nav-item" th:classappend="${active == 'admin'} ? active : ''" sec:authorize="hasAuthority('SHOW_ADMIN_PAGE')">
+						        <a class="nav-link" th:href="@{/admin}">Admin</a>
 						      </li>
 						</ul>
 							
@@ -35,13 +35,19 @@
 									<span class="caret"></span>
 								</a>
 								<div class="dropdown-menu dropdown-menu-right">
+									<a class="dropdown-item" th:href="@{/profile}">Profile</a>
+								  	<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="#" onclick="document.forms['form-logout'].submit()" th:text="#{logout}"></a>
 								</div>
 							</div>
 						</div>
-						<ul class="navbar-nav" sec:authorize="!isAuthenticated()">
-							<li><a class="btn btn-outline-warning" th:href="@{/login}">Login</a></li>
-						</ul>
+						
+						<ul sec:authorize="!isAuthenticated()" class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+						<form sec:authorize="!isAuthenticated()" class="form-inline my-2 my-lg-0">
+							<a class="btn btn-outline-warning mr-sm-2" th:href="@{/login}" th:text="#{login}"></a>
+							<a class="btn btn-warning my-2 my-sm-0" th:href="@{/user/signup}" th:text="#{sign.up}"></a>
+						</form>
+						
 					</div>
 				</div>
 			</nav>

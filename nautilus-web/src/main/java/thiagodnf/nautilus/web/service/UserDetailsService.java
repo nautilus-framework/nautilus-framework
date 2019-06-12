@@ -1,6 +1,7 @@
 package thiagodnf.nautilus.web.service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,22 +23,27 @@ public class UserDetailsService implements org.springframework.security.core.use
 
 	@Override
 	@Transactional(readOnly = true)
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-		User user = userRepository.findByEmail(username);
+		User user = userRepository.findByEmail(email);
 
 		if (user == null) {
 			throw new UsernameNotFoundException("The username was not found. Please verify the e-mail");
 		}
 
-		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-
-		grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-
-		if (grantedAuthorities.isEmpty()) {
-			throw new RuntimeException("The permissions were not found. Please verify them with the admin");
-		}
+		Set<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(user.getRole().getPrivileges());
 
 		return new UserDetails(user, grantedAuthorities);
+	}
+
+	private Set<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
+
+		Set<GrantedAuthority> authorities = new HashSet<>();
+
+		for (String privilege : privileges) {
+			authorities.add(new SimpleGrantedAuthority(privilege));
+		}
+
+		return authorities;
 	}
 }

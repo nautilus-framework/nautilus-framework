@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:replace="fragments/head :: default(Profile)"></head>
+	<body>
+		<div th:replace="fragments/navbar :: default('home')"></div>
+	
+		<div class="page-header page-header">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<h6 class="title">
+							<a th:href="@{/home}">Home</a>
+							<span class="path-divider">/</span>
+							<a th:href="@{#}">Profile</a>
+						</h6>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					
+					<h4 th:text="${profile.firstname} + ' ' + ${profile.lastname}"></h4>
+					
+					<hr/>
+					<dl class="row">
+					  <dt class="col-sm-1" th:text="#{user.e-mail}"></dt>
+					  <dd class="col-sm-11" th:text="${user.email}"></dd>
+					</dl>
+					<dl class="row">
+					  <dt class="col-sm-1">Bio</dt>
+					  <dd class="col-sm-11" th:text="${profile.biography}"></dd>
+					</dl>
+					
+					<a th:href="@{/profile/edit}" class="btn btn-primary" th:text="#{edit.profile}">Edit Profile</a>
+				</div>
+			</div>
+		</div>
+	
+		<div th:replace="fragments/footer :: footer"></div>
+	</body>
+</html>

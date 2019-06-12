@@ -11,12 +11,12 @@ public class UserDetails extends org.springframework.security.core.userdetails.U
 
 	private User user;
 
-	public UserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-		super(username, password, authorities);
+	public UserDetails(String username, String password, boolean isEnabled, Collection<? extends GrantedAuthority> authorities) {
+		super(username, password, isEnabled, true, true, true, authorities);
 	}
 
 	public UserDetails(User user, Set<GrantedAuthority> grantedAuthorities) {
-		this(user.getEmail(), user.getPassword(), grantedAuthorities);
+		this(user.getEmail(), user.getPassword(), user.isEnabled(), grantedAuthorities);
 		this.user = user;
 	}
 

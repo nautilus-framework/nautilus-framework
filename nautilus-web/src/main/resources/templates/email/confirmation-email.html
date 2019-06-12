@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:fragment="default(title)">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta charset="utf-8" />
+	</head>
+	<body>
+		<center>
+			<h1>Nautilus</h1>
+			
+			<p>You've just created your account on Nautilus!<p>
+			
+			<p>To enter, please click on the button below to confirm your email:</p>
+			
+			<a th:href="${url}">Click to validate your email!</a>
+		</center>
+	</body>
+</html>
