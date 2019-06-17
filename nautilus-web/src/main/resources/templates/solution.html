@@ -3,28 +3,23 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-	<head th:replace="fragments/head :: default(Solution)"></head>
+	<head th:replace="fragments/head :: title('Solution '+${solutionIndex})"></head>
 
-	<body th:with="
-		descriptor = ${plugin.getDescriptor()},
-		pluginId = ${descriptor.getPluginId()},
-		pluginName = ${descriptor.getPluginDescription()},
-		executionName = ${execution.getSettings().getName()}">
+	<body>
 	
 		<div th:replace="fragments/navbar :: default('home')"></div>
 	
 		<div class="page-header page-header-with-navbar">
 			<div class="container">
 				<div class="row">
-					<div class="col-12">
+					<div class="col-12 path">
 						<h6 class="title">
-							<a th:href="@{/}">Home</a> 
-							<span class="path-divider">/</span>
-							<a th:href="@{/plugin/} + ${pluginId}" th:text="${pluginName}"></a>
+							<a th:href="@{/}" th:text="#{nav.home}"></a> 
 							<span class="path-divider">/</span> 
-							<a th:href="@{/execution/}+${execution.getId()}" th:text="${#strings.isEmpty(executionName)} ? ${execution.getId()} : ${executionName}"></a>
+							<a th:href="@{/execution/}+${execution.id}" th:text="${#strings.isEmpty(execution.title)} ? ${execution.id} : ${execution.title}"></a> 
 							<span class="path-divider">/</span>
-							<a th:href="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/} + ${feedbackForObjectiveIndex}" th:text="'Solution '+${solutionIndex}"></a> 
+							<a th:href="@{/solution/}+${execution.id}+@{/}+${solutionIndex}+@{/}+${objectiveIndex}" th:text="'Solution '+ ${solutionIndex}"></a> 
+							 
 						</h6>
 					</div>
 				</div>
@@ -36,7 +31,6 @@
 				<div class="col-12">
 					<div class="nav nav-tabs" id="nav-tab" role="tablist">
 						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#variables">Variables</a>
-						<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings">Settings</a>
 					</div>
 					<!-- Tab panes -->
 					<div class="tab-content">
@@ -60,31 +54,11 @@
 								</div>
 								<div class="col-4">
 									
-										<div class="card">
-										  <div class="card-header">Feedback</div>
-										  <div class="card-body">
-										  	<p th:text="${feedbackForObjective.getName()}"/>
-										  	<form action="#" th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/} + ${feedbackForObjectiveIndex} + @{/save/feedback}" method="post">
-											  	<input type="hidden" th:value="${feedbackForObjectiveIndex}" name="objective-index">
-											  	<select class="form-control" name="feedback">
-											  		<option value="-1">Bad</option>
-												  	<option value="0" selected>No Opinion</option>
-												  	<option value="1">Good</option>
-												</select>
-												<hr />
-												<button type="submit" class="btn btn-success" id="btn-feedback">Save</button>
-												<a class="btn btn-outline-secondary" th:href="@{/execution/} + ${executionId}">Back</a>
-												</form>
-											</div>
-										</div>
-										
-									
-									<br>
 									<div class="card">
 										<div class="card-header">Objectives</div>
 										<div class="card-body">
 											<table id="solution-objective-table"
-												class="table table-striped table-hover table-sm table-datatable-without-search"
+												class="table table-striped table-hover table-sm"
 												style="width: 100%">
 												<thead>
 													<tr>
@@ -101,27 +75,25 @@
 											</table>
 										</div>
 									</div>
-								</div>
-							</div>
-						</div>
-						<div role="tabpanel" class="tab-pane fade" id="settings">
-							<div class="card border-danger mb-3">
-								<div class="card-header bg-transparent border-danger">Danger Zone</div>
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item">
-							  			<div class="row margin-bottom-minus-20">
-											<div class="col-8">
-												<strong>Clear User Preferences</strong><br/>
-												<p><small>Clear the user feedback to provide the preferences again</small></p>
-											</div>
-											<div class="col-4 text-right">
-												<form method="post" th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/clear/user-feedback}" >
-													<button class="btn btn-outline-danger pull-right" data:confirm="#{clear.all.user.feedbacks.single.solution}">Clear User Feedback</button>
+									<br>
+									<!-- <div class="card">
+										  <div class="card-header">Feedback</div>
+										  <div class="card-body">
+										  	<p th:text="${feedbackForObjective.getName()}"/>
+										  	<form action="#" th:action="@{/solution/} + ${executionId} + @{/} + ${solutionIndex} + @{/} + ${feedbackForObjectiveIndex} + @{/save/feedback}" method="post">
+											  	<input type="hidden" th:value="${feedbackForObjectiveIndex}" name="objective-index">
+											  	<select class="form-control" name="feedback">
+											  		<option value="-1">Bad</option>
+												  	<option value="0" selected>No Opinion</option>
+												  	<option value="1">Good</option>
+												</select>
+												<hr />
+												<button type="submit" class="btn btn-success" id="btn-feedback">Save</button>
+												<a class="btn btn-outline-secondary" th:href="@{/execution/} + ${executionId}">Back</a>
 												</form>
-											</div>	
-										</div>
-									</li>
-								</ul>
+											</div>
+										</div> -->
+								</div>
 							</div>
 						</div>
 					</div>

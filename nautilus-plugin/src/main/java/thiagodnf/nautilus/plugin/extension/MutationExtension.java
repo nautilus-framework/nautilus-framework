@@ -12,5 +12,5 @@ public interface MutationExtension extends ExtensionPoint {
 	
 	public String getId();
 	
-	public boolean supports(ProblemExtension extension);
+	public Class<? extends Solution<?>> supports();
 }

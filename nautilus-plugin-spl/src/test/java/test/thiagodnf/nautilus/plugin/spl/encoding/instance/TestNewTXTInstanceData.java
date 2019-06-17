@@ -9,11 +9,9 @@ import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
-import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.spl.encoding.instance.NewTXTInstanceData;
-import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
-
-public class TestNewTXTInstanceData {
+import thiagodnf.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
+class TestNewTXTInstanceData {
 
 	private static Path path = Paths.get("src")
 			.resolve("test")
@@ -22,9 +20,9 @@ public class TestNewTXTInstanceData {
 	
 	public static NewTXTInstanceData getInstanceData() {
 
-		InstanceExtension instanceDataExtension = new SPLInstanceDataExtension();
+		SPLProblemExtension instanceDataExtension = new SPLProblemExtension();
 
-		return (NewTXTInstanceData) instanceDataExtension.getInstanceData(path);
+		return (NewTXTInstanceData) instanceDataExtension.getInstance(path);
 	}
 	
 	@Test

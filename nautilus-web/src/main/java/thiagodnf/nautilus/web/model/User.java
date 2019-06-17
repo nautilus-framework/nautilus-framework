@@ -2,145 +2,53 @@ package thiagodnf.nautilus.web.model;
 
 import java.util.Date;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import thiagodnf.nautilus.core.util.Converter;
-import thiagodnf.nautilus.web.annotation.UniqueEmail;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Document
+@Getter
+@Setter
+@NoArgsConstructor
 public class User {
 
 	@Id
 	private String id;
 	
-	@NotBlank
-	@Email
-	@UniqueEmail
 	private String email;
 
-	@NotBlank
-	@Size(min = 6)
 	private String password;
 	
-	@DBRef
-	private Role role;
+	private String roleId;
 	
-	@NotNull
-	@DBRef
-	@Valid 
-	private Profile profile = new Profile();
+	private String firstname;
+
+	private String lastname;
 	
 	private String confirmationToken;
 	
-	private Date lastLoginDate;
+	private boolean enabled = false;
 	
-	private boolean isEnabled = true;
+	private boolean accountNonExpired = true;
 	
-	private boolean isVisible = true;
+	private boolean accountNonLocked = true;
 	
+	private boolean credentialsNonExpired = true;
+	
+	private boolean editable = true;
+	
+	private int decimalPlaces = 4;
+	
+	private String language = "en_US";
+
 	@CreatedDate
 	private Date creationDate;
 	
 	@LastModifiedDate
 	private Date lastChangeDate;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public boolean isEnabled() {
-		return isEnabled;
-	}
-
-	public void setEnabled(boolean isEnabled) {
-		this.isEnabled = isEnabled;
-	}
-	
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	public boolean isVisible() {
-		return isVisible;
-	}
-
-	public void setVisible(boolean isVisible) {
-		this.isVisible = isVisible;
-	}
-	
-	public Profile getProfile() {
-		return profile;
-	}
-
-	public void setProfile(Profile profile) {
-		this.profile = profile;
-	}
-
-	public Date getLastLoginDate() {
-		return lastLoginDate;
-	}
-
-	public void setLastLoginDate(Date lastLoginDate) {
-		this.lastLoginDate = lastLoginDate;
-	}
-
-	public String getConfirmationToken() {
-		return confirmationToken;
-	}
-
-	public void setConfirmationToken(String confirmationToken) {
-		this.confirmationToken = confirmationToken;
-	}
-	
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public Date getLastChangeDate() {
-		return lastChangeDate;
-	}
-
-	public void setLastChangeDate(Date lastChangeDate) {
-		this.lastChangeDate = lastChangeDate;
-	}
-
-	public String toString() {
-		return Converter.toJson(this);
-	}
 }

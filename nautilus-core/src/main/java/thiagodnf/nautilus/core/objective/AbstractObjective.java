@@ -24,7 +24,7 @@ public abstract class AbstractObjective {
 		return 1.0;
 	}
 
-	public String getId() {
+	public final String getId() {
 		return Converter.toKey(getName());
 	}
 

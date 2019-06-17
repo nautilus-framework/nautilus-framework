@@ -13,7 +13,7 @@ import thiagodnf.nautilus.core.util.Normalizer;
 
 public abstract class AbstractNormalize {
 
-	public String getId() {
+	public final String getId() {
 		return Converter.toKey(getName());
 	}
 	

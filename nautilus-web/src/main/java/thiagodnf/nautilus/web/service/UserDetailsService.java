@@ -11,27 +11,32 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import thiagodnf.nautilus.web.dto.RoleDTO;
 import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.model.UserDetails;
-import thiagodnf.nautilus.web.repository.UserRepository;
 
 @Service
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
+	
+	@Autowired
+	private RoleService roleService;
 
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-		User user = userRepository.findByEmail(email);
+		User user = userService.findByEmail(email);
 
 		if (user == null) {
 			throw new UsernameNotFoundException("The username was not found. Please verify the e-mail");
 		}
+		
+		RoleDTO roleDTO = roleService.findById(user.getRoleId());
 
-		Set<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(user.getRole().getPrivileges());
+		Set<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(roleDTO.getPrivileges());
 
 		return new UserDetails(user, grantedAuthorities);
 	}

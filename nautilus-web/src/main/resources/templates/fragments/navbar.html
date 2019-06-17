@@ -18,16 +18,16 @@
 		  			
 		  				<ul class="navbar-nav mr-auto" sec:authorize="isAuthenticated()">
 						      <li class="nav-item" th:classappend="${active == 'home'} ? active : ''">
-						        <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
+						        <a class="nav-link" th:href="@{/}" th:text="#{nav.home}"></a>
 						      </li>
 						      <li class="nav-item" th:classappend="${active == 'admin'} ? active : ''" sec:authorize="hasAuthority('SHOW_ADMIN_PAGE')">
-						        <a class="nav-link" th:href="@{/admin}">Admin</a>
+						        <a class="nav-link" th:href="@{/admin}" th:text="#{nav.admin}"></a>
 						      </li>
 						</ul>
 							
 						<div sec:authorize="isAuthenticated()">
 							
-							<div th:replace="fragments/form/logout"></div>
+							<form th:fragment="logout" id="form-logout" method="POST" th:action="@{/logout}"></form>
 						
 							<div class="dropdown">
 								<a class="dropdown-toggle dropdown-toggle-white" data-toggle="dropdown" href="#">
@@ -35,23 +35,24 @@
 									<span class="caret"></span>
 								</a>
 								<div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" th:href="@{/profile}">Profile</a>
+									<a class="dropdown-item" th:href="@{/settings}" th:text="#{nav.settings}"></a>
 								  	<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="#" onclick="document.forms['form-logout'].submit()" th:text="#{logout}"></a>
+									<a class="dropdown-item" href="#" onclick="document.forms['form-logout'].submit()" th:text="#{nav.logout}"></a>
 								</div>
 							</div>
 						</div>
 						
 						<ul sec:authorize="!isAuthenticated()" class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
 						<form sec:authorize="!isAuthenticated()" class="form-inline my-2 my-lg-0">
-							<a class="btn btn-outline-warning mr-sm-2" th:href="@{/login}" th:text="#{login}"></a>
-							<a class="btn btn-warning my-2 my-sm-0" th:href="@{/user/signup}" th:text="#{sign.up}"></a>
+							<a class="btn btn-outline-warning mr-sm-2" th:href="@{/login}" th:text="#{btn.login}"></a>
+							<a class="btn btn-warning my-2 my-sm-0" th:href="@{/signup}" th:text="#{btn.signup}"></a>
 						</form>
 						
 					</div>
 				</div>
 			</nav>
 			<div th:replace="fragments/flash-message :: flash-message"></div>
+			<div th:replace="fragments/confirm"></div>
 		</div>
 	</body>
 </html>

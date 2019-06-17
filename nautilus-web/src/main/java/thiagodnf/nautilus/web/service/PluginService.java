@@ -1,13 +1,9 @@
 package thiagodnf.nautilus.web.service;
 
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -18,8 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.google.common.collect.Ordering;
 
 import thiagodnf.nautilus.core.colorize.AbstractColorize;
 import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
@@ -40,7 +34,6 @@ import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.normalize.DontNormalize;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reduction.AbstractReduction;
 import thiagodnf.nautilus.core.reduction.ConfidenceBasedReduction;
 import thiagodnf.nautilus.core.reduction.DontReduceObjectivesReduction;
@@ -49,17 +42,24 @@ import thiagodnf.nautilus.core.reduction.RandomlyObjectivesReduction;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
-import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.extension.MutationExtension;
-import thiagodnf.nautilus.plugin.extension.ObjectiveExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.plugin.extension.SelectionExtension;
-import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
-import thiagodnf.nautilus.plugin.factory.CrossoverFactory;
-import thiagodnf.nautilus.plugin.factory.IndicatorFactory;
-import thiagodnf.nautilus.plugin.factory.MutationFactory;
-import thiagodnf.nautilus.plugin.factory.SelectionFactory;
-import thiagodnf.nautilus.web.exception.InstanceDataNotFoundException;
+import thiagodnf.nautilus.plugin.extension.algorithm.BruteForceSearchAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.GAAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIIAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.RNSGAIIAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.RandomSearchAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.SPEA2AlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.crossover.IntegerSBXCrossoverExtension;
+import thiagodnf.nautilus.plugin.extension.crossover.SBXCrossoverExtension;
+import thiagodnf.nautilus.plugin.extension.crossover.SinglePointCrossoverExtension;
+import thiagodnf.nautilus.plugin.extension.mutation.BitFlipMutationExtension;
+import thiagodnf.nautilus.plugin.extension.mutation.IntegerPolynomialMutationExtension;
+import thiagodnf.nautilus.plugin.extension.mutation.PolynomialMutationExtension;
+import thiagodnf.nautilus.plugin.extension.selection.BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension;
+import thiagodnf.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 import thiagodnf.nautilus.web.exception.PluginNotFoundException;
 import thiagodnf.nautilus.web.exception.ProblemNotFoundException;
 
@@ -83,11 +83,22 @@ public class PluginService {
 	
 	private Map<String, AbstractReduction> reducers = new TreeMap<>();
 	
+	private Map<String, ProblemExtension> problems = new TreeMap<>();
+	
+	private Map<String, AlgorithmExtension> algorithms = new TreeMap<>();
+	
+	private Map<String, CrossoverExtension> crossovers = new TreeMap<>();
+	
+	private Map<String, MutationExtension> mutations = new TreeMap<>();
+	
+	private Map<String, SelectionExtension> selections = new TreeMap<>();
+	
 	@PostConstruct
 	private void initIt() {
 
 		loadPluginsFromDirectory();
-
+		loadPluginsFromClasspath();
+		
 		LOGGER.info("Done. Adding Colorizers");
 
 		addColorizer(new DontColorize());
@@ -121,6 +132,7 @@ public class PluginService {
 		addReducer(new DontReduceObjectivesReduction());
 		addReducer(new RandomlyObjectivesReduction());
 		addReducer(new ConfidenceBasedReduction());
+
 	}
 	
 	public void loadPluginsFromDirectory() {
@@ -148,11 +160,104 @@ public class PluginService {
 				LOGGER.info("Creating folder for {}/{}", plugin.getPluginId(), extension.getId());
 
 				fileService.createPluginDirectory(plugin.getPluginId(), extension.getId());
+				
+				addProblemExtension(extension);
 			}
 		}
 		
 		LOGGER.info("Done. All plugins were loaded and started");
 	}
+	
+	public void loadPluginsFromClasspath() {
+		
+		LOGGER.info("Loading plugins from classpath");
+			
+		LOGGER.info("Loading problem extensions from classpath");
+		
+		addProblemExtension(new ToyProblemExtension());
+		
+		LOGGER.info("Done. Loading algorithms extensions from classpath");
+		
+		addAlgorithmExtension(new BruteForceSearchAlgorithmExtension());
+		addAlgorithmExtension(new GAAlgorithmExtension());
+		addAlgorithmExtension(new NSGAIIAlgorithmExtension());
+		addAlgorithmExtension(new NSGAIIIAlgorithmExtension());
+		addAlgorithmExtension(new RandomSearchAlgorithmExtension());
+		addAlgorithmExtension(new RNSGAIIAlgorithmExtension());
+		addAlgorithmExtension(new SPEA2AlgorithmExtension());
+		
+		LOGGER.info("Done. Loading crossover extensions from classpath");
+		
+		addCrossoverExtension(new IntegerSBXCrossoverExtension());
+		addCrossoverExtension(new SBXCrossoverExtension());
+		addCrossoverExtension(new SinglePointCrossoverExtension());
+		
+		LOGGER.info("Done. Loading mutation extensions from classpath");
+		
+		addMutationExtension(new BitFlipMutationExtension());
+		addMutationExtension(new IntegerPolynomialMutationExtension());
+		addMutationExtension(new PolynomialMutationExtension());
+		
+		LOGGER.info("Done. Loading selection extensions from classpath");
+		
+		addSelectionExtension(new BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension());
+	}
+	
+	private void addProblemExtension(ProblemExtension problemExtension) {
+
+		if (this.problems.containsKey(problemExtension.getId())) {
+			throw new RuntimeException("The problems w");
+		}
+		
+		this.problems.put(problemExtension.getId(), problemExtension);
+		
+		LOGGER.info("Added '{}' problem extension", problemExtension.getId());
+	}
+	
+	private void addAlgorithmExtension(AlgorithmExtension algorithmExtension) {
+
+		if (this.algorithms.containsKey(algorithmExtension.getId())) {
+			throw new RuntimeException("The algorithm w");
+		}
+
+		this.algorithms.put(algorithmExtension.getId(), algorithmExtension);
+		
+		LOGGER.info("Added '{}' algorithm extension", algorithmExtension.getId());
+	}
+	
+	private void addCrossoverExtension(CrossoverExtension crossoverExtension) {
+
+		if (this.crossovers.containsKey(crossoverExtension.getId())) {
+			throw new RuntimeException("The crossover w");
+		}
+
+		this.crossovers.put(crossoverExtension.getId(), crossoverExtension);
+		
+		LOGGER.info("Added '{}' crossover extension", crossoverExtension.getId());
+	}
+	
+	private void addMutationExtension(MutationExtension mutationExtension) {
+
+		if (this.mutations.containsKey(mutationExtension.getId())) {
+			throw new RuntimeException("The mutation w");
+		}
+
+		this.mutations.put(mutationExtension.getId(), mutationExtension);
+
+		LOGGER.info("Added '{}' mutation extension", mutationExtension.getId());
+	}
+	
+	private void addSelectionExtension(SelectionExtension selectionExtension) {
+
+		if (this.selections.containsKey(selectionExtension.getId())) {
+			throw new RuntimeException("The selection w");
+		}
+
+		this.selections.put(selectionExtension.getId(), selectionExtension);
+
+		LOGGER.info("Added '{}' selection extension", selectionExtension.getId());
+	}
+	
 	
 	private void addColorizer(AbstractColorize colorize) {
 
@@ -224,14 +329,6 @@ public class PluginService {
 		return plugin;
 	}
 	
-	public List<ObjectiveExtension> getObjectiveExtensions(String pluginId) {
-		return pluginManager.getExtensions(ObjectiveExtension.class, pluginId);
-	}
-	
-	public List<InstanceExtension> getInstanceDataExtensions(String pluginId) {
-		return pluginManager.getExtensions(InstanceExtension.class, pluginId);
-	}
-	
 	public List<ProblemExtension> getProblemExtensions(String pluginId) {
 		return pluginManager.getExtensions(ProblemExtension.class, pluginId);
 	}
@@ -256,121 +353,12 @@ public class PluginService {
 		return pluginManager.getExtensions(IndicatorExtension.class, pluginId);
 	}
 	
-	public InstanceExtension getInstanceDataExtension(String pluginId, String problemId) {
-		return getInstanceDataExtensions(pluginId)
-				.stream()
-				.filter(p -> p.getProblemIds().contains(problemId))
-				.findFirst()
-				.orElseThrow(InstanceDataNotFoundException::new);
-	}
-	
 	public ProblemExtension getProblemExtension(String pluginId, String problemId) {
 		return getProblemExtensions(pluginId)
 				.stream()
 				.filter(p -> p.getId().equalsIgnoreCase(problemId))
 				.findFirst()
 				.orElseThrow(ProblemNotFoundException::new);
-	}
-	
-	public ObjectiveExtension getObjectiveExtension(String pluginId, String problemId) {
-		return getObjectiveExtensions(pluginId)
-				.stream()
-				.filter(e -> e.getProblemId().equalsIgnoreCase(problemId))
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("Objective Extension was not found"));
-	}
-	
-	public Map<String, List<AbstractObjective>> getObjectivesByGroups(String pluginId, String problemId) {
-
-		Map<String, List<AbstractObjective>> map = new HashMap<>();
-		
-		ObjectiveExtension extension = getObjectiveExtension(pluginId, problemId);
-
-		for (AbstractObjective objective : extension.getObjectives()) {
-
-			if (!map.containsKey(objective.getGroupName())) {
-				map.put(objective.getGroupName(), new ArrayList<>());
-			}
-
-			map.get(objective.getGroupName()).add(objective);
-		}
-
-		return map;
-	}
-	
-	public List<AbstractObjective> getObjectivesByIds(String pluginId, String problemId, List<String> objectiveIds){
-		
-		ObjectiveExtension extension = getObjectiveExtension(pluginId, problemId);
-
-		return extension.getObjectives()
-				.stream()
-				.filter(o -> objectiveIds.contains(o.getId()))
-				.collect(Collectors.toList());
-	}
-	
-	public AlgorithmFactory getAlgorithmFactory(String pluginId) {
-
-		AlgorithmFactory factory = new AlgorithmFactory();
-
-		for (AlgorithmExtension extension : getAlgorithmExtensions(pluginId)) {
-			factory.getExtensions().add(extension);
-		}
-
-		Collections.sort(factory.getExtensions(), Ordering.usingToString());
-
-		return factory;
-	}
-	
-	public SelectionFactory getSelectionFactory(String pluginId) {
-
-		SelectionFactory factory = new SelectionFactory();
-
-		for (SelectionExtension extension : getSelectionExtensions(pluginId)) {
-			factory.getExtensions().add(extension);
-		}
-
-		Collections.sort(factory.getExtensions(), Ordering.usingToString());
-
-		return factory;
-	}
-	
-	public CrossoverFactory getCrossoverFactory(String pluginId) {
-
-		CrossoverFactory factory = new CrossoverFactory();
-
-		for (CrossoverExtension extension : getCrossoverExtensions(pluginId)) {
-			factory.getExtensions().add(extension);
-		}
-
-		Collections.sort(factory.getExtensions(), Ordering.usingToString());
-
-		return factory;
-	}
-	
-	public MutationFactory getMutationFactory(String pluginId) {
-
-		MutationFactory factory = new MutationFactory();
-
-		for (MutationExtension extension : getMutationExtensions(pluginId)) {
-			factory.getExtensions().add(extension);
-		}
-
-		Collections.sort(factory.getExtensions(), Ordering.usingToString());
-
-		return factory;
-	}
-	
-	public IndicatorFactory getIndicatorFactory(String pluginId) {
-
-		IndicatorFactory factory = new IndicatorFactory();
-
-		for (IndicatorExtension extension : getIndicatorExtensions(pluginId)) {
-			factory.add(extension);
-		}
-
-		Collections.sort(factory.getExtensions(), Ordering.usingToString());
-
-		return factory;
 	}
 
 	/**
@@ -387,4 +375,71 @@ public class PluginService {
 		
 		return plugin;
 	}
+
+	public Map<String, AlgorithmExtension> getAlgorithms() {
+		return algorithms;
+	}
+	
+	public Map<String, ProblemExtension> getProblems() {
+		return problems;
+	}
+	
+	public Map<String, SelectionExtension> getSelections() {
+		return selections;
+	}
+	
+	public Map<String, CrossoverExtension> getCrossovers() {
+		return crossovers;
+	}
+	
+	public Map<String, MutationExtension> getMutations() {
+		return mutations;
+	}
+	
+	public ProblemExtension getProblemById(String id) {
+		
+		if(problems.containsKey(id)) {
+			return problems.get(id);
+		}
+		
+		throw new ProblemNotFoundException();
+	}
+	
+	
+	public AlgorithmExtension getAlgorithmExtensionById(String id) {
+
+		if (algorithms.containsKey(id)) {
+			return algorithms.get(id);
+		}
+
+		throw new RuntimeException("The algorithm was not found");
+	}
+	
+	public SelectionExtension getSelectionExtensionById(String id) {
+
+		if (selections.containsKey(id)) {
+			return selections.get(id);
+		}
+
+		throw new RuntimeException("The selection was not found");
+	}
+	
+	public CrossoverExtension getCrossoverExtensionById(String id) {
+
+		if (crossovers.containsKey(id)) {
+			return crossovers.get(id);
+		}
+
+		throw new RuntimeException("The crossover was not found");
+	}
+	
+	public MutationExtension getMutationExtensionById(String id) {
+
+		if (mutations.containsKey(id)) {
+			return mutations.get(id);
+		}
+
+		throw new RuntimeException("The mutations was not found");
+	}
+	
 }

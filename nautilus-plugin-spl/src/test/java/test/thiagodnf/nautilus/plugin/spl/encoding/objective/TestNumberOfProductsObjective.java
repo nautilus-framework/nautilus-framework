@@ -15,10 +15,9 @@ import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
-import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.NumberOfProductsObjective;
 import thiagodnf.nautilus.plugin.spl.encoding.problem.SPLProblem;
-import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
+import thiagodnf.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
 
 public class TestNumberOfProductsObjective {
 
@@ -31,9 +30,9 @@ public class TestNumberOfProductsObjective {
 	
 	public static Instance getInstanceData() {
 
-		InstanceExtension instanceDataExtension = new SPLInstanceDataExtension();
+		SPLProblemExtension instanceDataExtension = new SPLProblemExtension();
 
-		return instanceDataExtension.getInstanceData(path);
+		return instanceDataExtension.getInstance(path);
 	}
 	
 	private double evaluate(String binaryString) {

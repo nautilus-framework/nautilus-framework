@@ -1,6 +1,5 @@
 package thiagodnf.nautilus.web.model;
 
-import java.util.Collection;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -11,17 +10,18 @@ public class UserDetails extends org.springframework.security.core.userdetails.U
 
 	private User user;
 
-	public UserDetails(String username, String password, boolean isEnabled, Collection<? extends GrantedAuthority> authorities) {
-		super(username, password, isEnabled, true, true, true, authorities);
-	}
-
 	public UserDetails(User user, Set<GrantedAuthority> grantedAuthorities) {
-		this(user.getEmail(), user.getPassword(), user.isEnabled(), grantedAuthorities);
+		super(
+			user.getEmail(), 
+			user.getPassword(), 
+			user.isEnabled(),
+			user.isAccountNonExpired(), 
+			user.isCredentialsNonExpired(),
+			user.isAccountNonLocked(),
+			grantedAuthorities
+		);
+		
 		this.user = user;
-	}
-
-	public String getId() {
-		return getUser().getId();
 	}
 
 	public User getUser() {

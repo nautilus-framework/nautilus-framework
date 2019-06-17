@@ -14,7 +14,7 @@
 						<div class="card-body">
 							<h4 th:text="#{login}"></h4>
 							<hr/>
-							<form th:action="@{/login}" method="post" th:object="${user}">
+							<form th:action="@{/login}" method="post" th:object="${loginDTO}">
 								<div class="form-group">
 									<label for="email" th:text="#{user.e-mail}"></label> 
 									<input type="email" class="form-control" th:field="*{email}" autocomplete="current-email" required autofocus/>

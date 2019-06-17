@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head></head>
+	<body>
+		
+		<div th:fragment="new-execution" class="modal fade" id="modal-new-execution" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<form method="GET" th:action="@{/problem/}" th:object="${newExecutionDTO}" class="form-get-without-parameters">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel" th:text="#{nav.new-execution}"></h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="problemId" th:text="#{nav.problem}"></label> 
+								<select class="form-control"  th:field="*{problemId}" required>
+							     	<option th:each="problem : ${problems}" 
+							     		th:value="${problem.key}"
+							     		th:text="${problem.value.name}" 
+							     	/>
+							    </select>
+							    <span class="text-danger" th:if="${#fields.hasErrors('problemId')}" th:errors="*{problemId}"></span>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" th:text="#{btn.new-execution}"></button>
+							<button type="button" class="btn btn-light" data-dismiss="modal" th:text="#{btn.cancel}"></button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+</html>

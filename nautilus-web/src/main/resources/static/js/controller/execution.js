@@ -69,12 +69,12 @@ function getData(rows){
 			if(index === (row.length - 1)){
 				return;
 			}
-			if(index === (row.length - 2)){
-				return;
-			}
-			if(index === (row.length - 3)){
-				return;
-			}
+//			if(index === (row.length - 2)){
+//				return;
+//			}
+//			if(index === (row.length - 3)){
+//				return;
+//			}
 			point.push(parseFloat(col));
 		});
 		

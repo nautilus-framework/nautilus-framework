@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import thiagodnf.nautilus.web.model.UploadInstanceFile;
+import thiagodnf.nautilus.web.dto.UploadInstanceDTO;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
-@RequestMapping("/problem/{pluginId:.+}/{problemId:.+}")
+@RequestMapping("/problem/{problemId:.+}")
 public class ProblemController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProblemController.class);
@@ -26,16 +26,13 @@ public class ProblemController {
 	private PluginService pluginService;
 	
 	@GetMapping("")
-	public String view(Model model,
-			@PathVariable("pluginId") String pluginId,
-			@PathVariable("problemId") String problemId){
+	public String view(@PathVariable String problemId, Model model){
 		
-		LOGGER.info("Displaying '{}/{}'", pluginId, problemId);
+		LOGGER.info("Displaying '{}'", problemId);
 		
-		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
-		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
-		model.addAttribute("instanceFiles", fileService.getInstanceFiles(pluginId, problemId));
-		model.addAttribute("uploadInstanceFile", new UploadInstanceFile());
+		model.addAttribute("instances", fileService.getInstances(problemId));
+		model.addAttribute("problem", pluginService.getProblemById(problemId));
+		model.addAttribute("uploadInstanceDTO", new UploadInstanceDTO(problemId, null));
 
 		return "problem";
 	}

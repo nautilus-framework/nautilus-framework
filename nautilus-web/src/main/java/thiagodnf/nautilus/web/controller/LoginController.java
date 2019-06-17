@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import thiagodnf.nautilus.web.dto.LoginDTO;
 import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.SecurityService;
 import thiagodnf.nautilus.web.util.Messages;
 
 @Controller
+@RequestMapping("/login")
 public class LoginController {
 
 	@Autowired
@@ -21,7 +23,7 @@ public class LoginController {
 	@Autowired
 	private FlashMessageService flashMessageService;
 	
-	@RequestMapping("/login")
+	@RequestMapping("")
 	public String index(Model model, 
 			RedirectAttributes ra,
 			@RequestParam(value = "error", required = false) String error, 
@@ -31,17 +33,25 @@ public class LoginController {
 			return "redirect:/home";
 		}
 		
-		model.addAttribute("user", new User());
+		model.addAttribute("loginDTO", new LoginDTO("", ""));
 		
 		if (error != null) {
-			flashMessageService.error(ra, Messages.USER_LOGIN_ERROR);
+			flashMessageService.error(ra, Messages.LOGIN_ERROR);
 		}
 		
 		if (logout != null) {
-			flashMessageService.success(ra, Messages.USER_LOGGOUT_SUCCESS);
+			flashMessageService.success(ra, Messages.LOGGOUT_SUCCESS);
 			return "redirect:/login";
 		}
 		
 		return "login";
+	}
+	
+	@RequestMapping("/success")
+	public String success() {
+
+		User user = securityService.getLoggedUser().getUser();
+
+		return "redirect:/home?lang=" + user.getLanguage();
 	}
 }

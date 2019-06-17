@@ -142,6 +142,47 @@ public class Converter {
 	    return (double) tmp / factor;
 	}
 	
+	public static String toVAR(List<NSolution<?>> solutions) {
+		
+		StringBuffer buffer = new StringBuffer();
+		
+		for (NSolution<?> s : solutions) {
+
+			for (int i = 0; i < s.getNumberOfVariables(); i++) {
+				
+				buffer.append(s.getVariableValue(i));
+
+				if (i + 1 != s.getNumberOfVariables()) {
+					buffer.append(";");
+				}
+			}
+
+			buffer.append("\n");
+		}
+	   
+		return buffer.toString();
+	}
+	
+	public static String toFUN(List<NSolution<?>> solutions) {
+
+		StringBuffer buffer = new StringBuffer();
+
+		for (NSolution<?> s : solutions) {
+
+			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
+				buffer.append(s.getObjective(i));
+
+				if (i + 1 != s.getNumberOfObjectives()) {
+					buffer.append(";");
+				}
+			}
+
+			buffer.append("\n");
+		}
+
+		return buffer.toString();
+	}
+	
 	public static String toJson(Object object) {
 		
 		Gson gson = new GsonBuilder()

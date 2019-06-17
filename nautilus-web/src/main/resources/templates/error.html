@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<head th:replace="fragments/head :: default(Ooops...)"></head>
+<head th:replace="fragments/head :: title(#{alert.error-title})"></head>
 
 <body>
 	<div th:replace="fragments/navbar :: default('home')"></div>
@@ -9,9 +9,9 @@
 	<div class="page-header">
 		<div class="container">
 			<div class="row">
-				<div class="col-12">
+				<div class="col-12 path">
 					<h6 class="title">
-						<a th:href="@{/}">Ooops...</a>
+						<a th:href="@{/}" th:text="#{alert.error-title}"></a>
 					</h6>
 				</div>
 			</div>
@@ -33,7 +33,9 @@
 			
 			<div class="col-12 center">
 				<br/>
-				<i class="far fa-frown fa-10x" aria-hidden="true"></i>
+				<i class="fa fa-frown-o fa-5x" aria-hidden="true"></i>
+				<br/>
+				<br/>
 				<h1 class="font-size-450x" th:text="${status}"></h1>
 				<h3  th:text="${error}"></h3>
 				<br/>
@@ -42,7 +44,7 @@
 				
 				<p>
 					Application has encountered an error. Please contact support on 
-					<br/><a th:href="#{app.url.issues}" th:text="#{app.url.issues}"></a>
+					<br/><a th:href="#{app.url-issues}" th:text="#{app.url-issues}"></a>
 				</p>
 				
 				<p>Support may ask you to right click to view page source.</p>

@@ -15,16 +15,16 @@
 							<h4 class="center" th:text="#{sign.up}"></h4>
 							<p class="center">Get started with your free account</p>
 							<hr/>
-							<form th:action="@{/user/save}" method="post" th:object="${user}">
+							<form th:action="@{/signup/save}" method="post" th:object="${signupDTO}">
 								<div class="form-group">
-									<label for="profile.firstname" th:text="#{user.firstname}"></label> 
-									<input type="text" class="form-control" th:field="*{profile.firstname}" autofocus autocomplete="given-name"/>
-									<span class="text-danger" th:if="${#fields.hasErrors('profile.firstname')}" th:errors="*{profile.firstname}"></span>
+									<label for="firstname" th:text="#{user.firstname}"></label> 
+									<input type="text" class="form-control" th:field="*{firstname}" autofocus autocomplete="given-name"/>
+									<span class="text-danger" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>
 								</div>
 								<div class="form-group">
-									<label for="profile.lastname" th:text="#{user.lastname}"></label> 
-									<input type="text" class="form-control" th:field="*{profile.lastname}" autocomplete="family-name"/>
-									<span class="text-danger" th:if="${#fields.hasErrors('profile.lastname')}" th:errors="*{profile.lastname}"></span>
+									<label for="lastname" th:text="#{user.lastname}"></label> 
+									<input type="text" class="form-control" th:field="*{lastname}" autocomplete="family-name"/>
+									<span class="text-danger" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>
 								</div>
 								<div class="form-group">
 									<label for="email" th:text="#{user.e-mail}"></label> 

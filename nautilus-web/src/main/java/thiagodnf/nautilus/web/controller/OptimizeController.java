@@ -1,5 +1,7 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.Future;
@@ -10,22 +12,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import thiagodnf.nautilus.web.model.Parameters;
+import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.web.dto.OptimizeDTO;
+import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.OptimizeService;
 import thiagodnf.nautilus.web.service.OptimizeService.ErrorStats;
 import thiagodnf.nautilus.web.service.OptimizeService.Stats;
 import thiagodnf.nautilus.web.service.OptimizeService.SuccessStats;
 import thiagodnf.nautilus.web.service.PluginService;
+import thiagodnf.nautilus.web.service.SecurityService;
 import thiagodnf.nautilus.web.service.WebSocketService;
 
 @Controller
-@RequestMapping("/optimize/{pluginId:.+}/{problemId:.+}/{filename:.+}")
+@RequestMapping("/optimize/{problemId:.+}/{instance:.+}")
 public class OptimizeController {
 	
 	@Autowired
@@ -35,41 +42,37 @@ public class OptimizeController {
 	private WebSocketService webSocketService;
 	
 	@Autowired
+	private SecurityService securityService;
+	
+	@Autowired
 	private OptimizeService asyncService;
 	
 	@GetMapping("")
 	public String optimize(Model model, 
-			@PathVariable("pluginId") String pluginId, 
-			@PathVariable("problemId") String problemId, 
-			@PathVariable("filename") String filename){
+			@PathVariable String problemId, 
+			@PathVariable String instance){
 		
-		Parameters parameters = new Parameters();
+		ProblemExtension problem = pluginService.getProblemById(problemId);
 		
-		parameters.setPluginId(pluginId);
-		parameters.setProblemId(problemId);
-		parameters.setFilename(filename);
+		User user = securityService.getLoggedUser().getUser(); 
 		
-		model.addAttribute("parameters", parameters);
-		model.addAttribute("filename", filename);
-		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
-		model.addAttribute("problem", pluginService.getProblemExtension(pluginId, problemId));
-		
-		model.addAttribute("algorithmFactory", pluginService.getAlgorithmFactory(pluginId));
-		model.addAttribute("selectionFactory", pluginService.getSelectionFactory(pluginId));
-		model.addAttribute("crossoverFactory", pluginService.getCrossoverFactory(pluginId));
-		model.addAttribute("mutationFactory", pluginService.getMutationFactory(pluginId));
-		
-		model.addAttribute("objectiveGroups", pluginService.getObjectivesByGroups(pluginId, problemId));
+		model.addAttribute("problem", problem);
+		model.addAttribute("instance", instance);
+		model.addAttribute("algorithms", pluginService.getAlgorithms());
+		model.addAttribute("crossovers", pluginService.getCrossovers());
+		model.addAttribute("mutations", pluginService.getMutations());
+		model.addAttribute("selections", pluginService.getSelections());
+		model.addAttribute("optimizeDTO", new OptimizeDTO(user.getId(), problem.getId(), instance));
 		
 		return "optimize";
 	}
 	
 	@MessageMapping("/hello.{sessionId}")
     public Future<?> teste(
-    		@Valid Parameters parameters, 
-    		@DestinationVariable String sessionId) {
+    		@Valid OptimizeDTO optimizeDTO, 
+    		@DestinationVariable String sessionId){
 		
-		CompletableFuture<Stats> future = asyncService.execute(parameters,sessionId);
+		CompletableFuture<Stats> future = asyncService.execute(optimizeDTO, sessionId);
 		
 		future.thenRun(() -> {
 			
@@ -94,6 +97,20 @@ public class OptimizeController {
 	
 	@MessageExceptionHandler
 	public void handleException(Throwable exception, @DestinationVariable String sessionId) {
-		webSocketService.sendException(sessionId, exception.getMessage());
+		
+		if (exception instanceof MethodArgumentNotValidException) {
+
+			MethodArgumentNotValidException ex = (MethodArgumentNotValidException) exception;
+
+			List<String> messages = new ArrayList<>();
+
+			for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+				messages.add(fieldError.getField() + ": " + fieldError.getDefaultMessage());
+			}
+
+			webSocketService.sendException(sessionId, messages.toString());
+		} else {
+			webSocketService.sendException(sessionId, exception.getMessage());
+		}
 	}
 }

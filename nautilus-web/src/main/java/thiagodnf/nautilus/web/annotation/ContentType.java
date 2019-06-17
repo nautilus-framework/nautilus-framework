@@ -17,7 +17,7 @@ import thiagodnf.nautilus.web.validator.ContentTypeValidator;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ContentType {
     
-	String message() default "{form.validation.ContentType.message}";
+	String message() default "{form-validation.ContentType.message}";
     
     Class<?>[] groups() default {};
     

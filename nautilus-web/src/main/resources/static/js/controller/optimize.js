@@ -41,18 +41,25 @@ function execute(array) {
 	
 	$.each(array, function(index, el){
 		
-		if(el.name in obj){
+		if(el.name.startsWith("_")){
+			
+		}else if(el.name in obj){
 			if(!Array.isArray(obj[el.name])){
 				obj[el.name] = [obj[el.name]]
 			}
-			obj[el.name].push(el.value)
+			
+			if(el.value){
+				obj[el.name].push(el.value)
+			}
 		}else{
 			obj[el.name] = el.value; 
 		}
 	})
 
 	if(!Array.isArray(obj["objectiveIds"])){
-		obj["objectiveIds"] = [obj["objectiveIds"]];
+		if(obj["objectiveIds"]){
+			obj["objectiveIds"] = [obj["objectiveIds"]];
+		}
 	}
 	
 	if(obj["referencePoints"]){

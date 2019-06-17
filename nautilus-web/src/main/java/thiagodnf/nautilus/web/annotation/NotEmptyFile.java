@@ -17,7 +17,7 @@ import thiagodnf.nautilus.web.validator.NotEmptyFileValidator;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotEmptyFile {
 
-	String message() default "{form.validation.NotEmptyFile.message}";
+	String message() default "{form-validation.NotEmptyFile.message}";
 	
 	Class<?>[] groups() default {};
 	

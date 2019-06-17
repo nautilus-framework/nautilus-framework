@@ -8,26 +8,26 @@ import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.algorithm.Builder;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.BruteForceSearchExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.GAExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIIExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.RNSGAIIExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.RandomSearchExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.SPEA2Extension;
+import thiagodnf.nautilus.plugin.extension.algorithm.BruteForceSearchAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.GAAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIIAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.RNSGAIIAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.RandomSearchAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.SPEA2AlgorithmExtension;
 
 public class AlgorithmFactory {
 
 	private List<AlgorithmExtension> extensions = new ArrayList<>();
 
 	public AlgorithmFactory() {
-		getExtensions().add(new NSGAIIExtension());
-		getExtensions().add(new SPEA2Extension());
-		getExtensions().add(new RNSGAIIExtension());
-		getExtensions().add(new NSGAIIIExtension());
-		getExtensions().add(new BruteForceSearchExtension());
-		getExtensions().add(new GAExtension());
-		getExtensions().add(new RandomSearchExtension());
+		getExtensions().add(new NSGAIIAlgorithmExtension());
+		getExtensions().add(new SPEA2AlgorithmExtension());
+		getExtensions().add(new RNSGAIIAlgorithmExtension());
+		getExtensions().add(new NSGAIIIAlgorithmExtension());
+		getExtensions().add(new BruteForceSearchAlgorithmExtension());
+		getExtensions().add(new GAAlgorithmExtension());
+		getExtensions().add(new RandomSearchAlgorithmExtension());
 	}
 
 	public List<AlgorithmExtension> getExtensions() {

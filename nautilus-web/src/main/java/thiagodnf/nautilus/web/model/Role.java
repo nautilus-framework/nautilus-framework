@@ -1,17 +1,22 @@
 package thiagodnf.nautilus.web.model;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.google.common.base.Preconditions;
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import thiagodnf.nautilus.core.util.Converter;
 
+@Document
+@Getter
+@Setter
+@NoArgsConstructor
 public class Role {
 	
 	public static final String ADMIN = "Admin";
@@ -21,64 +26,18 @@ public class Role {
 	@Id
 	private String id;
 	
-	@NotBlank
 	private String name;
 	
-	@NotNull
 	private List<String> privileges;
 	
-	private boolean isEditable;
+	private boolean isEditable = true;
 	
-	public Role() {
-		this("");
-	}
+	@CreatedDate
+	private Date creationDate;
 	
-	public Role(String name) {
-		this(name, new ArrayList<>(), true);
-	}
+	@LastModifiedDate
+	private Date lastChangeDate;
 	
-	public Role(String name, List<String> privileges, boolean isEditable) {
-
-		Preconditions.checkNotNull(name, "The name should not be null");
-		Preconditions.checkNotNull(privileges, "The privileges should not be null");
-		
-		this.name = name;
-		this.privileges = privileges;
-		this.isEditable = isEditable;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public List<String> getPrivileges() {
-		return privileges;
-	}
-
-	public void setPrivileges(List<String> privileges) {
-		this.privileges = privileges;
-	}
-	
-	public boolean isEditable() {
-		return isEditable;
-	}
-
-	public void setEditable(boolean isEditable) {
-		this.isEditable = isEditable;
-	}
-
 	public String toString() {
 		return Converter.toJson(this);
 	}

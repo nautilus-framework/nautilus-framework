@@ -24,14 +24,13 @@ import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
-import thiagodnf.nautilus.plugin.extension.InstanceExtension;
+import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
+import thiagodnf.nautilus.plugin.extension.MutationExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
-import thiagodnf.nautilus.plugin.factory.AlgorithmFactory;
-import thiagodnf.nautilus.plugin.factory.CrossoverFactory;
-import thiagodnf.nautilus.plugin.factory.MutationFactory;
-import thiagodnf.nautilus.plugin.factory.SelectionFactory;
+import thiagodnf.nautilus.plugin.extension.SelectionExtension;
+import thiagodnf.nautilus.web.dto.OptimizeDTO;
 import thiagodnf.nautilus.web.model.Execution;
-import thiagodnf.nautilus.web.model.Parameters;
 
 @Service
 public class OptimizeService {
@@ -73,53 +72,48 @@ public class OptimizeService {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Async
-    public CompletableFuture<Stats> execute(Parameters parameters, String sessionId) {
+    public CompletableFuture<Stats> execute(OptimizeDTO optimizeDTO, String sessionId) {
  
     	try {
         	
-        	System.out.println(parameters);
+        	System.out.println(optimizeDTO);
         	
 			webSocketService.sendTitle(sessionId, "Initializing...");
         	
         	Thread.currentThread().setName("optimizing-" + sessionId);
         	
-        	String pluginId = parameters.getPluginId();
-			String problemId = parameters.getProblemId();
-			String filename = parameters.getFilename();
-			
-			Path instance = fileService.getInstanceFile(pluginId, problemId, filename);
-			
-			List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, parameters.getObjectiveIds());
+        	ProblemExtension problemExtension = pluginService.getProblemById(optimizeDTO.getProblemId());
         	
-			ProblemExtension problemExtension = pluginService.getProblemExtension(pluginId, problemId);
-			InstanceExtension instanceDataExtension = pluginService.getInstanceDataExtension(pluginId, problemId);
+        	Path path = fileService.getInstance(optimizeDTO.getProblemId(), optimizeDTO.getInstance());
 			
-			Instance instanceData = instanceDataExtension.getInstanceData(instance);
+			List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(optimizeDTO.getObjectiveIds());
+        	
+			Instance instance = problemExtension.getInstance(path);
 			
 			// Factories
 			
-			AlgorithmFactory algorithmFactory = pluginService.getAlgorithmFactory(pluginId);
-			SelectionFactory selectionFactory = pluginService.getSelectionFactory(pluginId);
-			CrossoverFactory crossoverFactory = pluginService.getCrossoverFactory(pluginId);
-			MutationFactory mutationFactory = pluginService.getMutationFactory(pluginId);
+			AlgorithmExtension algorithmExtension = pluginService.getAlgorithmExtensionById(optimizeDTO.getAlgorithmId());
+			SelectionExtension selectionExtension = pluginService.getSelectionExtensionById(optimizeDTO.getSelectionId());
+			CrossoverExtension crossoverExtension = pluginService.getCrossoverExtensionById(optimizeDTO.getCrossoverId());
+			MutationExtension mutationExtension = pluginService.getMutationExtensionById(optimizeDTO.getMutationId());
 			
 			// Builder
 			
 			Builder builder = new Builder();
 			
-			builder.setPopulationSize(parameters.getPopulationSize());
-			builder.setMaxEvaluations(parameters.getMaxEvaluations());
-			builder.setProblem(problemExtension.getProblem(instanceData, objectives));
-			builder.setReferencePoints(Converter.toReferencePoints(parameters.getReferencePoints()));
-			builder.setEpsilon(parameters.getEpsilon());
+			builder.setPopulationSize(optimizeDTO.getPopulationSize());
+			builder.setMaxEvaluations(optimizeDTO.getMaxEvaluations());
+			builder.setProblem(problemExtension.getProblem(instance, objectives));
+			builder.setReferencePoints(Converter.toReferencePoints(optimizeDTO.getReferencePoints()));
+			builder.setEpsilon(optimizeDTO.getEpsilon());
 			
 			webSocketService.sendTitle(sessionId, "Loading last execution if it exists...");
 			
-			builder.setInitialPopulation(getInitialPopulation(builder.getProblem(), parameters.getLastExecutionId()));
+			builder.setInitialPopulation(getInitialPopulation(builder.getProblem(), optimizeDTO.getLastExecutionId()));
 			
-			builder.setSelection(selectionFactory.getSelection(parameters.getSelectionId()));
-			builder.setCrossover(crossoverFactory.getCrossover(parameters.getCrossoverId(), parameters.getCrossoverProbability(), parameters.getCrossoverDistribution()));
-			builder.setMutation(mutationFactory.getMutation(parameters.getMutationId(), parameters.getMutationProbability(), parameters.getMutationDistribution()));
+			builder.setSelection(selectionExtension.getSelection());
+			builder.setCrossover(crossoverExtension.getCrossover(optimizeDTO.getCrossoverProbability(), optimizeDTO.getCrossoverDistribution()));
+			builder.setMutation(mutationExtension.getMutation(optimizeDTO.getMutationProbability(), optimizeDTO.getMutationDistribution()));
 			
 			// Algorithm
 			
@@ -127,7 +121,7 @@ public class OptimizeService {
 			
 			webSocketService.sendTitle(sessionId, "Optimizing...");
 			
-			Algorithm algorithm = algorithmFactory.getAlgorithm(parameters.getAlgorithmId(), builder);
+			Algorithm algorithm = algorithmExtension.getAlgorithm(builder);
 
 			AlgorithmListener alg = (AlgorithmListener) algorithm;
 
@@ -152,17 +146,35 @@ public class OptimizeService {
 			for (int i = 0; i < rawSolutions.size(); i++) {
 				rawSolutions.get(i).getAttributes().clear();
 				rawSolutions.get(i).setAttribute(SolutionAttribute.ID, String.valueOf(i));
-				rawSolutions.get(i).setAttribute(SolutionAttribute.OPTIMIZED_OBJECTIVES, Converter.toJson(parameters.getObjectiveIds()));
+				rawSolutions.get(i).setAttribute(SolutionAttribute.OPTIMIZED_OBJECTIVES, Converter.toJson(optimizeDTO.getObjectiveIds()));
 			}
 		   	
 			webSocketService.sendTitle(sessionId, "Preparing the results...");
 			
 		   	Execution execution = new Execution();
-		   			
-			execution.setSolutions(rawSolutions);
-			execution.setParameters(parameters);
-			execution.setExecutionTime(algorithmRunner.getComputingTime());
-	
+		   	
+		   	execution.setSolutions(rawSolutions);
+		   	execution.setUserId(optimizeDTO.getUserId());
+		   	
+		   	execution.setExecutionTime(algorithmRunner.getComputingTime());
+			
+			execution.setAlgorithmId(optimizeDTO.getAlgorithmId());
+			execution.setProblemId(optimizeDTO.getProblemId());
+			execution.setInstance(optimizeDTO.getInstance());
+			execution.setPopulationSize(optimizeDTO.getPopulationSize());
+			execution.setMaxEvaluations(optimizeDTO.getMaxEvaluations());
+			execution.setSelectionId(optimizeDTO.getSelectionId());
+			execution.setCrossoverId(optimizeDTO.getCrossoverId());
+			execution.setCrossoverProbability(optimizeDTO.getCrossoverProbability());
+			execution.setCrossoverDistribution(optimizeDTO.getCrossoverDistribution());
+			execution.setMutationId(optimizeDTO.getMutationId());
+			execution.setMutationProbability(optimizeDTO.getMutationProbability());
+			execution.setMutationDistribution(optimizeDTO.getMutationDistribution());
+			execution.setReferencePoints(optimizeDTO.getReferencePoints());
+			execution.setEpsilon(optimizeDTO.getEpsilon());
+			execution.setObjectiveIds(optimizeDTO.getObjectiveIds());
+			execution.setShowToAllUsers(optimizeDTO.isShowToAllUsers());
+			
 			webSocketService.sendTitle(sessionId, "Saving the execution to database...");
 			
 			execution = executionService.save(execution);
@@ -179,7 +191,7 @@ public class OptimizeService {
 			return null;
 		}
 
-		Execution previousExecution = executionService.findById(previousExecutionId);
+		Execution previousExecution = executionService.findExecutionById(previousExecutionId);
 
 		List<NSolution<?>> initialPopulation = new ArrayList<>();
 

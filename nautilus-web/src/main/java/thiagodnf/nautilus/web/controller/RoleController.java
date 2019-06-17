@@ -2,9 +2,7 @@ package thiagodnf.nautilus.web.controller;
 
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,13 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import thiagodnf.nautilus.web.model.Role;
+import thiagodnf.nautilus.web.dto.RoleDTO;
 import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.RoleService;
+import thiagodnf.nautilus.web.util.Messages;
 import thiagodnf.nautilus.web.util.Privileges;
 
 @Controller
-@RequestMapping("/roles")
+@RequestMapping("/role")
 public class RoleController {
 	
 	@Autowired
@@ -30,70 +29,46 @@ public class RoleController {
 	private FlashMessageService flashMessageService;
 	
 	@GetMapping("/add")
-	@PreAuthorize ("hasAuthority('CREATE_ROLE')")
-	public String create(Model model) {
+	public String form(RoleDTO roleDTO, Model model) {
 		
-		model.addAttribute("role", new Role());
+		model.addAttribute("roleDTO", roleDTO);
 		model.addAttribute("privileges", Privileges.getPrivilegies());
 
-		return "form-role";
+		return "roleForm";
 	}
 	
 	@PostMapping("/save")
-	@PreAuthorize ("hasAuthority('SAVE_ROLE')")
-	public String save(
-			@Valid Role role,
-			BindingResult bindingResult, 
-			RedirectAttributes ra, 
-			Model model) {
+	public String save(@Valid RoleDTO roleDTO, BindingResult bindingResult, RedirectAttributes ra, Model model) {
 
 		if (bindingResult.hasErrors()) {
-
-			model.addAttribute("privileges", Privileges.getPrivilegies());
-			
-			return "form-role";
+			return form(roleDTO, model);
 		}
-
-		if (StringUtils.isBlank(role.getId())) {
-			role.setId(null);
-		}
-
-		Role savedRole = roleService.save(role);
-
-		flashMessageService.success(ra, "msg.role.save.success", savedRole.getName());
 		
-		return "redirect:/admin#roles";
+		RoleDTO saved = null;
+
+		if (roleDTO.getId() == null) {
+			saved = roleService.create(roleDTO);
+		} else {
+			saved = roleService.update(roleDTO);
+		}
+		
+		flashMessageService.success(ra, Messages.ROLE_SAVE_SUCCESS, saved.getName());
+		
+		return "redirect:/admin/roles";
 	}
 	
 	@GetMapping("/edit/{id:.+}")
-	@PreAuthorize ("hasAuthority('EDIT_ROLE')")
-	public String edit(Model model, @PathVariable("id") String id) {
-		
-		model.addAttribute("role", roleService.findById(id));
-		model.addAttribute("privileges", Privileges.getPrivilegies());
-		
-		return "form-role";
-	}
-	
-	@GetMapping("/view/{id:.+}")
-	@PreAuthorize ("hasAuthority('VIEW_ROLE')")
-	public String view(Model model, @PathVariable("id") String id) {
-		
-		model.addAttribute("role", roleService.findById(id));
-		
-		return "role";
+	public String edit(@PathVariable String id, Model model) {
+		return form(roleService.findById(id), model);
 	}
 	
 	@PostMapping("/delete/{id:.+}")
-	@PreAuthorize ("hasAuthority('DELETE_ROLE')")
-	public String deleteById(Model model, @PathVariable("id") String id, RedirectAttributes ra) {
+	public String deleteById(@PathVariable String id, RedirectAttributes ra, Model model) {
 
-		Role role = roleService.findById(id);
+		RoleDTO roleDTO = roleService.deleteById(id);
 
-		roleService.delete(role);
+		flashMessageService.success(ra, Messages.ROLE_DELETE_SUCCESS, roleDTO.getName());
 
-		flashMessageService.success(ra, "msg.role.delete.success", role.getName());
-
-		return "redirect:/admin#roles";
+		return "redirect:/admin/roles";
 	}
 }

@@ -1,17 +1,23 @@
 package thiagodnf.nautilus.web.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.google.gson.Gson;
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.util.Converter;
 
+@Document
+@Getter
+@Setter
+@NoArgsConstructor
 public class Execution {
 
 	@Id
@@ -19,74 +25,65 @@ public class Execution {
 	
 	private long executionTime;
 	
-	@NotNull
-	private Date date;
-	
-	@NotNull
-	private Parameters parameters;
-	
-	@NotNull
 	private List<NSolution<?>> solutions;
 	
-	@NotNull
-	private Settings settings;
+	private String lastExecutionId;
 	
-	public Execution() {
-		this.parameters = new Parameters();
-		this.solutions = new ArrayList<>();
-		this.date  = new Date();
-		this.settings = new Settings();
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public long getExecutionTime() {
-		return executionTime;
-	}
-
-	public void setExecutionTime(long executionTime) {
-		this.executionTime = executionTime;
-	}
-
-	public Parameters getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(Parameters parameters) {
-		this.parameters = parameters;
-	}	
+	private String title;
 	
-	public List<NSolution<?>> getSolutions() {
-		return solutions;
-	}
-
-	public void setSolutions(List<NSolution<?>> solutionsTwo) {
-		this.solutions = solutionsTwo;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
+	private String userId;
 	
-	public Settings getSettings() {
-		return settings;
-	}
+	private String problemId;
 
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
-
+	private String instance;
+	
+	private int populationSize;
+	
+	private int maxEvaluations;
+	
+	private String algorithmId;
+	
+	private String selectionId;
+	
+	private String crossoverId;
+	
+	private Double crossoverProbability;
+	
+	private Double crossoverDistribution;
+	
+	private String mutationId;
+	
+	private Double mutationProbability;
+	
+	private Double mutationDistribution;
+	
+	private Double epsilon;
+	
+	private List<List<Double>> referencePoints;
+	
+	private List<String> objectiveIds;
+	
+	private boolean showToAllUsers;
+	
+	private boolean showLines;
+	
+	private String colorizeId;
+	
+	private String normalizeId;
+	
+	private String correlationId;
+	
+	private String duplicatesRemoverId;
+	
+	private String reducerId;
+	
+	@CreatedDate
+	private Date creationDate;
+	
+	@LastModifiedDate
+	private Date lastChangeDate;
+	
 	public String toString() {
-		return new Gson().toJson(this);
+		return Converter.toJson(this);
 	}
 }

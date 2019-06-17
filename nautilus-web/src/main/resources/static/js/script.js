@@ -2,27 +2,68 @@ function isSafari(){
 	return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 }
 
+function getCookie(cname) {
+	
+	var name = cname + "=";
+	var decodedCookie = decodeURIComponent(document.cookie);
+	var ca = decodedCookie.split(';');
+
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
+}
+
+function getLanguage(){
+	return getCookie('localeInfo') || "en_US";
+}
+
+function getDatatableLanguage(){
+	
+	if(getLanguage() == 'pt_BR'){
+		return "//cdn.datatables.net/plug-ins/1.10.19/i18n/Portuguese-Brasil.json"
+	}
+	return null;
+}
+
 function confirm(message, callback){
 	
 	bootbox.dialog({
 		 message: message,
 		 closeButton: false,
-		 title: "Confirm",
+		 title: $("#confirm #title").text(),
 		 onEscape: true,
 		 buttons: {
 			 confirm: {
-				label: "Confirm",
+				label: $("#confirm #btn-confirm").text(),
 	            className: "btn-danger",
 	            callback: function(result){
 	            	callback();
 				}
 	        },
 	        cancel: {
-	            label: "Cancel",
+	            label: $("#confirm #btn-cancel").text(),
 	            className: "btn-light pull-right"
 	        },
 		 },
 	});
+}
+
+function getNoOrderableIndexes(){
+
+	var indexes = [];
+	
+	$('.table-datatable-no-orderable').find("th.no-orderable").each(function(index, value){
+		indexes.push($(this).index());
+	})
+
+	return indexes;
 }
  
 $(function(){
@@ -109,23 +150,36 @@ $(function(){
 		}
 	})
 	
-	
+	$("div.datatable-toolbar").html('<a th:href="@{/role/add}" class="btn btn-outline-success">New</a>');
    
-	$('.table-datatable').DataTable();
-	
-	$('.table-datatable-no-paginaton').dataTable({
-	    "bPaginate": false
+	$('.table-datatable').DataTable({
+		language: {
+	        url: getDatatableLanguage()
+	    }		
 	});
 	
-	$('.table-datatable-with-option').dataTable({
+	$('.table-datatable-no-paginaton').dataTable({
+	    "bPaginate": false,
+	    language: {
+	        url: getDatatableLanguage()
+	    }
+	});
+	
+	$('.table-datatable-no-orderable').dataTable({
 		"columnDefs": [ {
-			"targets": $('.table-datatable-with-option tr:first').find("th").length-1,
+			"targets": getNoOrderableIndexes(),
 			"orderable": false
-		}]
+		}],
+		language: {
+	        url: getDatatableLanguage()
+	    }	
 	});
 	
 	$('.table-datatable-without-search').dataTable( {
-	  "searching": false
+	  "searching": false,
+	  language: {
+	        url: getDatatableLanguage()
+	    }
 	});
 	
 	$('a[data-toggle="tab"]').click(function(e) {
@@ -164,4 +218,18 @@ $(function(){
             e.preventDefault();
         });
     }
+	
+	$(".form-get-without-parameters").submit(function(e){
+		
+		e.preventDefault();
+		
+		var action = $(this).attr("action");
+		
+		var value = $(this).find("select").val();
+		
+		window.location.href = action+value
+	});
+	
+	$( ".checkbox-all-selected input[type='checkbox']" ).prop( "checked", true );
+	
 })

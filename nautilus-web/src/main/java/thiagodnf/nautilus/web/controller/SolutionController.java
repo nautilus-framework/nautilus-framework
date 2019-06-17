@@ -21,9 +21,9 @@ import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.core.util.SolutionUtils;
+import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.exception.SolutionNotFoundException;
 import thiagodnf.nautilus.web.model.Execution;
-import thiagodnf.nautilus.web.model.Parameters;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.PluginService;
@@ -51,19 +51,17 @@ public class SolutionController {
 		
 		LOGGER.info("Displaying SolutionIndex {} in ExecutionId {}", solutionIndex, executionId);
 		
-		Execution execution = executionService.findById(executionId);
+		Execution execution = executionService.findExecutionById(executionId);
 		
 		List<NSolution<?>> solutions = execution.getSolutions();
 
+		ProblemExtension problemExtension = pluginService.getProblemById(execution.getProblemId());
+		
 		if (solutionIndex < 0 || solutionIndex >= solutions.size()) {
 			throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
 		}
 		
-		Parameters parameters = execution.getParameters();
-		
-		String pluginId = parameters.getPluginId();
-		String problemId = parameters.getProblemId();
-		List<String> objectiveIds = parameters.getObjectiveIds();
+		List<String> objectiveIds = execution.getObjectiveIds();
 		
 		NSolution<?> solution = solutions.get(solutionIndex);
 
@@ -71,25 +69,20 @@ public class SolutionController {
 		
 		execution = executionService.save(execution);
 
-		List<AbstractObjective> objectives = pluginService.getObjectivesByIds(pluginId, problemId, objectiveIds);
+		List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(objectiveIds);
 		
 		Map<String, Double> objectivesMap = new HashMap<>();
 
 		for (int i = 0; i < objectives.size(); i++) {
 			objectivesMap.put(objectives.get(i).getName(), solution.getObjective(i));
 		}
-		
-		if (objectiveIndex < 0 || objectiveIndex >= objectives.size()) {
-			throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
-		}
-		
+
 		model.addAttribute("objectivesMap", objectivesMap);
-		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("solution", solution);
 		model.addAttribute("variables", SolutionUtils.getVariablesAsList(solution));
 		model.addAttribute("execution", execution);
-		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
-		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
+//		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
+//		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
 		
 		return "solution";
 	}
@@ -103,7 +96,7 @@ public class SolutionController {
 		
 		LOGGER.info("Saving feedback for SolutionIndex {} in ExecutionId {}", solutionIndex, executionId);
 		
-		Execution execution = executionService.findById(executionId);
+		Execution execution = executionService.findExecutionById(executionId);
 
 		List<NSolution<?>> solutions = execution.getSolutions();
 		
@@ -132,7 +125,7 @@ public class SolutionController {
 			@PathVariable("executionId") String executionId, 
 			@PathVariable("solutionIndex") int solutionIndex) {
 		
-		Execution execution = executionService.findById(executionId);
+		Execution execution = executionService.findExecutionById(executionId);
 
 		List<NSolution<?>> solutions = execution.getSolutions();
 		

@@ -1,24 +1,10 @@
 package test.thiagodnf.nautilus.plugin.spl.encoding.objective;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
-import org.junit.jupiter.api.Test;
-
-import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
-import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
-import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.util.Converter;
-import thiagodnf.nautilus.plugin.extension.InstanceExtension;
 import thiagodnf.nautilus.plugin.spl.encoding.objective.SimilarityObjective;
-import thiagodnf.nautilus.plugin.spl.encoding.problem.SPLProblem;
-import thiagodnf.nautilus.plugin.spl.extension.instance.SPLInstanceDataExtension;
 
 public class TestSimilarityObjective {
 

@@ -1,19 +1,29 @@
 package thiagodnf.nautilus.plugin.zdt.extension.problem;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.pf4j.Extension;
-import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.plugin.extension.problem.AbstractProblemExtension;
+import thiagodnf.nautilus.plugin.gui.Tab;
+import thiagodnf.nautilus.plugin.gui.TableTabContent;
+import thiagodnf.nautilus.plugin.zdt.encoding.instance.TXTInstanceData;
+import thiagodnf.nautilus.plugin.zdt.encoding.objective.F1Objective;
+import thiagodnf.nautilus.plugin.zdt.encoding.objective.F2ForZDT1Objective;
 import thiagodnf.nautilus.plugin.zdt.encoding.problem.ZDT1Problem;
 
 @Extension
-public class ZDT1ProblemExtension implements ProblemExtension {
+public class ZDT1ProblemExtension extends AbstractProblemExtension {
 
 	@Override
 	public Problem<?> getProblem(Instance data, List<AbstractObjective> objectives) {
@@ -26,12 +36,39 @@ public class ZDT1ProblemExtension implements ProblemExtension {
 	}
 
 	@Override
-	public String getId() {
-		return Converter.toKey(getName());
+	public Class<? extends Solution<?>> supports() {
+		return DoubleSolution.class;
 	}
 
 	@Override
-	public Class<?> supports() {
-		return DoubleProblem.class;
+	public List<AbstractObjective> getObjectives() {
+		
+		List<AbstractObjective> objectives = new ArrayList<>();
+
+		objectives.add(new F1Objective());
+		objectives.add(new F2ForZDT1Objective());
+
+		return objectives;
+	}
+
+	@Override
+	public Instance getInstance(Path path) {
+		return new TXTInstanceData(path);
+	}
+	
+	@Override
+	public List<Tab> getTabs(Instance data) {
+		return Arrays.asList(getContentTab(data));
+	}
+
+	protected Tab getContentTab(Instance data) {
+
+		TXTInstanceData d = (TXTInstanceData) data;
+
+		TableTabContent table = new TableTabContent(Arrays.asList("Content", "Value"));
+
+		table.getRows().add(Arrays.asList("Number of Variables", "" + d.getNumberOfVariables()));
+
+		return new Tab("Content", table);
 	}
 }

@@ -7,22 +7,32 @@ body {
 }
 
 .page-header{
-	height: 55px;
+	height: 70px;
 	background-color: #FCFBFA;
 	border-bottom: 1px solid #dee2e6;
 	margin-bottom: 20px;
 }
 
-.page-header-with-navbar{
-	height: 100px;
+.page-header .path{
+	/*border: 1px solid black;*/
+}
+
+.page-header .path .title{
+	margin-top: 6px;
 	margin-bottom: 0px;
+} 
+
+.page-header .toolbar{
+	/*border: 1px solid black;*/
 }
 
-.page-header-with-navbar .btn{
-	margin-top: -5px;
+
+.page-header-with-navbar{
+	margin-bottom: 0px;
+	height: 110px !important;
 }
 
-.page-header-with-navbar .btn:first-child{
+.page-header .toolbar .btn:first-child{
 	margin-left: 10px;
 }
 
@@ -162,3 +172,12 @@ body {
 .dropdown-toggle-white:hover{
 	text-decoration: none;
 }
+
+.btn-xs{
+	padding: 3px 6px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px
+}
+
+

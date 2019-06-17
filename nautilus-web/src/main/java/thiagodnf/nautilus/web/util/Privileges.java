@@ -10,8 +10,6 @@ public class Privileges {
 	
 	public final static String SHOW_ROLES_PAGE = "SHOW_ROLES_PAGE";
 	
-	public final static String SHOW_PLUGINS_PAGE = "SHOW_PLUGINS_PAGE";
-	
 	public final static String SHOW_USERS_PAGE = "SHOW_USERS_PAGE";
 	
 	public final static String UPLOAD_PLUGIN = "UPLOAD_PLUGIN";
@@ -22,13 +20,17 @@ public class Privileges {
 	
 	public final static String CREATE_ROLE = "CREATE_ROLE";
 	
-	public final static String VIEW_ROLE = "VIEW_ROLE";
-	
 	public final static String EDIT_ROLE = "EDIT_ROLE";
 	
 	public final static String SAVE_ROLE = "SAVE_ROLE";
 	
 	public final static String DELETE_ROLE = "DELETE_ROLE";
+
+	public static final String SAVE_USER = "SAVE_USER";
+
+	public static final String DELETE_USER = "DELETE_USER";
+
+	public static final String EDIT_USER = "EDIT_USER";
 	
 	public static List<String> getPrivilegies() {
 

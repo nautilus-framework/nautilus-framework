@@ -3,29 +3,23 @@
 
 	<head th:replace="fragments/head :: default('Execution')"></head>
 
-	<body th:with="
-		descriptor = ${plugin.getDescriptor()},
-		pluginId = ${descriptor.getPluginId()},
-		pluginName = ${descriptor.getPluginDescription()},
-		executionName = ${execution.getSettings().getName()}">
+	<body>
 		
 	<div th:replace="fragments/navbar :: default('home')"></div>
 	
 		<div class="page-header page-header-with-navbar">
 			<div class="container">
 				<div class="row">
-					<div class="col-8">
+					<div class="col-8 path">
 						<h6 class="title">
-							<a th:href="@{/}">Home</a> 
-							<span class="path-divider">/</span>
-							<a th:href="@{/plugin/} + ${pluginId}" th:text="${pluginName}"></a>
+							<a th:href="@{/}" th:text="#{nav.home}"></a> 
 							<span class="path-divider">/</span> 
-							<a th:href="@{/execution/}+${execution.getId()}" th:text="${#strings.isEmpty(executionName)} ? ${execution.getId()} : ${executionName}"></a> 
+							<a th:href="@{/execution/}+${execution.id}" th:text="${#strings.isEmpty(execution.title)} ? ${execution.id} : ${execution.title}"></a> 
 						</h6>
 					</div>
-					<div class="col-4 float-right">
-						<a class="btn btn-success float-right" href="#" data-toggle="modal" data-target="#modal-select-indicators">Done</a>
-						<a class="btn btn-outline-secondary float-right" th:href="@{/continue/} + ${execution.getId()}">Continue</a>
+					<div class="col-4 toolbar">
+						<a class="btn btn-success float-right" href="#" data-toggle="modal" data-target="#modal-select-indicators" th:text="#{btn.done}"></a>
+						<a class="btn btn-outline-secondary float-right" th:href="@{/continue/} + ${execution.id}" th:text="#{btn.continue}"></a>
 					</div>
 				</div>
 			</div>
@@ -54,10 +48,9 @@
 									<thead>
 										<tr>
 											<th>#</th>
-											<th th:each="obj,i : ${objectives}" th:text="${obj.getName()}" class="objectives-names"></th>	
+											<th th:each="obj,i : ${objectives}" th:text="${obj.name}" class="objectives-names"></th>	
 											<th>Selected</th>
-											<th>Feedback</th>
-											<th>Distance</th>		
+					
 										</tr>
 									</thead>
 									<tbody>
@@ -67,8 +60,8 @@
 											<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,5 )}" class="objectives-values"/>
 												
 											<td th:text="${solution.getAttributes().containsKey('selected')}"/>
-											<td th:text="${#numbers.formatDecimal(solution.getUserFeedback(), 1, 5)}"></td>
-											<td th:text="${#numbers.formatDecimal(solution.getAttributes().get('distance'),1,5)}"></td>
+											<!-- <td th:text="${#numbers.formatDecimal(solution.getUserFeedback(), 1, 5)}"></td> -->
+											
 										</tr>
 									</tbody>
 								</table>
@@ -98,27 +91,92 @@
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="information">
-							<div th:replace="fragments/parameters :: default(${execution.getParameters()})"></div>
+							<div class="card">
+							  <div class="card-header">Information</div>
+							  <div class="card-body">
+							    <dl class="row">
+									<dt class="col-sm-3">Execution Id</dt>
+									<dd class="col-sm-9" th:text="${execution.id}"></dd>
+									<dt class="col-sm-3">Date</dt>
+									<dd class="col-sm-9 dates" th:text="${#formatter.date(execution.creationDate)}"></dd>
+									<dt class="col-sm-3"># of Solutions</dt>
+									<dd class="col-sm-9" th:text="${solutions.size()}"></dd>
+									<dt class="col-sm-3">Execution Time</dt>
+									<dd class="col-sm-9" th:text="${#formatter.interval(execution.getExecutionTime())}"></dd>
+								</dl>
+							  </div>
+							</div>
+							<br/>
+							<div class="card">
+							  <div class="card-header">Parameters</div>
+							  <div class="card-body">
+							    <dl class="row">
+								
+									<dt class="col-sm-3">Problem Id</dt>
+									<dd class="col-sm-9" th:text="${execution.problemId}"></dd>
+									<dt class="col-sm-3">Filename</dt>
+									<dd class="col-sm-9" th:text="${execution.instance}"></dd>
+									
+									<dt class="col-sm-3">Population Size</dt>
+									<dd class="col-sm-9" th:text="${execution.populationSize}"></dd>
+									<dt class="col-sm-3">Max Evalution</dt>
+									<dd class="col-sm-9" th:text="${execution.maxEvaluations}"></dd>
+									
+									
+									<dt class="col-sm-3">Algorithm Name</dt>
+									<dd class="col-sm-9" th:text="${execution.algorithmId}"></dd>
+									<dt class="col-sm-3">Objective Ids</dt>
+									<dd class="col-sm-9" th:text="${execution.objectiveIds}"></dd>
+									<dt class="col-sm-3">Selection Name</dt>
+									<dd class="col-sm-9" th:text="${execution.selectionId}"></dd>
+									<dt class="col-sm-3">Crossover Name</dt>
+									<dd class="col-sm-9" th:text="${execution.crossoverId}"></dd>
+									<dt class="col-sm-3">Crossover Probability</dt>
+									<dd class="col-sm-9" th:text="${execution.crossoverProbability}"></dd>
+									<dt class="col-sm-3">Mutation Name</dt>
+									<dd class="col-sm-9" th:text="${execution.mutationId}"></dd>
+									<dt class="col-sm-3">Mutation Probability</dt>
+									<dd class="col-sm-9" th:text="${execution.mutationProbability}"></dd>
+								</dl>
+							  </div>
+							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="settings">
 							
 							<div class="row">
 								<div class="col-12">
 								
+								
+								
 									<div class="card border-default mb-3">
-										<div class="card-header bg-transparent border-default">General</div>
-										<form action="#" th:action="@{/execution/}+${execution.getId()} + '/save/settings'" method="post" th:object="${settings}">
+										<div class="card-header bg-transparent border-default" th:text="#{nav.general}"></div>
+										
+											<form th:action="@{/execution/} + ${executionId} + @{/settings/save}" method="POST" th:object="${executionSettingsDTO}">
+										
 											<ul class="list-group list-group-flush">
 												<li class="list-group-item">
-										  			<div class="row margin-bottom-minus-10">
-														<div class="col-12">
-															<div class="form-group">
-																 <label class="form-check-label" for="name">
-															    	<strong>Name</strong>
+													<div class="row margin-bottom-minus-10">
+															<div class="col-12">
+																<div class="form-group">
+																 <label class="form-check-label" for="title">
+															    	<strong>Title</strong>
 															   		<p class="small">Define an own name for this execution</p>
 															    </label>
-															    <input type="text" class="form-control" th:field="*{name}"/>
+															    <input type="text" class="form-control" th:field="*{title}"/>
 															 </div>
+														 </div>
+													 </div>
+												</li>
+												<li class="list-group-item">
+										  			<div class="row margin-bottom-minus-20">
+														<div class="col-12">
+															<div class="form-check">
+															    <input type="checkbox" class="form-check-input" th:field="*{showToAllUsers}"/>
+															    <label class="form-check-label" for="showToAllUsers1">
+															    	<strong>Show to all users</strong>
+															   		<p class="small">Define if other users can visualize this execution</p>
+															    </label>
+															</div>
 														</div>
 													</div>
 												</li>
@@ -126,34 +184,16 @@
 										  			<div class="row margin-bottom-minus-10">
 														<div class="col-12">
 															<div class="form-group">
-														    <label class="form-check-label" for="normalizeId">
-														    	<strong>Normalize</strong>
-														   		<p class="small">Normalize the objective's values between 0 and 1</p>
-														    </label>
-														    <select class="form-control" th:field="*{normalizeId}">
-														      <option th:each="normalize : ${normalizers}" 
-														    		th:value="${normalize.key}"
-														    		th:text="${normalize.value}" 
-													    		/>
-														    </select>
-														  </div>
-														</div>
-													</div>
-												</li>
-												<li class="list-group-item">
-										  			<div class="row margin-bottom-minus-10">
-														<div class="col-12">
-															<div class="form-group">
-														    <label class="form-check-label" for="colorizeId">
-														    	<strong>Colorize</strong>
-														   		<p class="small">Colorize the closest solutions those ones you selected</p>
-														    </label>
-														    <select class="form-control" th:field="*{colorizeId}">
-														    	<option th:each="colorize : ${colorizers}" 
-														    		th:value="${colorize.key}"
-														    		th:text="${colorize.value}" 
-													    		/>
-														    </select>
+															    <label class="form-check-label" for="normalizeId">
+															    	<strong>Normalize</strong>
+															   		<p class="small">Normalize the objective's values between 0 and 1</p>
+															    </label>
+															    <select class="form-control" th:field="*{normalizeId}">
+															      <option th:each="normalize : ${normalizers}" 
+															    		th:value="${normalize.key}"
+															    		th:text="${normalize.value}" 
+														    		/>
+															    </select>
 														  </div>
 														</div>
 													</div>
@@ -226,7 +266,7 @@
 													</div>
 												</li>
 												<li class="list-group-item">
-													<button type="submit" class="btn btn-outline-success">Save</button>
+													<button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
 												</li>
 											</ul>
 										</form>
@@ -285,7 +325,7 @@
 													</div>
 													<div class="col-4 text-right">
 														<form method="POST" th:action="@{/execution/} + ${execution.getId()} + @{/delete}">
-															<button type="submit" class="btn btn-outline-danger" data:confirm="#{delete.execution}">Delete Execution</button>
+															<button type="submit" class="btn btn-outline-danger" data:confirm="#{confirm.delete.execution}" th:text="#{btn.delete}"></button>
 														</form>
 													</div>	
 												</div>
@@ -304,7 +344,6 @@
 		</div>
 	
 		<div th:replace="fragments/footer :: footer"></div>
-		<div th:replace="fragments/modal :: select-indicators"></div>
 		<script type="text/javascript" th:src="@{/js/controller/execution.js}"></script>
 	</body>
 

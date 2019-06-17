@@ -17,7 +17,7 @@ import thiagodnf.nautilus.web.validator.UniqueEmailValidator;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueEmail {
 
-	String message() default "{form.validation.UniqueEmail.message}";
+	String message() default "{form-validation.UniqueEmail.message}";
 	
 	Class<?>[] groups() default {};
 	

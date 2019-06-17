@@ -21,8 +21,7 @@ import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.nrp.encoding.problem.NRPProblem;
-import thiagodnf.nautilus.plugin.nrp.extension.instance.NRPInstanceDataExtension;
-import thiagodnf.nautilus.plugin.nrp.extension.objective.NRPObjectiveExtension;
+import thiagodnf.nautilus.plugin.nrp.extension.problem.NRPProblemExtension;
 
 public class NSGAIIRunner {
 
@@ -32,8 +31,8 @@ public class NSGAIIRunner {
 		
 		System.out.println("Loading...");
 		
-		List<AbstractObjective> objectives = new NRPObjectiveExtension().getObjectives();
-		Instance instance = new NRPInstanceDataExtension().getInstanceData(path);
+		List<AbstractObjective> objectives = new NRPProblemExtension().getObjectives();
+		Instance instance = new NRPProblemExtension().getInstance(path);
 		
 		Problem<BinarySolution> problem = new NRPProblem(instance, objectives);
 		

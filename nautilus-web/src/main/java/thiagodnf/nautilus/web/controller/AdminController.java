@@ -1,7 +1,6 @@
 package thiagodnf.nautilus.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +11,6 @@ import thiagodnf.nautilus.web.service.UserService;
 
 @Controller
 @RequestMapping("/admin")
-@PreAuthorize ("hasAuthority('SHOW_ADMIN_PAGE')")
 public class AdminController {
 	
 	@Autowired
@@ -23,10 +21,22 @@ public class AdminController {
 	
 	@GetMapping("")
 	public String show(Model model){
+		return showUsers(model);
+	}
+	
+	@GetMapping("/users")
+	public String showUsers(Model model){
 		
-		model.addAttribute("roles", roleService.findAll());
-		model.addAttribute("users", userService.findAll());
+		model.addAttribute("userDTOs", userService.findAll());
 		
-		return "admin";
+		return "admin-users";
+	}
+	
+	@GetMapping("/roles")
+	public String showRoles(Model model){
+		
+		model.addAttribute("rolesDTOs", roleService.findAll());
+		
+		return "admin-roles";
 	}
 }

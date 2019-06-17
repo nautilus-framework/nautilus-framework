@@ -12,11 +12,13 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.web.exception.FileAlreadyExistsException;
 import thiagodnf.nautilus.web.exception.FileIsEmptyException;
 import thiagodnf.nautilus.web.exception.FileNotFoundException;
@@ -65,16 +67,10 @@ public class FileService {
 			.collect(Collectors.toList());
 	}
 	
-	public List<Path> getInstanceFiles(String problemKey){
-		return findAll(getInstancesLocation().resolve(problemKey))
+	public List<Path> getInstances(String problemId){
+		return findAll(getInstancesLocation().resolve(problemId))
 			.sorted()
 			.collect(Collectors.toList());
-	}
-	
-	public List<Path> getInstanceFiles(String pluginId, String problemId) {
-		return findAll(getInstancesLocation().resolve(pluginId).resolve(problemId))
-				.sorted()
-				.collect(Collectors.toList());
 	}
 	
 	public void createInstancesDirectory(String pluginKey) {
@@ -104,8 +100,8 @@ public class FileService {
 		return files;
 	}
 	
-	public Path getInstanceFile(String pluginId, String problemId, String filename) {
-		return getInstancesLocation().resolve(pluginId).resolve(problemId).resolve(filename);
+	public Path getInstance(String problemId, String filename) {
+		return getInstancesLocation().resolve(problemId).resolve(filename);
 	}
 	
 	public Stream<Path> findAll(Path path) {
@@ -140,8 +136,8 @@ public class FileService {
 		}
 	}
 	
-	public Resource getInstanceFileAsResource(String pluginId, String problemId, String filename) {
-		return loadAsResource(getInstanceFile(pluginId, problemId, filename));
+	public Resource getInstanceAsResource(String problemId, String filename) {
+		return loadAsResource(getInstance(problemId, filename));
 	}
 	
 	public Path load(Path root, String filename) {
@@ -164,8 +160,8 @@ public class FileService {
 		store(getInstancesLocation().resolve(problemKey), filename, file);
 	}
 	
-	public void storeInstanceFile(String pluginId, String problemId, String filename, MultipartFile file) {
-		store(getInstancesLocation().resolve(pluginId).resolve(problemId), filename, file);
+	public void storeInstance(String problemId, String filename, MultipartFile file) {
+		store(getInstancesLocation().resolve(problemId), filename, file);
 	}
 	
 	public void storePlugin(String filename, MultipartFile file) {
@@ -180,8 +176,8 @@ public class FileService {
 		return Files.exists(path);
 	}
 	
-	public void deleteInstanceFile(String pluginId, String problemId, String filename) {
-		delete(getInstanceFile(pluginId, problemId, filename));
+	public void deleteInstance(String problemId, String filename) {
+		delete(getInstance(problemId, filename));
 	}
 	
 	public void delete(Path path) {
@@ -203,6 +199,13 @@ public class FileService {
 	
 	public void store(Path path, String filename, MultipartFile file) {
 
+		String name = FilenameUtils.removeExtension(filename);
+		String extension = FilenameUtils.getExtension(filename);
+		
+		name = Converter.toKey(name);
+		
+		filename = String.format("%s.%s", name, extension);
+		
 		createDirectories(path);
 
 		if (file.isEmpty()) {
@@ -225,9 +228,9 @@ public class FileService {
 		}
 	}
 	
-	public String readFileToString(String pluginId, String problemId, String filename) {
+	public String readFileToString(String problemId, String filename) {
 
-		Path path = getInstanceFile(pluginId, problemId, filename);
+		Path path = getInstance(problemId, filename);
 
 		if (!exists(path)) {
 			throw new RuntimeException("The file does not exist. Please choose a different one");

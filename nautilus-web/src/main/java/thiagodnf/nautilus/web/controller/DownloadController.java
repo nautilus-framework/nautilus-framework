@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.nio.file.Path;
-import java.util.List;
 
 import org.pf4j.PluginWrapper;
 import org.slf4j.Logger;
@@ -19,14 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.uma.jmetal.util.binarySet.BinarySet;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.serializer.BinarySetSerializer;
-import thiagodnf.nautilus.core.serializer.NSolutionSerializer;
+import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FileService;
@@ -53,16 +47,11 @@ public class DownloadController {
 	public ResponseEntity<Resource> downloadExecutionAsJsonFile(
 			@PathVariable("executionId") String executionId) {
 
-		LOGGER.info("Downloading as json file the execution id " + executionId);
+		LOGGER.info("Downloading as json file the execution id {}", executionId);
 
-		Execution execution = executionService.findById(executionId);
+		Execution execution = executionService.findExecutionById(executionId);
 		
-		Gson gson = new GsonBuilder()
-				.registerTypeAdapter(NSolution.class, new NSolutionSerializer())
-				.registerTypeAdapter(BinarySet.class, new BinarySetSerializer())
-				.create();
-		
-		String content = gson.toJson(execution);
+		String content = Converter.toJson(execution);
 
 		Resource file = new ByteArrayResource(content.getBytes());
 
@@ -78,28 +67,11 @@ public class DownloadController {
 	public ResponseEntity<Resource> downloadExecutionAsFunFile(
 			@PathVariable("executionId") String executionId) {
 
-		LOGGER.info("Downloading as fun file the execution id " + executionId);
+		LOGGER.info("Downloading as fun file the execution id {}", executionId);
 
-		Execution execution = executionService.findById(executionId);
+		Execution execution = executionService.findExecutionById(executionId);
 		
-		StringBuffer buffer = new StringBuffer();
-		
-		List<NSolution<?>> solutions = execution.getSolutions();
-		
-		for (NSolution<?> s : solutions) {
-
-			for (int i = 0; i < s.getNumberOfObjectives(); i++) {
-				buffer.append(s.getObjective(i));
-
-				if (i + 1 != s.getNumberOfObjectives()) {
-					buffer.append(";");
-				}
-			}
-
-			buffer.append("\n");
-		}
-	   
-		String content = buffer.toString();
+		String content = Converter.toFUN(execution.getSolutions());
 
 		Resource file = new ByteArrayResource(content.getBytes());
 
@@ -117,29 +89,11 @@ public class DownloadController {
 	public ResponseEntity<Resource> downloadExecutionAsVarFile(
 			@PathVariable("executionId") String executionId) {
 
-		LOGGER.info("Downloading as json file the execution id " + executionId);
+		LOGGER.info("Downloading as json file the execution id {}", executionId);
 
-		Execution execution = executionService.findById(executionId);
+		Execution execution = executionService.findExecutionById(executionId);
 		
-		StringBuffer buffer = new StringBuffer();
-		
-		List<NSolution<?>> solutions = execution.getSolutions();
-		
-		for (NSolution<?> s : solutions) {
-
-			for (int i = 0; i < s.getNumberOfVariables(); i++) {
-				
-				buffer.append(s.getVariableValue(i));
-
-				if (i + 1 != s.getNumberOfVariables()) {
-					buffer.append(";");
-				}
-			}
-
-			buffer.append("\n");
-		}
-	   
-		String content = buffer.toString();
+		String content = Converter.toVAR(execution.getSolutions());
 
 		Resource file = new ByteArrayResource(content.getBytes());
 		
@@ -152,16 +106,17 @@ public class DownloadController {
 				.body(file);
 	}
 	
-	@GetMapping("/instance-file/{pluginId:.+}/{problemId:.+}/{filename:.+}")
+	@GetMapping("/instance/{problemId:.+}/{filename:.+}")
 	@ResponseBody
 	public ResponseEntity<Resource> downloadInstanceFile(
-			@PathVariable("pluginId") String pluginId,
-			@PathVariable("problemId") String problemId,
-			@PathVariable("filename") String filename) throws IOException {
+			@PathVariable String problemId, 
+			@PathVariable String filename) throws IOException {
 
-		LOGGER.info("Downloading the instance file: " + filename);
+		ProblemExtension problem = pluginService.getProblemById(problemId);
+		
+		LOGGER.info("Downloading the instance file: {}", filename);
 
-		Resource file = fileService.getInstanceFileAsResource(pluginId, problemId, filename);
+		Resource file = fileService.getInstanceAsResource(problem.getId(), filename);
 		
 		FileNameMap fileNameMap = URLConnection.getFileNameMap();
 		

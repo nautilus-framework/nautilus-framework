@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import thiagodnf.nautilus.web.model.Role;
 import thiagodnf.nautilus.web.model.User;
-import thiagodnf.nautilus.web.service.RoleService;
+import thiagodnf.nautilus.web.repository.RoleRepository;
 import thiagodnf.nautilus.web.service.UserService;
 import thiagodnf.nautilus.web.util.Privileges;
 
@@ -27,7 +27,7 @@ public class InitialDataConfiguration implements ApplicationListener<ContextRefr
 	private UserService userService;
 	
 	@Autowired
-	private RoleService roleService;
+	private RoleRepository roleRepository;
 	
 	@Value("${admin.email}")
 	private String adminEmail;
@@ -45,22 +45,20 @@ public class InitialDataConfiguration implements ApplicationListener<ContextRefr
 	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		
-		LOGGER.info("Creating the privilegies");
+		LOGGER.info("Creating the default users and privilegies");
 
-		Role adminRole = createRoleIfNotFound(Role.ADMIN, Privileges.getPrivilegies(), false);
-		
+		createRoleIfNotFound(Role.ADMIN, Privileges.getPrivilegies(), false);
 		createRoleIfNotFound(Role.USER, new ArrayList<>(), false);
 
-		LOGGER.info("Creating the user");
-		
 		User adminUser = new User();
 		
 		adminUser.setEmail(adminEmail);
 		adminUser.setPassword(adminPassword);
-		adminUser.getProfile().setFirstname(adminFirstname);
-		adminUser.getProfile().setLastname(adminLastname);
-		adminUser.setRole(adminRole);
-		adminUser.setVisible(false);
+		adminUser.setFirstname(adminFirstname);
+		adminUser.setLastname(adminLastname);
+		adminUser.setRoleId(roleRepository.findByName(Role.ADMIN).getId());
+		adminUser.setEditable(false);
+		adminUser.setEnabled(true);
 
 		createUserIfNotFound(adminUser);
 	}
@@ -68,10 +66,17 @@ public class InitialDataConfiguration implements ApplicationListener<ContextRefr
 	@Transactional
 	private Role createRoleIfNotFound(String name, List<String> privileges, boolean isEditable) {
 
-		Role role = roleService.findByName(name);
+		Role role = roleRepository.findByName(name);
 
 		if (role == null) {
-			role = roleService.save(new Role(name, privileges, isEditable));
+
+			role = new Role();
+
+			role.setName(name);
+			role.setPrivileges(privileges);
+			role.setEditable(isEditable);
+
+			return roleRepository.save(role);
 		}
 
 		return role;
@@ -81,7 +86,7 @@ public class InitialDataConfiguration implements ApplicationListener<ContextRefr
 	private User createUserIfNotFound(User user) {
 
 		if (userService.findByEmail(user.getEmail()) == null) {
-			user = userService.signup(user);
+			user = userService.create(user);
 		}
 
 		return user;
