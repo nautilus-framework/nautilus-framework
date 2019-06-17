@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-	<head th:replace="fragments/head :: default('Sign up')"></head>
+	<head th:replace="fragments/head :: title(#{nav.signup})"></head>
 	<body class="light-gray">
 		<div th:replace="fragments/navbar :: default('home')"></div>
 		<br/>
@@ -12,8 +12,8 @@
 				<div class="offset-md-4 col-md-4 offset-md-4">
 					<div class="card">
 						<div class="card-body">
-							<h4 class="center" th:text="#{sign.up}"></h4>
-							<p class="center">Get started with your free account</p>
+							<h4 class="center" th:text="#{nav.signup}"></h4>
+							<p class="center" th:text="#{nav.get-started-with-your-free-account}"></p>
 							<hr/>
 							<form th:action="@{/signup/save}" method="post" th:object="${signupDTO}">
 								<div class="form-group">
@@ -36,9 +36,9 @@
 									<input type="password" class="form-control" th:field="*{password}"/>
 									<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
 								</div>
-								<button type="submit" class="btn btn-primary btn-block" th:text="#{sign.up}"></button>
+								<button type="submit" class="btn btn-primary btn-block" th:text="#{btn.signup}"></button>
 								<br>
-								<p class="center"><a th:href="@{/login}">Already have an account?</a></p>
+								<p class="center"><a th:href="@{/login}" th:text="#{nav.already-have-an-account}"></a></p>
 							</form>
 						</div>
 					</div>

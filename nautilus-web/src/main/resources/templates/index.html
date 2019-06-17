@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-	<head th:replace="fragments/head :: default(null)"></head>
+	<head th:replace="fragments/head :: title(#{app.name})"></head>
 	<body class="light-gray">
 		<div th:replace="fragments/navbar :: default('home')"></div>
 	
