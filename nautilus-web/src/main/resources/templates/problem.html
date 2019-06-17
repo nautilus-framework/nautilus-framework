@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	
-	<head th:replace="fragments/head :: default(teste)"></head>
+	<head th:replace="fragments/head :: title(${problem.name})"></head>
 	
 	<body >
 
@@ -12,13 +12,13 @@
 			<div class="row">
 				<div class="col-8 path">
 					<h6 class="title">
-						<a th:href="@{/}">Home</a> 
+						<a th:href="@{/}" th:text="#{nav.home}"></a> 
 						<span class="path-divider">/</span>
 						<a th:href="@{/problem/} + ${problem.id}" th:text="${problem.name}"></a>
 					</h6>
 				</div>
 				<div class="col-4 toolbar">
-					<a class="btn btn-outline-success float-right" href="#" data-toggle="modal" data-target="#modal-upload-instance">Upload Instance</a>
+					<a class="btn btn-outline-success float-right" href="#" data-toggle="modal" data-target="#modal-upload-instance" th:text="#{btn.upload-instance}"></a>
 				</div>
 			</div>
 		</div>
@@ -58,7 +58,7 @@
 								  	<a class="dropdown-item" th:href="@{/download/instance/} + ${problemId}+ @{/} + ${instance.getFileName()}" th:text="#{btn.download}"></a>
 								  	<div class="dropdown-divider"></div>
 								  	<form method="POST" th:action="@{/instance/}+${problemId}+@{/}+${instance.getFileName()}+@{/delete}">
-								    	<a class="dropdown-item text-danger dropdown-submit" href="#" data:confirm="#{delete.instance}"><i class="fa fa-trash"></i> Remove</a>
+								    	<a class="dropdown-item text-danger dropdown-submit" href="#" data:confirm="#{delete.instance}"><i class="fa fa-trash" th:text="' '+#{btn.remove}"></i></a>
 								    </form>
 								  </div>
 								</div>
