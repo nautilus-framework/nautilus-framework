@@ -18,7 +18,7 @@
 						</h6>
 					</div>
 					<div class="col-4 toolbar">
-						<a class="btn btn-success float-right" href="#" data-toggle="modal" data-target="#modal-select-indicators" th:text="#{btn.done}"></a>
+						<a class="btn btn-success float-right" th:href="@{/done/} + ${execution.id}" th:text="#{btn.done}"></a>
 						<a class="btn btn-outline-secondary float-right" th:href="@{/continue/} + ${execution.id}" th:text="#{btn.continue}"></a>
 					</div>
 				</div>
@@ -57,7 +57,7 @@
 										<tr th:each="solution : ${solutions}" th:with="i = ${solution.getAttributes().get('id')}">
 											<td><a th:href="@{/solution/}+${execution.getId()}+@{/}+${i}+@{/0}" th:text="${i}"></a></td>
 											
-											<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1,5 )}" class="objectives-values"/>
+											<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1, settingsPreferencesDTO.decimalPlaces, settingsPreferencesDTO.decimalSeparator )}" class="objectives-values"/>
 												
 											<td th:text="${solution.getAttributes().containsKey('selected')}"/>
 											<!-- <td th:text="${#numbers.formatDecimal(solution.getUserFeedback(), 1, 5)}"></td> -->
@@ -142,136 +142,89 @@
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="settings">
-							
 							<div class="row">
-								<div class="col-12">
-								
-								
-								
-									<div class="card border-default mb-3">
-										<div class="card-header bg-transparent border-default" th:text="#{nav.general}"></div>
-										
-											<form th:action="@{/execution/} + ${executionId} + @{/settings/save}" method="POST" th:object="${executionSettingsDTO}">
-										
-											<ul class="list-group list-group-flush">
-												<li class="list-group-item">
-													<div class="row margin-bottom-minus-10">
-															<div class="col-12">
-																<div class="form-group">
-																 <label class="form-check-label" for="title">
-															    	<strong>Title</strong>
-															   		<p class="small">Define an own name for this execution</p>
-															    </label>
-															    <input type="text" class="form-control" th:field="*{title}"/>
-															 </div>
-														 </div>
-													 </div>
-												</li>
-												<li class="list-group-item">
-										  			<div class="row margin-bottom-minus-20">
-														<div class="col-12">
-															<div class="form-check">
-															    <input type="checkbox" class="form-check-input" th:field="*{showToAllUsers}"/>
-															    <label class="form-check-label" for="showToAllUsers1">
-															    	<strong>Show to all users</strong>
-															   		<p class="small">Define if other users can visualize this execution</p>
-															    </label>
-															</div>
-														</div>
-													</div>
-												</li>
-												<li class="list-group-item">
-										  			<div class="row margin-bottom-minus-10">
-														<div class="col-12">
-															<div class="form-group">
-															    <label class="form-check-label" for="normalizeId">
-															    	<strong>Normalize</strong>
-															   		<p class="small">Normalize the objective's values between 0 and 1</p>
-															    </label>
-															    <select class="form-control" th:field="*{normalizeId}">
-															      <option th:each="normalize : ${normalizers}" 
-															    		th:value="${normalize.key}"
-															    		th:text="${normalize.value}" 
-														    		/>
-															    </select>
-														  </div>
-														</div>
-													</div>
-												</li>
-												<li class="list-group-item">
-										  			<div class="row margin-bottom-minus-10">
-														<div class="col-12">
-															<div class="form-group">
-														    <label class="form-check-label" for="correlationId">
-														    	<strong>Correlate</strong>
-														   		<p class="small">Correlate the objectives values</p>
-														    </label>
-														    <select class="form-control" th:field="*{correlationId}">
-														    	<option th:each="correlationer : ${correlationers}" 
-														    		th:value="${correlationer.key}"
-														    		th:text="${correlationer.value}" 
-													    		/>
-														    </select>
-														  </div>
-														</div>
-													</div>
-												</li>
-												<li class="list-group-item">
-										  			<div class="row margin-bottom-minus-10">
-														<div class="col-12">
-															<div class="form-group">
-														    <label class="form-check-label" for="duplicatesRemoverId">
-														    	<strong>Duplicates Removers</strong>
-														   		<p class="small">Remove the duplicated solutions from pareto-front. Ideally, if you are using a IntegerProblem, the order doesn't matter. If you are using a BinaryProblem, the order matters. </p>
-														    </label>
-														    <select class="form-control" th:field="*{duplicatesRemoverId}">
-														    	<option th:each="duplicatesRemover : ${duplicatesRemovers}" 
-														    		th:value="${duplicatesRemover.key}"
-														    		th:text="${duplicatesRemover.value}" 
-													    		/>
-														    </select>
-														  </div>
-														</div>
-													</div>
-												</li>
-												<li class="list-group-item">
-										  			<div class="row margin-bottom-minus-10">
-														<div class="col-12">
-															<div class="form-group">
-														    <label class="form-check-label" for="reducerId">
-														    	<strong>Objective Reducers</strong>
-														   		<p class="small">Reduce the number objectives to be optimized in the next execution</p>
-														    </label>
-														    <select class="form-control" th:field="*{reducerId}">
-														    	<option th:each="reducer : ${reducers}" 
-														    		th:value="${reducer.key}"
-														    		th:text="${reducer.value}" 
-													    		/>
-														    </select>
-														  </div>
-														</div>
-													</div>
-												</li>
-												<li class="list-group-item">
-										  			<div class="row margin-bottom-minus-20">
-														<div class="col-12">
-															<div class="form-check">
-															    <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
-															    <label class="form-check-label" for="showLines1">
-															    	<strong>Show Lines</strong>
-															   		<p class="small">Connect the found solutions by using lines</p>
-															    </label>
-															</div>
-														</div>
-													</div>
-												</li>
-												<li class="list-group-item">
-													<button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
-												</li>
-											</ul>
-										</form>
+							 <div class="col-12">
+							
+							     <form th:action="@{/execution/} + ${executionId} + @{/settings/save}" method="POST" th:object="${executionSettingsDTO}">
+								    <h5 th:text="#{nav.general}"></h5>
+								    <hr/>
+									<div class="form-group">
+										<label class="form-check-label" for="title"> 
+										      <strong>Title</strong>
+											<p class="small text-muted">Define an own name for this execution</p>
+										</label> 
+										<input type="text" class="form-control" th:field="*{title}" autofocus />
 									</div>
-									
+									<div class="form-check">
+                                         <input type="checkbox" class="form-check-input" th:field="*{showToAllUsers}"/>
+                                         <label class="form-check-label" for="showToAllUsers1">
+                                             <strong>Show to all users</strong>
+                                             <p class="small text-muted">Define if other users can visualize this execution</p>
+                                         </label>
+                                     </div>
+                                     <br/>
+                                       <h5>Graphics</h5>
+                                       <hr>
+                                       
+                                     <div class="form-group">
+                                           <label class="form-check-label" for="normalizeId">
+                                               <strong>Normalize</strong>
+                                               <p class="small text-muted">Normalize the objective's values between 0 and 1</p>
+                                           </label>
+                                           <select class="form-control" th:field="*{normalizeId}">
+                                             <option th:each="normalize : ${normalizers}" 
+                                                   th:value="${normalize.key}"
+                                                   th:text="${normalize.value}" 
+                                               />
+                                           </select>
+                                     </div>
+                                     <div class="form-group">
+	                                       <label class="form-check-label" for="correlationId">
+	                                           <strong>Correlate</strong>
+	                                           <p class="small text-muted">Correlate the objectives values</p>
+	                                       </label>
+	                                       <select class="form-control" th:field="*{correlationId}">
+	                                           <option th:each="correlationer : ${correlationers}" 
+	                                               th:value="${correlationer.key}"
+	                                               th:text="${correlationer.value}" 
+	                                           />
+	                                       </select>
+	                                     </div>
+									   <div class="form-group">
+                                          <label class="form-check-label" for="duplicatesRemoverId">
+                                              <strong>Duplicates Removers</strong>
+                                              <p class="small text-muted">Remove the duplicated solutions from pareto-front. Ideally, if you are using a IntegerProblem, the order doesn't matter. If you are using a BinaryProblem, the order matters. </p>
+                                          </label>
+                                          <select class="form-control" th:field="*{duplicatesRemoverId}">
+                                              <option th:each="duplicatesRemover : ${duplicatesRemovers}" 
+                                                  th:value="${duplicatesRemover.key}"
+                                                  th:text="${duplicatesRemover.value}" 
+                                              />
+                                          </select>
+                                        </div>
+									   <div class="form-group">
+                                         <label class="form-check-label" for="reducerId">
+                                             <strong>Objective Reducers</strong>
+                                             <p class="small text-muted">Reduce the number objectives to be optimized in the next execution</p>
+                                         </label>
+                                         <select class="form-control" th:field="*{reducerId}">
+                                             <option th:each="reducer : ${reducers}" 
+                                                 th:value="${reducer.key}"
+                                                 th:text="${reducer.value}" 
+                                             />
+                                         </select>
+                                       </div>
+                                       <div class="form-check">
+                                          <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
+                                          <label class="form-check-label" for="showLines1">
+                                              <strong>Show Lines</strong>
+                                              <p class="small text-muted">Connect the found solutions by using lines</p>
+                                          </label>
+                                      </div>
+									  <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
+									</form>
+									<br/>
+									<br/>
 									<div class="card border-default mb-3">
 										<div class="card-header bg-transparent border-default">Export</div>
 										<ul class="list-group list-group-flush">
@@ -320,12 +273,12 @@
 											<li class="list-group-item">
 									  			<div class="row margin-bottom-minus-20">
 													<div class="col-8">
-														<p><strong>Delete Execution</strong><br/>
+														<p><strong>Remove Execution</strong><br/>
 														<small>Once you delete, there is no going back. Please be certain.</small></p>
 													</div>
 													<div class="col-4 text-right">
 														<form method="POST" th:action="@{/execution/} + ${execution.getId()} + @{/delete}">
-															<button type="submit" class="btn btn-outline-danger" data:confirm="#{confirm.delete.execution}" th:text="#{btn.delete}"></button>
+															<button type="submit" class="btn btn-outline-danger" data:confirm="#{confirm.delete-execution}" th:text="#{btn.remove}"></button>
 														</form>
 													</div>	
 												</div>

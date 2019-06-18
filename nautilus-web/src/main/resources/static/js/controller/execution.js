@@ -75,7 +75,18 @@ function getData(rows){
 //			if(index === (row.length - 3)){
 //				return;
 //			}
-			point.push(parseFloat(col));
+			
+//			// switch between locales
+			
+			var locale = getLanguage().toLowerCase().replace("_", "-");
+			
+			if(locale != 'en-us'){
+				numeral.locale(locale);
+			}
+			
+			var myNumeral = numeral(col);
+			
+			point.push(parseFloat(myNumeral.value()));
 		});
 		
 		data.push(point);

@@ -1,6 +1,7 @@
 package thiagodnf.nautilus.web.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -13,11 +14,6 @@ public interface ExecutionRepository extends MongoRepository<Execution, String> 
 	
 	List<ExecutionSimplifiedDTO> findByShowToAllUsers(boolean isGlobal);
 	
-//	List<ExecutionSimplifiedDTO> findByParametersProblemId(String problemId);
+	Optional<ExecutionSimplifiedDTO> findExecutionSimplifiedDTOById(String id);
 	
-//	List<ExecutionSimplified> findByParametersPluginIdAndParametersProblemIdAndSettingsName(String pluginId, String problemId, String name);
-//	
-//	List<ExecutionSimplified> findByParametersPluginIdAndParametersProblemId(String pluginId, String problemId);
-	
-//	List<ExecutionSimplified> findByParametersPluginId(String pluginId);
 }

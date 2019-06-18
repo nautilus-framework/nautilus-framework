@@ -43,7 +43,7 @@ public class PluginController {
 		
 		model.addAttribute("plugin", pluginService.getPluginWrapper(pluginId));
 		model.addAttribute("problems", pluginService.getProblemExtensions(pluginId));
-		model.addAttribute("executions", executionService.findByPluginId(pluginId));
+//		model.addAttribute("executions", executionService.findByPluginId(pluginId));
 		//model.addAttribute("uploadExecution", new UploadExecution());
 //		model.addAttribute("generateParetoFront", new GenerateParetoFront());
 //		model.addAttribute("uploadRealParetoFront", new UploadRealParetoFront());

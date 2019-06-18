@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import thiagodnf.nautilus.web.dto.ProfileDTO;
+import thiagodnf.nautilus.web.dto.SettingsProfileDTO;
 import thiagodnf.nautilus.web.dto.UserDTO;
 import thiagodnf.nautilus.web.model.User;
 
@@ -15,7 +15,7 @@ public class ProfileService {
 	@Autowired
 	private UserService userService;
 	
-	public void update(ProfileDTO profileDTO) {
+	public void update(SettingsProfileDTO profileDTO) {
 
 		User found = userService.findUserById(profileDTO.getId());
 
@@ -25,17 +25,17 @@ public class ProfileService {
 		userService.save(found);
 	}
 
-	public ProfileDTO findById(String id) {
+	public SettingsProfileDTO findById(String id) {
 		return convertToDTO(userService.findById(id));
 	}
 	
-	public ProfileDTO convertToDTO(UserDTO userDTO) {
+	public SettingsProfileDTO convertToDTO(UserDTO userDTO) {
 		
 		if(userDTO == null) {
 			return null;
 		}
 		
-		return new ProfileDTO(
+		return new SettingsProfileDTO(
 			userDTO.getId(),
 			userDTO.getFirstname(),
 			userDTO.getLastname()

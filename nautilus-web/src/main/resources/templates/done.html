@@ -1,28 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-	<head th:replace="fragments/head :: default(${'Done'})"></head>
+	<head th:replace="fragments/head :: title(#{btn.done})"></head>
 
-	<body th:with="
-		descriptor = ${plugin.getDescriptor()},
-		pluginId = ${descriptor.getPluginId()},
-		pluginName = ${descriptor.getPluginDescription()},
-		executionName = ${execution.getSettings().getName()}">
+	<body>
 	
 	<div th:replace="fragments/navbar :: default('Home')"></div>
 	
 	<div class="page-header">
 		<div class="container">
 			<div class="row">
-				<div class="col-12">
+				<div class="col-12 path">
 					<h6 class="title">
-						<a th:href="@{/}">Home</a> 
-						<span class="path-divider">/</span>
-						<a th:href="@{/plugin/} + ${pluginId}" th:text="${pluginName}"></a>
-						<span class="path-divider">/</span> 
-						<a th:href="@{/execution/}+${execution.getId()}" th:text="${#strings.isEmpty(executionName)} ? ${execution.getId()} : ${executionName}"></a>
-						<span class="path-divider">/</span>
-						<a th:href="@{#}">Done</a> 
-					</h6>
+                          <a th:href="@{/}" th:text="#{nav.home}"></a> 
+                          <span class="path-divider">/</span> 
+                          <a th:href="@{/execution/}+${execution.id}" th:text="${#strings.isEmpty(execution.title)} ? ${execution.id} : ${execution.title}"></a>
+                          <span class="path-divider">/</span>  
+                          <a th:href="@{/done/}+${execution.id}" th:text="#{btn.done}"></a> 
+                     </h6>
 				</div>
 			</div>
 		</div>
@@ -31,25 +25,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
-				<table id="instances-table" class="table table-striped table-hover table-sm table-datatable">
-					<thead>
-						<tr>
-							<th width="50px">#</th>
-							<th>Indicator</th>
-							<th width="150px">Value</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="indicator, i : ${indicators}">
-							<td th:text="${i.index}"></td>
-							<td th:text="${indicator.key}"></td>
-							<td th:text="${#numbers.formatDecimal(indicator.value, 1, 5)}"></td>
-						</tr>
-					</tbody>
-				</table>
-				<br/>
-				<p>Warnings</p>
-				<p><i><small>The IGD is not sensitive to the size of the approximation fronts and it provides a ranking that intuitively matches more closely the desirable convergence, spread and distri- bution. Since it is also computationally fast to compute, IGD soon became the most widely used metric to assess many-objective EMO algorithms. Nonetheless, the IGD has been shown recently to lack Pareto-compliance [9]</small></i></p>
+				<h1 th:text="#{app.name}"></h1>
 			</div>
 		</div>
 	</div>

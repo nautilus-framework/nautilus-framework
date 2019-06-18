@@ -8,8 +8,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import thiagodnf.nautilus.web.dto.ExecutionSimplifiedDTO;
 import thiagodnf.nautilus.web.dto.RoleDTO;
 import thiagodnf.nautilus.web.dto.UserDTO;
+import thiagodnf.nautilus.web.exception.ConfirmationTokenNotFoundException;
 import thiagodnf.nautilus.web.exception.UserNotEditableException;
 import thiagodnf.nautilus.web.exception.UserNotFoundException;
 import thiagodnf.nautilus.web.model.User;
@@ -24,6 +26,9 @@ public class UserService {
 	
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+    private ExecutionService executionService;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -33,14 +38,14 @@ public class UserService {
 		user.setId(null);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		
-		return userRepository.save(user);
+		return save(user);
 	}
 	
 	public void confirm(User user) {
 		
 		user.setEnabled(true);
 		
-		userRepository.save(user);
+		save(user);
 	}
 	
 	public void update(UserDTO userDTO) {
@@ -72,7 +77,7 @@ public class UserService {
 	}
 	
 	public User findByConfirmationToken(String confirmationToken) {
-		return userRepository.findByConfirmationToken(confirmationToken);
+		return userRepository.findByConfirmationToken(confirmationToken).orElseThrow(ConfirmationTokenNotFoundException::new);
 	}
 	
 	public UserDTO findById(String id) {
@@ -86,8 +91,16 @@ public class UserService {
 		if (!found.isEditable()) {
 			throw new UserNotEditableException();
 		}
+		
+		// After removing a user, we have to remove all his/her executions
 
-		userRepository.delete(found);
+        List<ExecutionSimplifiedDTO> executions = executionService.findByUserId(found.getId());
+
+        for (ExecutionSimplifiedDTO execution : executions) {
+            executionService.deleteById(execution.getId());
+        }
+
+        userRepository.delete(found);
 	}
 	
 	public User findUserById(String id) {
@@ -104,9 +117,7 @@ public class UserService {
 	
 	public UserDTO convertToDTO(User user) {
 		
-		if(user == null) {
-			return null;
-		}
+		if(user == null) return null;
 		
 		RoleDTO role = roleService.findById(user.getRoleId());
 		

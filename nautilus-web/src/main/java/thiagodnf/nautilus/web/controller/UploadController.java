@@ -143,7 +143,7 @@ public class UploadController {
 				
 				executionService.save(execution);
 				
-				flashMessageService.success(ra, Messages.EXECUTION_UPLOAD_SUCCESS);
+				flashMessageService.success(ra, Messages.EXECUTION_UPLOADED_SUCCESS);
 			} catch (AbstractRedirectException ex) {
 				flashMessageService.error(ra, ex);
 			}

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import thiagodnf.nautilus.web.dto.PreferencesDTO;
+import thiagodnf.nautilus.web.dto.SettingsPreferencesDTO;
 import thiagodnf.nautilus.web.model.User;
 
 @Service
@@ -14,29 +14,29 @@ public class PreferencesService {
 	@Autowired
 	private UserService userService;
 	
-	public void update(PreferencesDTO preferencesDTO) {
+	public void update(SettingsPreferencesDTO preferencesDTO) {
 
 		User found = userService.findUserById(preferencesDTO.getId());
 
 		found.setDecimalPlaces(preferencesDTO.getDecimalPlaces());
+		found.setDecimalSeparator(preferencesDTO.getDecimalSeparator());
 		found.setLanguage(preferencesDTO.getLanguage());
 		
 		userService.save(found);
 	}
 
-	public PreferencesDTO findById(String id) {
+	public SettingsPreferencesDTO findById(String id) {
 		return convertToDTO(userService.findUserById(id));
 	}
 	
-	public PreferencesDTO convertToDTO(User user) {
+	public SettingsPreferencesDTO convertToDTO(User user) {
 		
-		if(user == null) {
-			return null;
-		}
+		if(user == null)  return null;
 		
-		return new PreferencesDTO(
+		return new SettingsPreferencesDTO(
 			user.getId(),
 			user.getDecimalPlaces(),
+			user.getDecimalSeparator(),
 			user.getLanguage()
 		);
     }

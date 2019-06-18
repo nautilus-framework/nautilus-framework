@@ -31,6 +31,7 @@
 										<th th:text="#{nav.execution}"></th>
 										<th width="200px" th:text="#{execution.problem}"></th>
 										<th width="200px" th:text="#{execution.instance}"></th>
+										<th width="80px" th:text="#{execution.global}"></th>
 										<th width="200px" th:text="#{execution.creationDate}"></th>
 										<th width="10px" class="no-orderable"></th>
 									</tr>
@@ -43,6 +44,7 @@
 										</td>
 										<td th:text="${execution.problemId}"></td>			
 										<td th:text="${execution.instance}"></td>
+										<td th:text="${execution.showToAllUsers? 'Yes': ''}"></td>
 										<td class="dates" th:text="${#formatter.date(execution.creationDate)}"></td>
 										<td>
 											<div class="dropdown float-right">

@@ -2,18 +2,18 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-	<head th:replace="fragments/head :: default(Roles)"></head>
+	<head th:replace="fragments/head :: title(#{nav.roles})"></head>
 	<body>
 		<div th:replace="fragments/navbar :: default('admin')"></div>
 	
 		<div class="page-header">
 			<div class="container">
 				<div class="row">
-					<div class="col-12">
+					<div class="col-12 path">
 						<h6 class="title">
-							<a th:href="@{/admin}">Admin</a>
+							<a th:href="@{/admin}" th:text="#{nav.admin}"></a>
 							<span class="path-divider">/</span>
-							<a th:href="@{/admin/#roles}">Role</a>
+							<a th:href="@{/admin/roles}" th:text="#{nav.roles}"></a>
 							<span class="path-divider">/</span>
 							<a th:href="@{#}" th:if="${roleDTO.id == null}">Add</a>
 							<a th:href="@{#}" th:unless="${roleDTO.id == null}">Edit</a>
@@ -29,7 +29,7 @@
 				
 				<div class="form-group">
 					<label for="name" th:text="#{role.name}"></label>
-					<input type="text" class="form-control" th:field="*{name}" autofocus />
+					<input type="text" class="form-control" th:field="*{name}" autocomplete="off" required autofocus />
 					<span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
 				</div>
 				
@@ -65,10 +65,10 @@
 					<span class="text-danger" th:if="${#fields.hasErrors('privileges')}" th:errors="*{privileges}"></span>
 				</div>
 				
-				<button type="submit" class="btn btn-success" th:text="#{save}"></button>
-				<a th:href="@{/admin/#roles}" class="btn btn-light" th:text="#{cancel}"></a>
+				<button type="submit" class="btn btn-success" th:text="#{btn.save}"></button>
+				<a th:href="@{/admin/#roles}" class="btn btn-light" th:text="#{btn.cancel}"></a>
 			</form>
-			
+			<br/>
 		</div>
 	
 		<div th:replace="fragments/footer :: footer"></div>

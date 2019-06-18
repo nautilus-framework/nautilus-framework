@@ -42,6 +42,8 @@ public class User {
 	
 	private boolean editable = true;
 	
+	private String decimalSeparator = "POINT";
+	
 	private int decimalPlaces = 4;
 	
 	private String language = "en_US";

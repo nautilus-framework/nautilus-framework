@@ -21,14 +21,16 @@ public class ExecutionService {
 	@Autowired
 	private ExecutionRepository executionRepository;
 	
-	public ExecutionSimplifiedDTO duplicate(String executionId) {
+	public ExecutionSimplifiedDTO duplicate(String userId, String executionId) {
 
 		Execution execution = findExecutionById(executionId);
 
 		execution.setId(null);
+		execution.setUserId(userId);
 		execution.setCreationDate(null);
 		execution.setLastChangeDate(null);
-
+		execution.setShowToAllUsers(false);
+		
 		Execution saved = save(execution);
 
 		return convertToExecutionSimplifiedDTO(saved);
@@ -54,12 +56,12 @@ public class ExecutionService {
 		return this.executionRepository.save(execution);
 	}
 	
+	public ExecutionSimplifiedDTO findExecutionSimplifiedDTOById(String executionId) {
+        return this.executionRepository.findExecutionSimplifiedDTOById(executionId).orElseThrow(ExecutionNotFoundException::new);
+    }
+	
 	public Execution findExecutionById(String executionId) {
 		return this.executionRepository.findById(executionId).orElseThrow(ExecutionNotFoundException::new);
-	}
-
-	public List<Execution> findAll(String problemKey) {
-		return this.executionRepository.findAll();
 	}
 
 	public List<ExecutionSimplifiedDTO> findByUserId(String userId) {
@@ -78,33 +80,17 @@ public class ExecutionService {
 		return executions.values().stream().collect(Collectors.toList());
 	}
 	
-//	public List<ExecutionSimplified> findByProblemId(String problemId) {
-//		return this.executionRepository.findByParametersProblemId(problemId);
-//	}
-	
-	public List<ExecutionSimplifiedDTO> findByName(String pluginId, String problemId, String name) {
-		return null;
-//		return executionRepository.findByParametersPluginIdAndParametersProblemIdAndSettingsName(pluginId, problemId, name);
-	}
-	
-	public void deleteById(String executionId) {
-		executionRepository.deleteById(executionId);
-	}
+    public void deleteById(String executionId) {
+
+        ExecutionSimplifiedDTO found = findExecutionSimplifiedDTOById(executionId);
+        
+        executionRepository.deleteById(found.getId());
+    }
 	
 	public boolean existsById(String executionId) {
 		return executionRepository.existsById(executionId);
 	}
 
-	public List<ExecutionSimplifiedDTO> findByPluginIdAndProblemId(String pluginId, String problemId) {
-		return null;
-//		return this.executionRepository.findByParametersPluginIdAndParametersProblemId(pluginId, problemId);
-	}
-	
-	public List<ExecutionSimplifiedDTO> findByPluginId(String pluginId) {
-		return null;
-//		return this.executionRepository.findByParametersPluginId(pluginId);
-	}
-	
 	public ExecutionSimplifiedDTO convertToExecutionSimplifiedDTO(Execution execution) {
 		
 		if(execution == null) return null;
@@ -114,6 +100,7 @@ public class ExecutionService {
 			execution.getTitle(),
 			execution.getProblemId(),
 			execution.getInstance(),
+			execution.isShowToAllUsers(),
 			execution.getCreationDate()
 		);
 	}

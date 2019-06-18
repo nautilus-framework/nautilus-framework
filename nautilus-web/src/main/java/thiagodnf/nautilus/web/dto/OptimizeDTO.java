@@ -10,6 +10,11 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import thiagodnf.nautilus.core.colorize.DontColorize;
+import thiagodnf.nautilus.core.correlation.DontCorrelation;
+import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
+import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
+import thiagodnf.nautilus.core.reduction.ConfidenceBasedReduction;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
 
 @Getter
@@ -74,6 +79,18 @@ public class OptimizeDTO {
 	private String lastExecutionId;
 	
 	private boolean showToAllUsers = false;
+    
+    private boolean showLines = true;
+    
+    private String colorizeId = new DontColorize().getId();
+
+    private String normalizeId = new ByParetoFrontValuesNormalize().getId();
+
+    private String correlationId = new DontCorrelation().getId();
+
+    private String duplicatesRemoverId = new ByObjectivesDuplicatesRemover().getId();
+
+    private String reducerId = new ConfidenceBasedReduction().getId();
 	
 	public OptimizeDTO(String userId, String problemId, String instance) {
 		this.userId = userId;

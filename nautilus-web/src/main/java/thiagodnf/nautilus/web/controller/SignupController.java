@@ -15,10 +15,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import thiagodnf.nautilus.web.dto.SignupDTO;
 import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.EmailService;
-import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.SecurityService;
 import thiagodnf.nautilus.web.service.SignupService;
 import thiagodnf.nautilus.web.util.Messages;
+import thiagodnf.nautilus.web.util.Redirect;
 
 @Controller
 @RequestMapping("/signup")
@@ -31,7 +31,7 @@ public class SignupController {
 	private EmailService emailService;
 	
 	@Autowired
-	private FlashMessageService flashMessageService;
+    private Redirect redirect;
 	
 	@Autowired
 	private SecurityService securityService;
@@ -43,7 +43,7 @@ public class SignupController {
 	public String form(SignupDTO signupDTO, Model model) {
 	
 		if (securityService.isUserLogged()) {
-			return "redirect:/home";
+			return redirect.to("/home").withNoMessage();
 		}
 		
 		model.addAttribute("signupDTO", signupDTO);
@@ -64,11 +64,9 @@ public class SignupController {
 
 			emailService.sendConfirmationMail(saved);
 
-			flashMessageService.success(ra, Messages.USER_CONFIRMATION_EMAIL, saved.getEmail());
-
-			return "redirect:/login";
+			return redirect.to("/login").withSuccess(ra, Messages.USER_CONFIRMATION_EMAIL, saved.getEmail());
 		}
 
-		return "redirect:/user/confirmation?token=" + saved.getConfirmationToken();
+		return redirect.to("/user/confirmation?token=" + saved.getConfirmationToken()).withNoMessage();
 	}
 }

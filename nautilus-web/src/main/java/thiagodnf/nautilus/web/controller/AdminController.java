@@ -19,12 +19,7 @@ public class AdminController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("")
-	public String show(Model model){
-		return showUsers(model);
-	}
-	
-	@GetMapping("/users")
+	@GetMapping({"", "/users"})
 	public String showUsers(Model model){
 		
 		model.addAttribute("userDTOs", userService.findAll());

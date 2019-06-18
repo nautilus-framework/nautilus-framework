@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.web.dto.RoleDTO;
-import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.RoleService;
 import thiagodnf.nautilus.web.util.Messages;
 import thiagodnf.nautilus.web.util.Privileges;
+import thiagodnf.nautilus.web.util.Redirect;
 
 @Controller
 @RequestMapping("/role")
@@ -26,7 +26,7 @@ public class RoleController {
 	private RoleService roleService;
 	
 	@Autowired
-	private FlashMessageService flashMessageService;
+    private Redirect redirect;
 	
 	@GetMapping("/add")
 	public String form(RoleDTO roleDTO, Model model) {
@@ -34,8 +34,13 @@ public class RoleController {
 		model.addAttribute("roleDTO", roleDTO);
 		model.addAttribute("privileges", Privileges.getPrivilegies());
 
-		return "roleForm";
+		return "form-role";
 	}
+	
+	@GetMapping("/edit/{id:.+}")
+    public String edit(@PathVariable String id, Model model) {
+        return form(roleService.findById(id), model);
+    }
 	
 	@PostMapping("/save")
 	public String save(@Valid RoleDTO roleDTO, BindingResult bindingResult, RedirectAttributes ra, Model model) {
@@ -44,22 +49,13 @@ public class RoleController {
 			return form(roleDTO, model);
 		}
 		
-		RoleDTO saved = null;
-
-		if (roleDTO.getId() == null) {
-			saved = roleService.create(roleDTO);
-		} else {
-			saved = roleService.update(roleDTO);
-		}
+        if (roleDTO.getId() == null) {
+            roleService.create(roleDTO);
+        } else {
+            roleService.update(roleDTO);
+        }
 		
-		flashMessageService.success(ra, Messages.ROLE_SAVE_SUCCESS, saved.getName());
-		
-		return "redirect:/admin/roles";
-	}
-	
-	@GetMapping("/edit/{id:.+}")
-	public String edit(@PathVariable String id, Model model) {
-		return form(roleService.findById(id), model);
+		return redirect.to("/admin/roles").withSuccess(ra, Messages.ROLE_SAVED_SUCCESS);
 	}
 	
 	@PostMapping("/delete/{id:.+}")
@@ -67,8 +63,6 @@ public class RoleController {
 
 		RoleDTO roleDTO = roleService.deleteById(id);
 
-		flashMessageService.success(ra, Messages.ROLE_DELETE_SUCCESS, roleDTO.getName());
-
-		return "redirect:/admin/roles";
+		return redirect.to("/admin/roles").withSuccess(ra, Messages.ROLE_DELETED_SUCCESS, roleDTO.getName());
 	}
 }

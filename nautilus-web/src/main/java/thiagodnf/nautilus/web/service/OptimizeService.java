@@ -174,7 +174,13 @@ public class OptimizeService {
 			execution.setEpsilon(optimizeDTO.getEpsilon());
 			execution.setObjectiveIds(optimizeDTO.getObjectiveIds());
 			execution.setShowToAllUsers(optimizeDTO.isShowToAllUsers());
-			
+			execution.setShowLines(optimizeDTO.isShowLines());
+			execution.setColorizeId(optimizeDTO.getColorizeId());
+			execution.setNormalizeId(optimizeDTO.getNormalizeId());
+			execution.setCorrelationId(optimizeDTO.getCorrelationId());
+			execution.setDuplicatesRemoverId(optimizeDTO.getDuplicatesRemoverId());
+		    execution.setReducerId(optimizeDTO.getReducerId());
+		    
 			webSocketService.sendTitle(sessionId, "Saving the execution to database...");
 			
 			execution = executionService.save(execution);

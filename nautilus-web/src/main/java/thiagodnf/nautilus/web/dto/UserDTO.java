@@ -21,7 +21,7 @@ public class UserDTO {
 	private String roleId;
 	
 	private String roleName;
-	
+		
 	public boolean enabled;
 	
 	private boolean accountNonExpired;

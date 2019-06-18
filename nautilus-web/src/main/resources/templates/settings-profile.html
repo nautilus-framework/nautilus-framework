@@ -12,7 +12,7 @@
 				<div class="col-9">
 					<h5 th:text="#{nav.profile}"></h5>
 					<hr/>
-					<form method="POST" th:action="@{/profile/update}" th:object="${profileDTO}">
+					<form method="POST" th:action="@{/settings/profile/update}" th:object="${profileDTO}">
 						<input type="hidden" th:field="*{id}" />
 						<div class="form-group">
 							<label for="firstname" th:text="#{user.firstname}"></label> 

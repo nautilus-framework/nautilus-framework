@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-	<head th:replace="fragments/head :: default('Edit User')"></head>
+	<head th:replace="fragments/head :: title('Edit User')"></head>
 	<body>
 		<div th:replace="fragments/navbar :: default('admin')"></div>
 	
@@ -11,9 +11,9 @@
 				<div class="row">
 					<div class="col-12">
 						<h6 class="title">
-							<a th:href="@{/admin}">Admin</a>
+							<a th:href="@{/admin}" th:text="#{nav.admin}"></a>
 							<span class="path-divider">/</span>
-							<a th:href="@{/admin/users}">User</a>
+							<a th:href="@{/admin/users}" th:text="#{nav.users}">User</a>
 							<span class="path-divider">/</span>
 							<a th:href="@{#}">Edit</a>
 						</h6>
@@ -24,8 +24,7 @@
 	
 		<div class="container">
 			<form method="POST" th:action="@{/user/update}" th:object="${userDTO}">
-				<input type="hidden" id="id" th:field="*{id}" th:if="${id != null}" />
-				
+				<input type="hidden" th:field="*{id}" />
 				<h5>Account</h5>
 				<hr/>
 				<div class="form-group">
@@ -115,9 +114,11 @@
 					</div>
 						
 				
-				<button type="submit" class="btn btn-success" th:text="#{save}"></button>
-				<a th:href="@{/admin/#users}" class="btn btn-light" th:text="#{cancel}"></a>
+				<button type="submit" class="btn btn-success" th:text="#{btn.save}"></button>
+				<a th:href="@{/admin/#users}" class="btn btn-light" th:text="#{btn.cancel}"></a>
+				
 			</form>
+			<br/>
 		</div>
 	
 		<div th:replace="fragments/footer :: footer"></div>

@@ -24,7 +24,7 @@
 									<label for="password" th:text="#{user.password}"></label> 
 									<input type="password" class="form-control" th:field="*{password}" autocomplete="current-password" required/>
 									<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
-									<span class="text-danger" th:if="${param.error}" th:text="#{msg.user.login.error}"></span>
+									<span class="text-danger" th:if="${param.error}" th:text="#{msg.login-error}"></span>
 								</div>
 								<div class="form-group">
 									<input type="checkbox" id="remember-me" name="remember-me" />

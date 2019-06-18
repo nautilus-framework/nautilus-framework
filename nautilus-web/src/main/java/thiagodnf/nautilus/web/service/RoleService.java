@@ -29,7 +29,6 @@ public class RoleService {
 
 		Role unSaved = convertFromDTO(roleDTO);
 		
-		// Make sure it is null because MongoDB is going to create it automatically
 		unSaved.setId(null);
 
 		Role saved = repository.save(unSaved);
@@ -77,9 +76,11 @@ public class RoleService {
 		
 		List<User> users = userService.findUserByRoleId(found.getId());
 		
+		RoleDTO userROLE = findByName(Role.USER);
+		
 		for(User user : users) {
 			
-			user.setRoleId(repository.findByName(Role.USER).getId());
+			user.setRoleId(userROLE.getId());
 			
 			UserDTO userDTO = userService.convertToDTO(user);
 			
@@ -106,9 +107,7 @@ public class RoleService {
 	
 	private RoleDTO convertToDTO(Role role) {
 		
-		if(role == null) {
-			return null;
-		}
+		if(role == null) return null;
 		
 		return new RoleDTO(
 			role.getId(), 
