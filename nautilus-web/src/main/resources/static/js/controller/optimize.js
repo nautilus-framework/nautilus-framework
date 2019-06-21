@@ -99,38 +99,38 @@ function executeAgain(nextParameters ) {
 
 $(function(){
 	
-	$("form").validate();
-   
-	$("#form-execute").on('submit', function (e) {
-		e.preventDefault();
-		
-		var data = $(this).serializeArray();
-		
-		var form = $(this)
-		
-		if (form[0].checkValidity() === false) {
-			event.preventDefault()
-			event.stopPropagation()
-	    }else{
-	    	webSocket.connect(function(){
-				execute(data);
-			});
-	    }
-		
-		form.addClass('was-validated');
-		
-		return false;
-	});
-
-	$("#btn-continue").click(function(e){
-		e.preventDefault();
-		
-		var nextParameters = $("#next-parameters").text();
-		
-		webSocket.connect(function(){
-			executeAgain(nextParameters);
-		});
-	
-		return false;
-	})
+//	$("form").validate();
+//   
+//	$("#form-execute").on('submit', function (e) {
+//		e.preventDefault();
+//		
+//		var data = $(this).serializeArray();
+//		
+//		var form = $(this)
+//		
+//		if (form[0].checkValidity() === false) {
+//			event.preventDefault()
+//			event.stopPropagation()
+//	    }else{
+//	    	webSocket.connect(function(){
+//				execute(data);
+//			});
+//	    }
+//		
+//		form.addClass('was-validated');
+//		
+//		return false;
+//	});
+//
+//	$("#btn-continue").click(function(e){
+//		e.preventDefault();
+//		
+//		var nextParameters = $("#next-parameters").text();
+//		
+//		webSocket.connect(function(){
+//			executeAgain(nextParameters);
+//		});
+//	
+//		return false;
+//	})
 })

@@ -27,13 +27,14 @@ public class HomeController {
 	
 	@GetMapping("/home")
 	public String index(Model model) {
-		
-		User user = securityService.getLoggedUser().getUser(); 
+	    
+	    User user = securityService.getLoggedUser().getUser(); 
 		
 		model.addAttribute("problems", pluginService.getProblems());
 		model.addAttribute("newExecutionDTO", new NewExecutionDTO(new ToyProblemExtension().getId()));
 		model.addAttribute("uploadExecutionDTO", new UploadExecutionDTO());
-		model.addAttribute("executions", executionService.findByUserId(user.getId()));
+		model.addAttribute("executions", executionService.findExecutionSimplifiedDTOByUserId(user.getId()));
+		model.addAttribute("runningExecutions", executionService.findRunningExecutions());
 		
 		return "home";
 	}

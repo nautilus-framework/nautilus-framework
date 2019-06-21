@@ -50,14 +50,14 @@ public class UserController {
 			return form(userDTO, model);
 		}
 		
-		userService.update(userDTO);
+		userService.updateUser(userDTO);
 		
 		return redirect.to("/admin/users").withSuccess(ra, Messages.USER_SAVED_SUCCESS);
 	}
 	
 	@GetMapping("/edit/{id:.+}")
-	public String edit(@PathVariable("id") String id, Model model) {
-		return form(userService.findById(id), model);
+	public String edit(@PathVariable String id, Model model) {
+		return form(userService.findUserDTOById(id), model);
 	}
 	
     @PostMapping("/delete/{id:.+}")

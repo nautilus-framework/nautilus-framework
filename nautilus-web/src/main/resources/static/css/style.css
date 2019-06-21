@@ -180,4 +180,12 @@ body {
 	border-radius: 3px
 }
 
+.form-group label{
+	font-weight: bold;
+}
+
+.form-check-label{
+	font-weight: bold;
+}
+
 

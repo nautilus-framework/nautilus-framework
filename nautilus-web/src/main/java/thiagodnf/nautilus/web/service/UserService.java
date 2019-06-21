@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import thiagodnf.nautilus.web.dto.ExecutionSimplifiedDTO;
 import thiagodnf.nautilus.web.dto.RoleDTO;
 import thiagodnf.nautilus.web.dto.UserDTO;
+import thiagodnf.nautilus.web.dto.UserDisplayDTO;
+import thiagodnf.nautilus.web.dto.UserProfileDTO;
 import thiagodnf.nautilus.web.exception.ConfirmationTokenNotFoundException;
 import thiagodnf.nautilus.web.exception.UserNotEditableException;
 import thiagodnf.nautilus.web.exception.UserNotFoundException;
@@ -48,27 +50,7 @@ public class UserService {
 		save(user);
 	}
 	
-	public void update(UserDTO userDTO) {
-
-		User found = findUserById(userDTO.getId());
-
-		found.setRoleId(userDTO.getRoleId());
-		found.setFirstname(userDTO.getFirstname());
-		found.setLastname(userDTO.getLastname());
-		found.setEnabled(userDTO.isEnabled());
-		found.setAccountNonExpired(userDTO.isAccountNonExpired());
-		found.setCredentialsNonExpired(userDTO.isCredentialsNonExpired());
-		found.setAccountNonLocked(userDTO.isAccountNonLocked());
-
-		save(found);
-	}
-	
 	public User save(User user) {
-
-		if (!user.isEditable()) {
-			throw new UserNotEditableException();
-		}
-
 		return userRepository.save(user);
 	}
 
@@ -80,8 +62,8 @@ public class UserService {
 		return userRepository.findByConfirmationToken(confirmationToken).orElseThrow(ConfirmationTokenNotFoundException::new);
 	}
 	
-	public UserDTO findById(String id) {
-		return convertToDTO(findUserById(id));
+	public UserDTO findUserDTOById(String id) {
+		return convertToUserDTO(findUserById(id));
 	}
 	
 	public void deleteById(String id) {
@@ -94,11 +76,11 @@ public class UserService {
 		
 		// After removing a user, we have to remove all his/her executions
 
-        List<ExecutionSimplifiedDTO> executions = executionService.findByUserId(found.getId());
-
-        for (ExecutionSimplifiedDTO execution : executions) {
-            executionService.deleteById(execution.getId());
-        }
+//        List<ExecutionSimplifiedDTO> executions = executionService.findExecutionSimplifiedDTOById(found.getId());
+//
+//        for (ExecutionSimplifiedDTO execution : executions) {
+//            executionService.deleteById(execution.getId());
+//        }
 
         userRepository.delete(found);
 	}
@@ -107,35 +89,105 @@ public class UserService {
 		return this.userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 	
-	public List<User> findUserByRoleId(String id) {
+	public List<User> findUsersByRoleId(String id) {
 		return this.userRepository.findByRoleId(id);
     }
 	
 	public List<UserDTO> findAll() {
-		return convertToDTOs(userRepository.findAll());
+		return convertToUserDTOs(userRepository.findAll());
 	}
 	
-	public UserDTO convertToDTO(User user) {
-		
-		if(user == null) return null;
-		
-		RoleDTO role = roleService.findById(user.getRoleId());
-		
-		return new UserDTO(
-			user.getId(),
-			user.getEmail(),
-			user.getFirstname(),
-			user.getLastname(),
-			role.getId(),
-			role.getName(),
-			user.isEnabled(),
-			user.isAccountNonExpired(),
-			user.isAccountNonLocked(),
-			user.isCredentialsNonExpired()
-		);
+	
+	
+	private List<UserDTO> convertToUserDTOs(List<User> models) {
+		return models.stream().map(this::convertToUserDTO).collect(Collectors.toList());
+	}
+	
+	public void updateUser(UserDTO userDTO) {
+
+        User found = findUserById(userDTO.getId());
+
+        if (!found.isEditable()) {
+            throw new UserNotEditableException();
+        }
+        
+        found.setRoleId(userDTO.getRoleId());
+        found.setEnabled(userDTO.isEnabled());
+        found.setAccountNonExpired(userDTO.isAccountNonExpired());
+        found.setCredentialsNonExpired(userDTO.isCredentialsNonExpired());
+        found.setAccountNonLocked(userDTO.isAccountNonLocked());
+        
+        userRepository.save(found);
     }
 	
-	private List<UserDTO> convertToDTOs(List<User> models) {
-		return models.stream().map(this::convertToDTO).collect(Collectors.toList());
-	}
+	public void updateUserDisplay(UserDisplayDTO userDisplayDTO) {
+
+        User found = findUserById(userDisplayDTO.getId());
+
+        found.setDecimalPlaces(userDisplayDTO.getDecimalPlaces());
+        found.setDecimalSeparator(userDisplayDTO.getDecimalSeparator());
+        found.setLanguage(userDisplayDTO.getLanguage());
+        
+        userRepository.save(found);
+    }
+	
+	public void updateUserProfile(UserProfileDTO userProfileDTO) {
+
+        User found = findUserById(userProfileDTO.getId());
+
+        found.setFirstname(userProfileDTO.getFirstname());
+        found.setLastname(userProfileDTO.getLastname());
+        
+        userRepository.save(found);
+    }
+
+    public UserDisplayDTO findUserDisplayDTOById(String id) {
+        return convertToUserDisplayDTO(findUserById(id));
+    }
+    
+    public UserProfileDTO findUserProfileDTOById(String id) {
+        return convertToUserProfileDTO(findUserById(id));
+    }
+    
+    private UserDTO convertToUserDTO(User user) {
+        
+        if(user == null) return null;
+        
+        RoleDTO role = roleService.findById(user.getRoleId());
+        
+        return new UserDTO(
+            user.getId(),
+            user.getEmail(),
+            String.format("%s %s", user.getFirstname(), user.getLastname()),
+            role.getId(),
+            role.getName(),
+            user.isEnabled(),
+            user.isAccountNonExpired(),
+            user.isAccountNonLocked(),
+            user.isCredentialsNonExpired()
+        );
+    }
+    
+    public UserDisplayDTO convertToUserDisplayDTO(User user) {
+        
+        if(user == null)  return null;
+        
+        return new UserDisplayDTO(
+            user.getId(),
+            user.getDecimalPlaces(),
+            user.getDecimalSeparator(),
+            user.getLanguage()
+        );
+    }
+    
+    private UserProfileDTO convertToUserProfileDTO(User user) {
+        
+        if(user == null)  return null;
+        
+        return new UserProfileDTO(
+            user.getId(),
+            user.getFirstname(),
+            user.getLastname()
+        );
+    }
 }

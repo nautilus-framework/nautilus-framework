@@ -12,14 +12,14 @@ public class IndexController {
 
 	@Autowired
 	private SecurityService securityService;
-
+	
 	@GetMapping("/")
 	public String index(Model model) {
 
 		if (securityService.isUserLogged()) {
 			return "redirect:/home";
 		}
-
+		
 		return "index";
 	}
 }

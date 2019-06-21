@@ -139,12 +139,6 @@
       <artifactId>moment-timezone</artifactId>
       <version>0.5.17</version>
     </dependency>
-    <!-- UUID -->
-    <dependency>
-      <groupId>org.webjars.bower</groupId>
-      <artifactId>uuid.js</artifactId>
-      <version>3.6.1</version>
-    </dependency>
     <!-- Popper.js -->
     <dependency>
       <groupId>org.webjars.bower</groupId>

@@ -1,3 +1,7 @@
+function formatDate(date){
+	return moment(date).format("YYYY-MM-DD HH:mm:ss")
+}
+
 function isSafari(){
 	return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 }
@@ -64,6 +68,56 @@ function getNoOrderableIndexes(){
 	})
 
 	return indexes;
+}
+
+var executionQueue = $("#execution-queue ul");
+
+function updateExecutionQueue(){
+	
+	if(!executionQueue) return;
+	
+	$.get({
+        url: "/api/execution/queue",
+        cache: false
+    }).done(function (response) {
+    	
+    	executionQueue.html("")
+    	
+    	if(response.length == 0){
+    		
+    		var item = (
+		    	'<li class="list-group-item">No execution in this queue</li>'
+		    );
+    		
+    		executionQueue.html(item);
+    		
+    		return;
+    	}
+    	
+    	var html = "";
+    	
+    	for(var i =0; i<response.length;i++){
+	    	
+    		var item = (
+		    	'<li class="list-group-item">'+
+			        '<span>@TITLE@</span>'+
+			        '<div class="progress mt-2">'+
+			              '<div class="progress-bar progress-bar-striped" role="progressbar" style="width: @PROGRESS@%" >@PROGRESS@%</div>'+
+			        '</div>'+
+			    '</li>'
+		    );
+	    	
+    		item = item.replace(/@TITLE@/g, "teste")
+	    	item = item.replace(/@PROGRESS@/g, response[i].progress.toFixed(1))
+		    
+	    	html = html + item;
+    	}
+    	
+    	executionQueue.html(html);
+    	
+    	console.log(response);
+    	
+    });
 }
  
 $(function(){
@@ -231,5 +285,32 @@ $(function(){
 	});
 	
 	$( ".checkbox-all-selected input[type='checkbox']" ).prop( "checked", true );
+	
+	$("form.needs-validation").submit(function(event){
+		
+		$(this).each(function(i, form){
+			
+			if (form.checkValidity() === false) {
+	          event.preventDefault();
+	          event.stopPropagation();
+	        }
+				
+			form.classList.add('was-validated');
+		});
+	});
+	
+//	setInterval(function(){ 
+//		updateExecutionQueue()
+//	}, 100);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 })

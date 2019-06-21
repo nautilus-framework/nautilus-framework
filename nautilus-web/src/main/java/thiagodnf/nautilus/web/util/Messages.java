@@ -48,4 +48,7 @@ public class Messages {
 	public static String EXECUTION_SETTINGS_SAVED_SUCCESS = "msg.execution-settings-saved-success";
 	
 	public static String EXECUTION_UPLOADED_SUCCESS = "msg.execution-uploaded-success";
+	
+	public static String EXECUTION_SCHEDULED_SUCCESS = "msg.execution-scheduled-success";
+	
 }

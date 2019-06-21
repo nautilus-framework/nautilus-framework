@@ -23,12 +23,15 @@ import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.dto.ExecutionSettingsDTO;
+import thiagodnf.nautilus.web.exception.ExecutionNotPublicException;
+import thiagodnf.nautilus.web.exception.ExecutionNotReadyException;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.User;
+import thiagodnf.nautilus.web.model.Execution.Visibility;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.PluginService;
-import thiagodnf.nautilus.web.service.PreferencesService;
 import thiagodnf.nautilus.web.service.SecurityService;
+import thiagodnf.nautilus.web.service.UserService;
 import thiagodnf.nautilus.web.util.Messages;
 import thiagodnf.nautilus.web.util.Redirect;
 
@@ -42,7 +45,7 @@ public class ExecutionController {
 	private ExecutionService executionService;
 	
 	@Autowired
-    private PreferencesService preferencesService;
+    private UserService userService;
 	
 	@Autowired
 	private SecurityService securityService;
@@ -56,19 +59,27 @@ public class ExecutionController {
 	@GetMapping("")
 	public String view(@PathVariable String executionId, Model model) {
 		
-		LOGGER.info("Displaying '{}'", executionId);
-		
-		Execution execution = executionService.findExecutionById(executionId);
+		LOGGER.debug("Displaying '{}'", executionId);
 		
 		User user = securityService.getLoggedUser().getUser(); 
 		
+        Execution execution = executionService.findExecutionById(executionId);
+
+        if (execution.getSolutions() == null) {
+            throw new ExecutionNotReadyException();
+        }
+        
+        if (!execution.getUserId().equalsIgnoreCase(user.getId()) && execution.getVisibility() == Visibility.PRIVATE) {
+            throw new ExecutionNotPublicException();
+        }
+        
 		ProblemExtension problemExtension = pluginService.getProblemById(execution.getProblemId());
 		
 		AbstractNormalize normalizer = pluginService.getNormalizers().get(execution.getNormalizeId());
 		AbstractDuplicatesRemover duplicatesRemover = pluginService.getDuplicatesRemovers().get(execution.getDuplicatesRemoverId());
 		AbstractCorrelation correlation = pluginService.getCorrelationers().get(execution.getCorrelationId());
 		
-		List<AbstractObjective> objectives = problemExtension.getObjectives();
+		List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
 		
 		List<NSolution<?>> solutions = execution.getSolutions();
 		
@@ -85,7 +96,8 @@ public class ExecutionController {
 		model.addAttribute("colorizers", pluginService.getColorizers());
 		model.addAttribute("correlationers", pluginService.getCorrelationers());
 		model.addAttribute("reducers", pluginService.getReducers());
-		model.addAttribute("settingsPreferencesDTO", preferencesService.findById(user.getId()));
+		model.addAttribute("visibilities", Visibility.values());
+		model.addAttribute("userDisplayDTO", userService.findUserDisplayDTOById(user.getId()));
 		model.addAttribute("executionSettingsDTO", executionService.convertToExecutionSettingsDTO(execution));
 		
 		return "execution";

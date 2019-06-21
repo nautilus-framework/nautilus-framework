@@ -1,27 +1,29 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<head th:replace="fragments/head :: title(#{nav.profile})"></head>
 	<body>
 		<div th:replace="fragments/navbar :: default('')"></div>
-		<br/>
+		<br />
 		<div class="container">
 			<div class="row">
 				<div class="col-3">
-					<div th:replace="fragments/panel/settings :: default('profile')"></div>
+					<div th:replace="fragments/panel/settings-panel :: default('profile')"></div>
 				</div>
 				<div class="col-9">
 					<h5 th:text="#{nav.profile}"></h5>
-					<hr/>
-					<form method="POST" th:action="@{/settings/profile/update}" th:object="${profileDTO}">
+					<hr />
+					<form method="POST" th:action="@{/settings/profile/update}" th:object="${userProfileDTO}">
 						<input type="hidden" th:field="*{id}" />
 						<div class="form-group">
 							<label for="firstname" th:text="#{user.firstname}"></label> 
-							<input type="text" class="form-control" th:field="*{firstname}" required autofocus autocomplete="given-name"/>
+							<input type="text" class="form-control" th:field="*{firstname}" required autofocus autocomplete="given-name" /> 
 							<span class="text-danger" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>
 						</div>
 						<div class="form-group">
 							<label for="lastname" th:text="#{user.lastname}"></label> 
-							<input type="text" class="form-control" th:field="*{lastname}" required autocomplete="family-name"/>
+							<input type="text" class="form-control" th:field="*{lastname}" required autocomplete="family-name" /> 
 							<span class="text-danger" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>
 						</div>
 						<button type="submit" class="btn btn-success" th:text="#{btn.save}"></button>
@@ -29,8 +31,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div th:replace="fragments/footer :: footer"></div>
 	</body>
-
 </html>

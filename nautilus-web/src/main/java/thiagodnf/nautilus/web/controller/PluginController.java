@@ -14,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.FlashMessageService;
-import thiagodnf.nautilus.web.service.ParetoFrontService;
 import thiagodnf.nautilus.web.service.PluginService;
 
 @Controller
@@ -32,8 +31,8 @@ public class PluginController {
 	@Autowired
 	private ExecutionService executionService;
 	
-	@Autowired
-	private ParetoFrontService paretoFrontService;
+//	@Autowired
+//	private ParetoFrontService paretoFrontService;
 	
 	@GetMapping("/{pluginId:.+}")
 	public String view(Model model, 

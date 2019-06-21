@@ -15,8 +15,6 @@ public class ExecutionSimplifiedDTO {
 	
 	private String instance;
 	
-	private boolean showToAllUsers;
-	
 	private Date creationDate;
 }
 

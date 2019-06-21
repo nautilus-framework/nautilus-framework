@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+	<body>
+	
+       <li class="list-group-item execution-queue-item" style="display: none">
+           <a class="execution-queue-title"></a>
+           <div class="progress mt-2">
+                 <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%">0%</div>
+           </div>
+           <div class="mt-2">
+               <span class="execution-queue-status"></span>
+               <a class="execution-queue-btn-cancel pull-right text-danger" href=""  th:text="#{btn.cancel}"></a>
+           </div>
+       </li>
+		
+	</body>
+</html>

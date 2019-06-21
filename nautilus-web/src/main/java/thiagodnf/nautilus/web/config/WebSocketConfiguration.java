@@ -1,66 +1,106 @@
 package thiagodnf.nautilus.web.config;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
 import org.springframework.messaging.handler.invocation.HandlerMethodReturnValueHandler;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
+import org.springframework.web.socket.messaging.SessionConnectEvent;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer{
 	
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketConfiguration.class);
+    
+    @Bean
+    public Map<String, String> loggedUsers() {
+        return new HashMap<>();
+    }
+    
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
-		config.enableSimpleBroker("/topic");
+		config.enableSimpleBroker("/topic", "/user");
 		config.setApplicationDestinationPrefixes("/app");
 	}
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/gs-guide-websocket").withSockJS();
+		registry.addEndpoint("/ws").withSockJS();
 	}
 
 	@Override
 	public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
-		// TODO Auto-generated method stub
-		
+		// Not implemented
 	}
 
 	@Override
 	public void configureClientInboundChannel(ChannelRegistration registration) {
-		// TODO Auto-generated method stub
-		
+	    // Not implemented
 	}
 
 	@Override
 	public void configureClientOutboundChannel(ChannelRegistration registration) {
-		// TODO Auto-generated method stub
-		
+	    // Not implemented
 	}
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-		// TODO Auto-generated method stub
-		
+	    // Not implemented
 	}
 
 	@Override
 	public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
-		// TODO Auto-generated method stub
-		
+	    // Not implemented
 	}
 
 	@Override
 	public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
-		// TODO Auto-generated method stub
+	 // Not implemented
 		return false;
 	}
+	
+    @Configuration
+    public class WebSocketOnConnected implements ApplicationListener<SessionConnectEvent> {
+
+        @Autowired
+        private Map<String, String> loggedUsers;
+
+        public void onApplicationEvent(SessionConnectEvent event) {
+
+            StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
+
+            loggedUsers.put(sha.getUser().getName(), sha.getSessionId());
+
+            LOGGER.debug("User {} Connected", sha.getSessionId());
+        }
+    }
+	
+    @Configuration
+    public class WebSocketOnDisconnected implements ApplicationListener<SessionDisconnectEvent> {
+
+        @Override
+        public void onApplicationEvent(SessionDisconnectEvent event) {
+
+            StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
+
+            LOGGER.debug("User {} Disconnected", sha.getSessionId());
+        }
+    }
 }

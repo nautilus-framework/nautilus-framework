@@ -36,7 +36,7 @@
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#preferences">Preferences</a>
 						</div>
 					</nav>
-					<form id="form-execute" class="needs-validation" th:object="${optimizeDTO}" novalidate autocomplete="off">
+					<form id="form-execute" method="POST" th:action="@{/optimize/} + ${problemId} + @{/} + ${instance} + @{/save}" class="needs-validation" th:object="${parametersDTO}" novalidate autocomplete="off">
 						<!-- Tab panes -->
 						<div class="tab-content">
 							<div role="tabpanel" class="tab-pane fade" id="general">
@@ -51,14 +51,17 @@
 								    		th:text="${algorithm.value.name}" 
 							    		/>
 									</select>
+									<span class="text-danger" th:if="${#fields.hasErrors('algorithmId')}" th:errors="*{algorithmId}"></span>
 								</div>
 								<div class="form-group">
 									<label for="populationSize">Population Size</label>
 									<input type="number" class="form-control" th:field="*{populationSize}" min="10" max="100000" step="1" required autocomplete="off" />
+									<span class="text-danger" th:if="${#fields.hasErrors('populationSize')}" th:errors="*{populationSize}"></span>
 								</div>
 								<div class="form-group">
 									<label for="maxEvaluations">Max Evaluations</label>
 									<input type="number" class="form-control" th:field="*{maxEvaluations}" min="10" max="10000000" step="1" required autocomplete="off" />
+									<span class="text-danger" th:if="${#fields.hasErrors('maxEvaluations')}" th:errors="*{maxEvaluations}"></span>
 								</div>
 							</div>
 							<div class="tab-pane fade" id="operators">
@@ -72,6 +75,7 @@
 									    		th:text="${selection.value.name}" 
 								    		/>
 										</select>
+										<span class="text-danger" th:if="${#fields.hasErrors('selectionId')}" th:errors="*{selectionId}"></span>
 									</div>
 								</div>
 								<hr/>
@@ -85,14 +89,17 @@
 									    		th:text="${crossover.value.name}" 
 								    		/>
 										</select>
+										<span class="text-danger" th:if="${#fields.hasErrors('crossoverId')}" th:errors="*{crossoverId}"></span>
 									</div>
 									<div class="form-group col-4">
 										<label for="crossoverProbability">Probability</label>
 										<input type="number" class="form-control" th:field="*{crossoverProbability}" min="0.0" max="1.0" step="0.1" required/>
+										<span class="text-danger" th:if="${#fields.hasErrors('crossoverProbability')}" th:errors="*{crossoverProbability}"></span>
 									</div>
 									<div class="form-group col-4">
 										<label for="crossoverDistribution">Distribution</label>
 										<input type="number" class="form-control" th:field="*{crossoverDistribution}" min="1.0" max="1000.0" step="0.1" required/>
+										<span class="text-danger" th:if="${#fields.hasErrors('crossoverDistribution')}" th:errors="*{crossoverDistribution}"></span>
 									</div>
 								</div>
 								<hr/>
@@ -106,14 +113,17 @@
 									    		th:text="${mutation.value.name}" 
 								    		/>
 								  		</select>
+								  		<span class="text-danger" th:if="${#fields.hasErrors('mutationId')}" th:errors="*{mutationId}"></span>
 									</div>
 									<div class="form-group col-4">
 										<label for="mutationProbability">Probability</label>
 										<input type="number" class="form-control" th:field="*{mutationProbability}" min="0.0" max="1.0" step="0.001" required/>
+										<span class="text-danger" th:if="${#fields.hasErrors('mutationProbability')}" th:errors="*{mutationProbability}"></span>
 									</div>
 									<div class="form-group col-4">
 										<label for="mutationDistribution">Distribution</label>
 										<input type="number" class="form-control" th:field="*{mutationDistribution}" min="1.0" max="1000.0" step="0.1" required/>
+										<span class="text-danger" th:if="${#fields.hasErrors('mutationDistribution')}" th:errors="*{mutationDistribution}"></span>
 									</div>
 								</div>
 							</div>
@@ -129,6 +139,7 @@
 										/>
 									  	<label class="form-check-label" th:for="${#ids.prev('objectiveIds')}" th:text="${objective.name}"> </label>
 									</div>
+									<span class="text-danger" th:if="${#fields.hasErrors('objectiveIds')}" th:errors="*{objectiveIds}"></span>
 									<br/>
 								</div>
 							</div>
@@ -136,18 +147,18 @@
 								<div class="form-group">
 									<label for="referencePoints">Reference Points</label>
 								    <textarea class="form-control" rows="5" th:field="*{referencePoints}"></textarea>
-								    <small class="form-text text-muted">
-									  Use ';' to separate the values and provide a RP by line
-									</small>
+								    <small class="form-text text-muted">Use ';' to separate the values and provide a RP by line</small>
+								    <span class="text-danger" th:if="${#fields.hasErrors('referencePoints')}" th:errors="*{referencePoints}"></span>
 								</div>
 								<div class="form-group">
 									<label for="epsilon">Epsilon</label>
 									<input type="number" class="form-control" th:field="*{epsilon}" min="0.0" max="1.0" step="0.001" required/>
+									<span class="text-danger" th:if="${#fields.hasErrors('epsilon')}" th:errors="*{epsilon}"></span>
 								</div>
 							</div>
 						</div>
 						<hr/>
-						<button type="submit" id="btn-execute" class="btn btn-success">Execute</button>
+						<button type="submit" id="btn-execute" class="btn btn-success" th:text="#{btn.execute}"></button>
 						<a class="btn btn-light" th:href="@{/problem/} + ${problem.id}" th:text="#{btn.cancel}"></a>
 					</form>
 					<div class="console"></div>
@@ -156,9 +167,7 @@
 		</div>
 	
 		<div th:replace="fragments/footer :: footer"></div>
-		<div th:replace="fragments/modal :: progressbar"></div>
-		<div th:replace="fragments/modal :: console"></div>
-		<script type="text/javascript" th:src="@{/js/controller/optimize.js}"></script>
+		<!-- <script type="text/javascript" th:src="@{/js/controller/optimize.js}"></script> -->
 	</body>
 
 </html>

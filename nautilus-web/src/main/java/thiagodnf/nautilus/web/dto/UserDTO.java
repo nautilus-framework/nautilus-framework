@@ -2,21 +2,21 @@ package thiagodnf.nautilus.web.dto;
 
 import javax.validation.constraints.NotBlank;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Value
+@Getter
+@Setter
+@AllArgsConstructor
 public class UserDTO {
 
 	private String id;
 	
 	private String email;
 
-	@NotBlank
-	private String firstname;
+	private String fullname;
 
-	@NotBlank
-	private String lastname;
-	
 	@NotBlank
 	private String roleId;
 	
@@ -29,9 +29,5 @@ public class UserDTO {
 	private boolean accountNonLocked;
 	
 	private boolean credentialsNonExpired;
-	
-	public String getFullname() {
-		return String.format("%s %s", firstname, lastname);
-	}
 }
 

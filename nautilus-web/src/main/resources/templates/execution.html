@@ -12,9 +12,9 @@
 				<div class="row">
 					<div class="col-8 path">
 						<h6 class="title">
-							<a th:href="@{/}" th:text="#{nav.home}"></a> 
+							<a th:href="@{#}" th:text="#{nav.home}"></a> 
 							<span class="path-divider">/</span> 
-							<a th:href="@{/execution/}+${execution.id}" th:text="${#strings.isEmpty(execution.title)} ? ${execution.id} : ${execution.title}"></a> 
+							<a th:href="@{|/execution/${execution.id}|}" th:text="${#strings.isEmpty(execution.title)} ? ${#dates.format(execution.creationDate, 'yyyy-MM-dd HH:mm:ss')} : ${execution.title}"></a> 
 						</h6>
 					</div>
 					<div class="col-4 toolbar">
@@ -30,11 +30,11 @@
 				<div class="col-12">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}">Scatter Chart</a>
-							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#solutions" >Solutions</a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}" th:text="#{nav.chart}"></a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#solutions" th:text="#{nav.solutions}"></a>
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#correlation" th:if="${correlations != null}">Correlation</a>
-							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#information" >Information</a>
-							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings" >Settings</a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#parameters" th:text="#{nav.parameters}"></a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings" th:text="#{nav.settings}"></a>
 						</div>
 					</nav>
 					<!-- Tab panes -->
@@ -47,21 +47,16 @@
 								<table id="execution-table" class="table table-striped table-hover table-sm table-datatable">
 									<thead>
 										<tr>
-											<th>#</th>
+											<th width="20px">#</th>
 											<th th:each="obj,i : ${objectives}" th:text="${obj.name}" class="objectives-names"></th>	
 											<th>Selected</th>
-					
 										</tr>
 									</thead>
 									<tbody>
 										<tr th:each="solution : ${solutions}" th:with="i = ${solution.getAttributes().get('id')}">
 											<td><a th:href="@{/solution/}+${execution.getId()}+@{/}+${i}+@{/0}" th:text="${i}"></a></td>
-											
-											<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1, settingsPreferencesDTO.decimalPlaces, settingsPreferencesDTO.decimalSeparator )}" class="objectives-values"/>
-												
+											<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1, userDisplayDTO.decimalPlaces, userDisplayDTO.decimalSeparator )}" class="objectives-values"/>
 											<td th:text="${solution.getAttributes().containsKey('selected')}"/>
-											<!-- <td th:text="${#numbers.formatDecimal(solution.getUserFeedback(), 1, 5)}"></td> -->
-											
 										</tr>
 									</tbody>
 								</table>
@@ -90,206 +85,158 @@
 								</table>
 							</div>
 						</div>
-						<div role="tabpanel" class="tab-pane fade" id="information">
-							<div class="card">
-							  <div class="card-header">Information</div>
-							  <div class="card-body">
-							    <dl class="row">
-									<dt class="col-sm-3">Execution Id</dt>
-									<dd class="col-sm-9" th:text="${execution.id}"></dd>
-									<dt class="col-sm-3">Date</dt>
-									<dd class="col-sm-9 dates" th:text="${#formatter.date(execution.creationDate)}"></dd>
-									<dt class="col-sm-3"># of Solutions</dt>
-									<dd class="col-sm-9" th:text="${solutions.size()}"></dd>
-									<dt class="col-sm-3">Execution Time</dt>
-									<dd class="col-sm-9" th:text="${#formatter.interval(execution.getExecutionTime())}"></dd>
-								</dl>
-							  </div>
-							</div>
-							<br/>
-							<div class="card">
-							  <div class="card-header">Parameters</div>
-							  <div class="card-body">
-							    <dl class="row">
-								
-									<dt class="col-sm-3">Problem Id</dt>
-									<dd class="col-sm-9" th:text="${execution.problemId}"></dd>
-									<dt class="col-sm-3">Filename</dt>
-									<dd class="col-sm-9" th:text="${execution.instance}"></dd>
-									
-									<dt class="col-sm-3">Population Size</dt>
-									<dd class="col-sm-9" th:text="${execution.populationSize}"></dd>
-									<dt class="col-sm-3">Max Evalution</dt>
-									<dd class="col-sm-9" th:text="${execution.maxEvaluations}"></dd>
-									
-									
-									<dt class="col-sm-3">Algorithm Name</dt>
-									<dd class="col-sm-9" th:text="${execution.algorithmId}"></dd>
-									<dt class="col-sm-3">Objective Ids</dt>
-									<dd class="col-sm-9" th:text="${execution.objectiveIds}"></dd>
-									<dt class="col-sm-3">Selection Name</dt>
-									<dd class="col-sm-9" th:text="${execution.selectionId}"></dd>
-									<dt class="col-sm-3">Crossover Name</dt>
-									<dd class="col-sm-9" th:text="${execution.crossoverId}"></dd>
-									<dt class="col-sm-3">Crossover Probability</dt>
-									<dd class="col-sm-9" th:text="${execution.crossoverProbability}"></dd>
-									<dt class="col-sm-3">Mutation Name</dt>
-									<dd class="col-sm-9" th:text="${execution.mutationId}"></dd>
-									<dt class="col-sm-3">Mutation Probability</dt>
-									<dd class="col-sm-9" th:text="${execution.mutationProbability}"></dd>
-								</dl>
-							  </div>
-							</div>
+						<div role="tabpanel" class="tab-pane fade" id="parameters">
+						  
+						      <table class="table table-striped table-hover table-sm table-datatable">
+                                    <thead>
+                                        <tr>
+                                            <th th:text="#{nav.parameter}"></th>
+                                            <th th:text="#{nav.value}" width="80%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Id</td><td th:text="${execution.id}"></td></tr>
+                                        <tr><td th:text="#{execution.creation-date}"></td><td th:text="${#dates.format(execution.creationDate, 'yyyy-MM-dd HH:mm:ss')}"></td></tr>
+                                        <tr><td th:text="#{execution.n-of-solutions}"></td><td th:text="${solutions.size()}"></td></tr>
+                                        <tr><td th:text="#{execution.execution-time}"></td><td th:text="${#formatter.interval(execution.getExecutionTime())}"></td></tr>
+                                        
+                                        <tr><td th:text="#{execution.problem}"></td><td th:text="${execution.problemId}"></td></tr>
+                                        <tr><td th:text="#{execution.instance}"></td><td th:text="${execution.instance}"></td></tr>
+                                        <tr><td th:text="#{execution.population-size}"></td><td th:text="${execution.populationSize}"></td></tr>
+                                        <tr><td th:text="#{execution.max-evaluations}"></td><td th:text="${execution.maxEvaluations}"></td></tr>
+                                        <tr><td th:text="#{execution.algorithm}"></td><td th:text="${execution.algorithmId}"></td></tr>
+                                        <tr><td th:text="#{execution.objectives}"></td><td th:text="${execution.objectiveIds}"></td></tr>
+                                        <tr><td th:text="#{execution.selection}"></td><td th:text="${execution.selectionId}"></td></tr>
+                                        <tr><td th:text="#{execution.crossover}"></td><td th:text="${execution.crossoverId}"></td></tr>
+                                        <tr><td th:text="#{execution.crossover-probability}"></td><td th:text="${execution.crossoverProbability}"></td></tr>
+                                        <tr><td th:text="#{execution.crossover-distribution}"></td><td th:text="${execution.crossoverDistribution}"></td></tr>
+                                        <tr><td th:text="#{execution.mutation}"></td><td th:text="${execution.mutationId}"></td></tr>
+                                        <tr><td th:text="#{execution.mutation-probability}"></td><td th:text="${execution.mutationProbability}"></td></tr>
+                                        <tr><td th:text="#{execution.mutation-distribution}"></td><td th:text="${execution.mutationDistribution}"></td></tr>
+                                    </tbody>
+                                </table>	
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="settings">
-							<div class="row">
-							 <div class="col-12">
-							
-							     <form th:action="@{/execution/} + ${executionId} + @{/settings/save}" method="POST" th:object="${executionSettingsDTO}">
-								    <h5 th:text="#{nav.general}"></h5>
-								    <hr/>
-									<div class="form-group">
-										<label class="form-check-label" for="title"> 
-										      <strong>Title</strong>
-											<p class="small text-muted">Define an own name for this execution</p>
-										</label> 
-										<input type="text" class="form-control" th:field="*{title}" autofocus />
-									</div>
-									<div class="form-check">
-                                         <input type="checkbox" class="form-check-input" th:field="*{showToAllUsers}"/>
-                                         <label class="form-check-label" for="showToAllUsers1">
-                                             <strong>Show to all users</strong>
-                                             <p class="small text-muted">Define if other users can visualize this execution</p>
-                                         </label>
-                                     </div>
-                                     <br/>
-                                       <h5>Graphics</h5>
-                                       <hr>
-                                       
-                                     <div class="form-group">
-                                           <label class="form-check-label" for="normalizeId">
-                                               <strong>Normalize</strong>
-                                               <p class="small text-muted">Normalize the objective's values between 0 and 1</p>
-                                           </label>
-                                           <select class="form-control" th:field="*{normalizeId}">
-                                             <option th:each="normalize : ${normalizers}" 
-                                                   th:value="${normalize.key}"
-                                                   th:text="${normalize.value}" 
-                                               />
-                                           </select>
-                                     </div>
-                                     <div class="form-group">
-	                                       <label class="form-check-label" for="correlationId">
-	                                           <strong>Correlate</strong>
-	                                           <p class="small text-muted">Correlate the objectives values</p>
-	                                       </label>
-	                                       <select class="form-control" th:field="*{correlationId}">
-	                                           <option th:each="correlationer : ${correlationers}" 
-	                                               th:value="${correlationer.key}"
-	                                               th:text="${correlationer.value}" 
-	                                           />
-	                                       </select>
-	                                     </div>
-									   <div class="form-group">
-                                          <label class="form-check-label" for="duplicatesRemoverId">
-                                              <strong>Duplicates Removers</strong>
-                                              <p class="small text-muted">Remove the duplicated solutions from pareto-front. Ideally, if you are using a IntegerProblem, the order doesn't matter. If you are using a BinaryProblem, the order matters. </p>
-                                          </label>
-                                          <select class="form-control" th:field="*{duplicatesRemoverId}">
-                                              <option th:each="duplicatesRemover : ${duplicatesRemovers}" 
-                                                  th:value="${duplicatesRemover.key}"
-                                                  th:text="${duplicatesRemover.value}" 
-                                              />
-                                          </select>
-                                        </div>
-									   <div class="form-group">
-                                         <label class="form-check-label" for="reducerId">
-                                             <strong>Objective Reducers</strong>
-                                             <p class="small text-muted">Reduce the number objectives to be optimized in the next execution</p>
-                                         </label>
-                                         <select class="form-control" th:field="*{reducerId}">
-                                             <option th:each="reducer : ${reducers}" 
-                                                 th:value="${reducer.key}"
-                                                 th:text="${reducer.value}" 
-                                             />
-                                         </select>
-                                       </div>
-                                       <div class="form-check">
-                                          <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
-                                          <label class="form-check-label" for="showLines1">
-                                              <strong>Show Lines</strong>
-                                              <p class="small text-muted">Connect the found solutions by using lines</p>
-                                          </label>
-                                      </div>
-									  <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
-									</form>
-									<br/>
-									<br/>
-									<div class="card border-default mb-3">
-										<div class="card-header bg-transparent border-default">Export</div>
-										<ul class="list-group list-group-flush">
-											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-20">
-													<div class="col-8">
-														<strong>Nautilus</strong>
-														<p class="small">Export a json file with the execution information to Nautilus</p>
-													</div>
-													<div class="col-4 text-right">
-														<a class="btn btn-outline-secondary" th:href="@{/download/execution/} + ${execution.getId()}+'/json'">Download Json</a>
-													</div>	
-												</div>
-											</li>
-											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-20">
-													<div class="col-6">
-														<strong>JMetal Framework</strong>
-														<p class="small">Export a fun and/or var files to jMetal Framework tool</p>
-													</div>
-													<div class="col-6 text-right">
-														<a class="btn btn-outline-secondary" th:href="@{/download/execution/} + ${execution.getId()}+'/fun'">Download FUN File</a>
-														<a class="btn btn-outline-secondary" th:href="@{/download/execution/} + ${execution.getId()}+'/var'">Download VAR File</a>
-													</div>	
-												</div>
-											</li>
-										</ul>
-									</div>
-									
-									<div class="card border-danger mb-3">
-										<div class="card-header bg-transparent border-danger">Danger Zone</div>
-										<ul class="list-group list-group-flush">
-											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-20">
-													<div class="col-8">
-														<strong>Clear User Preferences</strong><br/>
-														<p><small>Clear the user feedback to provide the preferences again</small></p>
-													</div>
-													<div class="col-4 text-right">
-														<form method="POST" th:action="@{/execution/} + ${execution.getId()} + @{/clear/user-feedback}">
-															<button type="submit" class="btn btn-outline-danger" data:confirm="#{clear.all.user.feedbacks.all.solution}" >Clear Feedback</button>
-														</form>
-													</div>	
-												</div>
-											</li>
-											<li class="list-group-item">
-									  			<div class="row margin-bottom-minus-20">
-													<div class="col-8">
-														<p><strong>Remove Execution</strong><br/>
-														<small>Once you delete, there is no going back. Please be certain.</small></p>
-													</div>
-													<div class="col-4 text-right">
-														<form method="POST" th:action="@{/execution/} + ${execution.getId()} + @{/delete}">
-															<button type="submit" class="btn btn-outline-danger" data:confirm="#{confirm.delete-execution}" th:text="#{btn.remove}"></button>
-														</form>
-													</div>	
-												</div>
-											</li>
-										</ul>
-									</div>
-									
-								</div>
-							</div>			
-						
-							
+						  
+						  <form th:action="@{|/execution/${executionId}/settings/save|}" method="POST" th:object="${executionSettingsDTO}">
+                                
+						      <div class="row">
+								    <div class="col-3">
+									    <div class="list-group" role="tablist">
+									        <a class="list-group-item light-gray" th:text="#{nav.settings}"></a>
+		                                    <a class="list-group-item list-group-item-action active" data-toggle="list" href="#panel-item-general" role="tab" th:text="#{nav.general}"></a>
+									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-display" role="tab" th:text="#{nav.display}"></a>
+									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-solutions" role="tab" th:text="#{nav.solutions}"></a>
+									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-objectives" role="tab" th:text="#{nav.objectives}"></a>
+									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-miscellaneous" role="tab" th:text="#{nav.miscellaneous}"></a>
+									    </div>
+								    </div>
+								    <div class="col-9">
+										<div class="tab-content mt-0">
+											<div class="tab-pane fade show active" id="panel-item-general" role="tabpanel">
+											  <h5 th:text="#{nav.general}"></h5>
+											  <hr/>
+										      <div class="form-group">
+		                                          <label for="title" th:text="#{execution.title}"></label> 
+		                                          <input type="text" class="form-control" th:field="*{title}" autofocus />
+		                                          <small class="form-text text-muted" th:text="#{help.execution.title}"></small>
+		                                          <span class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+		                                      </div>
+		                                      <div class="form-group">
+		                                           <label for="visibility" th:text="#{execution.visibility}"></label>
+		                                           <select class="form-control" th:field="*{visibility}">
+		                                           <option th:each="visibility : ${visibilities}" 
+	                                                   th:value="${visibility}"
+	                                                   th:text="#{'execution.visibility.'+${visibility.toString().toLowerCase()}}" 
+		                                           />
+		                                           </select>
+		                                           <small class="form-text text-muted" th:text="#{help.execution.visibility}"></small>
+		                                           <span class="text-danger" th:if="${#fields.hasErrors('visibility')}" th:errors="*{visibility}"></span>
+		                                       </div>
+		                                       <hr/>
+                                               <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
+											</div>
+											<div class="tab-pane fade" id="panel-item-display" role="tabpanel">
+											  <h5 th:text="#{nav.display}"></h5>
+		                                      <hr/>
+											  <div class="form-check">
+		                                          <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
+		                                          <label class="form-check-label" for="showLines1" th:text="#{execution.show-lines}"></label>
+		                                          <small class="form-text text-muted" th:text="#{help.execution.show-lines}"></small>
+		                                      </div>
+		                                      <hr/>
+                                              <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
+											</div>
+											<div class="tab-pane fade" id="panel-item-solutions" role="tabpanel">
+											  <h5 th:text="#{nav.solutions}"></h5>
+		                                         <hr/>
+											   <div class="form-group">
+		                                          <label for="duplicatesRemoverId" th:text="#{execution.duplicates-remover}"></label>
+		                                          <select class="form-control" th:field="*{duplicatesRemoverId}">
+		                                              <option th:each="duplicatesRemover : ${duplicatesRemovers}" 
+		                                                  th:value="${duplicatesRemover.key}"
+		                                                  th:text="${duplicatesRemover.value}" 
+		                                              />
+		                                          </select>
+		                                          <small class="form-text text-muted" th:text="#{help.execution.duplicates-remover}"></small>
+		                                          <span class="text-danger" th:if="${#fields.hasErrors('duplicatesRemoverId')}" th:errors="*{duplicatesRemoverId}"></span>
+		                                        </div>
+		                                        <hr/>
+                                                <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
+											</div>
+											<div class="tab-pane fade" id="panel-item-objectives" role="tabpanel">
+											     <h5 th:text="#{nav.objectives}"></h5>
+		                                         <hr/>
+											     <div class="form-group">
+		                                              <label for="normalizeId" th:text="#{execution.normalize}"></label>
+		                                              <select class="form-control" th:field="*{normalizeId}">
+		                                                <option th:each="normalize : ${normalizers}" 
+		                                                      th:value="${normalize.key}"
+		                                                      th:text="${normalize.value}" 
+		                                                  />
+		                                              </select>
+		                                              <small class="form-text text-muted" th:text="#{help.execution.normalize}"></small>
+		                                              <span class="text-danger" th:if="${#fields.hasErrors('normalizeId')}" th:errors="*{normalizeId}"></span>
+		                                          </div>
+		                                          <div class="form-group">
+		                                              <label for="correlationId" th:text="#{execution.correlation}"></label>
+			                                          <select class="form-control" th:field="*{correlationId}">
+			                                              <option th:each="correlationer : ${correlationers}" 
+			                                                  th:value="${correlationer.key}"
+			                                                  th:text="${correlationer.value}" 
+			                                              />
+			                                          </select>
+		                                              <small class="form-text text-muted" th:text="#{help.execution.correlation}"></small>
+		                                              <span class="text-danger" th:if="${#fields.hasErrors('correlationId')}" th:errors="*{correlationId}"></span>
+		                                          </div>
+		                                          <div class="form-group">
+		                                              <label for="reducerId" th:text="#{execution.objective-reducers}"></label>
+			                                         <select class="form-control" th:field="*{reducerId}">
+			                                             <option th:each="reducer : ${reducers}" 
+			                                                 th:value="${reducer.key}"
+			                                                 th:text="${reducer.value}" 
+			                                             />
+			                                         </select>
+		                                              <small class="form-text text-muted" th:text="#{help.execution.objective-reducers}"></small>
+		                                              <span class="text-danger" th:if="${#fields.hasErrors('reducerId')}" th:errors="*{reducerId}"></span>
+		                                          </div>
+		                                          <hr/>
+                                                  <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
+											 </div>
+											 <div class="tab-pane fade" id="panel-item-miscellaneous" role="tabpanel">
+											     <h5 th:text="#{nav.miscellaneous}"></h5>
+                                                 <hr/>
+                                                 <strong th:text="#{execution.remove-preferences}"></strong><br/>
+                                                 <p><small class="form-text text-muted" th:text="#{help.execution.remove-preferences}"></small></p>
+                                                 <form method="POST" action="#">
+                                                     <button type="submit" class="btn btn-outline-danger" data:confirm="#{confirm.clear-remove-preferences}" th:text="#{btn.clear}"></button>
+                                                 </form>
+											 </div>
+										</div>
+								    </div>
+								   </div>
+							   
+				             </form>
 						</div>
 					</div>
 				</div>

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import lombok.Value;
 
 @Value
-public class SettingsProfileDTO {
+public class UserProfileDTO {
 	
     @NotBlank
 	private String id;

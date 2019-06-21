@@ -8,7 +8,7 @@ import lombok.Value;
 import thiagodnf.nautilus.web.annotation.Contains;
 
 @Value
-public class SettingsPreferencesDTO {
+public class UserDisplayDTO {
 	
     @NotBlank
 	private String id;

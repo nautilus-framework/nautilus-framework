@@ -7,7 +7,7 @@
 	
 		<div th:fragment="default(active)" class="list-group">
 		  
-		  <a class="list-group-item" th:text="#{nav.admin}"></a>
+		  <a class="list-group-item light-gray" th:text="#{nav.admin}"></a>
       
 		  <a th:href="@{/admin/users}" class="list-group-item list-group-item-action" th:classappend="${active == 'users'} ? active  : ''">
 		    <p class="mb-0" th:classappend="${active == 'users'} ? '' : text-primary" th:text="#{nav.users}"></p>

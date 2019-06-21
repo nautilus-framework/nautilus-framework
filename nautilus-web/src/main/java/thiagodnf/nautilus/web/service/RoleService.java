@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import thiagodnf.nautilus.web.dto.RoleDTO;
-import thiagodnf.nautilus.web.dto.UserDTO;
 import thiagodnf.nautilus.web.exception.RoleNotEditableException;
 import thiagodnf.nautilus.web.exception.RoleNotFoundException;
 import thiagodnf.nautilus.web.model.Role;
@@ -52,7 +51,7 @@ public class RoleService {
 		return convertToDTO(updated);
 	}
 
-	public RoleDTO findByName(String name) {
+	public RoleDTO findRoleDTOByName(String name) {
 		return convertToDTO(this.repository.findByName(name));
 	}
 	
@@ -74,17 +73,15 @@ public class RoleService {
 	   
 		repository.delete(found);
 		
-		List<User> users = userService.findUserByRoleId(found.getId());
+		List<User> users = userService.findUsersByRoleId(found.getId());
 		
-		RoleDTO userROLE = findByName(Role.USER);
+		RoleDTO userRole = findRoleDTOByName(Role.USER);
 		
 		for(User user : users) {
 			
-			user.setRoleId(userROLE.getId());
+		    user.setRoleId(userRole.getId());
 			
-			UserDTO userDTO = userService.convertToDTO(user);
-			
-			userService.update(userDTO);
+			userService.save(user);
 		}
 		
 		return convertToDTO(found);

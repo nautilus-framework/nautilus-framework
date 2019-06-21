@@ -4,37 +4,35 @@ import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import thiagodnf.nautilus.core.colorize.DontColorize;
-import thiagodnf.nautilus.core.correlation.DontCorrelation;
-import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
-import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
-import thiagodnf.nautilus.core.reduction.ConfidenceBasedReduction;
+import thiagodnf.nautilus.web.model.Execution.Visibility;
 
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ExecutionSettingsDTO {
 	
 	private String title;
 	
-	private boolean showToAllUsers = false;
+	private Visibility visibility;
 	
-	private boolean showLines = true;
-	
-	@NotBlank
-	private String colorizeId = new DontColorize().getId();
+	private boolean showLines;
 	
 	@NotBlank
-	private String normalizeId = new ByParetoFrontValuesNormalize().getId();
+	private String colorizeId;
 	
 	@NotBlank
-	private String correlationId = new DontCorrelation().getId();
+	private String normalizeId;
 	
 	@NotBlank
-	private String duplicatesRemoverId = new ByObjectivesDuplicatesRemover().getId();
+	private String correlationId;
 	
 	@NotBlank
-	private String reducerId= new ConfidenceBasedReduction().getId();
+	private String duplicatesRemoverId;
+	
+	@NotBlank
+	private String reducerId;
 }
 

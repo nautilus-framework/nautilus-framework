@@ -6,6 +6,7 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OptimizeDTO {
+public class ParametersDTO {
 
 	@NotBlank
 	private String userId;
@@ -31,13 +32,13 @@ public class OptimizeDTO {
 	@NotBlank
 	private String instance;
 	
-	@DecimalMin("10")
+	@DecimalMin("100")
 	@DecimalMax("1000")
 	private int populationSize = 100;
 	
-	@DecimalMin("10")
+	@DecimalMin("100")
 	@DecimalMax("10000000")
-	private int maxEvaluations = 500000;
+	private int maxEvaluations = 100000;
 	
 	@NotBlank
 	private String algorithmId = new NSGAIIAlgorithmExtension().getId();
@@ -74,6 +75,7 @@ public class OptimizeDTO {
 	private List<List<Double>> referencePoints;
 	
 	@NotNull
+	@Size(min = 1)
 	private List<String> objectiveIds;
 	
 	private String lastExecutionId;
@@ -92,7 +94,7 @@ public class OptimizeDTO {
 
     private String reducerId = new ConfidenceBasedReduction().getId();
 	
-	public OptimizeDTO(String userId, String problemId, String instance) {
+	public ParametersDTO(String userId, String problemId, String instance) {
 		this.userId = userId;
 		this.problemId = problemId;
 		this.instance = instance;

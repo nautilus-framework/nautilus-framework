@@ -1,123 +1,155 @@
 package thiagodnf.nautilus.web.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import thiagodnf.nautilus.web.dto.ExecutionQueueDTO;
 import thiagodnf.nautilus.web.dto.ExecutionSettingsDTO;
 import thiagodnf.nautilus.web.dto.ExecutionSimplifiedDTO;
 import thiagodnf.nautilus.web.exception.ExecutionNotFoundException;
+import thiagodnf.nautilus.web.exception.UserNotOwnerException;
 import thiagodnf.nautilus.web.model.Execution;
+import thiagodnf.nautilus.web.model.User;
+import thiagodnf.nautilus.web.model.Execution.Visibility;
 import thiagodnf.nautilus.web.repository.ExecutionRepository;
 
 @Service
 public class ExecutionService {
-	
-	@Autowired
-	private ExecutionRepository executionRepository;
-	
-	public ExecutionSimplifiedDTO duplicate(String userId, String executionId) {
 
-		Execution execution = findExecutionById(executionId);
+    @Autowired
+    private ExecutionRepository executionRepository;
 
-		execution.setId(null);
-		execution.setUserId(userId);
-		execution.setCreationDate(null);
-		execution.setLastChangeDate(null);
-		execution.setShowToAllUsers(false);
-		
-		Execution saved = save(execution);
+    @Autowired
+    private List<ExecutionQueueDTO> runningExecutions;
 
-		return convertToExecutionSimplifiedDTO(saved);
-	}
-	
-	public void updateSettings(String executionId, ExecutionSettingsDTO executionSettingsDTO) {
+    @Autowired
+    private SecurityService securityService;
 
-		Execution execution = findExecutionById(executionId);
+    public List<ExecutionQueueDTO> findRunningExecutions() {
 
-		execution.setTitle(executionSettingsDTO.getTitle());
-		execution.setShowToAllUsers(executionSettingsDTO.isShowToAllUsers());
-		execution.setShowLines(executionSettingsDTO.isShowLines());
-		execution.setColorizeId(executionSettingsDTO.getColorizeId());
-		execution.setNormalizeId(executionSettingsDTO.getNormalizeId());
-		execution.setCorrelationId(executionSettingsDTO.getCorrelationId());
-		execution.setDuplicatesRemoverId(executionSettingsDTO.getDuplicatesRemoverId());
-		execution.setReducerId(executionSettingsDTO.getReducerId());
+        List<ExecutionQueueDTO> selected = new ArrayList<>();
 
-		save(execution);
-	}
-	
-	public Execution save(Execution execution) {
-		return this.executionRepository.save(execution);
-	}
-	
-	public ExecutionSimplifiedDTO findExecutionSimplifiedDTOById(String executionId) {
-        return this.executionRepository.findExecutionSimplifiedDTOById(executionId).orElseThrow(ExecutionNotFoundException::new);
+        for (ExecutionQueueDTO execution : runningExecutions) {
+
+            if (isOwner(execution.getUserId())) {
+                selected.add(execution);
+            }
+        }
+
+        return selected;
     }
-	
-	public Execution findExecutionById(String executionId) {
-		return this.executionRepository.findById(executionId).orElseThrow(ExecutionNotFoundException::new);
-	}
 
-	public List<ExecutionSimplifiedDTO> findByUserId(String userId) {
+    public ExecutionSimplifiedDTO duplicate(String userId, String executionId) {
 
-		List<ExecutionSimplifiedDTO> allExecutions = new ArrayList<>();
+        Execution execution = findExecutionById(executionId);
 
-		allExecutions.addAll(executionRepository.findByUserId(userId));
-		allExecutions.addAll(executionRepository.findByShowToAllUsers(true));
+        execution.setId(null);
+        execution.setUserId(userId);
+        execution.setCreationDate(null);
+        execution.setLastChangeDate(null);
+        execution.setVisibility(Visibility.PRIVATE);
 
-		Map<String, ExecutionSimplifiedDTO> executions = new HashMap<>();
+        Execution saved = save(execution);
 
-		for (ExecutionSimplifiedDTO execution : allExecutions) {
-			executions.put(execution.getId(), execution);
-		}
+        return convertToExecutionSimplifiedDTO(saved);
+    }
 
-		return executions.values().stream().collect(Collectors.toList());
-	}
-	
+    public void updateSettings(String executionId, ExecutionSettingsDTO executionSettingsDTO) {
+
+        Execution execution = findExecutionById(executionId);
+        
+        if (isOwner(execution)) {
+            throw new UserNotOwnerException();
+        }
+        
+        execution.setTitle(executionSettingsDTO.getTitle());
+        execution.setVisibility(executionSettingsDTO.getVisibility());
+        execution.setShowLines(executionSettingsDTO.isShowLines());
+        execution.setColorizeId(executionSettingsDTO.getColorizeId());
+        execution.setNormalizeId(executionSettingsDTO.getNormalizeId());
+        execution.setCorrelationId(executionSettingsDTO.getCorrelationId());
+        execution.setDuplicatesRemoverId(executionSettingsDTO.getDuplicatesRemoverId());
+        execution.setReducerId(executionSettingsDTO.getReducerId());
+
+        save(execution);
+    }
+
+    public boolean contains(String executionId) {
+        return this.executionRepository.existsById(executionId);
+    }
+
+    public Execution save(Execution execution) {
+        return this.executionRepository.save(execution);
+    }
+
+    public ExecutionSimplifiedDTO findExecutionSimplifiedDTOById(String executionId) {
+        return this.executionRepository.findExecutionSimplifiedDTOById(executionId)
+                .orElseThrow(ExecutionNotFoundException::new);
+    }
+
+    public Execution findExecutionById(String executionId) {
+        return this.executionRepository.findById(executionId).orElseThrow(ExecutionNotFoundException::new);
+    }
+
+    public List<ExecutionSimplifiedDTO> findExecutionSimplifiedDTOByUserId(String userId) {
+        return executionRepository.findByUserIdAndSolutionsNotNull(userId);
+    }
+
     public void deleteById(String executionId) {
 
-        ExecutionSimplifiedDTO found = findExecutionSimplifiedDTOById(executionId);
-        
-        executionRepository.deleteById(found.getId());
-    }
-	
-	public boolean existsById(String executionId) {
-		return executionRepository.existsById(executionId);
-	}
+        if (!contains(executionId)) {
+            throw new ExecutionNotFoundException();
+        }
 
-	public ExecutionSimplifiedDTO convertToExecutionSimplifiedDTO(Execution execution) {
-		
-		if(execution == null) return null;
-		
-		return new ExecutionSimplifiedDTO(
-			execution.getId(),
-			execution.getTitle(),
-			execution.getProblemId(),
-			execution.getInstance(),
-			execution.isShowToAllUsers(),
-			execution.getCreationDate()
-		);
-	}
-	
-	public ExecutionSettingsDTO convertToExecutionSettingsDTO(Execution execution) {
-		
-		if(execution == null) return null;
-		
-		return new ExecutionSettingsDTO(
-				execution.getTitle(), 
-				execution.isShowToAllUsers(), 
-				execution.isShowLines(), 
-				execution.getColorizeId(), 
-				execution.getNormalizeId(), 
-				execution.getCorrelationId(), 
-				execution.getDuplicatesRemoverId(), 
-				execution.getReducerId()
-		);
-	}
+        this.executionRepository.deleteById(executionId);
+    }
+
+    public ExecutionSimplifiedDTO convertToExecutionSimplifiedDTO(Execution execution) {
+
+        if (execution == null)
+            return null;
+
+        return new ExecutionSimplifiedDTO(execution.getId(), execution.getTitle(), execution.getProblemId(),
+                execution.getInstance(), execution.getCreationDate());
+    }
+
+    public ExecutionSettingsDTO convertToExecutionSettingsDTO(Execution execution) {
+
+        if (execution == null)
+            return null;
+
+        ExecutionSettingsDTO dto = new ExecutionSettingsDTO();
+
+        dto.setTitle(execution.getTitle());
+        dto.setVisibility(execution.getVisibility());
+        dto.setShowLines(execution.isShowLines());
+        dto.setNormalizeId(execution.getNormalizeId());
+        dto.setCorrelationId(execution.getColorizeId());
+        dto.setDuplicatesRemoverId(execution.getDuplicatesRemoverId());
+        dto.setReducerId(execution.getReducerId());
+
+        return dto;
+    }
+
+    public List<ExecutionSimplifiedDTO> findExecutionSimplifiedDTOByVisibility(Visibility visibility) {
+        return executionRepository.findByVisibility(visibility);
+    }
+
+    public boolean isOwner(Execution execution) {
+
+        if (execution == null || execution.getUserId() == null)
+            return false;
+
+        return isOwner(execution.getId());
+    }
+
+    public boolean isOwner(String executionId) {
+
+        User user = securityService.getLoggedUser().getUser();
+
+        return executionId.equalsIgnoreCase(user.getId());
+    }
 }

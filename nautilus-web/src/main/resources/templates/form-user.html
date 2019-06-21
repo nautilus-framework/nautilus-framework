@@ -9,36 +9,22 @@
 		<div class="page-header">
 			<div class="container">
 				<div class="row">
-					<div class="col-12">
+					<div class="col-12 path">
 						<h6 class="title">
 							<a th:href="@{/admin}" th:text="#{nav.admin}"></a>
 							<span class="path-divider">/</span>
-							<a th:href="@{/admin/users}" th:text="#{nav.users}">User</a>
+							<a th:href="@{/admin/users}" th:text="#{nav.users}"></a>
 							<span class="path-divider">/</span>
-							<a th:href="@{#}">Edit</a>
+							<a th:href="@{#}" th:text="#{nav.edit}"></a>
 						</h6>
 					</div>
 				</div>
 			</div>
 		</div>
-	
 		<div class="container">
 			<form method="POST" th:action="@{/user/update}" th:object="${userDTO}">
 				<input type="hidden" th:field="*{id}" />
 				<h5>Account</h5>
-				<hr/>
-				<div class="form-group">
-					<label for="firstname" th:text="#{user.firstname}"></label> 
-					<input type="text" class="form-control" th:field="*{firstname}" autofocus autocomplete="given-name"/>
-					<span class="text-danger" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>
-				</div>
-				<div class="form-group">
-					<label for="lastname" th:text="#{user.lastname}"></label> 
-					<input type="text" class="form-control" th:field="*{lastname}" autocomplete="family-name"/>
-					<span class="text-danger" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>
-				</div>
-				<br/>
-			  	<h5>Security</h5>
 			  	<hr/>
 			  	<div class="form-group">
 					    <label class="form-check-label" for="roleId">
@@ -53,7 +39,6 @@
 					    </select>
 					    <span class="text-danger" th:if="${#fields.hasErrors('roleId')}" th:errors="*{roleId}"></span>
 				  </div>
-				
 					<p>Change the authentication and authorization information</p>
 					<div class="card border-default mb-3">
 				
