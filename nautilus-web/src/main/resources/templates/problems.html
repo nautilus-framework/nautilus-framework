@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	
+	<head th:replace="fragments/head :: title(#{nav.problems})"></head>
+	
+	<body >
+
+	<div th:replace="fragments/navbar :: default('')"></div>
+	
+	<div class="page-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-8 path">
+					<h6 class="title">
+						<a th:href="@{/}" th:text="#{nav.home}"></a> 
+						<span class="path-divider">/</span>
+						<a th:href="@{/problems}" th:text="#{nav.problems}"></a>
+					</h6>
+				</div>
+				<div class="col-4 toolbar">
+					<a class="btn btn-outline-success float-right" href="#" data-toggle="modal" data-target="#modal-upload-instance" th:text="#{btn.upload-instance}"></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				 <div th:each="problem,i : ${problems}">
+				     <h5  th:text="${problem.value.name}"></h5>
+				     <hr/>
+				     
+				        <div class="container horizontal-scroll">
+						  <div class="row flex-nowrap">
+						    
+						    <div class="col-sm-3" th:each="instance : ${instances.get(problem.key)}">
+						    	 <div class="card" style="width: 16rem;">
+								  <div class="card-body">
+								  
+									<div class="d-flex w-100 justify-content-between">
+			                            <h5 class="card-title" ><a th:text="${instance.fileName}" th:href="@{|/instance/${problem.key}/${instance.fileName}|}"></a></h5>
+			                            <div class="dropdown">
+			                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+			                                <div class="dropdown-menu dropdown-menu-right">
+			                                    <a class="dropdown-item" th:href="@{|/download/instance/${problem.key}/${instance.fileName}|}" th:text="#{btn.download}"></a>
+			                                    <div class="dropdown-divider"></div>
+			                                    <form method="POST" th:action="@{|/instance/${problem.key}/${instance.fileName}/delete|}">
+			                                        <a class="dropdown-item text-danger dropdown-submit" href="#" data:confirm="#{confirm.delete-instance}"><i class="fa fa-trash" th:text="' '+#{btn.remove}"></i></a>
+			                                    </form>
+			                                </div>
+			                            </div>
+			                        </div>
+								  	
+								    <p class="card-text mb-0" th:text="#{nav.size}"></p>
+	                                <p class="card-text "><small class="text-muted" th:text="${instance.toFile().length()}+' bytes'"></small></p>
+	                                
+								    <p class="card-text mb-0" th:text="#{nav.last-modified}"></p>
+								    <p class="card-text "><small class="text-muted" th:text="${#dates.format(instance.toFile().lastModified(), 'yyyy-MM-dd HH:mm:ss')}"></small></p>
+								    
+								    <a class="btn btn-success btn-block" th:href="@{|/optimize/${problem.key}/${instance.fileName}|}" th:text="#{btn.optimize}"></a>
+								  </div>
+								</div>
+						    </div>
+						   
+						
+						  </div>
+						</div>
+					 
+					 <br/>
+			    </div> 
+			
+			</div>
+			
+		</div>
+	</div>
+
+	<div th:replace="fragments/modal/upload-instance"></div>
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+
+</html>

@@ -27,6 +27,7 @@ import com.sun.istack.internal.NotNull;
 
 import thiagodnf.nautilus.web.annotation.HTMLAutoComplete;
 import thiagodnf.nautilus.web.annotation.HTMLAutoFocus;
+import thiagodnf.nautilus.web.annotation.HTMLReadonly;
 import thiagodnf.nautilus.web.annotation.HTMLMaxLength;
 import thiagodnf.nautilus.web.annotation.HTMLMinLength;
 import thiagodnf.nautilus.web.annotation.HTMLRequired;
@@ -164,6 +165,10 @@ public class InputValidationDialect extends AbstractProcessorDialect {
                     if (annotation instanceof HTMLMaxLength) {
                         tags.add(getMaxLength((HTMLMaxLength) annotation));
                     }
+                    
+                    if (annotation instanceof HTMLReadonly) {
+                        tags.add(getReadonly());
+                    }
                 }
 
 
@@ -208,6 +213,10 @@ public class InputValidationDialect extends AbstractProcessorDialect {
         
         private String getAutoFocus() {
             return "autofocus";
+        }
+        
+        private String getReadonly() {
+            return "readonly";
         }
         
         private String getAutoComplete(HTMLAutoComplete autoComplete) {

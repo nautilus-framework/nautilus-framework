@@ -5,22 +5,26 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import thiagodnf.nautilus.web.annotation.ContentType;
+import thiagodnf.nautilus.web.annotation.HTMLAutoFocus;
+import thiagodnf.nautilus.web.annotation.HTMLRequired;
 import thiagodnf.nautilus.web.annotation.NotEmptyFile;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@NoArgsConstructor
 public class UploadInstanceDTO {
 	
 	@NotBlank
+	@HTMLAutoFocus
 	private String problemId;
 	
 	@NotNull
 	@NotEmptyFile
 	@ContentType("text/plain")
+	@HTMLRequired
 	private MultipartFile file;
 }

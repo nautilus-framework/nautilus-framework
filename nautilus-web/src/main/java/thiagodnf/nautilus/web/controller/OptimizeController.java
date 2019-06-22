@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.util.Converter;
@@ -22,13 +24,14 @@ import thiagodnf.nautilus.web.dto.ParametersDTO;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.OptimizeService;
 import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.service.SecurityService;
 import thiagodnf.nautilus.web.util.Messages;
 import thiagodnf.nautilus.web.util.Redirect;
 
 @Controller
-@RequestMapping("/optimize/")
+@RequestMapping("/optimize")
 public class OptimizeController {
 	
     private static final Logger LOGGER = LoggerFactory.getLogger(OptimizeController.class);
@@ -43,12 +46,15 @@ public class OptimizeController {
     private ExecutionService executionService;
 	
 	@Autowired
+    private OptimizeService optimizeService;
+	
+	@Autowired
     private List<Execution> pendingExecutions;
 	
 	@Autowired
 	private Redirect redirect;
 	
-	@GetMapping("{problemId:.+}/{instance:.+}")
+	@GetMapping("/{problemId:.+}/{instance:.+}")
 	public String form( 
 			@PathVariable String problemId, 
 			@PathVariable String instance,
@@ -74,7 +80,7 @@ public class OptimizeController {
     @PostMapping("/save")
     public String optimize(@Valid ParametersDTO parametersDTO, BindingResult bindingResult, RedirectAttributes ra,  Model model) {
 
-        System.out.println(bindingResult);
+        System.out.println(Converter.toJson(parametersDTO));
         
         if (bindingResult.hasErrors()) {
             return form(parametersDTO.getProblemId(), parametersDTO.getInstance(), parametersDTO, model);
@@ -109,5 +115,14 @@ public class OptimizeController {
         pendingExecutions.add(execution);
         
         return redirect.to("/home").withSuccess(ra, Messages.EXECUTION_SCHEDULED_SUCCESS);
+    }
+    
+    @RequestMapping(value = "/execution/cancel/{executionId:.+}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public String cancel(@PathVariable String executionId) {
+        
+        optimizeService.cancel(executionId);
+        
+        return Converter.toJson("");
     }
 }

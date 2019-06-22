@@ -16,11 +16,20 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<input type="hidden" th:field="*{problemId}"/> 
+							<div class="form-group">
+                                <label for="problemId" th:text="#{nav.problem}" ></label> 
+                                <select class="form-control"  th:field="*{problemId}" th:validation="problemId">
+                                    <option th:each="problem : ${problems}" 
+                                        th:value="${problem.key}"
+                                        th:text="${problem.value.name}" 
+                                    />
+                                </select>
+                               <span class="text-danger" th:if="${#fields.hasErrors('problemId')}" th:errors="*{problemId}"></span>
+                            </div> 
 							<p th:text="#{nav.select-a-file-to-upload}"></p>
 							<div class="custom-file">
 								<label for="file" class="custom-file-label" th:text="#{nav.nofilechosen}"></label> 
-								<input id="file" type="file" name="file" class="form-control-file custom-file-input" /> 
+								<input id="file" type="file" name="file" class="form-control-file custom-file-input" th:validation="file" /> 
 								<span class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
 							</div>
 						</div>

@@ -1,4 +1,5 @@
-var executionQueueItem = {}
+var executionQueueItem;
+var stompClient;
 
 // This method was extracted from:
 // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript/2117523#2117523
@@ -17,18 +18,32 @@ function loadItems(){
 	$("#execution-queue .list-group-item").each(function(index, item){
 		
 		if(!$(this).hasClass( "list-group-item-empty" )){
-			executionQueueItem[$(this).attr('id')] = {
+			
+			var id = $(this).attr('id');
+			
+			executionQueueItem[id] = {
 				el : $(this),
 				progress: $(this).find('.progress-bar'),
 				status: $(this).find('.execution-queue-status'),
 				btnCancel: $(this).find('.execution-queue-btn-cancel')
 			}
+			
+			$($(this).find('.execution-queue-btn-cancel')).click(function(){
+				
+				$.get( "/optimize/execution/cancel/"+id,  function( data ) {
+					  console.log(data)
+				});
+				
+				return false;
+			})
 		}
 	});	
 	
 	if(!$.isEmptyObject(executionQueueItem)){
 		$("#execution-queue .list-group-item-empty").hide();
 	}
+	
+	
 }
 
 function appendToQueue(template, item){
@@ -58,7 +73,7 @@ $(function(){
 	    }
 	 });
 	
-	var stompClient = Stomp.over(socket);
+	stompClient = Stomp.over(socket);
 	
 	// Remove the log
 	stompClient.debug = null
@@ -100,6 +115,12 @@ $(function(){
 				executionQueueItem[item.id].btnCancel.remove();
 			}
 		});
+		
+		$.get( "/optimize/execution/cancel/123", function( data ) {
+			  console.log(data)
+			});
+		
+		
     });
     
     var onCloseFromStomp = socket.onclose; 
@@ -107,6 +128,9 @@ $(function(){
     socket.onclose = function() {
     	
     	console.log("Closed")
-	};	
+	};
+	
+	
+	
 })
 

@@ -93,7 +93,6 @@ public class ExecutionController {
 		model.addAttribute("execution", execution);
 		model.addAttribute("normalizers", pluginService.getNormalizers());
 		model.addAttribute("duplicatesRemovers", pluginService.getDuplicatesRemovers());
-		model.addAttribute("colorizers", pluginService.getColorizers());
 		model.addAttribute("correlationers", pluginService.getCorrelationers());
 		model.addAttribute("reducers", pluginService.getReducers());
 		model.addAttribute("visibilities", Visibility.values());

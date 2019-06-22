@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,6 +19,13 @@ import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.reduction.ConfidenceBasedReduction;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
+import thiagodnf.nautilus.web.annotation.HTMLAutoComplete;
+import thiagodnf.nautilus.web.annotation.HTMLAutoFocus;
+import thiagodnf.nautilus.web.annotation.HTMLReadonly;
+import thiagodnf.nautilus.web.annotation.HTMLRequired;
+import thiagodnf.nautilus.web.annotation.HTMLSpellCheck;
+import thiagodnf.nautilus.web.annotation.HTMLStep;
+import thiagodnf.nautilus.web.model.Execution.Visibility;
 
 @Getter
 @Setter
@@ -24,20 +33,28 @@ import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
 public class ParametersDTO {
 
 	@NotBlank
-	private String userId;
-	
-	@NotBlank
+	@HTMLAutoFocus
+	@HTMLReadonly
 	private String problemId;
 
 	@NotBlank
+	@HTMLReadonly
 	private String instance;
 	
-	@DecimalMin("100")
-	@DecimalMax("1000")
+	@Min(100)
+    @Max(1000)
+    @HTMLStep(50)
+    @HTMLRequired
+    @HTMLAutoComplete("off")
+	@HTMLSpellCheck("false")
 	private int populationSize = 100;
 	
-	@DecimalMin("100")
-	@DecimalMax("10000000")
+	@Min(100)
+	@Max(100000000)
+	@HTMLStep(100)
+	@HTMLRequired
+    @HTMLAutoComplete("off")
+	@HTMLSpellCheck("false")
 	private int maxEvaluations = 100000;
 	
 	@NotBlank
@@ -51,26 +68,46 @@ public class ParametersDTO {
 	
 	@DecimalMin("0.0")
 	@DecimalMax("1.0")
-	private Double crossoverProbability = 0.9;
+	@HTMLStep(0.01)
+    @HTMLRequired
+    @HTMLAutoComplete("off")
+    @HTMLSpellCheck("false")
+	private double crossoverProbability = 0.9;
 	
 	@DecimalMin("0.0")
 	@DecimalMax("50.0")
-	private Double crossoverDistribution = 20.0;
+	@HTMLStep(1.0)
+	@HTMLRequired
+    @HTMLAutoComplete("off")
+    @HTMLSpellCheck("false")
+	private double crossoverDistribution = 20.0;
 	
 	@NotBlank
 	private String mutationId;
 	
 	@DecimalMin("0.0")
 	@DecimalMax("1.0")
-	private Double mutationProbability = 0.005;
+	@HTMLStep(0.001)
+    @HTMLRequired
+    @HTMLAutoComplete("off")
+    @HTMLSpellCheck("false")
+	private double mutationProbability = 0.005;
 	
 	@DecimalMin("0.0")
 	@DecimalMax("50.0")
-	private Double mutationDistribution = 20.0;
+	@HTMLStep(1.0)
+    @HTMLRequired
+    @HTMLAutoComplete("off")
+    @HTMLSpellCheck("false")
+	private double mutationDistribution = 20.0;
 	
 	@DecimalMin("0.0")
 	@DecimalMax("1.0")
-	private Double epsilon = 0.001;
+	@HTMLStep(0.001)
+    @HTMLRequired
+    @HTMLAutoComplete("off")
+    @HTMLSpellCheck("false")
+	private double epsilon = 0.001;
 	
 	private List<List<Double>> referencePoints;
 	
@@ -80,7 +117,7 @@ public class ParametersDTO {
 	
 	private String lastExecutionId;
 	
-	private boolean showToAllUsers = false;
+	private Visibility visibility = Visibility.PRIVATE;
     
     private boolean showLines = true;
     

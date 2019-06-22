@@ -14,7 +14,7 @@
 						</h6>
 					</div>
 					<div class="col-4 toolbar">
-						<a class="btn btn-success float-right" href="#" data-toggle="modal" data-target="#modal-new-execution" th:text="#{btn.new-execution}"></a>
+						<a class="btn btn-success float-right" href="/problems" th:text="#{btn.new-execution}"></a>
 						<a class="btn btn-outline-success float-right" href="#" data-toggle="modal" data-target="#modal-upload-execution" th:text="#{btn.upload}"></a>
 					</div>
 				</div>
@@ -101,7 +101,6 @@
 		</div>
 
 		<div th:replace="fragments/modal/upload-execution"></div>
-		<div th:replace="fragments/modal/new-execution"></div>
 		<div th:replace="fragments/footer :: footer"></div>
 		<script type="text/javascript" th:src="@{/js/src/execution-queue.js}"></script>
 	</body>

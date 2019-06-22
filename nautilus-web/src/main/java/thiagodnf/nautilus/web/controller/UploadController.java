@@ -104,7 +104,7 @@ public class UploadController {
 			}
 		}
 		
-		return "redirect:/problem/" + problem.getId();
+		return "redirect:/problems/";
 	}
 	
 	@PostMapping("/execution/")
