@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -7,10 +8,14 @@ import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDiale
 
 import thiagodnf.nautilus.web.dialet.ConverterDialect;
 import thiagodnf.nautilus.web.dialet.FormatterDialect;
+import thiagodnf.nautilus.web.dialet.InputValidationDialect;
 
 @Configuration
 public class ThymeleafConfiguration {
 	
+    @Value("${dialect.use-input-validation}")
+    private boolean useInputValidation;
+    
 	@Bean
 	public FormatterDialect getFormatterDialect() {
 		return new FormatterDialect();
@@ -25,4 +30,9 @@ public class ThymeleafConfiguration {
 	public DataAttributeDialect getDataAttributeDialect() {
 		return new DataAttributeDialect();
 	}
+	
+	@Bean
+    public InputValidationDialect getHelloDialect() {
+	    return new InputValidationDialect(useInputValidation);
+    }
 }

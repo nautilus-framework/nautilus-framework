@@ -299,18 +299,5 @@ $(function(){
 		});
 	});
 	
-//	setInterval(function(){ 
-//		updateExecutionQueue()
-//	}, 100);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 })

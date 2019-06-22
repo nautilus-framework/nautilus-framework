@@ -28,7 +28,7 @@ import thiagodnf.nautilus.web.util.Messages;
 import thiagodnf.nautilus.web.util.Redirect;
 
 @Controller
-@RequestMapping("/optimize/{problemId:.+}/{instance:.+}")
+@RequestMapping("/optimize/")
 public class OptimizeController {
 	
     private static final Logger LOGGER = LoggerFactory.getLogger(OptimizeController.class);
@@ -48,23 +48,25 @@ public class OptimizeController {
 	@Autowired
 	private Redirect redirect;
 	
-	@GetMapping("")
+	@GetMapping("{problemId:.+}/{instance:.+}")
 	public String form( 
 			@PathVariable String problemId, 
 			@PathVariable String instance,
+			ParametersDTO parametersDTO,
 			Model model){
 		
 		ProblemExtension problem = pluginService.getProblemById(problemId);
 		
 		User user = securityService.getLoggedUser().getUser(); 
 		
+		model.addAttribute("userId", user.getId());
 		model.addAttribute("problem", problem);
 		model.addAttribute("instance", instance);
 		model.addAttribute("algorithms", pluginService.getAlgorithms());
 		model.addAttribute("crossovers", pluginService.getCrossovers());
 		model.addAttribute("mutations", pluginService.getMutations());
 		model.addAttribute("selections", pluginService.getSelections());
-		model.addAttribute("parametersDTO", new ParametersDTO(user.getId(), problem.getId(), instance));
+		model.addAttribute("parametersDTO", parametersDTO);
 		
 		return "optimize";
 	}
@@ -72,8 +74,10 @@ public class OptimizeController {
     @PostMapping("/save")
     public String optimize(@Valid ParametersDTO parametersDTO, BindingResult bindingResult, RedirectAttributes ra,  Model model) {
 
+        System.out.println(bindingResult);
+        
         if (bindingResult.hasErrors()) {
-            return form(parametersDTO.getProblemId(), parametersDTO.getInstance(), model);
+            return form(parametersDTO.getProblemId(), parametersDTO.getInstance(), parametersDTO, model);
         }
         
         LOGGER.debug("Saving {}", Converter.toJson(parametersDTO));

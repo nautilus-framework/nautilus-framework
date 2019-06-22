@@ -36,16 +36,16 @@
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#preferences">Preferences</a>
 						</div>
 					</nav>
-					<form id="form-execute" method="POST" th:action="@{/optimize/} + ${problemId} + @{/} + ${instance} + @{/save}" class="needs-validation" th:object="${parametersDTO}" novalidate autocomplete="off">
+					<form  method="POST" th:action="@{/optimize/save}" th:object="${parametersDTO}" autocomplete="off">
 						<!-- Tab panes -->
 						<div class="tab-content">
 							<div role="tabpanel" class="tab-pane fade" id="general">
-								<input type="hidden" class="form-control" th:field="*{userId}" />
+								<input type="hidden" class="form-control" name="userId" th:value="${userId}" />
 								<input type="hidden" class="form-control" th:field="*{problemId}" />
 								<input type="hidden" class="form-control" th:field="*{instance}" />
 								<div class="form-group">
 									<label for="algorithmId">Algorithm</label>
-									<select class="form-control" th:field="*{algorithmId}">
+									<select class="form-control" th:field="*{algorithmId}" th:validation="algorithmId">
 										<option th:each="algorithm : ${algorithms}" 
 								    		th:value="${algorithm.key}"
 								    		th:text="${algorithm.value.name}" 
@@ -55,15 +55,17 @@
 								</div>
 								<div class="form-group">
 									<label for="populationSize">Population Size</label>
-									<input type="number" class="form-control" th:field="*{populationSize}" min="10" max="100000" step="1" required autocomplete="off" />
+									<input type="number" class="form-control" th:field="*{populationSize}" th:validation="populationSize"  />
 									<span class="text-danger" th:if="${#fields.hasErrors('populationSize')}" th:errors="*{populationSize}"></span>
 								</div>
 								<div class="form-group">
 									<label for="maxEvaluations">Max Evaluations</label>
-									<input type="number" class="form-control" th:field="*{maxEvaluations}" min="10" max="10000000" step="1" required autocomplete="off" />
+									<input type="number" class="form-control" th:field="*{maxEvaluations}" th:validation="maxEvaluations" />
 									<span class="text-danger" th:if="${#fields.hasErrors('maxEvaluations')}" th:errors="*{maxEvaluations}"></span>
 								</div>
 							</div>
+							
+							
 							<div class="tab-pane fade" id="operators">
 								<div class="row">
 									<div class="form-group col-12">
@@ -130,7 +132,6 @@
 							<div class="tab-pane fade" id="objectives">
 								<p>Select the objectives to be optimized:</p>
 								<div th:each="objective,i : ${problem.getObjectives()}">
-								
 									<div class="form-check checkbox-all-selected">
 										<input type="checkbox" 
 											class="form-check-input"
@@ -139,9 +140,9 @@
 										/>
 									  	<label class="form-check-label" th:for="${#ids.prev('objectiveIds')}" th:text="${objective.name}"> </label>
 									</div>
-									<span class="text-danger" th:if="${#fields.hasErrors('objectiveIds')}" th:errors="*{objectiveIds}"></span>
 									<br/>
 								</div>
+								<span class="text-danger" th:if="${#fields.hasErrors('objectiveIds')}" th:errors="*{objectiveIds}"></span>
 							</div>
 							<div class="tab-pane fade" id="preferences">
 								<div class="form-group">

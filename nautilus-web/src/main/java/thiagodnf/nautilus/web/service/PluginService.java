@@ -7,6 +7,7 @@ import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.logging.log4j.util.Strings;
 import org.pf4j.DefaultPluginManager;
 import org.pf4j.PluginManager;
 import org.pf4j.PluginWrapper;
@@ -398,11 +399,11 @@ public class PluginService {
 	
 	public ProblemExtension getProblemById(String id) {
 		
-		if(problems.containsKey(id)) {
-			return problems.get(id);
-		}
-		
-		throw new ProblemNotFoundException();
+        if (Strings.isBlank(id) || !problems.containsKey(id)) {
+            throw new ProblemNotFoundException();
+        }
+
+        return problems.get(id);
 	}
 	
 	

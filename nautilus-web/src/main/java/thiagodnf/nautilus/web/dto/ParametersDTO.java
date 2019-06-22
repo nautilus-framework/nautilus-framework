@@ -93,10 +93,4 @@ public class ParametersDTO {
     private String duplicatesRemoverId = new ByObjectivesDuplicatesRemover().getId();
 
     private String reducerId = new ConfidenceBasedReduction().getId();
-	
-	public ParametersDTO(String userId, String problemId, String instance) {
-		this.userId = userId;
-		this.problemId = problemId;
-		this.instance = instance;
-	}
 }

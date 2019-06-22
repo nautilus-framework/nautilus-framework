@@ -52,7 +52,7 @@ public class UserController {
 		
 		userService.updateUser(userDTO);
 		
-		return redirect.to("/admin/users").withSuccess(ra, Messages.USER_SAVED_SUCCESS);
+		return redirect.to("/admin").withSuccess(ra, Messages.USER_SAVED_SUCCESS);
 	}
 	
 	@GetMapping("/edit/{id:.+}")
@@ -65,7 +65,7 @@ public class UserController {
 
         userService.deleteById(id);
 
-        return redirect.to("/admin/users").withSuccess(ra, Messages.USER_DELETED_SUCCESS);
+        return redirect.to("/admin").withSuccess(ra, Messages.USER_DELETED_SUCCESS);
     }
 	
 	private String form(UserDTO userDTO, Model model) {

@@ -55,7 +55,7 @@ public class RoleController {
             roleService.update(roleDTO);
         }
 		
-		return redirect.to("/admin/roles").withSuccess(ra, Messages.ROLE_SAVED_SUCCESS);
+		return redirect.to("/admin").withSuccess(ra, Messages.ROLE_SAVED_SUCCESS);
 	}
 	
 	@PostMapping("/delete/{id:.+}")
@@ -63,6 +63,6 @@ public class RoleController {
 
 		RoleDTO roleDTO = roleService.deleteById(id);
 
-		return redirect.to("/admin/roles").withSuccess(ra, Messages.ROLE_DELETED_SUCCESS, roleDTO.getName());
+		return redirect.to("/admin").withSuccess(ra, Messages.ROLE_DELETED_SUCCESS, roleDTO.getName());
 	}
 }

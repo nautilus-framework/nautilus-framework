@@ -8,10 +8,6 @@ public class Privileges {
 
 	public final static String SHOW_ADMIN_PAGE = "SHOW_ADMIN_PAGE";
 	
-	public final static String SHOW_ROLES_PAGE = "SHOW_ROLES_PAGE";
-	
-	public final static String SHOW_USERS_PAGE = "SHOW_USERS_PAGE";
-	
 	public final static String UPLOAD_PLUGIN = "UPLOAD_PLUGIN";
 
 	public final static String DOWNLOAD_PLUGIN = "DOWNLOAD_PLUGIN";

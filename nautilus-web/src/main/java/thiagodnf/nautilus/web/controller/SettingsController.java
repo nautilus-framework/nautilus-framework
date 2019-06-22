@@ -32,47 +32,42 @@ public class SettingsController {
 	@Autowired
 	private Redirect redirect;
 	
-    @GetMapping({ "", "/profile" })
+    @GetMapping("")
     public String showProfile(Model model) {
 
         User user = securityService.getLoggedUser().getUser();
 
         model.addAttribute("userProfileDTO", userService.findUserProfileDTOById(user.getId()));
-
-        return "settings-profile";
+        model.addAttribute("userDisplayDTO", userService.findUserDisplayDTOById(user.getId()));
+        
+        return "settings";
     }
 	
 	@PostMapping("/profile/update")
     public String update(@Valid UserProfileDTO userProfileDTO, BindingResult bindingResult, RedirectAttributes ra, Model model) {
         
         if (bindingResult.hasErrors()) {
-            return "settings-profile";
+            return "settings";
         }
         
-        userService.updateUserProfile(userProfileDTO);
+        User user = securityService.getLoggedUser().getUser();
         
-        return redirect.to("/settings/profile").withSuccess(ra, Messages.SETTINGS_SAVE_SUCCESS);
+        userService.updateUserProfile(user.getId(), userProfileDTO);
+        
+        return redirect.to("/settings").withSuccess(ra, Messages.SETTINGS_SAVE_SUCCESS);
     }
-	
-	@GetMapping("/display")
-	public String showDisplay(Model model){
-		
-		User user = securityService.getLoggedUser().getUser(); 
-		
-		model.addAttribute("userDisplayDTO", userService.findUserDisplayDTOById(user.getId()));
-		
-		return "settings-display";
-	}
 	
 	@PostMapping("/display/update")
     public String update(@Valid UserDisplayDTO userDisplayDTO, BindingResult bindingResult, RedirectAttributes ra, Model model) {
         
         if (bindingResult.hasErrors()) {
-            return "settings-display";
+            return "settings";
         }
         
-        userService.updateUserDisplay(userDisplayDTO);
+        User user = securityService.getLoggedUser().getUser();
         
-        return redirect.to("/settings/display?lang=" + userDisplayDTO.getLanguage()).withSuccess(ra, Messages.SETTINGS_SAVE_SUCCESS);
+        userService.updateUserDisplay(user.getId(), userDisplayDTO);
+        
+        return redirect.to("/settings?lang=" + userDisplayDTO.getLanguage()).withSuccess(ra, Messages.SETTINGS_SAVE_SUCCESS);
     }
 }

@@ -10,6 +10,6 @@ public class UserNotEditableException extends AbstractRedirectException {
 	
 	@Override
 	public String getRedirectTo() {
-		return "/admin/users";
+		return "/admin";
 	}
 }

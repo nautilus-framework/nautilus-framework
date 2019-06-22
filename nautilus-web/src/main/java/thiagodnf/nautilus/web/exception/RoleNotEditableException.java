@@ -10,6 +10,6 @@ public class RoleNotEditableException extends AbstractRedirectException {
 	
 	@Override
 	public String getRedirectTo() {
-		return "/admin/roles";
+		return "/admin";
 	}
 }

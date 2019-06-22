@@ -59,6 +59,7 @@ public class InitialDataConfiguration implements ApplicationListener<ContextRefr
 		adminUser.setRoleId(roleRepository.findByName(Role.ADMIN).getId());
 		adminUser.setEditable(false);
 		adminUser.setEnabled(true);
+		adminUser.setMaxExecutions(Integer.MAX_VALUE);
 
 		createUserIfNotFound(adminUser);
 	}

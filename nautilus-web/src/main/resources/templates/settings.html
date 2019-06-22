@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:replace="fragments/head :: title(#{nav.settings})"></head>
+	<body>
+		<div th:replace="fragments/navbar :: default('')"></div>
+		<br />
+		<div class="container">
+			<div class="row">
+			  <div class="col-3">
+			    <div class="list-group" id="list-tab" role="tablist">
+			      <a class="list-group-item light-gray" th:text="#{nav.settings}"></a>
+                  <a class="list-group-item list-group-item-action active" data-toggle="list" href="#profile" role="tab" th:text="#{nav.profile}"></a>
+			      <a class="list-group-item list-group-item-action" data-toggle="list" href="#display" role="tab" th:text="#{nav.display}"></a>
+			     </div>
+			  </div>
+			  <div class="col-9">
+			    <div class="tab-content mt-0" id="nav-tabContent">
+			      <div class="tab-pane fade show active" id="profile" role="tabpanel">
+			         <h5 th:text="#{nav.profile}"></h5>
+	                    <hr />
+	                    <form method="POST" th:action="@{/settings/profile/update}" th:object="${userProfileDTO}">
+	                        <div class="form-group">
+	                            <label for="firstname" th:text="#{user.firstname}"></label> 
+	                            <input type="text" class="form-control" th:field="*{firstname}" th:validation="firstname" /> 
+	                            <span class="text-danger" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="lastname" th:text="#{user.lastname}"></label> 
+	                            <input type="text" class="form-control" th:field="*{lastname}" th:validation="lastname" /> 
+	                            <span class="text-danger" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>
+	                        </div>
+	                        <button type="submit" class="btn btn-success" th:text="#{btn.save}"></button>
+	                    </form>
+			      </div>
+			      <div class="tab-pane fade" id="display" role="tabpanel">
+			         <h5 th:text="#{nav.display}"></h5>
+                    <hr />
+                    <form method="POST" th:action="@{/settings/display/update}" th:object="${userDisplayDTO}">
+                        <div class="form-group">
+                            <label for="decimalPlaces" th:text="#{user.decimal-places}"></label>
+                            <input type="number" class="form-control" th:field="*{decimalPlaces}" th:validation="decimalPlaces" /> 
+                            <small class="form-text text-muted" th:text="#{help.user.decimal-places}"></small>
+                            <span class="text-danger" th:if="${#fields.hasErrors('decimalPlaces')}" th:errors="*{decimalPlaces}"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="decimalSeparator" th:text="#{user.decimal-separator}"></label>
+                            <select class="form-control" th:field="*{decimalSeparator}" th:validation="decimalSeparator">
+                                <option value="COMMA" th:text="#{decimal-separator.comma}"></option>
+                                <option value="POINT" th:text="#{decimal-separator.point}"></option>
+                            </select> <small class="form-text text-muted" th:text="#{help.user.decimal-separator}"></small> 
+                            <span class="text-danger" th:if="${#fields.hasErrors('decimalSeparator')}" th:errors="*{decimalSeparator}"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="language" th:text="#{user.language}"></label> 
+                            <select class="form-control" th:field="*{language}" th:validation="language">
+                                <option value="en_US" th:text="#{locale.en-us}"></option>
+                                <option value="pt_BR" th:text="#{locale.pt-br}"></option>
+                            </select> <small class="form-text text-muted" th:text="#{help.user.language}"></small>
+                            <span class="text-danger" th:if="${#fields.hasErrors('language')}" th:errors="*{language}"></span>
+                        </div>
+                        <button type="submit" class="btn btn-success" th:text="#{btn.save}"></button>
+                    </form>
+			      
+			      
+			      </div>
+			     </div>
+			  </div>
+			</div>
+		</div>
+		<div th:replace="fragments/footer :: footer"></div>
+	</body>
+</html>

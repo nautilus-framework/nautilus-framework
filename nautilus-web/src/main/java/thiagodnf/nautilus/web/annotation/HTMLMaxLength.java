@@ -9,19 +9,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import thiagodnf.nautilus.web.validator.ContainsValidator;
+import thiagodnf.nautilus.web.validator.HTMLMaxLengthValidator;
 
 @Documented
-@Constraint(validatedBy = ContainsValidator.class)
+@Constraint(validatedBy = HTMLMaxLengthValidator.class)
 @Target( { ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Contains {
+public @interface HTMLMaxLength {
     
-	String message() default "{form-validation.Contains.message}";
+	String message() default "HTMLMinLength";
     
     Class<?>[] groups() default {};
     
     Class<? extends Payload>[] payload() default {};
     
-    String[] value();
+    int value() default Integer.MAX_VALUE;
 }

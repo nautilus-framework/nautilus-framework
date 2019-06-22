@@ -9,19 +9,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import thiagodnf.nautilus.web.validator.ContainsValidator;
+import thiagodnf.nautilus.web.validator.HTMLStepValidator;
 
 @Documented
-@Constraint(validatedBy = ContainsValidator.class)
+@Constraint(validatedBy = HTMLStepValidator.class)
 @Target( { ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Contains {
+public @interface HTMLStep {
     
-	String message() default "{form-validation.Contains.message}";
+	String message() default "step";
     
     Class<?>[] groups() default {};
     
     Class<? extends Payload>[] payload() default {};
     
-    String[] value();
+    double value() default 0.1;
 }

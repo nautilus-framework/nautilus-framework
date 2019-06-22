@@ -9,19 +9,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import thiagodnf.nautilus.web.validator.ContainsValidator;
+import thiagodnf.nautilus.web.validator.HTMLRequiredValidator;
 
 @Documented
-@Constraint(validatedBy = ContainsValidator.class)
+@Constraint(validatedBy = HTMLRequiredValidator.class)
 @Target( { ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Contains {
+public @interface HTMLRequired {
     
-	String message() default "{form-validation.Contains.message}";
+	String message() default "required";
     
     Class<?>[] groups() default {};
     
     Class<? extends Payload>[] payload() default {};
     
-    String[] value();
+    String value() default "";
 }

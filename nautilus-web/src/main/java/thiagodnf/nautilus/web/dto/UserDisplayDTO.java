@@ -6,16 +6,23 @@ import javax.validation.constraints.NotBlank;
 
 import lombok.Value;
 import thiagodnf.nautilus.web.annotation.Contains;
+import thiagodnf.nautilus.web.annotation.HTMLAutoComplete;
+import thiagodnf.nautilus.web.annotation.HTMLAutoFocus;
+import thiagodnf.nautilus.web.annotation.HTMLRequired;
+import thiagodnf.nautilus.web.annotation.HTMLSpellCheck;
+import thiagodnf.nautilus.web.annotation.HTMLStep;
 
 @Value
 public class UserDisplayDTO {
 	
-    @NotBlank
-	private String id;
-
-	@Min(1)
+    @Min(1)
 	@Max(10)
-	private int decimalPlaces;
+    @HTMLStep(1)
+	@HTMLRequired
+    @HTMLAutoFocus
+    @HTMLSpellCheck("false")
+    @HTMLAutoComplete("off")
+    private int decimalPlaces;
 	
 	@NotBlank
 	@Contains({"COMMA", "POINT"})

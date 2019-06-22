@@ -76,11 +76,11 @@ public class UserService {
 		
 		// After removing a user, we have to remove all his/her executions
 
-//        List<ExecutionSimplifiedDTO> executions = executionService.findExecutionSimplifiedDTOById(found.getId());
-//
-//        for (ExecutionSimplifiedDTO execution : executions) {
-//            executionService.deleteById(execution.getId());
-//        }
+        List<ExecutionSimplifiedDTO> executions = executionService.findExecutionSimplifiedDTOByUserId(found.getId());
+
+        for (ExecutionSimplifiedDTO execution : executions) {
+            executionService.deleteById(execution.getId());
+        }
 
         userRepository.delete(found);
 	}
@@ -111,18 +111,23 @@ public class UserService {
             throw new UserNotEditableException();
         }
         
-        found.setRoleId(userDTO.getRoleId());
+        RoleDTO roleDTO = roleService.findById(userDTO.getRoleId());
+        
+        found.setRoleId(roleDTO.getId());
         found.setEnabled(userDTO.isEnabled());
         found.setAccountNonExpired(userDTO.isAccountNonExpired());
         found.setCredentialsNonExpired(userDTO.isCredentialsNonExpired());
         found.setAccountNonLocked(userDTO.isAccountNonLocked());
+        found.setMaxExecutions(userDTO.getMaxExecutions());
+        found.setFirstname(userDTO.getFirstname());
+        found.setLastname(userDTO.getLastname());
         
         userRepository.save(found);
     }
 	
-	public void updateUserDisplay(UserDisplayDTO userDisplayDTO) {
+	public void updateUserDisplay(String userId, UserDisplayDTO userDisplayDTO) {
 
-        User found = findUserById(userDisplayDTO.getId());
+        User found = findUserById(userId);
 
         found.setDecimalPlaces(userDisplayDTO.getDecimalPlaces());
         found.setDecimalSeparator(userDisplayDTO.getDecimalSeparator());
@@ -131,9 +136,9 @@ public class UserService {
         userRepository.save(found);
     }
 	
-	public void updateUserProfile(UserProfileDTO userProfileDTO) {
+	public void updateUserProfile(String userId, UserProfileDTO userProfileDTO) {
 
-        User found = findUserById(userProfileDTO.getId());
+        User found = findUserById(userId);
 
         found.setFirstname(userProfileDTO.getFirstname());
         found.setLastname(userProfileDTO.getLastname());
@@ -158,13 +163,15 @@ public class UserService {
         return new UserDTO(
             user.getId(),
             user.getEmail(),
-            String.format("%s %s", user.getFirstname(), user.getLastname()),
+            user.getFirstname(),
+            user.getLastname(),
             role.getId(),
             role.getName(),
             user.isEnabled(),
             user.isAccountNonExpired(),
             user.isAccountNonLocked(),
-            user.isCredentialsNonExpired()
+            user.isCredentialsNonExpired(),
+            user.getMaxExecutions()
         );
     }
     
@@ -173,7 +180,6 @@ public class UserService {
         if(user == null)  return null;
         
         return new UserDisplayDTO(
-            user.getId(),
             user.getDecimalPlaces(),
             user.getDecimalSeparator(),
             user.getLanguage()
@@ -185,7 +191,6 @@ public class UserService {
         if(user == null)  return null;
         
         return new UserProfileDTO(
-            user.getId(),
             user.getFirstname(),
             user.getLastname()
         );

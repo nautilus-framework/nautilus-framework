@@ -46,6 +46,8 @@ public class User {
 	
 	private int decimalPlaces = 4;
 	
+	private int maxExecutions = 2;
+	
 	private String language = "en_US";
 
 	@CreatedDate
