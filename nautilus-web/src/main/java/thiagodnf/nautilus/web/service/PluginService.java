@@ -16,11 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
-import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
-import thiagodnf.nautilus.core.duplicated.ByVariablesOrderDoesNotMatterDuplicatesRemover;
-import thiagodnf.nautilus.core.duplicated.ByVariablesOrderMattersDuplicatesRemover;
-import thiagodnf.nautilus.core.duplicated.DontDuplicatesRemover;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
@@ -28,6 +23,7 @@ import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
 import thiagodnf.nautilus.plugin.extension.MutationExtension;
 import thiagodnf.nautilus.plugin.extension.NormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.plugin.extension.RemoverExtension;
 import thiagodnf.nautilus.plugin.extension.SelectionExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.BruteForceSearchAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.GAAlgorithmExtension;
@@ -50,6 +46,9 @@ import thiagodnf.nautilus.plugin.extension.mutation.PolynomialMutationExtension;
 import thiagodnf.nautilus.plugin.extension.normalizer.ByMaxAndMinValuesNormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.normalizer.ByParetoFrontValuesNormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.normalizer.DontNormalizeNormalizerExtension;
+import thiagodnf.nautilus.plugin.extension.remover.DontRemoverExtension;
+import thiagodnf.nautilus.plugin.extension.remover.ObjectivesRemoverExtension;
+import thiagodnf.nautilus.plugin.extension.remover.VariablesRemoverExtension;
 import thiagodnf.nautilus.plugin.extension.selection.BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension;
 import thiagodnf.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 import thiagodnf.nautilus.web.exception.PluginNotFoundException;
@@ -65,11 +64,7 @@ public class PluginService {
 
 	private final PluginManager pluginManager = new DefaultPluginManager(); 
 	
-	private Map<String, AbstractDuplicatesRemover> duplicatesRemovers = new TreeMap<>();
-	
-	
-	
-	
+	// Extensions
 	
 	private Map<String, ProblemExtension> problems = new TreeMap<>();
 	
@@ -84,20 +79,14 @@ public class PluginService {
 	private Map<String, NormalizerExtension> normalizers = new TreeMap<>();
 	
 	private Map<String, CorrelationExtension> correlations = new TreeMap<>();
+	
+	private Map<String, RemoverExtension> removers = new TreeMap<>();
     
 	
 	@PostConstruct
 	private void initIt() {
-
 		loadPluginsFromDirectory();
 		loadPluginsFromClasspath();
-		
-		LOGGER.info("Done. Adding Duplicate Removers");
-		
-		addDuplicatesRemover(new DontDuplicatesRemover());
-		addDuplicatesRemover(new ByVariablesOrderDoesNotMatterDuplicatesRemover());
-		addDuplicatesRemover(new ByVariablesOrderMattersDuplicatesRemover());
-		addDuplicatesRemover(new ByObjectivesDuplicatesRemover());
 	}
 	
 	public void loadPluginsFromDirectory() {
@@ -180,6 +169,12 @@ public class PluginService {
 		addCorrelationExtension(new SpearmanCorrelationExtension());
 		addCorrelationExtension(new PearsonCorrelationExtension());
 		addCorrelationExtension(new KendallCorrelationExtension());
+		
+		LOGGER.info("Done. Loading remover extensions from classpath");
+		
+		addRemoverExtension(new DontRemoverExtension());
+		addRemoverExtension(new VariablesRemoverExtension());
+		addRemoverExtension(new ObjectivesRemoverExtension());
 	}
 	
 	private void addProblemExtension(ProblemExtension problemExtension) {
@@ -258,21 +253,21 @@ public class PluginService {
 
         LOGGER.info("Added '{}' correlation extension", correlationExtension.getId());
     }
-	
-	
-	
-	
-	
-	private void addDuplicatesRemover(AbstractDuplicatesRemover duplicatesRemover) {
+    
+    private void addRemoverExtension(RemoverExtension removerExtension) {
 
-		this.duplicatesRemovers.put(duplicatesRemover.getId(), duplicatesRemover);
+        if (this.removers.containsKey(removerExtension.getId())) {
+            throw new RuntimeException("The remover w");
+        }
 
-		LOGGER.info("Added '{}' normalizer", duplicatesRemover.getId());
-	}
+        this.removers.put(removerExtension.getId(), removerExtension);
+
+        LOGGER.info("Added '{}' remover extension", removerExtension.getId());
+    }
 	
-	public Map<String, AbstractDuplicatesRemover> getDuplicatesRemovers() {
-		return duplicatesRemovers;
-	}
+	
+	
+	
 	
 	public List<PluginWrapper> getStartedPlugins() {
 		return pluginManager.getStartedPlugins();
@@ -364,6 +359,10 @@ public class PluginService {
         return correlations;
     }
 	
+	public Map<String, RemoverExtension> getRemovers() {
+        return removers;
+    }
+	
 	public ProblemExtension getProblemById(String id) {
 		
         if (Strings.isBlank(id) || !problems.containsKey(id)) {
@@ -426,6 +425,15 @@ public class PluginService {
         }
 
         throw new RuntimeException("The correlation was not found");
+    }
+	
+	public RemoverExtension getRemoverExtensionById(String id) {
+
+        if (removers.containsKey(id)) {
+            return removers.get(id);
+        }
+
+        throw new RuntimeException("The removers was not found");
     }
 	
 }

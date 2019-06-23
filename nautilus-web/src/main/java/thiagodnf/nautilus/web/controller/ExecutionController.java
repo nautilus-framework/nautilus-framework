@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.NormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.plugin.extension.RemoverExtension;
 import thiagodnf.nautilus.web.dto.ExecutionSettingsDTO;
 import thiagodnf.nautilus.web.exception.ExecutionNotPublicException;
 import thiagodnf.nautilus.web.exception.ExecutionNotReadyException;
@@ -79,15 +79,14 @@ public class ExecutionController {
 		NormalizerExtension normalizerExtension = pluginService.getNormalizerExtensionById(execution.getNormalizeId());
 		CorrelationExtension correlationExtension = pluginService.getCorrelationExtensionById(execution.getCorrelationId());
 		AlgorithmExtension algorithmExtension = pluginService.getAlgorithmExtensionById(execution.getAlgorithmId());
-		
-		AbstractDuplicatesRemover duplicatesRemover = pluginService.getDuplicatesRemovers().get(execution.getDuplicatesRemoverId());
+		RemoverExtension duplicatesRemover = pluginService.getRemoverExtensionById(execution.getRemoverId());
 		
 		List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
 		
 		List<NSolution<?>> solutions = execution.getSolutions();
 		
 		List<NSolution<?>> normalizedSolutions = normalizerExtension.getNormalizer().normalize(objectives, solutions);
-		List<NSolution<?>> distinctSolutions = duplicatesRemover.execute(normalizedSolutions);
+		List<NSolution<?>> distinctSolutions = duplicatesRemover.getRemover(problemExtension).execute(normalizedSolutions);
 		
 		model.addAttribute("correlations", correlationExtension.getCorrelation().execute(objectives, normalizedSolutions));
 		model.addAttribute("problem", problemExtension);
@@ -96,12 +95,12 @@ public class ExecutionController {
 		model.addAttribute("solutions", distinctSolutions);
 		model.addAttribute("execution", execution);
 		model.addAttribute("normalizers", pluginService.getNormalizers());
-		model.addAttribute("duplicatesRemovers", pluginService.getDuplicatesRemovers());
+		model.addAttribute("removers", pluginService.getRemovers());
 		model.addAttribute("correlationers", pluginService.getCorrelations());
-		model.addAttribute("visibilities", Visibility.values());
 		model.addAttribute("userDisplayDTO", userService.findUserDisplayDTOById(user.getId()));
 		model.addAttribute("executionSettingsDTO", executionService.convertToExecutionSettingsDTO(execution));
 		model.addAttribute("colors", Color.values());
+		model.addAttribute("visibilities", Visibility.values());
 		
 		return "execution";
 	}

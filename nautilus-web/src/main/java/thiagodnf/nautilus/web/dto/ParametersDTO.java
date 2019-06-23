@@ -13,10 +13,10 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.normalizer.ByParetoFrontValuesNormalizerExtension;
+import thiagodnf.nautilus.plugin.extension.remover.ObjectivesRemoverExtension;
 import thiagodnf.nautilus.web.annotation.HTMLAutoComplete;
 import thiagodnf.nautilus.web.annotation.HTMLAutoFocus;
 import thiagodnf.nautilus.web.annotation.HTMLReadonly;
@@ -123,5 +123,5 @@ public class ParametersDTO {
 
     private String correlationId = new PearsonCorrelationExtension().getId();
 
-    private String duplicatesRemoverId = new ByObjectivesDuplicatesRemover().getId();
+    private String removerId = new ObjectivesRemoverExtension().getId();
 }

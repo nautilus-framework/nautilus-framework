@@ -24,7 +24,7 @@ import Jama.Matrix;
 import thiagodnf.nautilus.core.listener.AlgorithmListener;
 import thiagodnf.nautilus.core.listener.OnProgressListener;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes", "unlikely-arg-type"})
 public class NSGAIII<S extends Solution<?>> implements Algorithm<List<S>>, AlgorithmListener{
 
     private static final long serialVersionUID = -8000998001765174131L;

@@ -9,6 +9,7 @@ import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.remover.AbstractRemover;
 
 public interface ProblemExtension extends ExtensionPoint {
 
@@ -27,4 +28,6 @@ public interface ProblemExtension extends ExtensionPoint {
 	public List<AbstractObjective> getObjectiveByIds(List<String> objectiveIds);
 	
 	public List<String> getVariablesAsList(Instance instance, Solution<?> solution);
+	
+	public AbstractRemover getRemover();
 }

@@ -1,16 +1,11 @@
-package thiagodnf.nautilus.core.duplicated;
+package thiagodnf.nautilus.core.remover;
 
 import java.util.List;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.util.SolutionUtils;
 
-public class ByVariablesOrderMattersDuplicatesRemover extends AbstractDuplicatesRemover {
-
-	@Override
-	public String getName() {
-		return "By Variables Values (Order matters)";
-	}
+public class BinarySolutionRemover extends AbstractRemover {
 
 	@Override
 	public boolean equals(NSolution<?> s1, NSolution<?> s2) {

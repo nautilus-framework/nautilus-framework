@@ -1,13 +1,8 @@
-package thiagodnf.nautilus.core.duplicated;
+package thiagodnf.nautilus.core.remover;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
 
-public class ByObjectivesDuplicatesRemover extends AbstractDuplicatesRemover {
-
-	@Override
-	public String getName() {
-		return "By Objective Values";
-	}
+public class ObjectivesRemover extends AbstractRemover {
 
 	@Override
 	public boolean equals(NSolution<?> s1, NSolution<?> s2) {

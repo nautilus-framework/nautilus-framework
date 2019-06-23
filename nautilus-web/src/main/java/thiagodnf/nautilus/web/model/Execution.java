@@ -12,12 +12,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.normalizer.ByParetoFrontValuesNormalizerExtension;
+import thiagodnf.nautilus.plugin.extension.remover.ObjectivesRemoverExtension;
 
 @Document
 @Getter
@@ -83,7 +83,7 @@ public class Execution {
 
     private String correlationId = new PearsonCorrelationExtension().getId();
 
-    private String duplicatesRemoverId = new ByObjectivesDuplicatesRemover().getId();
+    private String removerId = new ObjectivesRemoverExtension().getId();
 
     private List<ItemForEvaluation> itemForEvaluations = new ArrayList<>();
     

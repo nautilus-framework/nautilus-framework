@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.core.duplicated;
+package thiagodnf.nautilus.core.remover;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,12 +8,7 @@ import java.util.Map.Entry;
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.util.SolutionUtils;
 
-public class ByVariablesOrderDoesNotMatterDuplicatesRemover extends AbstractDuplicatesRemover {
-
-	@Override
-	public String getName() {
-		return "By Variables Values (Order Doesn't matter)";
-	}
+public class IntegerSolutionRemover extends AbstractRemover {
 
 	@Override
 	public boolean equals(NSolution<?> s1, NSolution<?> s2) {

@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.core.duplicated;
+package thiagodnf.nautilus.core.remover;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.util.Converter;
 
-public abstract class AbstractDuplicatesRemover {
+public abstract class AbstractRemover {
 
 	public List<NSolution<?>> execute(List<NSolution<?>> solutions) {
 		
@@ -34,15 +34,9 @@ public abstract class AbstractDuplicatesRemover {
 		return false;
 	}
 	
-	public String getId() {
-		return Converter.toKey(getName());
-	}
-	
 	public String toString() {
-		return getName();
+		return Converter.toJson(this);
 	}
 	
 	public abstract boolean equals(NSolution<?> s1, NSolution<?> s2);
-	
-	public abstract String getName() ;
 }

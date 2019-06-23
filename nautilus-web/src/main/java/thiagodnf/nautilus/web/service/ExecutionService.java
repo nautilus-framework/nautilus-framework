@@ -70,7 +70,7 @@ public class ExecutionService {
         execution.setShowLines(executionSettingsDTO.isShowLines());
         execution.setNormalizeId(executionSettingsDTO.getNormalizeId());
         execution.setCorrelationId(executionSettingsDTO.getCorrelationId());
-        execution.setDuplicatesRemoverId(executionSettingsDTO.getDuplicatesRemoverId());
+        execution.setRemoverId(executionSettingsDTO.getRemoverId());
         execution.setColor(executionSettingsDTO.getColor());
 
         save(execution);
@@ -132,7 +132,7 @@ public class ExecutionService {
         dto.setShowLines(execution.isShowLines());
         dto.setNormalizeId(execution.getNormalizeId());
         dto.setCorrelationId(execution.getCorrelationId());
-        dto.setDuplicatesRemoverId(execution.getDuplicatesRemoverId());
+        dto.setRemoverId(execution.getRemoverId());
         dto.setColor(execution.getColor());
 
         return dto;

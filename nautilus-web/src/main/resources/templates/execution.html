@@ -127,8 +127,7 @@
 									        <a class="list-group-item light-gray" th:text="#{nav.settings}"></a>
 		                                    <a class="list-group-item list-group-item-action active" data-toggle="list" href="#panel-item-general" role="tab" th:text="#{nav.general}"></a>
 									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-display" role="tab" th:text="#{nav.chart}"></a>
-									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-solutions" role="tab" th:text="#{nav.solutions}"></a>
-									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-objectives" role="tab" th:text="#{nav.objectives}"></a>
+									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-pareto-front" role="tab" th:text="#{nav.pareto-front}"></a>
 									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-miscellaneous" role="tab" th:text="#{nav.miscellaneous}"></a>
 									    </div>
 								    </div>
@@ -179,52 +178,46 @@
 		                                      <hr/>
                                               <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
 											</div>
-											<div class="tab-pane fade" id="panel-item-solutions" role="tabpanel">
-											  <h5 th:text="#{nav.solutions}"></h5>
+											<div class="tab-pane fade" id="panel-item-pareto-front" role="tabpanel">
+											  <h5 th:text="#{nav.pareto-front}"></h5>
 		                                         <hr/>
 											   <div class="form-group">
-		                                          <label for="duplicatesRemoverId" th:text="#{execution.duplicates-remover}"></label>
-		                                          <select class="form-control" th:field="*{duplicatesRemoverId}">
-		                                              <option th:each="duplicatesRemover : ${duplicatesRemovers}" 
-		                                                  th:value="${duplicatesRemover.key}"
-		                                                  th:text="${duplicatesRemover.value}" 
+		                                          <label for="removerId" th:text="#{execution.remove}"></label>
+		                                          <select class="form-control" th:field="*{removerId}">
+		                                              <option th:each="remover : ${removers}" 
+		                                                  th:value="${remover.key}"
+		                                                  th:text="${remover.value.name}" 
 		                                              />
 		                                          </select>
-		                                          <small class="form-text text-muted" th:text="#{help.execution.duplicates-remover}"></small>
-		                                          <span class="text-danger" th:if="${#fields.hasErrors('duplicatesRemoverId')}" th:errors="*{duplicatesRemoverId}"></span>
+		                                          <small class="form-text text-muted" th:text="#{help.execution.remove}"></small>
+		                                          <span class="text-danger" th:if="${#fields.hasErrors('removerId')}" th:errors="*{removerId}"></span>
 		                                        </div>
+		                                        <div class="form-group">
+                                                      <label for="normalizeId" th:text="#{execution.normalize}"></label>
+                                                      <select class="form-control" th:field="*{normalizeId}">
+                                                        <option th:each="normalize : ${normalizers}" 
+                                                              th:value="${normalize.key}"
+                                                              th:text="${normalize.value.name}" 
+                                                          />
+                                                      </select>
+                                                      <small class="form-text text-muted" th:text="#{help.execution.normalize}"></small>
+                                                      <span class="text-danger" th:if="${#fields.hasErrors('normalizeId')}" th:errors="*{normalizeId}"></span>
+                                                  </div>
+                                                  <div class="form-group">
+                                                      <label for="correlationId" th:text="#{execution.correlation}"></label>
+                                                      <select class="form-control" th:field="*{correlationId}">
+                                                          <option th:each="correlationer : ${correlationers}" 
+                                                              th:value="${correlationer.key}"
+                                                              th:text="${correlationer.value.name}" 
+                                                          />
+                                                      </select>
+                                                      <small class="form-text text-muted" th:text="#{help.execution.correlation}"></small>
+                                                      <span class="text-danger" th:if="${#fields.hasErrors('correlationId')}" th:errors="*{correlationId}"></span>
+                                                  </div>
 		                                        <hr/>
                                                 <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
 											</div>
-											<div class="tab-pane fade" id="panel-item-objectives" role="tabpanel">
-											     <h5 th:text="#{nav.objectives}"></h5>
-		                                         <hr/>
-											     <div class="form-group">
-		                                              <label for="normalizeId" th:text="#{execution.normalize}"></label>
-		                                              <select class="form-control" th:field="*{normalizeId}">
-		                                                <option th:each="normalize : ${normalizers}" 
-		                                                      th:value="${normalize.key}"
-		                                                      th:text="${normalize.value.name}" 
-		                                                  />
-		                                              </select>
-		                                              <small class="form-text text-muted" th:text="#{help.execution.normalize}"></small>
-		                                              <span class="text-danger" th:if="${#fields.hasErrors('normalizeId')}" th:errors="*{normalizeId}"></span>
-		                                          </div>
-		                                          <div class="form-group">
-		                                              <label for="correlationId" th:text="#{execution.correlation}"></label>
-			                                          <select class="form-control" th:field="*{correlationId}">
-			                                              <option th:each="correlationer : ${correlationers}" 
-			                                                  th:value="${correlationer.key}"
-			                                                  th:text="${correlationer.value.name}" 
-			                                              />
-			                                          </select>
-		                                              <small class="form-text text-muted" th:text="#{help.execution.correlation}"></small>
-		                                              <span class="text-danger" th:if="${#fields.hasErrors('correlationId')}" th:errors="*{correlationId}"></span>
-		                                          </div>
-		                                          <hr/>
-                                                  <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
-											 </div>
-											 <div class="tab-pane fade" id="panel-item-miscellaneous" role="tabpanel">
+											<div class="tab-pane fade" id="panel-item-miscellaneous" role="tabpanel">
 											     <h5 th:text="#{nav.miscellaneous}"></h5>
                                                  <hr/>
                                                  <strong th:text="#{execution.remove-preferences}"></strong><br/>
