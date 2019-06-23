@@ -60,12 +60,16 @@ function getObjectivesNames(table){
 function getData(rows){
 	
 	var data = [];
-
+	
 	$.each(rows, function(index, row){
 		
 		var point = [];
 		
 		$.each(row, function(index, col){
+			
+			 col = $(col).text();
+			
+			
 			if(index === 0){
 				return;
 			}
@@ -274,6 +278,7 @@ $(function(){
 	var tableHeader = getObjectivesNames("#execution-table");
 	
 	var rows = table.rows().data();
+	
 	var normalize = executionSettingsDTO.normalizeId == "don-t-normalize" ? false : true;
 	
 	if(tableHeader.length == 1){

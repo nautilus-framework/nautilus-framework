@@ -88,6 +88,7 @@ public class ExecutionController {
 		List<NSolution<?>> normalizedSolutions = normalizerExtension.getNormalizer().normalize(objectives, solutions);
 		List<NSolution<?>> distinctSolutions = duplicatesRemover.getRemover(problemExtension).execute(normalizedSolutions);
 		
+		System.out.println(executionService.isReadOnly(execution));
 		model.addAttribute("correlations", correlationExtension.getCorrelation().execute(objectives, normalizedSolutions));
 		model.addAttribute("problem", problemExtension);
 		model.addAttribute("algorithm", algorithmExtension);
@@ -99,6 +100,7 @@ public class ExecutionController {
 		model.addAttribute("correlationers", pluginService.getCorrelations());
 		model.addAttribute("userDisplayDTO", userService.findUserDisplayDTOById(user.getId()));
 		model.addAttribute("executionSettingsDTO", executionService.convertToExecutionSettingsDTO(execution));
+		model.addAttribute("isReadOnly", executionService.isReadOnly(execution));
 		model.addAttribute("colors", Color.values());
 		model.addAttribute("visibilities", Visibility.values());
 		

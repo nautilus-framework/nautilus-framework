@@ -147,13 +147,22 @@ public class ExecutionService {
         if (execution == null || execution.getUserId() == null)
             return false;
 
-        return isOwner(execution.getId());
+        return isOwner(execution.getUserId());
     }
 
-    public boolean isOwner(String executionId) {
+    public boolean isOwner(String userId) {
 
         User user = securityService.getLoggedUser().getUser();
 
-        return executionId.equalsIgnoreCase(user.getId());
+        return userId.equalsIgnoreCase(user.getId());
+    }
+    
+    public boolean isReadOnly(Execution execution) {
+        
+        if (isOwner(execution)) {
+            return false;
+        }
+        
+        return !isOwner(execution) && execution.getVisibility() == Visibility.PUBLIC;
     }
 }

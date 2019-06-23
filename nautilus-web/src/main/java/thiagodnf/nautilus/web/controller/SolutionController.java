@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
+import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
@@ -78,14 +79,9 @@ public class SolutionController {
 		}
 		
 		
-
-		//solution.setAttribute(SolutionAttribute.VISUALIZED, true);
-		
-		//execution = executionService.save(execution);
-
 		List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
 		
-		List<NSolution<?>> normalizedSolutions = new ByMaxAndMinValuesNormalize().normalize(objectives, execution.getSolutions());
+		List<NSolution<?>> normalizedSolutions = new ByParetoFrontValuesNormalize().normalize(objectives, execution.getSolutions());
 		
 		NSolution<?> solution = execution.getSolutions().get(solutionIndex);
 		NSolution<?> normalizedSolution = normalizedSolutions.get(solutionIndex);
@@ -112,6 +108,7 @@ public class SolutionController {
 		model.addAttribute("userDisplayDTO", userService.findUserDisplayDTOById(user.getId()));
 		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
 		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
+		model.addAttribute("isReadOnly", executionService.isReadOnly(execution));
 		
 		return "solution";
 	}
@@ -137,7 +134,7 @@ public class SolutionController {
 		
 		List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
         
-		List<NSolution<?>> normalizedSolutions = new ByMaxAndMinValuesNormalize().normalize(objectives, execution.getSolutions());
+		List<NSolution<?>> normalizedSolutions = new ByParetoFrontValuesNormalize().normalize(objectives, execution.getSolutions());
         
         if (solutionIndex < 0 || solutionIndex >= normalizedSolutions.size()) {
             throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);

@@ -74,7 +74,7 @@
 										</div>
 									</div>
 									<br>
-									<div class="card border-success">
+									<div class="card border-success" th:if="${not isReadOnly}">
 										  <div class="card-header border-success " th:text="#{nav.feedback-for(${feedbackForObjective.getName()})}"></div>
 										  <div class="card-body">
 										  	<form action="#" th:action="@{|/solution/${executionId}/${solutionIndex}/${feedbackForObjectiveIndex}/save/feedback|}" method="post" th:object="${userFeedbackDTO}">

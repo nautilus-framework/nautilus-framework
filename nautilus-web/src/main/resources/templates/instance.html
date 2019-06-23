@@ -14,18 +14,13 @@
 				<div class="row">
 					<div class="col-8 path">
 						<h6 class="title">
-							<a th:href="@{/}" th:text="#{nav.home}"></a> <span
-								class="path-divider">/</span> <a
-								th:href="@{/problem/} + ${problem.id}" th:text="${problem.name}"></a>
-							<span class="path-divider">/</span> <a
-								th:href="@{/instance/} + ${problem.id} + @{/} + ${filename}"
-								th:text="${filename}"></a>
+							<a th:href="@{/}" th:text="#{nav.home}"></a> 
+							<span class="path-divider">/</span>
+							<a th:href="@{|/instance/${problem.id}/${filename}|}" th:text="${filename}"></a>
 						</h6>
 					</div>
 					<div class="col-4 toolbar">
-						<a class="btn btn-success float-right"
-							th:href="@{/optimize/} + ${problemId} +@{/}+${filename}"
-							th:text="#{btn.optimize}"></a>
+						<a class="btn btn-success float-right" th:href="@{|/optimize/${problemId}/${filename}|}" th:text="#{btn.optimize}"></a>
 					</div>
 				</div>
 			</div>

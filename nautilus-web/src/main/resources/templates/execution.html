@@ -17,7 +17,7 @@
 							<a th:href="@{|/execution/${execution.id}|}" th:text="${#strings.isEmpty(execution.title)} ? ${#dates.format(execution.creationDate, 'yyyy-MM-dd HH:mm:ss')} : ${execution.title}"></a> 
 						</h6>
 					</div>
-					<div class="col-4 toolbar">
+					<div class="col-4 toolbar" th:if="${not isReadOnly}">
 						<a class="btn btn-success float-right" th:href="@{/done/} + ${execution.id}" th:text="#{btn.done}"></a>
 						<a class="btn btn-outline-secondary float-right" th:href="@{/continue/} + ${execution.id}" th:if="${algorithm.reduction}" th:text="#{btn.continue}"></a>
 					</div>
@@ -34,7 +34,7 @@
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#solutions" th:text="#{nav.solutions}"></a>
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#correlation" th:text="#{nav.correlation}"></a>
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#parameters" th:text="#{nav.parameters}"></a>
-							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings" th:text="#{nav.settings}"></a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings" th:text="#{nav.settings}" th:if="${not isReadOnly}"></a>
 						</div>
 					</nav>
 					<!-- Tab panes -->
@@ -55,7 +55,11 @@
 									<tbody>
 										<tr th:each="solution : ${solutions}" th:with="i = ${solution.getAttributes().get('id')}">
 											<td><a th:href="@{/solution/}+${execution.getId()}+@{/}+${i}+@{/0}" th:text="${i}"></a></td>
-											<td th:each="value : ${solution.getObjectives()}" th:text="${#numbers.formatDecimal(value,1, userDisplayDTO.decimalPlaces, userDisplayDTO.decimalSeparator )}" class="objectives-values"/>
+											<td th:each="value, j : ${solution.getObjectives()}"  class="objectives-values">
+											
+											     <a th:href="@{|/solution/${execution.getId()}/${i}/${j.index}|}" th:text="${#numbers.formatDecimal(value,1, userDisplayDTO.decimalPlaces, userDisplayDTO.decimalSeparator )}"></a>
+											
+											</td>
 											<td th:text="${solution.getAttributes().containsKey('selected')}"/>
 										</tr>
 									</tbody>
@@ -117,7 +121,7 @@
                                     </tbody>
                                 </table>	
 						</div>
-						<div role="tabpanel" class="tab-pane fade" id="settings">
+						<div role="tabpanel" class="tab-pane fade" id="settings" th:if="${not isReadOnly}">
 						  
 						  <form th:action="@{|/execution/${executionId}/settings/save|}" method="POST" th:object="${executionSettingsDTO}">
                                 
