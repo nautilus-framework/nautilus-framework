@@ -14,9 +14,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.service.FileService;
-import thiagodnf.nautilus.web.service.FlashMessageService;
 import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.util.Messages;
+import thiagodnf.nautilus.web.util.Redirect;
 
 @Controller
 @RequestMapping("/instance/{problemId:.+}/{filename:.+}")
@@ -29,7 +29,7 @@ public class InstanceController {
 	private PluginService pluginService;
 	
 	@Autowired
-	private FlashMessageService flashMessageService;
+	private Redirect redirect;
 	
 	@GetMapping("")
 	public String view( 
@@ -53,16 +53,14 @@ public class InstanceController {
 	public String delete(
 			@PathVariable String problemId, 
 			@PathVariable String filename,
-			Model model, 
-			RedirectAttributes ra){
+			RedirectAttributes ra,
+			Model model ){
 		
 		ProblemExtension problem = pluginService.getProblemById(problemId);
 		
 		fileService.deleteInstance(problem.getId(), filename);
 		
-		flashMessageService.success(ra, Messages.FILE_DELETED_SUCCESS, filename);
-		
-		return "redirect:/problem/" + problem.getId();
+		return redirect.to("/problems").withSuccess(ra, Messages.FILE_DELETED_SUCCESS, filename);
 	}
 			
 }

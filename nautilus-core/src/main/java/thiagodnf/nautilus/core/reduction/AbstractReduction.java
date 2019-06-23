@@ -138,9 +138,9 @@ public abstract class AbstractReduction {
 		return Converter.toJson(this);
 	}
 	
-	public List<RankingItem> execute(List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation){
+	public abstract List<RankingItem> execute(List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation);
+	    
+	public List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation){
 	    return null;
 	}
-    
-	public abstract List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation);
 }

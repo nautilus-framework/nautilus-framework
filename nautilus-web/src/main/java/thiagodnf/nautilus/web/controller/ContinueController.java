@@ -35,7 +35,11 @@ public class ContinueController {
 		
 		AlgorithmExtension algorithmExtension = pluginService.getAlgorithmExtensionById(execution.getAlgorithmId());
         
-		AbstractReduction reduction = algorithmExtension.getReduction();
+        AbstractReduction reduction = algorithmExtension.getReduction();
+
+        if (reduction == null) {
+            new RuntimeException("Reduction was not found");
+        }
 		
 		List<RankingItem> rankings = reduction.execute(execution.getSolutions(), execution.getItemForEvaluations());
 		

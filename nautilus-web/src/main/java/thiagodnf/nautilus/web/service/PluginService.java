@@ -50,6 +50,7 @@ import thiagodnf.nautilus.plugin.extension.remover.DontRemoverExtension;
 import thiagodnf.nautilus.plugin.extension.remover.ObjectivesRemoverExtension;
 import thiagodnf.nautilus.plugin.extension.remover.VariablesRemoverExtension;
 import thiagodnf.nautilus.plugin.extension.selection.BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension;
+import thiagodnf.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
 import thiagodnf.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 import thiagodnf.nautilus.web.exception.PluginNotFoundException;
 import thiagodnf.nautilus.web.exception.ProblemNotFoundException;
@@ -129,6 +130,7 @@ public class PluginService {
 		LOGGER.info("Loading problem extensions from classpath");
 		
 		addProblemExtension(new ToyProblemExtension());
+		addProblemExtension(new SPLProblemExtension());
 		
 		LOGGER.info("Done. Loading algorithms extensions from classpath");
 		
@@ -184,6 +186,8 @@ public class PluginService {
 		}
 		
 		this.problems.put(problemExtension.getId(), problemExtension);
+		
+		this.fileService.createInstancesDirectory(problemExtension.getId());
 		
 		LOGGER.info("Added '{}' problem extension", problemExtension.getId());
 	}

@@ -205,6 +205,11 @@
       <artifactId>nautilus-plugin-toy</artifactId>
       <version>1.0.0</version>
     </dependency>
+    <dependency>
+      <groupId>thiagodnf.nautilus.plugin.spl</groupId>
+      <artifactId>nautilus-plugin-spl</artifactId>
+      <version>1.0.0</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
