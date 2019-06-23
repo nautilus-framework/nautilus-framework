@@ -78,9 +78,4 @@ public class ByParetoFrontValuesNormalize extends AbstractNormalize {
 		
 		return Normalizer.normalize(value, min, max);
 	}
-
-	@Override
-	public String getName() {
-		return "By Pareto-front Values";
-	}
 }

@@ -16,22 +16,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import thiagodnf.nautilus.core.correlation.AbstractCorrelation;
 import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.CorrelationExtension;
+import thiagodnf.nautilus.plugin.extension.NormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.dto.ExecutionSettingsDTO;
 import thiagodnf.nautilus.web.exception.ExecutionNotPublicException;
 import thiagodnf.nautilus.web.exception.ExecutionNotReadyException;
 import thiagodnf.nautilus.web.model.Execution;
-import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.model.Execution.Visibility;
+import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.service.SecurityService;
 import thiagodnf.nautilus.web.service.UserService;
+import thiagodnf.nautilus.web.util.Color;
 import thiagodnf.nautilus.web.util.Messages;
 import thiagodnf.nautilus.web.util.Redirect;
 
@@ -74,30 +76,32 @@ public class ExecutionController {
         }
         
 		ProblemExtension problemExtension = pluginService.getProblemById(execution.getProblemId());
+		NormalizerExtension normalizerExtension = pluginService.getNormalizerExtensionById(execution.getNormalizeId());
+		CorrelationExtension correlationExtension = pluginService.getCorrelationExtensionById(execution.getCorrelationId());
+		AlgorithmExtension algorithmExtension = pluginService.getAlgorithmExtensionById(execution.getAlgorithmId());
 		
-		AbstractNormalize normalizer = pluginService.getNormalizers().get(execution.getNormalizeId());
 		AbstractDuplicatesRemover duplicatesRemover = pluginService.getDuplicatesRemovers().get(execution.getDuplicatesRemoverId());
-		AbstractCorrelation correlation = pluginService.getCorrelationers().get(execution.getCorrelationId());
 		
 		List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
 		
 		List<NSolution<?>> solutions = execution.getSolutions();
 		
-		List<NSolution<?>> normalizedSolutions = normalizer.normalize(objectives, solutions);
+		List<NSolution<?>> normalizedSolutions = normalizerExtension.getNormalizer().normalize(objectives, solutions);
 		List<NSolution<?>> distinctSolutions = duplicatesRemover.execute(normalizedSolutions);
 		
-		model.addAttribute("correlations", correlation.execute(objectives, normalizedSolutions));
+		model.addAttribute("correlations", correlationExtension.getCorrelation().execute(objectives, normalizedSolutions));
 		model.addAttribute("problem", problemExtension);
+		model.addAttribute("algorithm", algorithmExtension);
 		model.addAttribute("objectives", objectives);
 		model.addAttribute("solutions", distinctSolutions);
 		model.addAttribute("execution", execution);
 		model.addAttribute("normalizers", pluginService.getNormalizers());
 		model.addAttribute("duplicatesRemovers", pluginService.getDuplicatesRemovers());
-		model.addAttribute("correlationers", pluginService.getCorrelationers());
-		model.addAttribute("reducers", pluginService.getReducers());
+		model.addAttribute("correlationers", pluginService.getCorrelations());
 		model.addAttribute("visibilities", Visibility.values());
 		model.addAttribute("userDisplayDTO", userService.findUserDisplayDTOById(user.getId()));
 		model.addAttribute("executionSettingsDTO", executionService.convertToExecutionSettingsDTO(execution));
+		model.addAttribute("colors", Color.values());
 		
 		return "execution";
 	}
@@ -134,7 +138,8 @@ public class ExecutionController {
 			@PathVariable String executionId,
 			@Valid ExecutionSettingsDTO executionSettingsDTO,
 			BindingResult bindingResult,
-			RedirectAttributes ra, Model model) {
+			RedirectAttributes ra, 
+			Model model) {
 	    
 	    Execution execution = executionService.findExecutionById(executionId);
 	    
@@ -150,21 +155,18 @@ public class ExecutionController {
         return redirect.to("/execution/" + executionId+"#settings").withError(ra, Messages.EXECUTION_DELETED_FAIL_NO_OWNER);
 	}
 	
-//	@PostMapping("/clear/user-feedback")
-//	public String clearUserFeedback(Model model,
-//			RedirectAttributes ra,
-//			@PathVariable("executionId") String executionId) {
-//			
-//		Execution execution = executionService.findExecutionById(executionId);
-//
-//		for (NSolution<?> solution : execution.getSolutions()) {
-//			SolutionUtils.clearUserFeedback(solution);
-//		}
-//
-//		execution = executionService.save(execution);
-//		
-//		flashMessageService.success(ra, "msg.cleaned.feedback.all.solutions.success");
-//
-//		return "redirect:/execution/" + executionId;
-//	}
+	@PostMapping("/clear/user-feedback")
+	public String clearUserFeedback(
+			@PathVariable String executionId,
+			RedirectAttributes ra,
+			Model model) {
+			
+		Execution execution = executionService.findExecutionById(executionId);
+
+		execution.getItemForEvaluations().clear();
+		
+		execution = executionService.save(execution);
+		
+		return redirect.to("/execution/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_CLEANED_SUCCESS);
+	}
 }

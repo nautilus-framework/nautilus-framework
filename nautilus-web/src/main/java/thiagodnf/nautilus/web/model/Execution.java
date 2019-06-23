@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,13 +12,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import thiagodnf.nautilus.core.colorize.DontColorize;
-import thiagodnf.nautilus.core.correlation.DontCorrelation;
 import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
-import thiagodnf.nautilus.core.reduction.ConfidenceBasedReduction;
+import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
+import thiagodnf.nautilus.plugin.extension.normalizer.ByParetoFrontValuesNormalizerExtension;
 
 @Document
 @Getter
@@ -77,16 +77,16 @@ public class Execution {
 	
 	private boolean showLines = true;
 	
-    private String colorizeId = new DontColorize().getId();
+	private String color = "#7cb5ec";
+	
+    private String normalizeId = new ByParetoFrontValuesNormalizerExtension().getId();
 
-    private String normalizeId = new ByParetoFrontValuesNormalize().getId();
-
-    private String correlationId = new DontCorrelation().getId();
+    private String correlationId = new PearsonCorrelationExtension().getId();
 
     private String duplicatesRemoverId = new ByObjectivesDuplicatesRemover().getId();
 
-    private String reducerId = new ConfidenceBasedReduction().getId();
-	
+    private List<ItemForEvaluation> itemForEvaluations = new ArrayList<>();
+    
 	@CreatedDate
 	private Date creationDate;
 	

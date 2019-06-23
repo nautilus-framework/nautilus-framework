@@ -26,10 +26,10 @@
 				<div class="col-12">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#general">General</a>
-							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#operators">Operators</a>
-							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#objectives">Objectives</a>
-							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#preferences">Preferences</a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#general" th:text="#{nav.general}"></a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#operators" th:text="#{nav.operators}"></a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#objectives" th:text="#{nav.objectives}"></a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#preferences" th:text="#{nav.preferences}"></a>
 						</div>
 					</nav>
 					<form  method="POST" th:action="@{/optimize/save}" th:object="${parametersDTO}">

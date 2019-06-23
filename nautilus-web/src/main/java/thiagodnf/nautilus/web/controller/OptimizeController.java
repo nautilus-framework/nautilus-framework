@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,8 +21,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.web.dto.ContinueDTO;
 import thiagodnf.nautilus.web.dto.ParametersDTO;
 import thiagodnf.nautilus.web.model.Execution;
+import thiagodnf.nautilus.web.model.Execution.Visibility;
 import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.OptimizeService;
@@ -80,8 +83,6 @@ public class OptimizeController {
     @PostMapping("/save")
     public String optimize(@Valid ParametersDTO parametersDTO, BindingResult bindingResult, RedirectAttributes ra,  Model model) {
 
-        System.out.println(Converter.toJson(parametersDTO));
-        
         if (bindingResult.hasErrors()) {
             return form(parametersDTO.getProblemId(), parametersDTO.getInstance(), parametersDTO, model);
         }
@@ -109,6 +110,30 @@ public class OptimizeController {
         execution.setReferencePoints(parametersDTO.getReferencePoints());
         execution.setEpsilon(parametersDTO.getEpsilon());
         execution.setObjectiveIds(parametersDTO.getObjectiveIds());
+        execution.setVisibility(Visibility.PRIVATE);
+        
+        execution = executionService.save(execution);
+        
+        pendingExecutions.add(execution);
+        
+        return redirect.to("/home").withSuccess(ra, Messages.EXECUTION_SCHEDULED_SUCCESS);
+    }
+    
+    @PostMapping("/continue")
+    public String optimizeAgain(@Valid ContinueDTO continueDTO, BindingResult bindingResult, RedirectAttributes ra,  Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "continue";
+        }
+        
+        Execution execution = executionService.findExecutionById(continueDTO.getPreviousExecutionId());
+        
+        execution.setLastExecutionId(execution.getId());
+        execution.setId(null);
+        execution.setSolutions(null);
+        execution.setObjectiveIds(continueDTO.getNextObjectiveIds());
+        execution.setVisibility(Visibility.PRIVATE);
+        execution.setItemForEvaluations(new ArrayList<>());
         
         execution = executionService.save(execution);
         

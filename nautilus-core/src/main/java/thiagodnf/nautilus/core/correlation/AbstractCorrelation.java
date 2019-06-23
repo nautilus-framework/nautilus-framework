@@ -58,12 +58,8 @@ public abstract class AbstractCorrelation {
 		}
 	}
 
-	public String getId() {
-		return Converter.toKey(getName());
-	}
-	
 	public String toString() {
-		return getName();
+		return Converter.toJson(this);
 	}
 	
 	public List<CorrelationItem> execute(List<AbstractObjective> objectives, List<NSolution<?>> solutions) {
@@ -106,8 +102,6 @@ public abstract class AbstractCorrelation {
 	public boolean isEnabled() {
 		return true;
 	}
-	
-	public abstract String getName() ;
 	
 	public abstract double getCorrelation(final double[] x, final double[] y);	
 }

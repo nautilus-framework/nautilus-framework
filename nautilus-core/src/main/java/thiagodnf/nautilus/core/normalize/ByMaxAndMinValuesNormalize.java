@@ -9,11 +9,6 @@ import thiagodnf.nautilus.core.objective.AbstractObjective;
 public class ByMaxAndMinValuesNormalize extends AbstractNormalize {
 
 	@Override
-	public String getName() {
-		return "By Max And Min Values";
-	}
-
-	@Override
 	public double[] getMinimumValues(List<AbstractObjective> objectives, List<? extends Solution<?>> solutions) {
 		
 		double[] minValues = new double[objectives.size()];

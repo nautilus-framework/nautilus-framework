@@ -9,7 +9,6 @@ import org.uma.jmetal.solution.Solution;
 
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.plugin.gui.Tab;
 
 public interface ProblemExtension extends ExtensionPoint {
 
@@ -19,8 +18,6 @@ public interface ProblemExtension extends ExtensionPoint {
 	
 	public Instance getInstance(Path path);
 	
-	public List<Tab> getTabs(Instance data);
-	
 	public String getName();
 	
 	public String getId();
@@ -28,4 +25,6 @@ public interface ProblemExtension extends ExtensionPoint {
 	public List<AbstractObjective> getObjectives();
 	
 	public List<AbstractObjective> getObjectiveByIds(List<String> objectiveIds);
+	
+	public List<String> getVariablesAsList(Instance instance, Solution<?> solution);
 }

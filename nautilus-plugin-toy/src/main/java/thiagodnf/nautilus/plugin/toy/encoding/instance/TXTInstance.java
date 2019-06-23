@@ -2,9 +2,13 @@ package thiagodnf.nautilus.plugin.toy.encoding.instance;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.common.base.Preconditions;
 
+import thiagodnf.nautilus.core.gui.Tab;
+import thiagodnf.nautilus.core.gui.TableTabContent;
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.util.InstanceReader;
 
@@ -51,4 +55,22 @@ public class TXTInstance extends Instance {
 	public void setNumberOfVariables(int numberOfVariables) {
 		this.numberOfVariables = numberOfVariables;
 	}
+	
+	@Override
+    public List<Tab> getTabs(Instance data) {
+        return Arrays.asList(getContentTab(data));
+    }
+
+    protected Tab getContentTab(Instance data) {
+
+        TXTInstance d = (TXTInstance) data;
+
+        TableTabContent table = new TableTabContent("Key", "Value");
+
+        table.addRow("Lower Bound", d.getLowerBound());
+        table.addRow("Upper Bound", d.getUpperBound());
+        table.addRow("Number of Variables", d.getNumberOfVariables());
+
+        return new Tab("Content", table);
+    }
 }

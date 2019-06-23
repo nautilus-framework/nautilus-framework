@@ -10,12 +10,12 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
+import thiagodnf.nautilus.core.gui.Tab;
+import thiagodnf.nautilus.core.gui.TableTabContent;
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.problem.AbstractProblemExtension;
-import thiagodnf.nautilus.plugin.gui.Tab;
-import thiagodnf.nautilus.plugin.gui.TableTabContent;
 import thiagodnf.nautilus.plugin.zdt.encoding.instance.TXTInstanceData;
 import thiagodnf.nautilus.plugin.zdt.encoding.objective.F1Objective;
 import thiagodnf.nautilus.plugin.zdt.encoding.objective.F2ForZDT2Objective;
@@ -56,18 +56,8 @@ public class ZDT2ProblemExtension extends AbstractProblemExtension {
 	}
 	
 	@Override
-	public List<Tab> getTabs(Instance data) {
-		return Arrays.asList(getContentTab(data));
-	}
-
-	protected Tab getContentTab(Instance data) {
-
-		TXTInstanceData d = (TXTInstanceData) data;
-
-		TableTabContent table = new TableTabContent(Arrays.asList("Content", "Value"));
-
-		table.getRows().add(Arrays.asList("Number of Variables", "" + d.getNumberOfVariables()));
-
-		return new Tab("Content", table);
-	}
+    public List<String> getVariablesAsList(Instance instance, Solution<?> solution) {
+        // TODO Auto-generated method stub
+        return new ArrayList<>();
+    }
 }

@@ -3,10 +3,13 @@ package thiagodnf.nautilus.plugin.spl.encoding.instance;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
 
+import thiagodnf.nautilus.core.gui.Tab;
+import thiagodnf.nautilus.core.gui.TableTabContent;
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.util.InstanceReader;
 import thiagodnf.nautilus.core.util.SimilarityUtils;
@@ -275,4 +278,97 @@ public class OldTXTInstanceData extends Instance {
 	public void setSumOfImportance(double sumOfImportance) {
 		this.sumOfImportance = sumOfImportance;
 	}
+	
+	@Override
+    public List<Tab> getTabs(Instance data) {
+
+        NewTXTInstanceData c = (NewTXTInstanceData) data;
+
+        List<Tab> tabs = new ArrayList<>();
+
+        tabs.add(getFeaturesTab(c));
+        tabs.add(getProductsTab(c));
+        tabs.add(getPairwiseCoverageTab(c));
+        tabs.add(getMutationCoverageTab(c));
+
+        return tabs;
+    }
+
+    protected Tab getFeaturesTab(NewTXTInstanceData data) {
+
+        TableTabContent table = new TableTabContent(Arrays.asList("Feature", "Cost", "Importance"));
+
+        List<String> features = data.getFeatures();
+
+        for (int i = 0; i < data.getNumberOfFeatures(); i++) {
+            table.getRows().add(Arrays.asList(
+                    features.get(i),
+                    "" + data.getCosts().get(i),
+                    "" + data.getImportances().get(i)
+            ));
+        }
+
+        return new Tab("Features", table);
+    }
+
+    protected Tab getProductsTab(NewTXTInstanceData data) {
+
+        TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Feature", "Cost", "Importance"));
+
+        for (int i = 0; i < data.getNumberOfProducts(); i++) {
+            table.getRows().add(Arrays.asList("Product " + i, 
+                data.getProduct(i).toString(), 
+                "" + data.getProductCost(i),
+                "" + data.getProductImportance(i)
+            ));
+        }
+
+        return new Tab("Products", table);
+    }
+    
+    protected Tab getPairwiseCoverageTab(NewTXTInstanceData data) {
+
+        TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Covered", "Uncovered", "# of Uncovered"));
+
+        for (int i = 0; i < data.getNumberOfProducts(); i++) {
+
+            List<String> covered = new ArrayList<>();
+            List<String> unCovered = new ArrayList<>();
+
+            for (int j = 0; j < data.getNumberOfPairs(); j++) {
+                if (data.getPairs(i).contains(j)) {
+                    covered.add(String.valueOf(j));
+                } else {
+                    unCovered.add(String.valueOf(j));
+                }
+            }
+
+            table.getRows().add(Arrays.asList("Product " + i, covered.toString(), unCovered.toString(), ""+unCovered.size()));
+        }
+
+        return new Tab("Pairwise Coverate", table);
+    }
+    
+    protected Tab getMutationCoverageTab(NewTXTInstanceData data) {
+
+        TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Dead", "Alive", "# of Alive"));
+
+        for (int i = 0; i < data.getNumberOfProducts(); i++) {
+
+            List<String> covered = new ArrayList<>();
+            List<String> unCovered = new ArrayList<>();
+
+            for (int j = 0; j < data.getNumberOfMutants(); j++) {
+                if (data.getMutants(i).contains(j)) {
+                    covered.add(String.valueOf(j));
+                } else {
+                    unCovered.add(String.valueOf(j));
+                }
+            }
+
+            table.getRows().add(Arrays.asList("Product " + i, covered.toString(), unCovered.toString(), ""+unCovered.size()));
+        }
+
+        return new Tab("Mutation Coverage", table);
+    }
 }

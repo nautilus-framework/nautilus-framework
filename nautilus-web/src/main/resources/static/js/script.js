@@ -133,6 +133,19 @@ $(function(){
 		
 		return false;
 	});
+
+	$("form[data-confirm]").submit(function(e){
+		e.preventDefault();
+		
+		var that = $(this);
+		
+		if(confirm(that.data("confirm"), function(){
+			// We have to unbind because it generates an infinity loop
+			that.unbind('submit').submit()
+		}));
+		
+		return false;
+	});
 	
 	var tz = moment.tz.guess();
 	
@@ -299,5 +312,10 @@ $(function(){
 		});
 	});
 	
-	
+	$('.boostrap-slider').slider({
+		formatter: function(value) {
+			return 'Current value: ' + value;
+		}
+		
+	});
 })

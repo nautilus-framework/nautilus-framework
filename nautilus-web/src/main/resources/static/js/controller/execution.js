@@ -1,3 +1,6 @@
+var userDisplayDTO;
+var executionSettingsDTO;
+
 var red = 0;
 var green = 100;
 
@@ -6,7 +9,7 @@ function getColorize(){
 }
 
 function showLines(){
-	return $("input[name='showLines']").is(":checked")
+	return executionSettingsDTO.showLines;
 }
 
 function normalize(value, a, b, min, max) {
@@ -76,14 +79,12 @@ function getData(rows){
 //				return;
 //			}
 			
-//			// switch between locales
-			
-			var locale = getLanguage().toLowerCase().replace("_", "-");
-			
-			if(locale != 'en-us'){
-				numeral.locale(locale);
+			if(userDisplayDTO.decimalSeparator === "COMMA"){
+				numeral.locale("pt-br");
 			}
 			
+			// switch between locales
+				
 			var myNumeral = numeral(col);
 			
 			point.push(parseFloat(myNumeral.value()));
@@ -218,7 +219,9 @@ function plot4D(tableHeader, rows, normalize){
 	
 	$.each(data, function(index, row){
 		
-		var color = getColorForDistance(distances[index], minDistance, maxDistance);
+//		var color = getColorForDistance(distances[index], minDistance, maxDistance);
+		
+		var color= executionSettingsDTO.color || "#90ed7d";
 		
 		var serie = {
 			lineWidth: showLines()? 1 : 0,
@@ -263,12 +266,15 @@ function openSolution(solutionIndex, objectiveIndex){
 
 $(function(){
 	
+	userDisplayDTO = JSON.parse($("#userDisplayDTO").text());
+	executionSettingsDTO = JSON.parse($("#executionSettingsDTO").text());
+	
 	var table = $('#execution-table').DataTable();
 	
 	var tableHeader = getObjectivesNames("#execution-table");
 	
 	var rows = table.rows().data();
-	var normalize = $("#normalizeId").val() == "don-t-normalize" ? false : true;
+	var normalize = executionSettingsDTO.normalizeId == "don-t-normalize" ? false : true;
 	
 	if(tableHeader.length == 1){
 		

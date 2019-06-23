@@ -16,49 +16,40 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import thiagodnf.nautilus.core.colorize.AbstractColorize;
-import thiagodnf.nautilus.core.colorize.ByEuclideanDistanceColorize;
-import thiagodnf.nautilus.core.colorize.BySimilarityWithHammingDistanceColorize;
-import thiagodnf.nautilus.core.colorize.BySimilarityWithJaccardIndexColorize;
-import thiagodnf.nautilus.core.colorize.DontColorize;
-import thiagodnf.nautilus.core.correlation.AbstractCorrelation;
-import thiagodnf.nautilus.core.correlation.DontCorrelation;
-import thiagodnf.nautilus.core.correlation.KendallCorrelation;
-import thiagodnf.nautilus.core.correlation.PearsonCorrelation;
-import thiagodnf.nautilus.core.correlation.SpearmanCorrelation;
 import thiagodnf.nautilus.core.duplicated.AbstractDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.ByVariablesOrderDoesNotMatterDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.ByVariablesOrderMattersDuplicatesRemover;
 import thiagodnf.nautilus.core.duplicated.DontDuplicatesRemover;
-import thiagodnf.nautilus.core.normalize.AbstractNormalize;
-import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
-import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
-import thiagodnf.nautilus.core.normalize.DontNormalize;
-import thiagodnf.nautilus.core.reduction.AbstractReduction;
-import thiagodnf.nautilus.core.reduction.ConfidenceBasedReduction;
-import thiagodnf.nautilus.core.reduction.DontReduceObjectivesReduction;
-import thiagodnf.nautilus.core.reduction.ImplicitFeedbackObjectiveReduction;
-import thiagodnf.nautilus.core.reduction.RandomlyObjectivesReduction;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.CorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.IndicatorExtension;
 import thiagodnf.nautilus.plugin.extension.MutationExtension;
+import thiagodnf.nautilus.plugin.extension.NormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.plugin.extension.SelectionExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.BruteForceSearchAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.GAAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIIAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIWithRandomReductionAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.RNSGAIIAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.RandomSearchAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.SPEA2AlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.correlation.KendallCorrelationExtension;
+import thiagodnf.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
+import thiagodnf.nautilus.plugin.extension.correlation.SpearmanCorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.crossover.IntegerSBXCrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.crossover.SBXCrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.crossover.SinglePointCrossoverExtension;
 import thiagodnf.nautilus.plugin.extension.mutation.BitFlipMutationExtension;
 import thiagodnf.nautilus.plugin.extension.mutation.IntegerPolynomialMutationExtension;
 import thiagodnf.nautilus.plugin.extension.mutation.PolynomialMutationExtension;
+import thiagodnf.nautilus.plugin.extension.normalizer.ByMaxAndMinValuesNormalizerExtension;
+import thiagodnf.nautilus.plugin.extension.normalizer.ByParetoFrontValuesNormalizerExtension;
+import thiagodnf.nautilus.plugin.extension.normalizer.DontNormalizeNormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.selection.BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension;
 import thiagodnf.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 import thiagodnf.nautilus.web.exception.PluginNotFoundException;
@@ -74,15 +65,11 @@ public class PluginService {
 
 	private final PluginManager pluginManager = new DefaultPluginManager(); 
 	
-	private Map<String, AbstractNormalize> normalizers = new TreeMap<>();
-	
-	private Map<String, AbstractColorize> colorizers = new TreeMap<>();
-	
 	private Map<String, AbstractDuplicatesRemover> duplicatesRemovers = new TreeMap<>();
 	
-	private Map<String, AbstractCorrelation> correlationers = new TreeMap<>();
 	
-	private Map<String, AbstractReduction> reducers = new TreeMap<>();
+	
+	
 	
 	private Map<String, ProblemExtension> problems = new TreeMap<>();
 	
@@ -94,31 +81,16 @@ public class PluginService {
 	
 	private Map<String, SelectionExtension> selections = new TreeMap<>();
 	
+	private Map<String, NormalizerExtension> normalizers = new TreeMap<>();
+	
+	private Map<String, CorrelationExtension> correlations = new TreeMap<>();
+    
+	
 	@PostConstruct
 	private void initIt() {
 
 		loadPluginsFromDirectory();
 		loadPluginsFromClasspath();
-		
-		LOGGER.info("Done. Adding Colorizers");
-
-		addColorizer(new DontColorize());
-		addColorizer(new ByEuclideanDistanceColorize());
-		addColorizer(new BySimilarityWithJaccardIndexColorize());
-		addColorizer(new BySimilarityWithHammingDistanceColorize());
-
-		LOGGER.info("Done. Adding Normalizers");
-
-		addNormalizer(new DontNormalize());
-		addNormalizer(new ByMaxAndMinValuesNormalize());
-		addNormalizer(new ByParetoFrontValuesNormalize());
-		
-		LOGGER.info("Done. Adding Correlationers");
-
-		addCorrelationer(new DontCorrelation());
-		addCorrelationer(new SpearmanCorrelation());
-		addCorrelationer(new PearsonCorrelation());
-		addCorrelationer(new KendallCorrelation());
 		
 		LOGGER.info("Done. Adding Duplicate Removers");
 		
@@ -126,14 +98,6 @@ public class PluginService {
 		addDuplicatesRemover(new ByVariablesOrderDoesNotMatterDuplicatesRemover());
 		addDuplicatesRemover(new ByVariablesOrderMattersDuplicatesRemover());
 		addDuplicatesRemover(new ByObjectivesDuplicatesRemover());
-		
-		LOGGER.info("Done. Adding Reductions");
-		
-		addReducer(new ImplicitFeedbackObjectiveReduction());
-		addReducer(new DontReduceObjectivesReduction());
-		addReducer(new RandomlyObjectivesReduction());
-		addReducer(new ConfidenceBasedReduction());
-
 	}
 	
 	public void loadPluginsFromDirectory() {
@@ -186,6 +150,8 @@ public class PluginService {
 		addAlgorithmExtension(new RandomSearchAlgorithmExtension());
 		addAlgorithmExtension(new RNSGAIIAlgorithmExtension());
 		addAlgorithmExtension(new SPEA2AlgorithmExtension());
+		addAlgorithmExtension(new NSGAIIWithConfidenceBasedReductionAlgorithmExtension());
+		addAlgorithmExtension(new NSGAIIWithRandomReductionAlgorithmExtension());
 		
 		LOGGER.info("Done. Loading crossover extensions from classpath");
 		
@@ -202,6 +168,18 @@ public class PluginService {
 		LOGGER.info("Done. Loading selection extensions from classpath");
 		
 		addSelectionExtension(new BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension());
+		
+		LOGGER.info("Done. Loading normalizer extensions from classpath");
+		
+		addNormalizerExtension(new DontNormalizeNormalizerExtension());
+		addNormalizerExtension(new ByMaxAndMinValuesNormalizerExtension());
+		addNormalizerExtension(new ByParetoFrontValuesNormalizerExtension());
+		
+		LOGGER.info("Done. Loading correlation extensions from classpath");
+		
+		addCorrelationExtension(new SpearmanCorrelationExtension());
+		addCorrelationExtension(new PearsonCorrelationExtension());
+		addCorrelationExtension(new KendallCorrelationExtension());
 	}
 	
 	private void addProblemExtension(ProblemExtension problemExtension) {
@@ -259,27 +237,31 @@ public class PluginService {
 		LOGGER.info("Added '{}' selection extension", selectionExtension.getId());
 	}
 	
+	private void addNormalizerExtension(NormalizerExtension normalizerExtension) {
+
+        if (this.normalizers.containsKey(normalizerExtension.getId())) {
+            throw new RuntimeException("The normalizer w");
+        }
+
+        this.normalizers.put(normalizerExtension.getId(), normalizerExtension);
+
+        LOGGER.info("Added '{}' normalizer extension", normalizerExtension.getId());
+    }
 	
-	private void addColorizer(AbstractColorize colorize) {
+    private void addCorrelationExtension(CorrelationExtension correlationExtension) {
 
-		this.colorizers.put(colorize.getId(), colorize);
-		
-		LOGGER.info("Added '{}' colorizer", colorize.getId());
-	}
+        if (this.correlations.containsKey(correlationExtension.getId())) {
+            throw new RuntimeException("The correlation w");
+        }
 
-	private void addNormalizer(AbstractNormalize normalize) {
+        this.correlations.put(correlationExtension.getId(), correlationExtension);
 
-		this.normalizers.put(normalize.getId(), normalize);
-		
-		LOGGER.info("Added '{}' normalizer", normalize.getId());
-	}
+        LOGGER.info("Added '{}' correlation extension", correlationExtension.getId());
+    }
 	
-	private void addCorrelationer(AbstractCorrelation correlation) {
-
-		this.correlationers.put(correlation.getId(), correlation);
-		
-		LOGGER.info("Added '{}' correlationer", correlation.getId());
-	}
+	
+	
+	
 	
 	private void addDuplicatesRemover(AbstractDuplicatesRemover duplicatesRemover) {
 
@@ -288,31 +270,8 @@ public class PluginService {
 		LOGGER.info("Added '{}' normalizer", duplicatesRemover.getId());
 	}
 	
-	private void addReducer(AbstractReduction reducer) {
-
-		this.reducers.put(reducer.getId(), reducer);
-		
-		LOGGER.info("Added '{}' reducer", reducer.getId());
-	}
-	
-	public Map<String, AbstractNormalize> getNormalizers() {
-		return normalizers;
-	}
-	
 	public Map<String, AbstractDuplicatesRemover> getDuplicatesRemovers() {
 		return duplicatesRemovers;
-	}
-
-	public Map<String, AbstractColorize> getColorizers() {
-		return colorizers;
-	}
-	
-	public Map<String, AbstractCorrelation> getCorrelationers() {
-		return correlationers;
-	}
-	
-	public Map<String, AbstractReduction> getReducers() {
-		return reducers;
 	}
 	
 	public List<PluginWrapper> getStartedPlugins() {
@@ -397,6 +356,14 @@ public class PluginService {
 		return mutations;
 	}
 	
+	public Map<String, NormalizerExtension> getNormalizers() {
+        return normalizers;
+    }
+	
+	public Map<String, CorrelationExtension> getCorrelations() {
+        return correlations;
+    }
+	
 	public ProblemExtension getProblemById(String id) {
 		
         if (Strings.isBlank(id) || !problems.containsKey(id)) {
@@ -442,5 +409,23 @@ public class PluginService {
 
 		throw new RuntimeException("The mutations was not found");
 	}
+	
+	public NormalizerExtension getNormalizerExtensionById(String id) {
+
+        if (normalizers.containsKey(id)) {
+            return normalizers.get(id);
+        }
+
+        throw new RuntimeException("The normalizer was not found");
+    }
+	
+	public CorrelationExtension getCorrelationExtensionById(String id) {
+
+        if (correlations.containsKey(id)) {
+            return correlations.get(id);
+        }
+
+        throw new RuntimeException("The correlation was not found");
+    }
 	
 }

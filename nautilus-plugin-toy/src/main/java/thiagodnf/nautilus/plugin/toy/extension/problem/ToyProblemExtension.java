@@ -2,7 +2,6 @@ package thiagodnf.nautilus.plugin.toy.extension.problem;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.pf4j.Extension;
@@ -10,11 +9,10 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
 
+import thiagodnf.nautilus.core.encoding.solution.NIntegerSolution;
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.extension.problem.AbstractProblemExtension;
-import thiagodnf.nautilus.plugin.gui.Tab;
-import thiagodnf.nautilus.plugin.gui.TableTabContent;
 import thiagodnf.nautilus.plugin.toy.encoding.instance.TXTInstance;
 import thiagodnf.nautilus.plugin.toy.encoding.objective.NumberOfObjective;
 import thiagodnf.nautilus.plugin.toy.encoding.problem.ToyProblem;
@@ -55,22 +53,18 @@ public class ToyProblemExtension extends AbstractProblemExtension {
 	public Instance getInstance(Path path) {
 		return new TXTInstance(path);
 	}
-	
-	@Override
-	public List<Tab> getTabs(Instance data) {
-		return Arrays.asList(getContentTab(data));
-	}
 
-	protected Tab getContentTab(Instance data) {
+    @Override
+    public List<String> getVariablesAsList(Instance instance, Solution<?> solution) {
 
-		TXTInstance d = (TXTInstance) data;
+        NIntegerSolution sol = (NIntegerSolution) solution;
 
-		TableTabContent table = new TableTabContent("Key", "Value");
+        List<String> variables = new ArrayList<>();
 
-		table.addRow("Lower Bound", d.getLowerBound());
-		table.addRow("Upper Bound", d.getUpperBound());
-		table.addRow("Number of Variables", d.getNumberOfVariables());
+        for (int i = 0; i < sol.getNumberOfVariables(); i++) {
+            variables.add(String.valueOf(sol.getVariableValue(i)));
+        }
 
-		return new Tab("Content", table);
-	}
+        return variables;
+    }
 }

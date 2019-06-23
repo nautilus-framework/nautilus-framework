@@ -13,6 +13,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.dialect.AbstractProcessorDialect;
@@ -23,13 +24,11 @@ import org.thymeleaf.processor.element.AbstractAttributeTagProcessor;
 import org.thymeleaf.processor.element.IElementTagStructureHandler;
 import org.thymeleaf.templatemode.TemplateMode;
 
-import com.sun.istack.internal.NotNull;
-
 import thiagodnf.nautilus.web.annotation.HTMLAutoComplete;
 import thiagodnf.nautilus.web.annotation.HTMLAutoFocus;
-import thiagodnf.nautilus.web.annotation.HTMLReadonly;
 import thiagodnf.nautilus.web.annotation.HTMLMaxLength;
 import thiagodnf.nautilus.web.annotation.HTMLMinLength;
+import thiagodnf.nautilus.web.annotation.HTMLReadonly;
 import thiagodnf.nautilus.web.annotation.HTMLRequired;
 import thiagodnf.nautilus.web.annotation.HTMLSpellCheck;
 import thiagodnf.nautilus.web.annotation.HTMLStep;

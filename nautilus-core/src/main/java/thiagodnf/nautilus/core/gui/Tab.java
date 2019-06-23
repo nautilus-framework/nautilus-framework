@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.gui;
+package thiagodnf.nautilus.core.gui;
 
 import thiagodnf.nautilus.core.util.Converter;
 

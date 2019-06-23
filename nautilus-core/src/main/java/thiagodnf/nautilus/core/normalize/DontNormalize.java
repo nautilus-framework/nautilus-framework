@@ -28,9 +28,4 @@ public class DontNormalize extends AbstractNormalize {
 
 		return copiedSolutions;
 	}
-
-	@Override
-	public String getName() {
-		return "Don't Normalize";
-	}
 }

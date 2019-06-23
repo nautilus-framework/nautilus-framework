@@ -13,12 +13,10 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import thiagodnf.nautilus.core.colorize.DontColorize;
-import thiagodnf.nautilus.core.correlation.DontCorrelation;
 import thiagodnf.nautilus.core.duplicated.ByObjectivesDuplicatesRemover;
-import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
-import thiagodnf.nautilus.core.reduction.ConfidenceBasedReduction;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
+import thiagodnf.nautilus.plugin.extension.normalizer.ByParetoFrontValuesNormalizerExtension;
 import thiagodnf.nautilus.web.annotation.HTMLAutoComplete;
 import thiagodnf.nautilus.web.annotation.HTMLAutoFocus;
 import thiagodnf.nautilus.web.annotation.HTMLReadonly;
@@ -33,7 +31,6 @@ import thiagodnf.nautilus.web.model.Execution.Visibility;
 public class ParametersDTO {
 
 	@NotBlank
-	@HTMLAutoFocus
 	@HTMLReadonly
 	private String problemId;
 
@@ -43,6 +40,7 @@ public class ParametersDTO {
 	
 	@Min(100)
     @Max(1000)
+	@HTMLAutoFocus
     @HTMLStep(50)
     @HTMLRequired
     @HTMLAutoComplete("off")
@@ -121,13 +119,9 @@ public class ParametersDTO {
     
     private boolean showLines = true;
     
-    private String colorizeId = new DontColorize().getId();
+    private String normalizeId = new ByParetoFrontValuesNormalizerExtension().getId();
 
-    private String normalizeId = new ByParetoFrontValuesNormalize().getId();
-
-    private String correlationId = new DontCorrelation().getId();
+    private String correlationId = new PearsonCorrelationExtension().getId();
 
     private String duplicatesRemoverId = new ByObjectivesDuplicatesRemover().getId();
-
-    private String reducerId = new ConfidenceBasedReduction().getId();
 }

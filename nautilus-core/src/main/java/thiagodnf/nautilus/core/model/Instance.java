@@ -1,5 +1,10 @@
 package thiagodnf.nautilus.core.model;
 
-public abstract class Instance {
+import java.util.List;
 
+import thiagodnf.nautilus.core.gui.Tab;
+
+public abstract class Instance {
+    
+    public abstract List<Tab> getTabs(Instance data);
 }

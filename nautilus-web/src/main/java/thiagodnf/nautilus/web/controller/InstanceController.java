@@ -44,7 +44,7 @@ public class InstanceController {
 		Instance instance = problemExtension.getInstance(path);
 		
 		model.addAttribute("problem", problemExtension);
-		model.addAttribute("tabs", problemExtension.getTabs(instance));
+		model.addAttribute("tabs", instance.getTabs(instance));
 	
 		return "instance";
 	}

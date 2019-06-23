@@ -51,4 +51,8 @@ public class Messages {
 	
 	public static String EXECUTION_SCHEDULED_SUCCESS = "msg.execution-scheduled-success";
 	
+	public static String EXECUTION_FEEDBACK_CLEANED_SUCCESS = "msg.execution-feedback-cleaned-success";
+	
+	public static String EXECUTION_FEEDBACK_SAVED_SUCCESS = "msg.execution-feedback-saved-success";
+	
 }

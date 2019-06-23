@@ -68,11 +68,10 @@ public class ExecutionService {
         execution.setTitle(executionSettingsDTO.getTitle());
         execution.setVisibility(executionSettingsDTO.getVisibility());
         execution.setShowLines(executionSettingsDTO.isShowLines());
-        execution.setColorizeId(executionSettingsDTO.getColorizeId());
         execution.setNormalizeId(executionSettingsDTO.getNormalizeId());
         execution.setCorrelationId(executionSettingsDTO.getCorrelationId());
         execution.setDuplicatesRemoverId(executionSettingsDTO.getDuplicatesRemoverId());
-        execution.setReducerId(executionSettingsDTO.getReducerId());
+        execution.setColor(executionSettingsDTO.getColor());
 
         save(execution);
     }
@@ -112,8 +111,13 @@ public class ExecutionService {
         if (execution == null)
             return null;
 
-        return new ExecutionSimplifiedDTO(execution.getId(), execution.getTitle(), execution.getProblemId(),
-                execution.getInstance(), execution.getCreationDate());
+        return new ExecutionSimplifiedDTO(
+            execution.getId(), 
+            execution.getTitle(), 
+            execution.getProblemId(),
+            execution.getInstance(),
+            execution.getCreationDate()
+        );
     }
 
     public ExecutionSettingsDTO convertToExecutionSettingsDTO(Execution execution) {
@@ -127,9 +131,9 @@ public class ExecutionService {
         dto.setVisibility(execution.getVisibility());
         dto.setShowLines(execution.isShowLines());
         dto.setNormalizeId(execution.getNormalizeId());
-        dto.setCorrelationId(execution.getColorizeId());
+        dto.setCorrelationId(execution.getCorrelationId());
         dto.setDuplicatesRemoverId(execution.getDuplicatesRemoverId());
-        dto.setReducerId(execution.getReducerId());
+        dto.setColor(execution.getColor());
 
         return dto;
     }

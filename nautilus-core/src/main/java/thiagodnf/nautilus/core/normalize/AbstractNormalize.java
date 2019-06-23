@@ -13,10 +13,6 @@ import thiagodnf.nautilus.core.util.Normalizer;
 
 public abstract class AbstractNormalize {
 
-	public final String getId() {
-		return Converter.toKey(getName());
-	}
-	
 	/**
 	 * This method returns a copy of a given list of solutions with normalized objective values.
 	 * 
@@ -79,10 +75,8 @@ public abstract class AbstractNormalize {
 	}
 	
 	public String toString() {
-		return getName();
+		return Converter.toJson(this);
 	}
-	
-	public abstract String getName() ;
 	
 	/**
 	 * This method returns an array contains the minimum values 

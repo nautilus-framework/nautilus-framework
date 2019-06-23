@@ -1,4 +1,4 @@
-package thiagodnf.nautilus.plugin.gui;
+package thiagodnf.nautilus.core.gui;
 
 public abstract class TabContent {
 

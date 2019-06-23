@@ -4,7 +4,6 @@ import java.util.List;
 
 import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractReduction {
@@ -135,15 +134,13 @@ public abstract class AbstractReduction {
 		}		
 	}
 	
-	public String getId() {
-		return Converter.toKey(getName());
-	}
-	
 	public String toString() {
-		return getName();
+		return Converter.toJson(this);
 	}
 	
+	public List<RankingItem> execute(List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation){
+	    return null;
+	}
+    
 	public abstract List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation);
-	
-	public abstract String getName() ;
 }

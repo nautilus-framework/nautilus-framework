@@ -5,6 +5,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import lombok.Value;
+import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.web.annotation.Contains;
 import thiagodnf.nautilus.web.annotation.HTMLAutoComplete;
 import thiagodnf.nautilus.web.annotation.HTMLAutoFocus;
@@ -31,5 +32,9 @@ public class UserDisplayDTO {
 	@NotBlank
 	@Contains({"en_US", "pt_BR"})
 	private String language;
+	
+	public String toString() {
+	    return Converter.toJson(this);
+	}
 }
 

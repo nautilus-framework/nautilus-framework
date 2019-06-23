@@ -1,32 +1,39 @@
 package thiagodnf.nautilus.web.controller;
 
-import java.util.HashMap;
+import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.model.Instance;
+import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.util.SolutionAttribute;
-import thiagodnf.nautilus.core.util.SolutionUtils;
+import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.web.dto.UserFeedbackDTO;
 import thiagodnf.nautilus.web.exception.SolutionNotFoundException;
 import thiagodnf.nautilus.web.model.Execution;
+import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.ExecutionService;
-import thiagodnf.nautilus.web.service.FlashMessageService;
+import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
+import thiagodnf.nautilus.web.service.SecurityService;
+import thiagodnf.nautilus.web.service.UserService;
+import thiagodnf.nautilus.web.util.Messages;
+import thiagodnf.nautilus.web.util.Redirect;
 
 @Controller
 @RequestMapping("/solution/{executionId:.+}/{solutionIndex:.+}/{objectiveIndex:.+}")
@@ -41,7 +48,16 @@ public class SolutionController {
 	private PluginService pluginService;
 	
 	@Autowired
-	private FlashMessageService flashMessageService;
+    private FileService fileService;
+	
+	@Autowired
+	private Redirect redirect;
+	
+	@Autowired
+    private UserService userService;
+	
+	@Autowired
+    private SecurityService securityService;
 	
 	@GetMapping("")
 	public String view(Model model, 
@@ -61,86 +77,107 @@ public class SolutionController {
 			throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
 		}
 		
-		List<String> objectiveIds = execution.getObjectiveIds();
 		
-		NSolution<?> solution = solutions.get(solutionIndex);
 
-		solution.setAttribute(SolutionAttribute.VISUALIZED, true);
+		//solution.setAttribute(SolutionAttribute.VISUALIZED, true);
 		
-		execution = executionService.save(execution);
+		//execution = executionService.save(execution);
 
-		List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(objectiveIds);
+		List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
 		
-		Map<String, Double> objectivesMap = new HashMap<>();
-
-		for (int i = 0; i < objectives.size(); i++) {
-			objectivesMap.put(objectives.get(i).getName(), solution.getObjective(i));
+		List<NSolution<?>> normalizedSolutions = new ByMaxAndMinValuesNormalize().normalize(objectives, execution.getSolutions());
+		
+		NSolution<?> solution = execution.getSolutions().get(solutionIndex);
+		NSolution<?> normalizedSolution = normalizedSolutions.get(solutionIndex);
+		
+		User user = securityService.getLoggedUser().getUser(); 
+		
+		Path path = fileService.getInstance(execution.getProblemId(), execution.getInstance());
+		
+		Instance instance = problemExtension.getInstance(path);
+		
+		ItemForEvaluation found = findBySolutionIndexAndObjectiveIndex(execution.getItemForEvaluations(), solutionIndex, objectiveIndex);
+        
+		if(found == null) {
+		    model.addAttribute("userFeedbackDTO", new UserFeedbackDTO(objectiveIndex));
+		}else {
+		    model.addAttribute("userFeedbackDTO", new UserFeedbackDTO(found.getObjectiveIndex(), found.getFeedback()));
 		}
-
-		model.addAttribute("objectivesMap", objectivesMap);
+		
 		model.addAttribute("solution", solution);
-		model.addAttribute("variables", SolutionUtils.getVariablesAsList(solution));
+		model.addAttribute("normalizedSolution", normalizedSolution);
+		model.addAttribute("objectives", objectives);
 		model.addAttribute("execution", execution);
-//		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
-//		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
+		model.addAttribute("variables", problemExtension.getVariablesAsList(instance, solution));
+		model.addAttribute("userDisplayDTO", userService.findUserDisplayDTOById(user.getId()));
+		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
+		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
 		
 		return "solution";
 	}
 	
 	@PostMapping("/save/feedback")
-	public String saveUserFeedback(ModelMap model,
-			@PathVariable("executionId") String executionId, 
-			@PathVariable("solutionIndex") int solutionIndex, 
-			@PathVariable("objectiveIndex") int objectiveIndex,
-			@RequestParam Map<String,String> parameters) {
+	public String saveUserFeedback(
+			@PathVariable String executionId, 
+			@PathVariable int solutionIndex, 
+			@Valid UserFeedbackDTO userFeedbackDTO,
+			BindingResult bindingResult,
+			RedirectAttributes ra,
+			Model model) {
 		
 		LOGGER.info("Saving feedback for SolutionIndex {} in ExecutionId {}", solutionIndex, executionId);
 		
-		Execution execution = executionService.findExecutionById(executionId);
-
-		List<NSolution<?>> solutions = execution.getSolutions();
-		
-		if (solutionIndex < 0 || solutionIndex >= solutions.size()) {
-			throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
+		if (bindingResult.hasErrors()) {
+		    return "solution";
 		}
 		
-		NSolution<?> solution = solutions.get(solutionIndex);
-		
-		solution.setAttribute(SolutionAttribute.SELECTED, true);
+		Execution execution = executionService.findExecutionById(executionId);
 
-		System.out.println(parameters);
-				
-		double feedback = Double.valueOf(parameters.get("feedback"));
+		ProblemExtension problemExtension = pluginService.getProblemById(execution.getProblemId());
 		
-		solution.setAttribute(SolutionAttribute.FEEDBACK_FOR_OBJECTIVE+objectiveIndex, feedback);
-
+		List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
+        
+		List<NSolution<?>> normalizedSolutions = new ByMaxAndMinValuesNormalize().normalize(objectives, execution.getSolutions());
+        
+        if (solutionIndex < 0 || solutionIndex >= normalizedSolutions.size()) {
+            throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
+        }
+        
+        NSolution<?> normalizedSolution = normalizedSolutions.get(solutionIndex);
+		
+        int objectiveIndex =  userFeedbackDTO.getObjectiveIndex();
+        
+        //
+        
+        ItemForEvaluation found = findBySolutionIndexAndObjectiveIndex(execution.getItemForEvaluations(), solutionIndex, objectiveIndex);
+        
+        if (found != null) {
+            execution.getItemForEvaluations().remove(found);
+        }
+		
+		ItemForEvaluation item = new ItemForEvaluation();
+		
+		item.setSolutionIndex(solutionIndex);
+		item.setObjectiveIndex(objectiveIndex);
+		item.setObjectiveValue(normalizedSolution.getObjective(objectiveIndex));
+		item.setFeedback(userFeedbackDTO.getFeedback());
+		
+		execution.getItemForEvaluations().add(item);
+		
 		execution = executionService.save(execution);
 
-		return "redirect:/execution/" + executionId;
+		return redirect.to("/execution/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_SAVED_SUCCESS);
 	}
 	
-	@PostMapping("/clear/user-feedback")
-	public String clearUserFeedback(Model model, 
-			RedirectAttributes ra,
-			@PathVariable("executionId") String executionId, 
-			@PathVariable("solutionIndex") int solutionIndex) {
-		
-		Execution execution = executionService.findExecutionById(executionId);
-
-		List<NSolution<?>> solutions = execution.getSolutions();
-		
-		if (solutionIndex < 0 || solutionIndex >= solutions.size()) {
-			throw new SolutionNotFoundException();
-		}
-		
-		NSolution<?> solution = solutions.get(solutionIndex);
-
-		SolutionUtils.clearUserFeedback(solution);
-		
-		execution = executionService.save(execution);
-		
-		flashMessageService.success(ra, "msg.cleaned.feedback.single.solution.success", String.valueOf(solutionIndex));
-		
-		return "redirect:/execution/" + executionId;
+	private ItemForEvaluation findBySolutionIndexAndObjectiveIndex(List<ItemForEvaluation> items, int solutionIndex, int objectiveIndex) {
+	    
+	    for(ItemForEvaluation item : items) {
+	        
+	        if(item.getSolutionIndex() == solutionIndex && item.getObjectiveIndex() == objectiveIndex) {
+	            return item;
+	        }
+	    }
+	    
+	    return null;
 	}
 }

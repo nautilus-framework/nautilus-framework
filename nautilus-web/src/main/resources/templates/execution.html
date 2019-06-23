@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-	<head th:replace="fragments/head :: title(${#strings.isEmpty(execution.title)} ? ${execution.id} : ${execution.title})"></head>
+	<head th:replace="fragments/head :: title(${#strings.isEmpty(execution.title)} ? ${#dates.format(execution.creationDate, 'yyyy-MM-dd HH:mm:ss')} : ${execution.title})"></head>
 
 	<body>
 		
@@ -12,14 +12,14 @@
 				<div class="row">
 					<div class="col-8 path">
 						<h6 class="title">
-							<a th:href="@{#}" th:text="#{nav.home}"></a> 
+							<a th:href="@{/}" th:text="#{nav.home}"></a> 
 							<span class="path-divider">/</span> 
 							<a th:href="@{|/execution/${execution.id}|}" th:text="${#strings.isEmpty(execution.title)} ? ${#dates.format(execution.creationDate, 'yyyy-MM-dd HH:mm:ss')} : ${execution.title}"></a> 
 						</h6>
 					</div>
 					<div class="col-4 toolbar">
 						<a class="btn btn-success float-right" th:href="@{/done/} + ${execution.id}" th:text="#{btn.done}"></a>
-						<a class="btn btn-outline-secondary float-right" th:href="@{/continue/} + ${execution.id}" th:text="#{btn.continue}"></a>
+						<a class="btn btn-outline-secondary float-right" th:href="@{/continue/} + ${execution.id}" th:if="${algorithm.reduction}" th:text="#{btn.continue}"></a>
 					</div>
 				</div>
 			</div>
@@ -32,7 +32,7 @@
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}" th:text="#{nav.chart}"></a>
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#solutions" th:text="#{nav.solutions}"></a>
-							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#correlation" th:if="${correlations != null}">Correlation</a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#correlation" th:text="#{nav.correlation}"></a>
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#parameters" th:text="#{nav.parameters}"></a>
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#settings" th:text="#{nav.settings}"></a>
 						</div>
@@ -62,13 +62,13 @@
 								</table>
 							</div>
 						</div>
-						<div role="tabpanel" class="tab-pane fade" id="correlation" th:if="${correlations != null}">
+						<div role="tabpanel" class="tab-pane fade" id="correlation" >
 							<div class="table-responsive horizontal-scroll">
 								<table class="table table-striped table-hover table-sm table-datatable">
 									<thead>
 										<tr>
 											<th width="50px">#</th>
-											<th>Objective</th>
+											<th th:text="#{nav.objective}"></th>
 											<th th:each="obj : ${objectives}" th:text="${obj.getName()}"/>
 										</tr>
 									</thead>
@@ -77,7 +77,7 @@
 											<td th:text="${i.count}"></td>
 											<td th:text="${c.getName()}"></td>
 											<td th:each="v : ${c.getValues()}" 
-												th:text="${#numbers.formatDecimal(v,1,5)}"
+												th:text="${#numbers.formatDecimal(v,1, userDisplayDTO.decimalPlaces, userDisplayDTO.decimalSeparator)}"
 												th:classappend="${v == 0 ? 'text-secondary' : (v < 0 ? 'text-danger' : 'text-success')}"
 											/>
 										</tr>
@@ -126,7 +126,7 @@
 									    <div class="list-group" role="tablist">
 									        <a class="list-group-item light-gray" th:text="#{nav.settings}"></a>
 		                                    <a class="list-group-item list-group-item-action active" data-toggle="list" href="#panel-item-general" role="tab" th:text="#{nav.general}"></a>
-									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-display" role="tab" th:text="#{nav.display}"></a>
+									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-display" role="tab" th:text="#{nav.chart}"></a>
 									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-solutions" role="tab" th:text="#{nav.solutions}"></a>
 									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-objectives" role="tab" th:text="#{nav.objectives}"></a>
 									        <a class="list-group-item list-group-item-action" data-toggle="list" href="#panel-item-miscellaneous" role="tab" th:text="#{nav.miscellaneous}"></a>
@@ -146,10 +146,10 @@
 		                                      <div class="form-group">
 		                                           <label for="visibility" th:text="#{execution.visibility}"></label>
 		                                           <select class="form-control" th:field="*{visibility}">
-		                                           <option th:each="visibility : ${visibilities}" 
-	                                                   th:value="${visibility}"
-	                                                   th:text="#{'execution.visibility.'+${visibility.toString().toLowerCase()}}" 
-		                                           />
+			                                           <option th:each="visibility : ${visibilities}" 
+		                                                   th:value="${visibility}"
+		                                                   th:text="#{'execution.visibility.'+${visibility.toString().toLowerCase()}}" 
+			                                           />
 		                                           </select>
 		                                           <small class="form-text text-muted" th:text="#{help.execution.visibility}"></small>
 		                                           <span class="text-danger" th:if="${#fields.hasErrors('visibility')}" th:errors="*{visibility}"></span>
@@ -158,13 +158,24 @@
                                                <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
 											</div>
 											<div class="tab-pane fade" id="panel-item-display" role="tabpanel">
-											  <h5 th:text="#{nav.display}"></h5>
+											  <h5 th:text="#{nav.chart}"></h5>
 		                                      <hr/>
-											  <div class="form-check">
-		                                          <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
-		                                          <label class="form-check-label" for="showLines1" th:text="#{execution.show-lines}"></label>
-		                                          <small class="form-text text-muted" th:text="#{help.execution.show-lines}"></small>
-		                                      </div>
+											  <div class="form-group">
+                                                   <label for="color" th:text="#{execution.color}"></label>
+                                                   <select class="form-control" th:field="*{color}">
+                                                        <option style='color: green;' th:each="color : ${colors}" 
+	                                                       th:value="${color.hex}"
+	                                                       th:text="#{'color.'+${color.name().toLowerCase()}}" 
+	                                                   /> 
+                                                   </select>
+                                                   <small class="form-text text-muted" th:text="#{help.execution.color}"></small>
+                                                   <span class="text-danger" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></span>
+                                               </div>
+                                               <div class="form-check">
+                                                  <input type="checkbox" class="form-check-input" th:field="*{showLines}"/>
+                                                  <label class="form-check-label" for="showLines1" th:text="#{execution.show-lines}"></label>
+                                                  <small class="form-text text-muted" th:text="#{help.execution.show-lines}"></small>
+                                              </div>
 		                                      <hr/>
                                               <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
 											</div>
@@ -193,7 +204,7 @@
 		                                              <select class="form-control" th:field="*{normalizeId}">
 		                                                <option th:each="normalize : ${normalizers}" 
 		                                                      th:value="${normalize.key}"
-		                                                      th:text="${normalize.value}" 
+		                                                      th:text="${normalize.value.name}" 
 		                                                  />
 		                                              </select>
 		                                              <small class="form-text text-muted" th:text="#{help.execution.normalize}"></small>
@@ -204,22 +215,11 @@
 			                                          <select class="form-control" th:field="*{correlationId}">
 			                                              <option th:each="correlationer : ${correlationers}" 
 			                                                  th:value="${correlationer.key}"
-			                                                  th:text="${correlationer.value}" 
+			                                                  th:text="${correlationer.value.name}" 
 			                                              />
 			                                          </select>
 		                                              <small class="form-text text-muted" th:text="#{help.execution.correlation}"></small>
 		                                              <span class="text-danger" th:if="${#fields.hasErrors('correlationId')}" th:errors="*{correlationId}"></span>
-		                                          </div>
-		                                          <div class="form-group">
-		                                              <label for="reducerId" th:text="#{execution.objective-reducers}"></label>
-			                                         <select class="form-control" th:field="*{reducerId}">
-			                                             <option th:each="reducer : ${reducers}" 
-			                                                 th:value="${reducer.key}"
-			                                                 th:text="${reducer.value}" 
-			                                             />
-			                                         </select>
-		                                              <small class="form-text text-muted" th:text="#{help.execution.objective-reducers}"></small>
-		                                              <span class="text-danger" th:if="${#fields.hasErrors('reducerId')}" th:errors="*{reducerId}"></span>
 		                                          </div>
 		                                          <hr/>
                                                   <button type="submit" class="btn btn-outline-success" th:text="#{btn.save}"></button>
@@ -229,20 +229,22 @@
                                                  <hr/>
                                                  <strong th:text="#{execution.remove-preferences}"></strong><br/>
                                                  <p><small class="form-text text-muted" th:text="#{help.execution.remove-preferences}"></small></p>
-                                                 <form method="POST" action="#">
-                                                     <button type="submit" class="btn btn-outline-danger" data:confirm="#{confirm.clear-remove-preferences}" th:text="#{btn.clear}"></button>
-                                                 </form>
+                                                 <button type="submit" class="btn btn-outline-danger" th:text="#{btn.clear}" form="clear-feedback"></button>
 											 </div>
 										</div>
 								    </div>
 								   </div>
 							   
 				             </form>
+				             <form id="clear-feedback" method="POST" th:action="@{|/execution/${execution.id}/clear/user-feedback|}" data:confirm="#{confirm.clear-remove-preferences}"></form>           
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		
+		<div class="d-none" id="userDisplayDTO" th:text="${userDisplayDTO}"></div> 
+		<div class="d-none" id="executionSettingsDTO" th:text="${executionSettingsDTO}"></div>    
 	
 		<div th:replace="fragments/footer :: footer"></div>
 		<script type="text/javascript" th:src="@{/js/controller/execution.js}"></script>

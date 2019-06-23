@@ -2,8 +2,11 @@ package thiagodnf.nautilus.plugin.nrp.encoding.instance;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import thiagodnf.nautilus.core.gui.Tab;
+import thiagodnf.nautilus.core.gui.TableTabContent;
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.util.InstanceReader;
 import thiagodnf.nautilus.plugin.nrp.encoding.model.Requirement;
@@ -115,4 +118,32 @@ public class TXTInstance extends Instance {
 	public List<Task> getTasks(int requirementId) {
 		return this.requirements.get(requirementId).tasks;
 	}
+	
+	@Override
+    public List<Tab> getTabs(Instance data) {
+
+        TXTInstance c = (TXTInstance) data;
+
+        List<Tab> tabs = new ArrayList<>();
+
+        tabs.add(getRequirementsTab(c));
+        
+        return tabs;
+    }
+
+    protected Tab getRequirementsTab(TXTInstance data) {
+
+        TableTabContent table = new TableTabContent(Arrays.asList("Requirement", "Cost", "Profit", "Importance"));
+
+        for (int i = 0; i < data.getNumberOfRequirements(); i++) {
+            table.getRows().add(Arrays.asList(
+                    "" + i,
+                    "" + data.getCost(i),
+                    "" + data.getProfit(i),
+                    "" + data.getImportance(i)
+            ));
+        }
+
+        return new Tab("Requirements", table);
+    }
 }
