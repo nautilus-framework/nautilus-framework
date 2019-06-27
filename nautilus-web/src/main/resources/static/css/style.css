@@ -195,23 +195,10 @@ body {
   overflow-x: auto;
   
 }
-/*.horizontal-scroll > .row > .col-sm-3 {
-  display: inline-block;
-  float: none;
-}*/
 
 .horizontal-scroll .card-title{
 	white-space: nowrap;
     overflow: hidden;
 	text-overflow: ellipsis;
 }
-
-word-break: break-all;
-    white-space: normal;
-
-/* Decorations 
-.col-sm-4 { color: #fff; font-size: 48px; padding-bottom: 20px; padding-top: 18px; }
-.col-sm-4:nth-child(3n+1) { background: #c69; }
-.col-sm-4:nth-child(3n+2) { background: #9c6; }
-.col-sm-4:nth-child(3n+3) { background: #69c; }*/
 

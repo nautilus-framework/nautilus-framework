@@ -61,7 +61,7 @@ public class ExecutionService {
 
         Execution execution = findExecutionById(executionId);
         
-        if (isOwner(execution)) {
+        if (!isOwner(execution)) {
             throw new UserNotOwnerException();
         }
         
