@@ -32,7 +32,7 @@ public class ThymeleafConfiguration {
 	}
 	
 	@Bean
-    public InputValidationDialect getHelloDialect() {
+    public InputValidationDialect getInputValidationDialect() {
 	    return new InputValidationDialect(useInputValidation);
     }
 }
