@@ -49,6 +49,8 @@ public class User {
 	private int maxExecutions = 2;
 	
 	private String language = "en_US";
+	
+	private String timeZone = "(GMT-03:00) America/Sao_Paulo";
 
 	@CreatedDate
 	private Date creationDate;

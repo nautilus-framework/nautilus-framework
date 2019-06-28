@@ -28,7 +28,7 @@ public class HomeController {
 	@GetMapping("/home")
 	public String index(Model model) {
 	    
-	    User user = securityService.getLoggedUser().getUser(); 
+	     User user = securityService.getLoggedUser().getUser(); 
 		
 		model.addAttribute("problems", pluginService.getProblems());
 		model.addAttribute("newExecutionDTO", new NewExecutionDTO(new ToyProblemExtension().getId()));

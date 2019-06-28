@@ -11,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import thiagodnf.nautilus.web.dto.ExecutionSimplifiedDTO;
 import thiagodnf.nautilus.web.dto.RoleDTO;
 import thiagodnf.nautilus.web.dto.UserDTO;
-import thiagodnf.nautilus.web.dto.UserDisplayDTO;
-import thiagodnf.nautilus.web.dto.UserProfileDTO;
+import thiagodnf.nautilus.web.dto.UserSettingsDTO;
 import thiagodnf.nautilus.web.exception.ConfirmationTokenNotFoundException;
 import thiagodnf.nautilus.web.exception.UserNotEditableException;
 import thiagodnf.nautilus.web.exception.UserNotFoundException;
@@ -125,33 +124,22 @@ public class UserService {
         userRepository.save(found);
     }
 	
-	public void updateUserDisplay(String userId, UserDisplayDTO userDisplayDTO) {
+    public void updateUserSettings(String userId, UserSettingsDTO dto) {
 
         User found = findUserById(userId);
 
-        found.setDecimalPlaces(userDisplayDTO.getDecimalPlaces());
-        found.setDecimalSeparator(userDisplayDTO.getDecimalSeparator());
-        found.setLanguage(userDisplayDTO.getLanguage());
-        
-        userRepository.save(found);
-    }
-	
-	public void updateUserProfile(String userId, UserProfileDTO userProfileDTO) {
+        found.setFirstname(dto.getFirstname());
+        found.setLastname(dto.getLastname());
+        found.setDecimalPlaces(dto.getDecimalPlaces());
+        found.setDecimalSeparator(dto.getDecimalSeparator());
+        found.setLanguage(dto.getLanguage());
+        found.setTimeZone(dto.getTimeZone());
 
-        User found = findUserById(userId);
-
-        found.setFirstname(userProfileDTO.getFirstname());
-        found.setLastname(userProfileDTO.getLastname());
-        
         userRepository.save(found);
     }
 
-    public UserDisplayDTO findUserDisplayDTOById(String id) {
-        return convertToUserDisplayDTO(findUserById(id));
-    }
-    
-    public UserProfileDTO findUserProfileDTOById(String id) {
-        return convertToUserProfileDTO(findUserById(id));
+    public UserSettingsDTO findUserSettingsDTOById(String id) {
+        return convertToUserSettingsDTO(findUserById(id));
     }
     
     private UserDTO convertToUserDTO(User user) {
@@ -175,24 +163,17 @@ public class UserService {
         );
     }
     
-    public UserDisplayDTO convertToUserDisplayDTO(User user) {
+    public UserSettingsDTO convertToUserSettingsDTO(User user) {
         
         if(user == null)  return null;
         
-        return new UserDisplayDTO(
+        return new UserSettingsDTO(
+            user.getFirstname(),
+            user.getLastname(),  
             user.getDecimalPlaces(),
             user.getDecimalSeparator(),
-            user.getLanguage()
-        );
-    }
-    
-    private UserProfileDTO convertToUserProfileDTO(User user) {
-        
-        if(user == null)  return null;
-        
-        return new UserProfileDTO(
-            user.getFirstname(),
-            user.getLastname()
+            user.getLanguage(),
+            user.getTimeZone()
         );
     }
 }

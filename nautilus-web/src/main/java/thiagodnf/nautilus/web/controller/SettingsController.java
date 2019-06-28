@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import thiagodnf.nautilus.web.dto.UserDisplayDTO;
-import thiagodnf.nautilus.web.dto.UserProfileDTO;
+import thiagodnf.nautilus.web.dto.UserSettingsDTO;
 import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.SecurityService;
 import thiagodnf.nautilus.web.service.UserService;
 import thiagodnf.nautilus.web.util.Messages;
 import thiagodnf.nautilus.web.util.Redirect;
+import thiagodnf.nautilus.web.util.TimeZones;
 
 @Controller
 @RequestMapping("/settings")
@@ -37,37 +37,28 @@ public class SettingsController {
 
         User user = securityService.getLoggedUser().getUser();
 
-        model.addAttribute("userProfileDTO", userService.findUserProfileDTOById(user.getId()));
-        model.addAttribute("userDisplayDTO", userService.findUserDisplayDTOById(user.getId()));
+        return form(userService.findUserSettingsDTOById(user.getId()), model);
+    }
+	
+	@PostMapping("/update")
+    public String update(@Valid UserSettingsDTO userSettingsDTO, BindingResult bindingResult, RedirectAttributes ra, Model model) {
+        
+        if (bindingResult.hasErrors()) {
+            return form(userSettingsDTO, model);
+        }
+        
+        User user = securityService.getLoggedUser().getUser();
+        
+        userService.updateUserSettings(user.getId(), userSettingsDTO);
+        
+        return redirect.to("/settings?lang=" + userSettingsDTO.getLanguage()).withSuccess(ra, Messages.SETTINGS_SAVE_SUCCESS);
+    }
+	
+	private String form(UserSettingsDTO userSettingsDTO, Model model) {
+
+        model.addAttribute("availableTimeZones", TimeZones.getAvailableTimeZones());
+        model.addAttribute("userSettingsDTO", userSettingsDTO);
         
         return "settings";
-    }
-	
-	@PostMapping("/profile/update")
-    public String update(@Valid UserProfileDTO userProfileDTO, BindingResult bindingResult, RedirectAttributes ra, Model model) {
-        
-        if (bindingResult.hasErrors()) {
-            return "settings";
-        }
-        
-        User user = securityService.getLoggedUser().getUser();
-        
-        userService.updateUserProfile(user.getId(), userProfileDTO);
-        
-        return redirect.to("/settings").withSuccess(ra, Messages.SETTINGS_SAVE_SUCCESS);
-    }
-	
-	@PostMapping("/display/update")
-    public String update(@Valid UserDisplayDTO userDisplayDTO, BindingResult bindingResult, RedirectAttributes ra, Model model) {
-        
-        if (bindingResult.hasErrors()) {
-            return "settings";
-        }
-        
-        User user = securityService.getLoggedUser().getUser();
-        
-        userService.updateUserDisplay(user.getId(), userDisplayDTO);
-        
-        return redirect.to("/settings?lang=" + userDisplayDTO.getLanguage()).withSuccess(ra, Messages.SETTINGS_SAVE_SUCCESS);
     }
 }

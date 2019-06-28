@@ -19,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
@@ -105,7 +104,7 @@ public class SolutionController {
 		model.addAttribute("objectives", objectives);
 		model.addAttribute("execution", execution);
 		model.addAttribute("variables", problemExtension.getVariablesAsList(instance, solution));
-		model.addAttribute("userDisplayDTO", userService.findUserDisplayDTOById(user.getId()));
+		model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
 		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
 		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
 		model.addAttribute("isReadOnly", executionService.isReadOnly(execution));

@@ -12,7 +12,7 @@ public class Launcher {
 
     @PostConstruct
     public void init(){
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
     }
     
 	public static void main(String[] args) {

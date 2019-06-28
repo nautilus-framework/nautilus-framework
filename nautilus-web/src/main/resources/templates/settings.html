@@ -16,28 +16,28 @@
 			     </div>
 			  </div>
 			  <div class="col-9">
+			  
+			  <form method="POST" th:action="@{/settings/update}" th:object="${userSettingsDTO}">
+			    
 			    <div class="tab-content mt-0" id="nav-tabContent">
+			    
 			      <div class="tab-pane fade show active" id="profile" role="tabpanel">
-			         <h5 th:text="#{nav.profile}"></h5>
+			            <h5 th:text="#{nav.profile}"></h5>
 	                    <hr />
-	                    <form method="POST" th:action="@{/settings/profile/update}" th:object="${userProfileDTO}">
-	                        <div class="form-group">
-	                            <label for="firstname" th:text="#{user.firstname}"></label> 
-	                            <input type="text" class="form-control" th:field="*{firstname}" th:validation="firstname" /> 
-	                            <span class="text-danger" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>
-	                        </div>
-	                        <div class="form-group">
-	                            <label for="lastname" th:text="#{user.lastname}"></label> 
-	                            <input type="text" class="form-control" th:field="*{lastname}" th:validation="lastname" /> 
-	                            <span class="text-danger" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>
-	                        </div>
-	                        <button type="submit" class="btn btn-success" th:text="#{btn.save}"></button>
-	                    </form>
+                        <div class="form-group">
+                            <label for="firstname" th:text="#{user.firstname}"></label> 
+                            <input type="text" class="form-control" th:field="*{firstname}" th:validation="firstname" /> 
+                            <span class="text-danger" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" th:text="#{user.lastname}"></label> 
+                            <input type="text" class="form-control" th:field="*{lastname}" th:validation="lastname" /> 
+                            <span class="text-danger" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>
+                        </div>
 			      </div>
 			      <div class="tab-pane fade" id="display" role="tabpanel">
-			         <h5 th:text="#{nav.display}"></h5>
-                    <hr />
-                    <form method="POST" th:action="@{/settings/display/update}" th:object="${userDisplayDTO}">
+			             <h5 th:text="#{nav.display}"></h5>
+                        <hr />
                         <div class="form-group">
                             <label for="decimalPlaces" th:text="#{user.decimal-places}"></label>
                             <input type="number" class="form-control" th:field="*{decimalPlaces}" th:validation="decimalPlaces" /> 
@@ -49,7 +49,8 @@
                             <select class="form-control" th:field="*{decimalSeparator}" th:validation="decimalSeparator">
                                 <option value="COMMA" th:text="#{decimal-separator.comma}"></option>
                                 <option value="POINT" th:text="#{decimal-separator.point}"></option>
-                            </select> <small class="form-text text-muted" th:text="#{help.user.decimal-separator}"></small> 
+                            </select> 
+                            <small class="form-text text-muted" th:text="#{help.user.decimal-separator}"></small> 
                             <span class="text-danger" th:if="${#fields.hasErrors('decimalSeparator')}" th:errors="*{decimalSeparator}"></span>
                         </div>
                         <div class="form-group">
@@ -57,15 +58,28 @@
                             <select class="form-control" th:field="*{language}" th:validation="language">
                                 <option value="en_US" th:text="#{locale.en-us}"></option>
                                 <option value="pt_BR" th:text="#{locale.pt-br}"></option>
-                            </select> <small class="form-text text-muted" th:text="#{help.user.language}"></small>
+                            </select> 
+                            <small class="form-text text-muted" th:text="#{help.user.language}"></small>
                             <span class="text-danger" th:if="${#fields.hasErrors('language')}" th:errors="*{language}"></span>
                         </div>
-                        <button type="submit" class="btn btn-success" th:text="#{btn.save}"></button>
-                    </form>
+                        <div class="form-group">
+                            <label for="timeZone" th:text="#{user.time-zone}"></label> 
+                            <select class="form-control" th:field="*{timeZone}" th:validation="timeZone">
+                                <option th:each="timeZone : ${availableTimeZones}" 
+                                        th:value="${timeZone}" 
+                                        th:text="${timeZone}"/>
+                            </select> 
+                            <small class="form-text text-muted" th:text="#{help.user.time-zone}"></small>
+                            <span class="text-danger" th:if="${#fields.hasErrors('timeZone')}" th:errors="*{timeZone}"></span>
+                        </div>
+                   
 			      
-			      
-			      </div>
-			     </div>
+					  </div>
+					 <button type="submit" class="btn btn-success" th:text="#{btn.save}"></button>
+                  
+		       </div>
+			     </form>
+			         
 			  </div>
 			</div>
 		</div>
