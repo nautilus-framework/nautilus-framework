@@ -155,16 +155,16 @@ $(function(){
 	
 	// Format all data with this class to a friendly date
 	
-	$(".format-date").html(function(index, value) {
-		
-		var date = moment(value);
-		
-		if(date.isValid()){
-			return date.tz(tz).format("YYYY-MM-DD HH:mm:ss")
-		}
-		
-		return value;
-	});
+//	$(".format-date").html(function(index, value) {
+//		
+//		var date = moment(value);
+//		
+//		if(date.isValid()){
+//			return date.tz(tz).format("YYYY-MM-DD HH:mm:ss")
+//		}
+//		
+//		return value;
+//	});
 	
 	jQuery.validator.setDefaults({
 	    highlight: function(element) {

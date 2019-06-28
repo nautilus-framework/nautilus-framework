@@ -1,4 +1,4 @@
-var userDisplayDTO;
+var userSettingsDTO;
 var executionSettingsDTO;
 
 var red = 0;
@@ -83,7 +83,7 @@ function getData(rows){
 //				return;
 //			}
 			
-			if(userDisplayDTO.decimalSeparator === "COMMA"){
+			if(userSettingsDTO.decimalSeparator === "COMMA"){
 				numeral.locale("pt-br");
 			}
 			
@@ -270,7 +270,7 @@ function openSolution(solutionIndex, objectiveIndex){
 
 $(function(){
 	
-	userDisplayDTO = JSON.parse($("#userDisplayDTO").text());
+	userSettingsDTO = JSON.parse($("#userSettingsDTO").text());
 	executionSettingsDTO = JSON.parse($("#executionSettingsDTO").text());
 	
 	var table = $('#execution-table').DataTable();

@@ -144,7 +144,8 @@ public class UserService {
     
     private UserDTO convertToUserDTO(User user) {
         
-        if(user == null) return null;
+        if (user == null)
+            return null;
         
         RoleDTO role = roleService.findById(user.getRoleId());
         
@@ -165,7 +166,8 @@ public class UserService {
     
     public UserSettingsDTO convertToUserSettingsDTO(User user) {
         
-        if(user == null)  return null;
+        if (user == null)
+            return null;
         
         return new UserSettingsDTO(
             user.getFirstname(),

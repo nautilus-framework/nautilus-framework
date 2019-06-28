@@ -57,7 +57,7 @@
 											<td><a th:href="@{/solution/}+${execution.getId()}+@{/}+${i}+@{/0}" th:text="${i}"></a></td>
 											<td th:each="value, j : ${solution.getObjectives()}"  class="objectives-values">
 											
-											     <a th:href="@{|/solution/${execution.getId()}/${i}/${j.index}|}" th:text="${#numbers.formatDecimal(value,1, userDisplayDTO.decimalPlaces, userDisplayDTO.decimalSeparator )}"></a>
+											     <a th:href="@{|/solution/${execution.getId()}/${i}/${j.index}|}" th:text="${#numbers.formatDecimal(value,1, userSettingsDTO.decimalPlaces, userSettingsDTO.decimalSeparator )}"></a>
 											
 											</td>
 											<td th:text="${solution.getAttributes().containsKey('selected')}"/>
@@ -81,7 +81,7 @@
 											<td th:text="${i.count}"></td>
 											<td th:text="${c.getName()}"></td>
 											<td th:each="v : ${c.getValues()}" 
-												th:text="${#numbers.formatDecimal(v,1, userDisplayDTO.decimalPlaces, userDisplayDTO.decimalSeparator)}"
+												th:text="${#numbers.formatDecimal(v,1, userSettingsDTO.decimalPlaces, userSettingsDTO.decimalSeparator)}"
 												th:classappend="${v == 0 ? 'text-secondary' : (v < 0 ? 'text-danger' : 'text-success')}"
 											/>
 										</tr>
@@ -240,7 +240,7 @@
 			</div>
 		</div>
 		
-		<div class="d-none" id="userDisplayDTO" th:text="${userDisplayDTO}"></div> 
+		<div class="d-none" id="userSettingsDTO" th:text="${userSettingsDTO}"></div> 
 		<div class="d-none" id="executionSettingsDTO" th:text="${executionSettingsDTO}"></div>    
 	
 		<div th:replace="fragments/footer :: footer"></div>
