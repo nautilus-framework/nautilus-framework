@@ -51,7 +51,7 @@
 											  </button>
 											  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 											  
-											  	<form method="POST" th:action="@{/execution/} + ${execution.id} + @{/duplicate}">
+											  	<form method="POST" th:action="@{|/execution/${execution.id}/duplicate|}">
 											  		<a class="dropdown-item" href="#" data:confirm="#{confirm.duplicate-execution}"><i class="fa fa-copy"></i><span th:text="' ' + #{btn.duplicate}"></span></a>
 												</form>
 												<div class="dropdown-divider"></div>
