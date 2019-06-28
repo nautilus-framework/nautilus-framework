@@ -1,7 +1,9 @@
 package thiagodnf.nautilus.plugin.extension.problem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.solution.IntegerSolution;
@@ -47,6 +49,22 @@ public abstract class AbstractProblemExtension implements ProblemExtension {
 
 		return selected;
 	}
+	
+    public Map<String, List<AbstractObjective>> getObjectiveGroups() {
+
+        Map<String, List<AbstractObjective>> objectiveGroups = new HashMap<>();
+
+        for (AbstractObjective objective : getObjectives()) {
+
+            if (!objectiveGroups.containsKey(objective.getGroupName())) {
+                objectiveGroups.put(objective.getGroupName(), new ArrayList<>());
+            }
+
+            objectiveGroups.get(objective.getGroupName()).add(objective);
+        }
+
+        return objectiveGroups;
+    }
 	
     @Override
     public AbstractRemover getRemover() {

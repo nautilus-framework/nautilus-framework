@@ -94,7 +94,7 @@ public class PluginService {
 		
 		LOGGER.info("Loading plugins from directory");
 		
-		List<String> files = fileService.getJarPlugins();
+		List<String> files = fileService.getPlugins();
 
 		LOGGER.info("Done. It was found {} .jar files. Loading all of them", files.size());
 

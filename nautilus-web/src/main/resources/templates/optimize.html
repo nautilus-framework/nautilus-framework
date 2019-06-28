@@ -139,21 +139,32 @@
 									</div>
 								</div>
 							</div>
+							
 							<div class="tab-pane fade" id="objectives">
-								<p>Select the objectives to be optimized:</p>
-								<div th:each="objective,i : ${problem.getObjectives()}">
-									<div class="form-check checkbox-all-selected">
-										<input type="checkbox" 
-											class="form-check-input"
-											th:field="*{objectiveIds}"
-											th:value="${objective}"
-										/>
-									  	<label class="form-check-label" th:for="${#ids.prev('objectiveIds')}" th:text="${objective.name}"> </label>
+							
+							
+							<div class="row">
+								<div th:class="'col-'+12/${problem.objectiveGroups.size()}" th:each="objectiveGroup : ${problem.objectiveGroups}">
+									<div class="card">
+										  <div class="card-header" th:text="${objectiveGroup.key}"></div>
+										  <ul class="list-group list-group-flush">
+										    <li class="list-group-item" th:each="objective,i : ${objectiveGroup.value}">
+											    <div class="form-check checkbox-all-selected">
+											        <input type="checkbox" 
+			                                            class="form-check-input"
+			                                            th:field="*{objectiveIds}"
+			                                            th:value="${objective}"
+			                                        />
+			                                        <label class="form-check-label" th:for="${#ids.prev('objectiveIds')}" th:text="${objective.name}"> </label>
+											    </div>
+										    </li>
+										  </ul>
+										  <span class="text-danger" th:if="${#fields.hasErrors('objectiveIds')}" th:errors="*{objectiveIds}"></span>
+										</div>
 									</div>
-									<br/>
 								</div>
-								<span class="text-danger" th:if="${#fields.hasErrors('objectiveIds')}" th:errors="*{objectiveIds}"></span>
 							</div>
+							
 							<div class="tab-pane fade" id="preferences">
 								<div class="form-group">
 									<label for="referencePoints">Reference Points</label>

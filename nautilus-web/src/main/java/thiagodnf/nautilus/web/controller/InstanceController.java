@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.web.exception.InstanceNotFoundException;
 import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.util.Messages;
@@ -38,6 +39,10 @@ public class InstanceController {
 			Model model){
 		
 		ProblemExtension problemExtension = pluginService.getProblemById(problemId);
+		
+		if (!fileService.containsInstance(problemId, filename)) {
+            throw new InstanceNotFoundException();
+        }
 		
 		Path path = fileService.getInstance(problemId, filename);
 		

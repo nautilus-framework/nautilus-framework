@@ -45,6 +45,7 @@ public class ToyProblemExtension extends AbstractProblemExtension {
 		objectives.add(new NumberOfObjective(3));
 		objectives.add(new NumberOfObjective(4));
 		objectives.add(new NumberOfObjective(5));
+		objectives.add(new NumberOfObjective(6));
 
 		return objectives;
 	}

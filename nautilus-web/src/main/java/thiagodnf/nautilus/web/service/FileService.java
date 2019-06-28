@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,7 +47,7 @@ public class FileService {
 		return getRootLocation().resolve("plugins");
 	}
 	
-	public List<String> getJarPlugins() {
+	public List<String> getPlugins() {
 		try {
 			return Files.walk(getPluginsLocation(), 1)
 				.filter(path -> !path.toFile().isDirectory())
@@ -59,12 +58,6 @@ public class FileService {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
-	}
-	
-	public List<Path> getProblems(){
-		return findAll(getInstancesLocation())
-			.sorted()
-			.collect(Collectors.toList());
 	}
 	
 	public List<Path> getInstances(String problemId){
@@ -89,19 +82,12 @@ public class FileService {
 		}
 	}
 	
-	public List<Path> getInstanceFilesLocation() {
-		
-		List<Path> files = new ArrayList<>();
-		
-		for(Path problem : getProblems()) {
-			files.addAll(findAll(problem).collect(Collectors.toList()));
-		}
-		
-		return files;
-	}
+    public boolean containsInstance(String problemId, String filename) {
+        return Files.exists(getInstance(problemId, filename));
+    }
 	
 	public Path getInstance(String problemId, String filename) {
-		return getInstancesLocation().resolve(problemId).resolve(filename);
+	    return getInstancesLocation().resolve(problemId).resolve(filename);
 	}
 	
 	public Stream<Path> findAll(Path path) {
@@ -148,16 +134,8 @@ public class FileService {
 		return load(getInstancesLocation().resolve(pluginKey), filename);
 	}
 	
-	public Path getPath() {
-		return rootLocation;
-	}
-	
-	public void store(MultipartFile file, String filename) {
-		store(getPath(), filename, file);
-	}
-	
-	public void store(String problemKey, MultipartFile file, String filename) {
-		store(getInstancesLocation().resolve(problemKey), filename, file);
+	public void store(String problemId, MultipartFile file, String filename) {
+		store(getInstancesLocation().resolve(problemId), filename, file);
 	}
 	
 	public void storeInstance(String problemId, String filename, MultipartFile file) {

@@ -23,10 +23,12 @@ import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.dto.ContinueDTO;
 import thiagodnf.nautilus.web.dto.ParametersDTO;
+import thiagodnf.nautilus.web.exception.InstanceNotFoundException;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Execution.Visibility;
 import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.OptimizeService;
 import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.service.SecurityService;
@@ -38,6 +40,9 @@ import thiagodnf.nautilus.web.util.Redirect;
 public class OptimizeController {
 	
     private static final Logger LOGGER = LoggerFactory.getLogger(OptimizeController.class);
+    
+    @Autowired
+    private FileService fileService;
     
 	@Autowired
 	private PluginService pluginService;
@@ -64,7 +69,11 @@ public class OptimizeController {
 			ParametersDTO parametersDTO,
 			Model model){
 		
-		ProblemExtension problem = pluginService.getProblemById(problemId);
+        ProblemExtension problem = pluginService.getProblemById(problemId);
+
+        if (!fileService.containsInstance(problemId, instance)) {
+            throw new InstanceNotFoundException();
+        }
 		
 		User user = securityService.getLoggedUser().getUser(); 
 		

@@ -111,7 +111,9 @@ public abstract class AbstractObjective {
 
 	public abstract String getName();
 	
-	public abstract String getGroupName();
+    public String getGroupName() {
+        return "Ungrouped";
+    }
 	
 	public abstract double calculate(Instance data, Solution<?> solution);
 
