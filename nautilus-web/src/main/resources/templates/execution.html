@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-	<head th:replace="fragments/head :: title(${#strings.isEmpty(execution.title)} ? ${#dates.format(execution.creationDate, 'yyyy-MM-dd HH:mm:ss')} : ${execution.title})"></head>
+	<head th:replace="fragments/head :: title(${#strings.isEmpty(execution.title)} ? ${#formatter.date(execution.creationDate, userSettingsDTO.timeZone)} : ${execution.title})"></head>
 
 	<body>
 		
