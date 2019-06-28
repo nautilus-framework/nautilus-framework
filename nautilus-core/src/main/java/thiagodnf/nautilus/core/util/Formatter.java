@@ -14,6 +14,10 @@ public class Formatter {
 		return FileUtils.byteCountToDisplaySize(size);
 	}
 	
+	public static Date fileDate(long size) {
+        return new Date(size);
+    }
+	
 	public static String date(long l) {
 		return date(new Date(l));
 	}

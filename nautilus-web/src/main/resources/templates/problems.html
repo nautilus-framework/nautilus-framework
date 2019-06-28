@@ -54,7 +54,7 @@
 								  	
 								  	<p class="card-text mb-0" th:text="#{nav.last-modified}"></p>
                                    <!-- <p class="card-text "><small class="text-muted" th:text="${#dates.format(instance.toFile().lastModified(), 'yyyy-MM-dd HH:mm:ss')}"></small></p> -->
-                                   <p class="card-text "><small class="text-muted" th:text="${#formatter.date(instance.toFile().lastModified())}"></small></p> 
+                                   <p class="card-text "><small class="text-muted format-date" th:text="${#formatter.fileDate(instance.toFile().lastModified())}"></small></p> 
                                     
                                     <p class="card-text mb-0" th:text="#{nav.size}"></p>
 	                                <p class="card-text "><small class="text-muted" th:text="${#formatter.fileSize(instance.toFile().length())}"></small></p>

@@ -115,12 +115,6 @@ $(function(){
 				executionQueueItem[item.id].btnCancel.remove();
 			}
 		});
-		
-		$.get( "/optimize/execution/cancel/123", function( data ) {
-			  console.log(data)
-			});
-		
-		
     });
     
     var onCloseFromStomp = socket.onclose; 
@@ -129,8 +123,5 @@ $(function(){
     	
     	console.log("Closed")
 	};
-	
-	
-	
 })
 

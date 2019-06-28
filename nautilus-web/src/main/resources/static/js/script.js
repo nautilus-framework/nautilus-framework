@@ -147,12 +147,23 @@ $(function(){
 		return false;
 	});
 	
+	// Try to guess the user timezone
+	
 	var tz = moment.tz.guess();
 	
 	moment.tz.setDefault(tz);
 	
-	$(".dates").html(function(index, value) {
-		return moment(value).tz(tz).format("ddd, DD MMM YYYY HH:mm:ss");
+	// Format all data with this class to a friendly date
+	
+	$(".format-date").html(function(index, value) {
+		
+		var date = moment(value);
+		
+		if(date.isValid()){
+			return date.tz(tz).format("YYYY-MM-DD HH:mm:ss")
+		}
+		
+		return value;
 	});
 	
 	jQuery.validator.setDefaults({
