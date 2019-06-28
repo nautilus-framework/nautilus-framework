@@ -26,6 +26,7 @@ import thiagodnf.nautilus.core.listener.OnProgressListener;
 import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.core.util.Formatter;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
@@ -78,7 +79,15 @@ public class OptimizeService {
             
             String email = userDTO.getEmail();
             
-            ExecutionQueueDTO itemQueue = new ExecutionQueueDTO(execution);
+            String timeZone = userService.findByEmail(email).getTimeZone();
+            
+            ExecutionQueueDTO itemQueue = new ExecutionQueueDTO();
+            
+            itemQueue.setId(execution.getId());
+            itemQueue.setUserId(execution.getUserId());
+            itemQueue.setCreationDate(execution.getCreationDate());
+            itemQueue.setTitle(Formatter.date(execution.getCreationDate(), timeZone));
+            itemQueue.setProgress(0.0);
             
             setStatus(itemQueue, "execution.status.pending");
             

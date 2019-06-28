@@ -81,7 +81,7 @@
 						      </li>
 						    <li class="list-group-item" th:each="execution,i : ${runningExecutions}" th:id="${execution.id}">
 						        <a th:href="@{/execution/} + ${execution.id}" 
-						           th:text="${#dates.format(execution.creationDate, 'yyyy-MM-dd HH:mm:ss')}">
+						           th:text="${#formatter.date(execution.creationDate, userSettingsDTO.timeZone)}">
 						        </a>
 							    <div class="progress mt-2">
 									  <div class="progress-bar progress-bar-striped "  

@@ -50,7 +50,7 @@ function appendToQueue(template, item){
 	
 	var html = template.clone().attr('id',item.id);
 	
-	html.find('.execution-queue-title').text(formatDate(item.creationDate));
+	html.find('.execution-queue-title').text(item.title);
 	html.find('.execution-queue-title').attr("href", "/execution/"+item.id);
 	html.find('.execution-queue-status').text(item.status);
 	

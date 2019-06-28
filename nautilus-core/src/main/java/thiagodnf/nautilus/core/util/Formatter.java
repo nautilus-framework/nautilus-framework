@@ -22,9 +22,7 @@ public class Formatter {
 
 	    ZoneId zoneId = ZoneId.of(timeZone.split(" ")[1]);
 	    
-	    System.out.println(zoneId);
-	    
-		ZonedDateTime d = ZonedDateTime.ofInstant(date.toInstant(), zoneId);
+	    ZonedDateTime d = ZonedDateTime.ofInstant(date.toInstant(), zoneId);
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

@@ -4,28 +4,24 @@ import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import thiagodnf.nautilus.web.model.Execution;
 
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ExecutionQueueDTO {
 
     private String id;
     
     private String userId;
     
+    private String title;
+    
     private Date creationDate;
     
     private double progress;
     
     private String status;
-    
-    public ExecutionQueueDTO(Execution execution) {
-        this.id = execution.getId();
-        this.userId = execution.getUserId();
-        this.creationDate = execution.getCreationDate();
-        this.progress = 0.0;
-    }
 }
