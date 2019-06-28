@@ -39,7 +39,7 @@
 										<td th:text="${i.count}"></td>
 										<td>
 											<a  th:href="@{|/execution/${execution.id}|}"  
-											    th:text="${#strings.isEmpty(execution.title)} ? ${#dates.format(execution.creationDate, 'yyyy-MM-dd HH:mm:ss')} : ${execution.title}">
+											    th:text="${#strings.isEmpty(execution.title)} ? ${#formatter.date(execution.creationDate)} : ${execution.title}">
 											</a>
 										</td>
 										<td th:text="${execution.problemId}"></td>			
