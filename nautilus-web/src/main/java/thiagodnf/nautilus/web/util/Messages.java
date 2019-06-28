@@ -43,9 +43,7 @@ public class Messages {
     
     public static String EXECUTION_DELETED_SUCCESS = "msg.execution-deleted-success";
     
-    public static String EXECUTION_DELETED_FAIL_NO_OWNER = "msg.execution-delete-fail-no-owner";
-    
-	public static String EXECUTION_SETTINGS_SAVED_SUCCESS = "msg.execution-settings-saved-success";
+    public static String EXECUTION_SETTINGS_SAVED_SUCCESS = "msg.execution-settings-saved-success";
 	
 	public static String EXECUTION_UPLOADED_SUCCESS = "msg.execution-uploaded-success";
 	

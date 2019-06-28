@@ -35,7 +35,7 @@
 						  <div class="row flex-nowrap">
 						    
 						    <div class="col-sm-3" th:each="instance : ${instances.get(problem.key)}">
-						    	 <div class="card" style="width: 15rem;">
+						    	 <div class="card">
 								  <div class="card-body">
 								  
 									<div class="d-flex w-100 justify-content-between">
@@ -52,12 +52,12 @@
 			                            </div>
 			                        </div>
 								  	
-								    <p class="card-text mb-0" th:text="#{nav.size}"></p>
+								  	<p class="card-text mb-0" th:text="#{nav.last-modified}"></p>
+                                    <p class="card-text "><small class="text-muted" th:text="${#dates.format(instance.toFile().lastModified(), 'yyyy-MM-dd HH:mm:ss')}"></small></p>
+                                    
+                                    <p class="card-text mb-0" th:text="#{nav.size}"></p>
 	                                <p class="card-text "><small class="text-muted" th:text="${instance.toFile().length()}+' bytes'"></small></p>
 	                                
-								    <p class="card-text mb-0" th:text="#{nav.last-modified}"></p>
-								    <p class="card-text "><small class="text-muted" th:text="${#dates.format(instance.toFile().lastModified(), 'yyyy-MM-dd HH:mm:ss')}"></small></p>
-								    
 								    <a class="btn btn-success btn-block" th:href="@{|/optimize/${problem.key}/${instance.fileName}|}" th:text="#{btn.optimize}"></a>
 								  </div>
 								</div>

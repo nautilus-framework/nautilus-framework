@@ -62,9 +62,9 @@ public class SolutionController {
 	
 	@GetMapping("")
 	public String view(Model model, 
-			@PathVariable("executionId") String executionId, 
-			@PathVariable("solutionIndex") int solutionIndex,
-			@PathVariable("objectiveIndex") int objectiveIndex) {
+			@PathVariable String executionId, 
+			@PathVariable int solutionIndex,
+			@PathVariable int objectiveIndex) {
 		
 		LOGGER.info("Displaying SolutionIndex {} in ExecutionId {}", solutionIndex, executionId);
 		

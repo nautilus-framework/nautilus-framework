@@ -186,10 +186,6 @@ body {
 }
 
 
-
-
-
-
 /* The heart of the matter */
 .horizontal-scroll > .row {
   overflow-x: auto;

@@ -67,9 +67,8 @@ public class ExecutionController {
 		
         Execution execution = executionService.findExecutionById(executionId);
 
-        if (execution.getSolutions() == null) {
+        if (execution.getSolutions() == null)
             throw new ExecutionNotReadyException();
-        }
         
         if (!execution.getUserId().equalsIgnoreCase(user.getId()) && execution.getVisibility() == Visibility.PRIVATE) {
             throw new ExecutionNotPublicException();
@@ -109,22 +108,16 @@ public class ExecutionController {
 	@PostMapping("/delete")
 	public String delete(@PathVariable String executionId, RedirectAttributes ra, Model model) {
 
-		Execution execution = executionService.findExecutionById(executionId);
-
-		User user = securityService.getLoggedUser().getUser(); 
-		
-		if(execution.getUserId().equalsIgnoreCase(user.getId())) {
+	    executionService.deleteById(executionId);
 			
-			executionService.deleteById(executionId);
-			
-			return redirect.to("/home/").withSuccess(ra, Messages.EXECUTION_DELETED_SUCCESS, execution.getId());
-		}
-		
-		return redirect.to("/home/").withError(ra, Messages.EXECUTION_DELETED_FAIL_NO_OWNER);
+		return redirect.to("/home/").withSuccess(ra, Messages.EXECUTION_DELETED_SUCCESS, executionId);
 	}
 	
 	@PostMapping("/duplicate")
-	public String duplicate(@PathVariable String executionId, RedirectAttributes ra, Model model) {
+	public String duplicate(
+	        @PathVariable String executionId, 
+	        RedirectAttributes ra, 
+	        Model model) {
 
 	    User user = securityService.getLoggedUser().getUser(); 
 	    
@@ -140,22 +133,10 @@ public class ExecutionController {
 			BindingResult bindingResult,
 			RedirectAttributes ra, 
 			Model model) {
-	    
-	    Execution execution = executionService.findExecutionById(executionId);
-	    
-	    User user = securityService.getLoggedUser().getUser(); 
-        
-	    System.out.println(execution.getUserId());
-	    System.out.println(user.getId());
-	    
-        if(execution.getUserId().equalsIgnoreCase(user.getId())) {
+	    	    
+        executionService.updateSettings(executionId, executionSettingsDTO);
             
-            executionService.updateSettings(executionId, executionSettingsDTO);
-            
-            return redirect.to("/execution/" + executionId+"#settings").withSuccess(ra, Messages.EXECUTION_SETTINGS_SAVED_SUCCESS);
-        }
-
-        return redirect.to("/execution/" + executionId+"#settings").withError(ra, Messages.EXECUTION_DELETED_FAIL_NO_OWNER);
+        return redirect.to("/execution/" + executionId+"#settings").withSuccess(ra, Messages.EXECUTION_SETTINGS_SAVED_SUCCESS);
 	}
 	
 	@PostMapping("/clear/user-feedback")

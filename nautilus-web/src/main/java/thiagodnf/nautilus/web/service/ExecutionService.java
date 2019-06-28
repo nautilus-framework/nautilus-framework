@@ -61,9 +61,8 @@ public class ExecutionService {
 
         Execution execution = findExecutionById(executionId);
         
-        if (!isOwner(execution)) {
+        if (!isOwner(execution))
             throw new UserNotOwnerException();
-        }
         
         execution.setTitle(executionSettingsDTO.getTitle());
         execution.setVisibility(executionSettingsDTO.getVisibility());
@@ -76,17 +75,12 @@ public class ExecutionService {
         save(execution);
     }
 
-    public boolean contains(String executionId) {
-        return this.executionRepository.existsById(executionId);
-    }
-
     public Execution save(Execution execution) {
         return this.executionRepository.save(execution);
     }
 
     public ExecutionSimplifiedDTO findExecutionSimplifiedDTOById(String executionId) {
-        return this.executionRepository.findExecutionSimplifiedDTOById(executionId)
-                .orElseThrow(ExecutionNotFoundException::new);
+        return this.executionRepository.findExecutionSimplifiedDTOById(executionId).orElseThrow(ExecutionNotFoundException::new);
     }
 
     public Execution findExecutionById(String executionId) {
@@ -99,11 +93,12 @@ public class ExecutionService {
 
     public void deleteById(String executionId) {
 
-        if (!contains(executionId)) {
-            throw new ExecutionNotFoundException();
-        }
+        Execution execution = findExecutionById(executionId);
 
-        this.executionRepository.deleteById(executionId);
+        if (!isOwner(execution))
+            throw new UserNotOwnerException();
+        
+        this.executionRepository.delete(execution);
     }
 
     public ExecutionSimplifiedDTO convertToExecutionSimplifiedDTO(Execution execution) {
@@ -159,9 +154,8 @@ public class ExecutionService {
     
     public boolean isReadOnly(Execution execution) {
         
-        if (isOwner(execution)) {
+        if (isOwner(execution))
             return false;
-        }
         
         return !isOwner(execution) && execution.getVisibility() == Visibility.PUBLIC;
     }
