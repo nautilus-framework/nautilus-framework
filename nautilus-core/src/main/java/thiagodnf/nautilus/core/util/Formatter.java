@@ -14,19 +14,19 @@ public class Formatter {
 		return FileUtils.byteCountToDisplaySize(size);
 	}
 	
-	public static Date fileDate(long size) {
-        return new Date(size);
-    }
-	
-	public static String date(long l) {
-		return date(new Date(l));
+	public static String date(long l, String timeZone) {
+		return date(new Date(l), timeZone);
 	}
 
-	public static String date(Date date) {
+	public static String date(Date date, String timeZone) {
 
-		ZonedDateTime d = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+	    ZoneId zoneId = ZoneId.of(timeZone.split(" ")[1]);
+	    
+	    System.out.println(zoneId);
+	    
+		ZonedDateTime d = ZonedDateTime.ofInstant(date.toInstant(), zoneId);
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 		return d.format(formatter);
 	}

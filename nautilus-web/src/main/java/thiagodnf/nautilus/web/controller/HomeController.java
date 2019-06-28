@@ -11,6 +11,7 @@ import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.ExecutionService;
 import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.service.SecurityService;
+import thiagodnf.nautilus.web.service.UserService;
 
 @Controller
 @RequestMapping("/home")
@@ -21,6 +22,9 @@ public class HomeController {
 	
 	@Autowired
 	private ExecutionService executionService;
+	
+	@Autowired
+    private UserService userService;
 	
 	@Autowired
 	private SecurityService securityService;
@@ -34,6 +38,7 @@ public class HomeController {
 		model.addAttribute("uploadExecutionDTO", new UploadExecutionDTO());
 		model.addAttribute("executions", executionService.findExecutionSimplifiedDTOByUserId(user.getId()));
 		model.addAttribute("runningExecutions", executionService.findRunningExecutions());
+		model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
 		
 		return "home";
 	}

@@ -14,7 +14,7 @@
 						<h6 class="title">
 							<a th:href="@{/}" th:text="#{nav.home}"></a> 
 							<span class="path-divider">/</span> 
-							<a class="format-date" th:href="@{|/execution/${execution.id}|}" th:text="${#strings.isEmpty(execution.title)} ? ${execution.creationDate} : ${execution.title}"></a> 
+							<a class="format-date" th:href="@{|/execution/${execution.id}|}" th:text="${#strings.isEmpty(execution.title)} ? ${#formatter.date(execution.creationDate, userSettingsDTO.timeZone)} : ${execution.title}"></a> 
 						</h6>
 					</div>
 					<div class="col-4 toolbar" th:if="${not isReadOnly}">
@@ -100,7 +100,7 @@
                                     </thead>
                                     <tbody>
                                         <tr><td>Id</td><td th:text="${execution.id}"></td></tr>
-                                        <tr><td th:text="#{execution.creation-date}"></td><td class="format-date" th:text="${execution.creationDate}"></td></tr>
+                                        <tr><td th:text="#{execution.creation-date}"></td><td class="format-date" th:text="${#formatter.date(execution.creationDate, userSettingsDTO.timeZone)}"></td></tr>
                                         <tr><td th:text="#{execution.n-of-solutions}"></td><td th:text="${solutions.size()}"></td></tr>
                                         <tr><td th:text="#{execution.execution-time}"></td><td th:text="${#formatter.interval(execution.getExecutionTime())}"></td></tr>
                                         

@@ -40,7 +40,7 @@
 										<td>
 											<a  class="format-date"
 											    th:href="@{|/execution/${execution.id}|}"  
-											    th:text="${#strings.isEmpty(execution.title)} ? ${execution.creationDate} : ${execution.title}">
+											    th:text="${#strings.isEmpty(execution.title)} ? ${#formatter.date(execution.creationDate, userSettingsDTO.timeZone)} : ${execution.title}">
 											</a>
 										</td>
 										<td th:text="${execution.problemId}"></td>			
