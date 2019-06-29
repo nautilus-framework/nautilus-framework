@@ -22,6 +22,7 @@ import thiagodnf.nautilus.web.exception.FileAlreadyExistsException;
 import thiagodnf.nautilus.web.exception.FileIsEmptyException;
 import thiagodnf.nautilus.web.exception.FileNotFoundException;
 import thiagodnf.nautilus.web.exception.FileNotReadableException;
+import thiagodnf.nautilus.web.exception.InstanceNotFoundException;
 
 @Service
 public class FileService {
@@ -122,9 +123,14 @@ public class FileService {
 		}
 	}
 	
-	public Resource getInstanceAsResource(String problemId, String filename) {
-		return loadAsResource(getInstance(problemId, filename));
-	}
+    public Resource getInstanceAsResource(String problemId, String filename) {
+
+        if (!containsInstance(problemId, filename)) {
+            throw new InstanceNotFoundException();
+        }
+
+        return loadAsResource(getInstance(problemId, filename));
+    }
 	
 	public Path load(Path root, String filename) {
 		return root.resolve(filename);
