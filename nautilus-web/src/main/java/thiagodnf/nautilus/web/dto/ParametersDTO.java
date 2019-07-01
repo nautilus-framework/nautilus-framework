@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.DecimalMax;
@@ -107,7 +108,7 @@ public class ParametersDTO {
     @HTMLSpellCheck("false")
 	private double epsilon = 0.001;
 	
-	private List<List<Double>> referencePoints;
+	private List<String> referencePoints = new ArrayList<>();
 	
 	@NotNull
 	@Size(min = 1)

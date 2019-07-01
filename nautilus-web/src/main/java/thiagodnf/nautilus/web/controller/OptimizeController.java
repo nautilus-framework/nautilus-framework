@@ -92,6 +92,8 @@ public class OptimizeController {
     @PostMapping("/save")
     public String optimize(@Valid ParametersDTO parametersDTO, BindingResult bindingResult, RedirectAttributes ra,  Model model) {
 
+        System.out.println(Converter.toJson(parametersDTO));
+        
         if (bindingResult.hasErrors()) {
             return form(parametersDTO.getProblemId(), parametersDTO.getInstance(), parametersDTO, model);
         }
@@ -116,7 +118,7 @@ public class OptimizeController {
         execution.setMutationId(parametersDTO.getMutationId());
         execution.setMutationProbability(parametersDTO.getMutationProbability());
         execution.setMutationDistribution(parametersDTO.getMutationDistribution());
-        execution.setReferencePoints(parametersDTO.getReferencePoints());
+        //execution.setReferencePoints(parametersDTO.getReferencePoints());
         execution.setEpsilon(parametersDTO.getEpsilon());
         execution.setObjectiveIds(parametersDTO.getObjectiveIds());
         execution.setVisibility(Visibility.PRIVATE);
