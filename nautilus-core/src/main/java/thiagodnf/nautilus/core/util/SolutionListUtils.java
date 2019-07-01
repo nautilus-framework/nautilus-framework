@@ -1,6 +1,7 @@
 package thiagodnf.nautilus.core.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
@@ -54,5 +55,14 @@ public class SolutionListUtils {
 		}
 
 		return visualizedSolutions;
+	}
+	
+    public static List<List<Double>> getDefaultReferencePoints(int numberOfObjectives){
+	    
+	    List<List<Double>> referencePoints = new ArrayList<>();
+	    
+	    referencePoints.add(Collections.nCopies(numberOfObjectives, 0.5));
+	    
+	    return referencePoints;   
 	}
 }

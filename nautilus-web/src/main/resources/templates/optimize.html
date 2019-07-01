@@ -166,38 +166,21 @@
 							</div>
 							
 							<div class="tab-pane fade" id="preferences">
-								 <div th:each="rp,i : ${referencePoints}">
-								    <p th:text="${rp}">
-								 </div>
-								 
-								 <div class="form-group">
-								     <label for="referencePoints">Reference Points</label>
-								    
-								    <div class="input-group mb-2">
-									  <input type="text" class="form-control" readonly th:name="referencePoints">
+								 <div class="form-group" id="reference-points">
+								    <label for="referencePoints">Reference Points</label>
+								    <div class="input-group mb-2"  th:each="rp, i: ${defaultReferencePoints}">
+								       <input type="text" class="form-control" id="referencePoints" readonly th:name="|referencePoints[__${i.index}__]|" th:value="${#strings.arrayJoin(rp, ',')}">
 									  <div class="input-group-append">
-									    <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa fa-trash"></i></button>
+									    <button type="button" class="btn btn-secondary btn-remove-reference-point" ><i class="fa fa-trash"></i></button>
 									  </div>
 									</div>
-								    
-								    <div class="input-group mb-2">
-                                      <input type="text" class="form-control" readonly th:name="referencePoints">
-                                      <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa fa-trash"></i></button>
-                                      </div>
-                                     </div>
-									 
+									
 									 <span class="text-danger" th:if="${#fields.hasErrors('referencePoints')}" th:errors="*{referencePoints}"></span>
-									 <a class="btn btn-outline-secondary btn-sm" href="#" th:text="#{btn.new}"></a>
+									
                                  </div>
                                  
-							
-								<!-- <div class="form-group">
-									<label for="referencePoints">Reference Points</label>
-								    <textarea class="form-control" rows="5" th:field="*{referencePoints}"></textarea>
-								    <small class="form-text text-muted">Use ';' to separate the values and provide a RP by line</small>
-								    <span class="text-danger" th:if="${#fields.hasErrors('referencePoints')}" th:errors="*{referencePoints}"></span>
-								</div> -->
+                                  <a id="btn-add-reference-point" class="btn btn-secondary btn-sm mb-2" href="#" th:text="#{btn.new}"></a>
+                                 
 								<div class="form-group">
 									<label for="epsilon" th:text="#{execution.epsilon}"></label>
 									<input type="number" class="form-control" th:field="*{epsilon}" th:validation="epsilon"/>
@@ -214,8 +197,9 @@
 			</div>
 		</div>
 	
+	   <div th:replace="fragments/modal/upload-reference-point"></div>
 		<div th:replace="fragments/footer :: footer"></div>
-		<!-- <script type="text/javascript" th:src="@{/js/controller/optimize.js}"></script> -->
+		<script type="text/javascript" th:src="@{/js/controller/optimize.js}"></script>
 	</body>
 
 </html>

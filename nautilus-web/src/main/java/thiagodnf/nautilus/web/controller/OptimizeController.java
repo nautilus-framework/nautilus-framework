@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.dto.ContinueDTO;
 import thiagodnf.nautilus.web.dto.ParametersDTO;
@@ -75,7 +76,7 @@ public class OptimizeController {
             throw new InstanceNotFoundException();
         }
 		
-		User user = securityService.getLoggedUser().getUser(); 
+        User user = securityService.getLoggedUser().getUser(); 
 		
 		model.addAttribute("userId", user.getId());
 		model.addAttribute("problem", problem);
@@ -85,6 +86,7 @@ public class OptimizeController {
 		model.addAttribute("mutations", pluginService.getMutations());
 		model.addAttribute("selections", pluginService.getSelections());
 		model.addAttribute("parametersDTO", parametersDTO);
+		model.addAttribute("defaultReferencePoints", SolutionListUtils.getDefaultReferencePoints(problem.getObjectives().size()));
 		
 		return "optimize";
 	}
@@ -118,7 +120,7 @@ public class OptimizeController {
         execution.setMutationId(parametersDTO.getMutationId());
         execution.setMutationProbability(parametersDTO.getMutationProbability());
         execution.setMutationDistribution(parametersDTO.getMutationDistribution());
-        //execution.setReferencePoints(parametersDTO.getReferencePoints());
+        execution.setReferencePoints(parametersDTO.getReferencePoints());
         execution.setEpsilon(parametersDTO.getEpsilon());
         execution.setObjectiveIds(parametersDTO.getObjectiveIds());
         execution.setVisibility(Visibility.PRIVATE);

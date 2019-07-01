@@ -18,6 +18,7 @@ import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.normalizer.ByParetoFrontValuesNormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.remover.ObjectivesRemoverExtension;
+import thiagodnf.nautilus.web.annotation.ContainsNotBlank;
 import thiagodnf.nautilus.web.annotation.HTMLAutoComplete;
 import thiagodnf.nautilus.web.annotation.HTMLAutoFocus;
 import thiagodnf.nautilus.web.annotation.HTMLReadonly;
@@ -102,13 +103,15 @@ public class ParametersDTO {
 	
 	@DecimalMin("0.0")
 	@DecimalMax("1.0")
-	@HTMLStep(0.001)
+	@HTMLStep(0.00001)
     @HTMLRequired
     @HTMLAutoComplete("off")
     @HTMLSpellCheck("false")
 	private double epsilon = 0.001;
 	
-	private List<String> referencePoints = new ArrayList<>();
+	@NotNull
+	@ContainsNotBlank
+	private List<List<Double>> referencePoints = new ArrayList<>();
 	
 	@NotNull
 	@Size(min = 1)
