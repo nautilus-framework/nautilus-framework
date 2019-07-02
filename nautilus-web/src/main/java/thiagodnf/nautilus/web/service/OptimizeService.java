@@ -113,6 +113,7 @@ public class OptimizeService {
             sendProgress(email, itemQueue);
             
             setStatus(itemQueue, "execution.status.initializing");
+            sendProgress(email, itemQueue);
             
             ProblemExtension problemExtension = pluginService.getProblemById(execution.getProblemId());
             
@@ -152,6 +153,7 @@ public class OptimizeService {
                 List<NSolution<?>> rawSolutions = null;
                 
                 setStatus(itemQueue, "execution.status.optimizing");
+                sendProgress(email, itemQueue);
                 
                 Algorithm<?> algorithm = algorithmExtension.getAlgorithm(builder);
     
@@ -185,6 +187,7 @@ public class OptimizeService {
                 }
                 
                 setStatus(itemQueue, "execution.status.preparing");
+                sendProgress(email, itemQueue);
     
                 for (int i = 0; i < rawSolutions.size(); i++) {
                     rawSolutions.get(i).getAttributes().clear();
@@ -196,11 +199,11 @@ public class OptimizeService {
                 execution.setExecutionTime(computingTime);
                 
                 setStatus(itemQueue, "execution.status.saving");
+                sendProgress(email, itemQueue);
                 
                 executionRepository.save(execution);
                 
                 setStatus(itemQueue, "execution.status.done");
-                
                 itemQueue.setProgress(100);
                 sendProgress(email, itemQueue);
             } catch (Exception ex) {
