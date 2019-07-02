@@ -110,11 +110,9 @@ public class OptimizeService {
         
         Callable<Execution> callableTask = () -> {
             
-            setStatus(itemQueue, "execution.status.running");
-            
             sendProgress(email, itemQueue);
             
-            System.out.println("Initializing...");
+            setStatus(itemQueue, "execution.status.initializing");
             
             ProblemExtension problemExtension = pluginService.getProblemById(execution.getProblemId());
             
@@ -141,8 +139,6 @@ public class OptimizeService {
             builder.setReferencePoints(Converter.toReferencePoints(execution.getReferencePoints()));
             builder.setEpsilon(execution.getEpsilon());
             
-            System.out.println("Loading last execution if it exists...");
-            
             builder.setInitialPopulation(getInitialPopulation(builder.getProblem(), execution.getLastExecutionId()));
             
             builder.setSelection(selectionExtension.getSelection());
@@ -155,7 +151,7 @@ public class OptimizeService {
             
                 List<NSolution<?>> rawSolutions = null;
                 
-                System.out.println("Optimizing...");
+                setStatus(itemQueue, "execution.status.optimizing");
                 
                 Algorithm<?> algorithm = algorithmExtension.getAlgorithm(builder);
     
@@ -187,8 +183,8 @@ public class OptimizeService {
                 } else {
                     rawSolutions = (List<NSolution<?>>) algorithm.getResult();
                 }
-    
-                System.out.println("Setting ids to solutions...");
+                
+                setStatus(itemQueue, "execution.status.preparing");
     
                 for (int i = 0; i < rawSolutions.size(); i++) {
                     rawSolutions.get(i).getAttributes().clear();
@@ -196,19 +192,17 @@ public class OptimizeService {
                     rawSolutions.get(i).setAttribute(SolutionAttribute.OPTIMIZED_OBJECTIVES, Converter.toJson(execution.getObjectiveIds()));
                 }
                 
-                System.out.println("Preparing the results...");
-                
                 execution.setSolutions(rawSolutions);
                 execution.setExecutionTime(computingTime);
-               
-                setStatus(itemQueue, "execution.status.done");
-                itemQueue.setProgress(100);
                 
-                sendProgress(email, itemQueue);
-                
-                System.out.println("Saving the execution to database...");
+                setStatus(itemQueue, "execution.status.saving");
                 
                 executionRepository.save(execution);
+                
+                setStatus(itemQueue, "execution.status.done");
+                
+                itemQueue.setProgress(100);
+                sendProgress(email, itemQueue);
             } catch (Exception ex) {
                 
                 executionRepository.deleteById(execution.getId());
