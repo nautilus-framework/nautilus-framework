@@ -76,7 +76,9 @@ public class OptimizeController {
             throw new InstanceNotFoundException();
         }
 		
-        User user = securityService.getLoggedUser().getUser(); 
+        User user = securityService.getLoggedUser().getUser();
+        
+        parametersDTO.setReferencePoints(SolutionListUtils.getDefaultReferencePoints(problem.getObjectives().size()));
 		
 		model.addAttribute("userId", user.getId());
 		model.addAttribute("problem", problem);
@@ -86,7 +88,6 @@ public class OptimizeController {
 		model.addAttribute("mutations", pluginService.getMutations());
 		model.addAttribute("selections", pluginService.getSelections());
 		model.addAttribute("parametersDTO", parametersDTO);
-		model.addAttribute("defaultReferencePoints", SolutionListUtils.getDefaultReferencePoints(problem.getObjectives().size()));
 		
 		return "optimize";
 	}

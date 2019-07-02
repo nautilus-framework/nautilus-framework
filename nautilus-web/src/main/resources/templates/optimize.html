@@ -167,9 +167,9 @@
 							
 							<div class="tab-pane fade" id="preferences">
 								 <div class="form-group" id="reference-points">
-								    <label for="referencePoints">Reference Points</label>
-								    <div class="input-group mb-2"  th:each="rp, i: ${defaultReferencePoints}">
-								       <input type="text" class="form-control" id="referencePoints" readonly th:name="|referencePoints[__${i.index}__]|" th:value="${#strings.arrayJoin(rp, ',')}">
+								    <label for="referencePoints" th:text="#{execution.reference-points}"></label>
+								    <div class="input-group mb-2"  th:each="rp, i: *{referencePoints}">
+								        <input type="text" class="form-control" id="referencePoints" readonly th:name="|referencePoints[__${i.index}__]|" th:value="${#strings.arrayJoin(rp, ',')}">
 									  <div class="input-group-append">
 									    <button type="button" class="btn btn-secondary btn-remove-reference-point" ><i class="fa fa-trash"></i></button>
 									  </div>
