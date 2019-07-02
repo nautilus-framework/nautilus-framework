@@ -36,6 +36,7 @@ import thiagodnf.nautilus.plugin.extension.SelectionExtension;
 import thiagodnf.nautilus.web.dto.ExecutionQueueDTO;
 import thiagodnf.nautilus.web.dto.UserDTO;
 import thiagodnf.nautilus.web.model.Execution;
+import thiagodnf.nautilus.web.repository.ExecutionRepository;
 
 @Component
 public class OptimizeService {
@@ -59,6 +60,9 @@ public class OptimizeService {
     private SimpMessageSendingOperations messaging;
     
     @Autowired
+    private ExecutionRepository executionRepository;
+    
+    @Autowired
     private ExecutionService executionService;
     
     @Autowired
@@ -68,7 +72,7 @@ public class OptimizeService {
     private UserService userService;
     
     @Autowired
-    private Map<String, String> loggedUsers;
+    private Map<String, List<String>> loggedUsers;
     
     @Scheduled(fixedRate = 1000)
     public void execute() {
@@ -204,10 +208,10 @@ public class OptimizeService {
                 
                 System.out.println("Saving the execution to database...");
                 
-                executionService.save(execution);
+                executionRepository.save(execution);
             } catch (Exception ex) {
                 
-                executionService.deleteById(execution.getId());
+                executionRepository.deleteById(execution.getId());
 
                 itemQueue.setStatus(ex.getMessage());
                 itemQueue.setProgress(100);
@@ -257,23 +261,23 @@ public class OptimizeService {
     
     public void sendError(String email, ExecutionQueueDTO itemQueue) {
         
-        String sessionId = loggedUsers.get(email);
-        
-        messaging.convertAndSendToUser(sessionId,"/execution/queue/error", itemQueue); 
+        for (String sessionId : loggedUsers.get(email)) {
+            messaging.convertAndSendToUser(sessionId,"/execution/queue/error", itemQueue);
+        }
     }
     
     public void sendAppend(String email, ExecutionQueueDTO itemQueue) {
         
-        String sessionId = loggedUsers.get(email);
-        
-        messaging.convertAndSendToUser(sessionId,"/execution/queue/append", itemQueue);
+        for (String sessionId : loggedUsers.get(email)) {
+            messaging.convertAndSendToUser(sessionId, "/execution/queue/append", itemQueue);
+        }
     }
     
     public void sendProgress(String email, ExecutionQueueDTO itemQueue) {
         
-        String sessionId = loggedUsers.get(email);
-        
-        messaging.convertAndSendToUser(sessionId,"/execution/queue/progress", itemQueue);     
+        for (String sessionId : loggedUsers.get(email)) {
+            messaging.convertAndSendToUser(sessionId,"/execution/queue/progress", itemQueue);
+        }
     }
     
     public void setStatus(ExecutionQueueDTO itemQueue, String status, String... args) {

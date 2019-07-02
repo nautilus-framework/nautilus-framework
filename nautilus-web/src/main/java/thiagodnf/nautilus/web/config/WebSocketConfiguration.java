@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.config;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer{
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketConfiguration.class);
     
     @Bean
-    public Map<String, String> loggedUsers() {
+    public Map<String, List<String>> loggedUsers() {
         return new HashMap<>();
     }
     
@@ -80,13 +81,19 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer{
     public class WebSocketOnConnected implements ApplicationListener<SessionConnectEvent> {
 
         @Autowired
-        private Map<String, String> loggedUsers;
+        private Map<String, List<String>> loggedUsers;
 
         public void onApplicationEvent(SessionConnectEvent event) {
 
             StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
 
-            loggedUsers.put(sha.getUser().getName(), sha.getSessionId());
+            String key = sha.getUser().getName();
+
+            if (!loggedUsers.containsKey(key)) {
+                loggedUsers.put(key, new ArrayList<>());
+            }
+
+            loggedUsers.get(key).add(sha.getSessionId());
 
             LOGGER.debug("User {} Connected", sha.getSessionId());
         }
@@ -95,10 +102,19 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer{
     @Configuration
     public class WebSocketOnDisconnected implements ApplicationListener<SessionDisconnectEvent> {
 
+        @Autowired
+        private Map<String, List<String>> loggedUsers;
+        
         @Override
         public void onApplicationEvent(SessionDisconnectEvent event) {
 
             StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
+            
+            String key = sha.getUser().getName();
+
+            if (loggedUsers.containsKey(key)) {
+                loggedUsers.get(key).remove(sha.getSessionId());
+            }
 
             LOGGER.debug("User {} Disconnected", sha.getSessionId());
         }
