@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.uma.jmetal.util.comparator.ObjectiveComparator;
+
 import thiagodnf.nautilus.core.encoding.NSolution;
 
 public class SolutionListUtils {
@@ -65,4 +67,36 @@ public class SolutionListUtils {
 	    
 	    return referencePoints;   
 	}
+    
+    public static double[] getMinimumObjectiveValues(List<? extends NSolution<?>> population) {
+
+        int numberOfObjectives = population.get(0).getNumberOfObjectives();
+
+        double[] fmin = new double[numberOfObjectives];
+
+        for (int i = 0; i < numberOfObjectives; i++) {
+
+            Collections.sort(population, new ObjectiveComparator<NSolution<?>>(i));
+
+            fmin[i] = population.get(0).getObjective(i);
+        }
+
+        return fmin;
+    }
+
+    public static double[] getMaximumObjectiveValues(List<? extends NSolution<?>> population) {
+
+        int numberOfObjectives = population.get(0).getNumberOfObjectives();
+
+        double[] fmax = new double[numberOfObjectives];
+
+        for (int i = 0; i < numberOfObjectives; i++) {
+
+            Collections.sort(population, new ObjectiveComparator<NSolution<?>>(i));
+
+            fmax[i] = population.get(population.size() - 1).getObjective(i);
+        }
+
+        return fmax;
+    }
 }

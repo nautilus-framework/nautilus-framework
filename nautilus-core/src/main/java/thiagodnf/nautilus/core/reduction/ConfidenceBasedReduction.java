@@ -8,9 +8,7 @@ import java.util.Map;
 
 import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.core.util.RandomUtils;
-import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 
 public class ConfidenceBasedReduction extends AbstractReduction {
@@ -45,9 +43,10 @@ public class ConfidenceBasedReduction extends AbstractReduction {
     public List<RankingItem> execute(List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation) {
 
 	    List<String> optimizedObjectives = SolutionListUtils.getObjectives(population.get(0));
+
+	    
         
-//      List<NSolution<?>> selectedSolutions = SolutionListUtils.getSelectedSolutions(population); 
-        
+	    
         double[] maxWorst = new double[optimizedObjectives.size()];
         double[] maxBest = new double[optimizedObjectives.size()];
 
@@ -56,30 +55,25 @@ public class ConfidenceBasedReduction extends AbstractReduction {
             maxBest[i] = Double.NEGATIVE_INFINITY;
         }
         
-//      for (NSolution<?> solution : selectedSolutions) {
-//
-//          for (int i = 0; i < problem.getNumberOfObjectives(); i++) {
-//
-//              Object value = solution.getAttribute(SolutionAttribute.FEEDBACK_FOR_OBJECTIVE + i);
-//
-//              if (value == null) {
-//                  value = 0.0;
-//              }
-//              
-//              if (solution.getObjective(i) == 0.0) {
-//                  best[i] = Math.max(best[i], (double) value);
-//              } else if (solution.getObjective(i) == 1.0) {
-//                  worst[i] = Math.max(worst[i], (double) value);
-//              }
-//          }
-//      }
-        
         for (ItemForEvaluation item : itemsForEvaluation) {
 
             if (item.getObjectiveValue() == 0.0) {
                 maxBest[item.getObjectiveIndex()] = Math.max(maxBest[item.getObjectiveIndex()], item.getFeedback());
             } else if (item.getObjectiveValue() == 1.0) {
                 maxWorst[item.getObjectiveIndex()] = Math.max(maxWorst[item.getObjectiveIndex()], item.getFeedback());
+            }
+        }
+        
+        double[] minValues = SolutionListUtils.getMinimumObjectiveValues(population);
+        double[] maxValues = SolutionListUtils.getMaximumObjectiveValues(population);
+        
+        for (int i = 0; i < optimizedObjectives.size(); i++) {
+            
+            if(minValues[i] == maxValues[i] && minValues[i] == 0.0) {
+                maxWorst[i] = maxBest[i];
+            }
+            if(minValues[i] == maxValues[i] && minValues[i] == 1.0) {
+                maxBest[i] = maxWorst[i];
             }
         }
         
