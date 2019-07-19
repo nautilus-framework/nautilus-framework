@@ -73,7 +73,7 @@ public class ConfidenceBasedReduction extends AbstractReduction {
                 maxWorst[i] = maxBest[i];
             }
             if(minValues[i] == maxValues[i] && minValues[i] == 1.0) {
-                maxBest[i] = maxWorst[i];
+                maxBest[i] = maxWorst[i] = 0.0;
             }
         }
         
