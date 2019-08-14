@@ -74,6 +74,7 @@ public class ByParetoFrontValuesNormalize extends AbstractNormalize {
 		
 		if (min == max) {
 			return min;
+//		    return 0.0;
 		}
 		
 		return Normalizer.normalize(value, min, max);

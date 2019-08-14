@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
@@ -74,11 +75,14 @@ public class SolutionListUtils {
 
         double[] fmin = new double[numberOfObjectives];
 
-        for (int i = 0; i < numberOfObjectives; i++) {
+        for (int i = 0; i < fmin.length; i++) {
+            fmin[i] = Double.POSITIVE_INFINITY;
+        }
 
-            Collections.sort(population, new ObjectiveComparator<NSolution<?>>(i));
-
-            fmin[i] = population.get(0).getObjective(i);
+        for (NSolution<?> sol : population) {
+            for (int i = 0; i < numberOfObjectives; i++) {
+                fmin[i] = Math.min(fmin[i], sol.getObjective(i));
+            }
         }
 
         return fmin;
@@ -90,11 +94,14 @@ public class SolutionListUtils {
 
         double[] fmax = new double[numberOfObjectives];
 
-        for (int i = 0; i < numberOfObjectives; i++) {
+        for (int i = 0; i < fmax.length; i++) {
+            fmax[i] = Double.NEGATIVE_INFINITY;
+        }
 
-            Collections.sort(population, new ObjectiveComparator<NSolution<?>>(i));
-
-            fmax[i] = population.get(population.size() - 1).getObjective(i);
+        for (NSolution<?> sol : population) {
+            for (int i = 0; i < numberOfObjectives; i++) {
+                fmax[i] = Math.max(fmax[i], sol.getObjective(i));
+            }
         }
 
         return fmax;

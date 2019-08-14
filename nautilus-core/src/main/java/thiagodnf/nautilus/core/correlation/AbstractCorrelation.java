@@ -64,6 +64,10 @@ public abstract class AbstractCorrelation {
 	
 	public List<CorrelationItem> execute(List<AbstractObjective> objectives, List<NSolution<?>> solutions) {
 		
+        if (solutions.size() <= 1) {
+            return new ArrayList<>();
+        }
+	    
 		List<CorrelationItem> items = new ArrayList<>();
 		
 		if(!isEnabled()) {

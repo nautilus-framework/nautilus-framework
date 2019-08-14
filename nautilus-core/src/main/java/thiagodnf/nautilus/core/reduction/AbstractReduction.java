@@ -4,6 +4,7 @@ import java.util.List;
 
 import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 
 public abstract class AbstractReduction {
@@ -35,12 +36,17 @@ public abstract class AbstractReduction {
 		 * @param objectiveIndex the objective index
 		 * @param objectiveValue the objective value
 		 */
-		public ItemForEvaluation(int solutionIndex, int objectiveIndex, double objectiveValue) {
+        public ItemForEvaluation(int solutionIndex, int objectiveIndex, double objectiveValue) {
+            this(solutionIndex, objectiveIndex, objectiveValue, 0.0);
+        }
 
-			this.solutionIndex = solutionIndex;
-			this.objectiveIndex = objectiveIndex;
-			this.objectiveValue = objectiveValue;
-		}
+        public ItemForEvaluation(int solutionIndex, int objectiveIndex, double objectiveValue, double feedback) {
+
+            this.solutionIndex = solutionIndex;
+            this.objectiveIndex = objectiveIndex;
+            this.objectiveValue = objectiveValue;
+            this.feedback = feedback;
+        }
 
 		/**
 		 * Constructor
@@ -138,9 +144,9 @@ public abstract class AbstractReduction {
 		return Converter.toJson(this);
 	}
 	
-	public abstract List<RankingItem> execute(List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation);
+	public abstract List<RankingItem> execute(List<AbstractObjective> objectives, List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation);
 	    
-	public List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation){
-	    return null;
-	}
+//	public List<RankingItem> execute(NProblem<?> problem, List<NSolution<?>> population, List<ItemForEvaluation> itemsForEvaluation){
+//	    return null;
+//	}
 }
