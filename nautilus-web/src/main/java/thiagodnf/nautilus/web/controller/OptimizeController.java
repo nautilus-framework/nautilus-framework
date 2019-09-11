@@ -118,6 +118,10 @@ public class OptimizeController {
             return form(parametersDTO.getProblemId(), parametersDTO.getInstance(), parametersDTO, model);
         }
         
+        if (parametersDTO.getAlgorithmId().equalsIgnoreCase("manually")) {
+            throw new RuntimeException("You must not select this algorithm");
+        }
+        
         LOGGER.debug("Saving {}", Converter.toJson(parametersDTO));
         
         User user = securityService.getLoggedUser().getUser();
