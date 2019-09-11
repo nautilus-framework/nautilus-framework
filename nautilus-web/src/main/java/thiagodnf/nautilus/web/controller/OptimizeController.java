@@ -1,7 +1,10 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -16,12 +19,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.uma.jmetal.operator.impl.crossover.SinglePointCrossover;
+import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.binarySet.BinarySet;
 
+import thiagodnf.nautilus.core.encoding.NProblem;
+import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
+import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
+import thiagodnf.nautilus.core.model.Instance;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.core.util.SolutionListUtils;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.plugin.extension.crossover.SinglePointCrossoverExtension;
+import thiagodnf.nautilus.plugin.extension.mutation.BitFlipMutationExtension;
+import thiagodnf.nautilus.plugin.extension.selection.BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension;
 import thiagodnf.nautilus.web.dto.ContinueDTO;
 import thiagodnf.nautilus.web.dto.ParametersDTO;
 import thiagodnf.nautilus.web.exception.InstanceNotFoundException;
@@ -163,5 +180,129 @@ public class OptimizeController {
         optimizeService.cancel(executionId);
         
         return Converter.toJson("");
+    }
+    
+    @GetMapping("/{problemId:.+}/{instance:.+}/manually")
+    public String manually( 
+            @PathVariable String problemId, 
+            @PathVariable String instance,
+            Model model){
+        
+        ProblemExtension problemExtension = pluginService.getProblemById(problemId);
+
+        if (!fileService.containsInstance(problemId, instance)) {
+            throw new InstanceNotFoundException();
+        }
+        
+        Path path = fileService.getInstance(problemId, instance);
+        
+        Instance inst = problemExtension.getInstance(path);
+        
+        List<AbstractObjective> objectives = problemExtension.getObjectives();
+        
+        NProblem<?> p = (NProblem<?>) problemExtension.getProblem(inst, objectives);
+        Solution<?> solution = (Solution<?>) p.createSolution();
+        
+        for (int i = 0; i < solution.getNumberOfVariables(); i++) {
+
+            if(solution instanceof NBinarySolution) {
+                
+                NBinarySolution sol = (NBinarySolution) solution;
+
+                BinarySet set = new BinarySet(sol.getTotalNumberOfBits());
+                
+                for (int j = 0; j < sol.getTotalNumberOfBits(); j++) {
+                    set.set(j, true);
+                }
+                
+                ((NBinarySolution) solution).setVariableValue(i, set);
+            }
+        }
+        
+        model.addAttribute("execution", new Execution());
+        model.addAttribute("objectives", objectives);
+        model.addAttribute("solution", solution);
+        model.addAttribute("variables", problemExtension.getVariablesAsList(inst, solution));
+        
+        return "manually";
+    }
+    
+    @PostMapping("/{problemId:.+}/{instance:.+}/manually/save")
+    public String manuallySave( 
+            @PathVariable String problemId, 
+            @PathVariable String instance,
+            @RequestParam List<String> selectedVariables,
+            RedirectAttributes ra,
+            Model model){
+        
+        if (selectedVariables.isEmpty()) {
+            throw new RuntimeException("You must select at least one variable");
+        }
+
+        ProblemExtension problemExtension = pluginService.getProblemById(problemId);
+
+        if (!fileService.containsInstance(problemId, instance)) {
+            throw new InstanceNotFoundException();
+        }
+
+        User user = securityService.getLoggedUser().getUser();
+        
+        Path path = fileService.getInstance(problemId, instance);
+
+        Instance inst = problemExtension.getInstance(path);
+
+        List<AbstractObjective> objectives = problemExtension.getObjectives();
+
+        NProblem<?> p = (NProblem<?>) problemExtension.getProblem(inst, objectives);
+
+        
+        Execution execution = new Execution();
+        
+        execution.setUserId(user.getId());
+        execution.setAlgorithmId("manually");
+        execution.setProblemId(problemExtension.getId());
+        execution.setInstance(instance);
+        execution.setObjectiveIds(objectives.stream().map(e -> e.getId()).collect(Collectors.toList()));
+        execution.setCrossoverDistribution(20.0);
+        execution.setCrossoverProbability(0.9);
+        execution.setMutationDistribution(20.0);
+        execution.setMutationProbability(0.9);
+        execution.setEpsilon(0.001);
+        execution.setSelectionId(new BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension().getId());
+        
+        if (p instanceof NBinaryProblem) {
+            
+            execution.setCrossoverId(new SinglePointCrossoverExtension().getId());
+            execution.setMutationId(new BitFlipMutationExtension().getId());
+            
+            NBinaryProblem pro = (NBinaryProblem) p;
+            
+            NBinarySolution sol = (NBinarySolution) p.createSolution();
+
+            BinarySet set = new BinarySet(sol.getTotalNumberOfBits());
+
+            set.clear();
+
+            for (String variableIndex : selectedVariables) {
+
+                int index = Integer.valueOf(variableIndex);
+
+                set.set(index, true);
+            }
+
+            sol.setVariableValue(0, set);
+            
+            pro.evaluate(sol);
+            
+            sol.getAttributes().clear();
+            sol.setAttribute(SolutionAttribute.ID, String.valueOf(0));
+            sol.setAttribute(SolutionAttribute.OPTIMIZED_OBJECTIVES, Converter.toJson(execution.getObjectiveIds()));
+            
+            execution.setSolutions(Arrays.asList(sol));
+        }
+        
+        executionService.save(execution);
+        
+        return redirect.to("/home").withSuccess(ra, Messages.EXECUTION_UPLOADED_SUCCESS);
     }
 }

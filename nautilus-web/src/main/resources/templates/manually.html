@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+	<head th:replace="fragments/head :: title('Solution '+${solutionIndex})"></head>
+
+	<body>
+	
+		<div th:replace="fragments/navbar :: default('home')"></div>
+	
+		<div class="page-header">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 path">
+						<h6 class="title">
+							<a th:href="@{/}" th:text="#{nav.home}"></a>
+							<span class="path-divider">/</span> 
+							<a th:href="@{#}">Manually</a>
+                           
+						</h6>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<div class="container">
+			<div class="row">
+				
+								<div class="col-7">
+								    <form action="#" th:action="@{|/optimize/${problemId}/${instance}/manually/save|}" method="post" th:object="${userFeedbackDTO}">
+	                                    <table id="table-variables"
+											class="table table-striped table-hover table-sm "
+											style="width: 100%">
+											<thead>
+												<tr>
+												     <th class="no-orderable"></th>
+												     <th width="50px">#</th>
+													 <th th:text="#{nav.variable}"></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="value,i : ${variables}">
+												 <td class="no-orderable"><input class="checkbox-variable" type="checkbox" th:value="${i.index}" name="selectedVariables"/></td>
+												 <td th:text="${i.count}"></td>
+													<td  th:text="${value}"/>
+												</tr>
+											</tbody>
+										</table>
+									<button type="submit" class="btn btn-success mt-4" id="btn-feedback">Save</button>
+                                   </form>
+								</div>
+								<div class="col-5">
+									
+									
+								</div>
+							</div>
+						</div>
+					
+		<div th:replace="fragments/footer :: footer"></div>
+		<script type="text/javascript" th:src="@{/js/controller/manually.js}"></script>
+	</body>
+
+</html>

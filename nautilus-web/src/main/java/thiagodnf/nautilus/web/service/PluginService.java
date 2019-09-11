@@ -27,6 +27,7 @@ import thiagodnf.nautilus.plugin.extension.RemoverExtension;
 import thiagodnf.nautilus.plugin.extension.SelectionExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.BruteForceSearchAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.GAAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.ManuallyExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIIAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
@@ -143,6 +144,7 @@ public class PluginService {
 		addAlgorithmExtension(new SPEA2AlgorithmExtension());
 		addAlgorithmExtension(new NSGAIIWithConfidenceBasedReductionAlgorithmExtension());
 		addAlgorithmExtension(new NSGAIIWithRandomReductionAlgorithmExtension());
+		addAlgorithmExtension(new ManuallyExtension());
 		
 		LOGGER.info("Done. Loading crossover extensions from classpath");
 		

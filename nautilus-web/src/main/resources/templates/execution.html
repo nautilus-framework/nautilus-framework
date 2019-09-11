@@ -30,7 +30,7 @@
 				<div class="col-12">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}" th:text="#{nav.chart}"></a>
+							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 1}" th:text="#{nav.chart}"></a>
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#solutions" th:text="#{nav.solutions}"></a>
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#correlation" th:text="#{nav.correlation}"></a>
 							<a class="nav-item nav-link" role="tab" data-toggle="tab" href="#parameters" th:text="#{nav.parameters}"></a>
@@ -39,7 +39,7 @@
 					</nav>
 					<!-- Tab panes -->
 					<div class="tab-content">
-						<div role="tabpanel" class="tab-pane fade" id="scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 2}">
+						<div role="tabpanel" class="tab-pane fade" id="scatter-chart" th:if="${objectives.size() >= 2 and solutions.size() >= 1}">
 							<div id="execution-chart"></div>
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="solutions">
