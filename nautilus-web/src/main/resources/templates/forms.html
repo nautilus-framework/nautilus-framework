@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:replace="fragments/head :: title(#{app.name})"></head>
+	<body class="light-gray">
+		<div th:replace="fragments/navbar :: default('home')"></div>
+	
+		<div class="container">
+			<br>
+			<h4>Questionnaires</h4>
+			<br/>
+			<ol>
+				<li class="mb-2"><a target="_blank" href="https://forms.gle/rFjky21vwAhEkU519">Pre-Study Questionnaire | Profile</a></li>
+				<li class="mb-2"><a target="_blank" href="https://forms.gle/ioNaBY1CN2Amhith7">Pre-Study Questionnaire | Toy Example</a></li>
+				<li class="mb-2"><a target="_blank" href="https://forms.gle/hiG9NgSMpA12Bh8o9">Questionnaire | Nautilus</a></li>
+				<li class="mb-2"><a target="_blank" href="https://forms.gle/7RqALEN6t3ieT54t8">Questionnaire | Algorithms | Group 1</a></li>
+				<li class="mb-2"><a target="_blank" href="https://forms.gle/BTZrjr5Cn43qDYPi8">Questionnaire | Algorithms | Group 2</a></li>
+				<li class="mb-2"><a target="_blank" href="https://forms.gle/1XPKsvag5xacfeif9">Questionnaire | Algorithms | Group 3</a></li>
+				<li class="mb-2"><a target="_blank" href="https://forms.gle/HPtv4Xh18if8F9Ny6">Questionnaire | Algorithms | Group 4</a></li>
+			</ol>
+		</div>
+	
+		<div th:replace="fragments/footer :: footer"></div>
+	</body>
+</html>

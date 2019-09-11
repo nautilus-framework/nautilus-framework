@@ -22,4 +22,9 @@ public class IndexController {
 		
 		return "index";
 	}
+	
+	@GetMapping("/forms")
+    public String forms(Model model) {
+	    return "forms";
+	}
 }
