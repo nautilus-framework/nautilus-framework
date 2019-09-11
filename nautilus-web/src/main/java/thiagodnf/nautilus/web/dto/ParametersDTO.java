@@ -47,7 +47,8 @@ public class ParametersDTO {
     @HTMLRequired
     @HTMLAutoComplete("off")
 	@HTMLSpellCheck("false")
-	private int populationSize = 100;
+	@HTMLReadonly
+	private int populationSize = 112;
 	
 	@Min(100)
 	@Max(100000000)
@@ -55,7 +56,8 @@ public class ParametersDTO {
 	@HTMLRequired
     @HTMLAutoComplete("off")
 	@HTMLSpellCheck("false")
-	private int maxEvaluations = 100000;
+	@HTMLReadonly
+	private int maxEvaluations = 134400;
 	
 	@NotBlank
 	private String algorithmId = new NSGAIIAlgorithmExtension().getId();

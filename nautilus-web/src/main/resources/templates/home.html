@@ -29,8 +29,9 @@
 									<tr>
 										<th width="25px">#</th>
 										<th th:text="#{execution.title}"></th>
-										<th width="200px" th:text="#{execution.problem}"></th>
-										<th width="200px" th:text="#{execution.instance}"></th>
+										<th th:text="#{execution.problem}"></th>
+										<th th:text="#{execution.instance}"></th>
+										<th th:text="#{execution.algorithm}"></th>
 									    <th width="8px" class="no-orderable"></th>
 									</tr>
 								</thead>
@@ -45,6 +46,7 @@
 										</td>
 										<td th:text="${execution.problemId}"></td>			
 										<td th:text="${execution.instance}"></td>
+										<td th:text="${execution.algorithmId}"></td>
 										<td>
 											<div class="dropdown float-right">
 											  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

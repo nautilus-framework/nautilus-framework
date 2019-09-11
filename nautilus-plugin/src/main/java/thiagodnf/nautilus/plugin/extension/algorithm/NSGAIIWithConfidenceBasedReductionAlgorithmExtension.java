@@ -20,7 +20,7 @@ public class NSGAIIWithConfidenceBasedReductionAlgorithmExtension extends Abstra
 
 	@Override
 	public String getName() {
-		return "NSGA-II with Confidence-based Reduction";
+		return "COR-NSGA-II";
 	}
 	
 	public AbstractReduction getReduction() {

@@ -15,6 +15,8 @@ public class ExecutionSimplifiedDTO {
 	
 	private String instance;
 	
+	private String algorithmId;
+	
 	private Date creationDate;
 }
 

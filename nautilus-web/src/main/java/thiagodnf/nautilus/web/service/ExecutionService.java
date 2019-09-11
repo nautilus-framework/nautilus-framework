@@ -111,6 +111,7 @@ public class ExecutionService {
             execution.getTitle(), 
             execution.getProblemId(),
             execution.getInstance(),
+            execution.getAlgorithmId(),
             execution.getCreationDate()
         );
     }
