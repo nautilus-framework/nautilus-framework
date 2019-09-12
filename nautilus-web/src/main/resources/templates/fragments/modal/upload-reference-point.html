@@ -19,9 +19,14 @@
 							
 							     <div class="input-group mb-2" th:each="objective,i : ${problem.getObjectives()}">
 								  <div class="input-group-prepend" style="width: 80%" >
-								    <span class="input-group-text" th:text="${objective.name}" style="width: 100%"></span>
+								  
+								    
+								    <span class="input-group-text" style="width: 100%">
+								        <input type="checkbox" class="rp-objective" th:data:target-id="|rp-${objective.id}|"> 
+								        <span class="ml-3" th:text="${objective.name}" ></span>
+								    </span>
 								  </div>
-								  <input type="number" class="form-control" th:id="|rp-${objective.id}|" required step="0.1" value="0.0" autocomplete='off' >
+								  <input type="number" class="form-control" disabled th:id="|rp-${objective.id}|" required step="0.1" value="1.0" autocomplete='off' >
 								</div>
 															
 						</div>
