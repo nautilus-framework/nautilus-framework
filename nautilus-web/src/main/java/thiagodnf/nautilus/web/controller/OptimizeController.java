@@ -119,7 +119,7 @@ public class OptimizeController {
         }
         
         if (parametersDTO.getAlgorithmId().equalsIgnoreCase("manually")) {
-            throw new RuntimeException("You must not select this algorithm");
+            return redirect.to("/optimize/" + parametersDTO.getProblemId() + "/" + parametersDTO.getInstance() + "/manually").withNoMessage();
         }
         
         LOGGER.debug("Saving {}", Converter.toJson(parametersDTO));

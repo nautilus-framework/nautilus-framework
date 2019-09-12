@@ -67,5 +67,4 @@ public class InstanceController {
 		
 		return redirect.to("/problems").withSuccess(ra, Messages.FILE_DELETED_SUCCESS, filename);
 	}
-			
 }

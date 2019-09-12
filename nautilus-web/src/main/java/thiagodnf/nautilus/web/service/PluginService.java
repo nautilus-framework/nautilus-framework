@@ -1,5 +1,6 @@
 package thiagodnf.nautilus.web.service;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.binarySet.BinarySet;
 
+import thiagodnf.nautilus.core.encoding.NProblem;
+import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
+import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
+import thiagodnf.nautilus.core.model.Instance;
+import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.CrossoverExtension;
@@ -25,16 +33,10 @@ import thiagodnf.nautilus.plugin.extension.NormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.plugin.extension.RemoverExtension;
 import thiagodnf.nautilus.plugin.extension.SelectionExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.BruteForceSearchAlgorithmExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.GAAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.ManuallyExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIIAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIWithRandomReductionAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.RNSGAIIAlgorithmExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.RandomSearchAlgorithmExtension;
-import thiagodnf.nautilus.plugin.extension.algorithm.SPEA2AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.correlation.KendallCorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.correlation.SpearmanCorrelationExtension;
@@ -135,15 +137,15 @@ public class PluginService {
 		
 		LOGGER.info("Done. Loading algorithms extensions from classpath");
 		
-		addAlgorithmExtension(new BruteForceSearchAlgorithmExtension());
-		addAlgorithmExtension(new GAAlgorithmExtension());
+//		addAlgorithmExtension(new BruteForceSearchAlgorithmExtension());
+//		addAlgorithmExtension(new GAAlgorithmExtension());
 		addAlgorithmExtension(new NSGAIIAlgorithmExtension());
-		addAlgorithmExtension(new NSGAIIIAlgorithmExtension());
-		addAlgorithmExtension(new RandomSearchAlgorithmExtension());
+//		addAlgorithmExtension(new NSGAIIIAlgorithmExtension());
+//		addAlgorithmExtension(new RandomSearchAlgorithmExtension());
 		addAlgorithmExtension(new RNSGAIIAlgorithmExtension());
-		addAlgorithmExtension(new SPEA2AlgorithmExtension());
+//		addAlgorithmExtension(new SPEA2AlgorithmExtension());
 		addAlgorithmExtension(new NSGAIIWithConfidenceBasedReductionAlgorithmExtension());
-		addAlgorithmExtension(new NSGAIIWithRandomReductionAlgorithmExtension());
+//		addAlgorithmExtension(new NSGAIIWithRandomReductionAlgorithmExtension());
 		addAlgorithmExtension(new ManuallyExtension());
 		
 		LOGGER.info("Done. Loading crossover extensions from classpath");
@@ -441,5 +443,42 @@ public class PluginService {
 
         throw new RuntimeException("The removers was not found");
     }
+	
+	
+	public Solution<?> getSolution(String problemId, String instanceId, List<String> variables){
+	    
+        Path path = fileService.getInstance(problemId, instanceId);
+
+        ProblemExtension problemExtension = getProblemById(problemId);
+
+        Instance instance = problemExtension.getInstance(path);
+
+        List<AbstractObjective> objectives = problemExtension.getObjectives();
+
+        NProblem<?> problem = (NProblem<?>) problemExtension.getProblem(instance, objectives);
+	    
+	    if (problem instanceof NBinaryProblem) {
+            
+            NBinaryProblem pro = (NBinaryProblem) problem;
+
+            NBinarySolution sol = (NBinarySolution) pro.createSolution();
+
+            BinarySet set = new BinarySet(sol.getTotalNumberOfBits());
+
+            set.clear();
+
+            for (String variable : variables) {
+                set.set(Integer.valueOf(variable), true);
+            }
+
+            sol.setVariableValue(0, set);
+            
+            pro.evaluate(sol);
+           
+            return sol;
+        }
+	    
+	    return null;
+	}
 	
 }

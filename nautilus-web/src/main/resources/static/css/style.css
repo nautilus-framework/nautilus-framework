@@ -201,3 +201,10 @@ color: RGB(32, 57, 81);
 	text-overflow: ellipsis;
 }
 
+
+.fixed-div-on-right {
+  position: fixed;
+  right: 0;
+  margin-right: 20px;
+}
+
