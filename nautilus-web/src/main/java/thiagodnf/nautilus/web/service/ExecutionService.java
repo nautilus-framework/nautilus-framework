@@ -67,6 +67,7 @@ public class ExecutionService {
         execution.setTitle(executionSettingsDTO.getTitle());
         execution.setVisibility(executionSettingsDTO.getVisibility());
         execution.setShowLines(executionSettingsDTO.isShowLines());
+        execution.setShowOriginalObjectiveValues(executionSettingsDTO.isShowOriginalObjectiveValues());
         execution.setNormalizeId(executionSettingsDTO.getNormalizeId());
         execution.setCorrelationId(executionSettingsDTO.getCorrelationId());
         execution.setRemoverId(executionSettingsDTO.getRemoverId());
@@ -126,6 +127,7 @@ public class ExecutionService {
         dto.setTitle(execution.getTitle());
         dto.setVisibility(execution.getVisibility());
         dto.setShowLines(execution.isShowLines());
+        dto.setShowOriginalObjectiveValues(execution.isShowOriginalObjectiveValues());
         dto.setNormalizeId(execution.getNormalizeId());
         dto.setCorrelationId(execution.getCorrelationId());
         dto.setRemoverId(execution.getRemoverId());

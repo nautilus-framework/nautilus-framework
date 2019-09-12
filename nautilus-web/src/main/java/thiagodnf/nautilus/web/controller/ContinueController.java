@@ -9,11 +9,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reduction.AbstractReduction;
 import thiagodnf.nautilus.core.reduction.AbstractReduction.RankingItem;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
+import thiagodnf.nautilus.plugin.extension.normalizer.ByParetoFrontValuesNormalizerExtension;
 import thiagodnf.nautilus.web.dto.ContinueDTO;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.service.ExecutionService;
@@ -45,8 +47,12 @@ public class ContinueController {
         }
         
         List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
-		
-		List<RankingItem> rankings = reduction.execute(objectives, execution.getSolutions(), execution.getItemForEvaluations());
+        
+        List<NSolution<?>> solutions = execution.getSolutions();
+        
+        List<NSolution<?>> normalizedSolutions = new ByParetoFrontValuesNormalizerExtension().getNormalizer().normalize(objectives, solutions);
+        
+		List<RankingItem> rankings = reduction.execute(objectives, normalizedSolutions, execution.getItemForEvaluations());
 		
 	    List<String> nextObjectiveIds = new ArrayList<>();
 

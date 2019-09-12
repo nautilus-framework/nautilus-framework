@@ -13,9 +13,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
+import thiagodnf.nautilus.plugin.extension.normalizer.ByMaxAndMinValuesNormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.normalizer.ByParetoFrontValuesNormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.remover.ObjectivesRemoverExtension;
 
@@ -77,9 +79,11 @@ public class Execution {
 	
 	private boolean showLines = true;
 	
+	private boolean showOriginalObjectiveValues = false;
+	
 	private String color = "#7cb5ec";
 	
-    private String normalizeId = new ByParetoFrontValuesNormalizerExtension().getId();
+    private String normalizeId = new ByMaxAndMinValuesNormalizerExtension().getId();
 
     private String correlationId = new PearsonCorrelationExtension().getId();
 

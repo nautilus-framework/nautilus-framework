@@ -22,6 +22,8 @@ public class ExecutionSettingsDTO {
 	
 	private boolean showLines;
 	
+	private boolean showOriginalObjectiveValues;
+	
 	@NotBlank
 	private String normalizeId;
 	

@@ -1,5 +1,7 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -15,9 +17,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.BinarySolution;
+import org.uma.jmetal.solution.Solution;
 
+import thiagodnf.nautilus.core.encoding.NProblem;
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
+import thiagodnf.nautilus.core.encoding.problem.NIntegerProblem;
+import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
+import thiagodnf.nautilus.core.encoding.solution.NIntegerSolution;
+import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
+import thiagodnf.nautilus.core.util.Converter;
+import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.plugin.extension.AlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.CorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.NormalizerExtension;
@@ -30,6 +43,7 @@ import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Execution.Visibility;
 import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.ExecutionService;
+import thiagodnf.nautilus.web.service.FileService;
 import thiagodnf.nautilus.web.service.PluginService;
 import thiagodnf.nautilus.web.service.SecurityService;
 import thiagodnf.nautilus.web.service.UserService;
@@ -56,6 +70,9 @@ public class ExecutionController {
 	private PluginService pluginService;
 	
 	@Autowired
+    private FileService fileService;
+	
+	@Autowired
     private Redirect redirect;
 	
 	@GetMapping("")
@@ -80,9 +97,43 @@ public class ExecutionController {
 		AlgorithmExtension algorithmExtension = pluginService.getAlgorithmExtensionById(execution.getAlgorithmId());
 		RemoverExtension duplicatesRemover = pluginService.getRemoverExtensionById(execution.getRemoverId());
 		
-		List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
 		
-		List<NSolution<?>> solutions = execution.getSolutions();
+		List<NSolution<?>> solutions = null;
+		List<AbstractObjective> objectives = null;
+		
+        if (execution.isShowOriginalObjectiveValues()) {
+
+            objectives = problemExtension.getObjectives();
+
+            Path path = fileService.getInstance(execution.getProblemId(), execution.getInstance());
+
+            Instance instance = problemExtension.getInstance(path);
+
+            NProblem<?> problem = (NProblem<?>) problemExtension.getProblem(instance, objectives);
+            
+            solutions = new ArrayList<>();
+
+            for (Solution<?> solution : execution.getSolutions()) {
+
+                Solution<?> newSolution = Converter.toSolutionWithOutObjectives(problem, solution);
+
+                if (problem instanceof NBinaryProblem) {
+                    ((NBinaryProblem) problem).evaluate((NBinarySolution) newSolution);
+                }
+                if (problem instanceof NIntegerProblem) {
+                    ((NIntegerProblem) problem).evaluate((NIntegerSolution) newSolution);
+                }
+                
+                ((NSolution<?>)newSolution).getAttributes().clear();
+                ((NSolution<?>)newSolution).setAttribute(SolutionAttribute.ID, solution.getAttribute(SolutionAttribute.ID));
+                ((NSolution<?>)newSolution).setAttribute(SolutionAttribute.OPTIMIZED_OBJECTIVES, solution.getAttribute(SolutionAttribute.OPTIMIZED_OBJECTIVES));
+                
+                solutions.add((NSolution<?>) newSolution);
+            }
+        }else {
+            solutions = execution.getSolutions();
+            objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
+        }
 		
 		List<NSolution<?>> normalizedSolutions = normalizerExtension.getNormalizer().normalize(objectives, solutions);
 		List<NSolution<?>> distinctSolutions = duplicatesRemover.getRemover(problemExtension).execute(normalizedSolutions);
