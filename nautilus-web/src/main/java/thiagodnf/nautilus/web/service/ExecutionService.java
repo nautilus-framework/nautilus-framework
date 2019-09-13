@@ -87,6 +87,10 @@ public class ExecutionService {
     public Execution findExecutionById(String executionId) {
         return this.executionRepository.findById(executionId).orElseThrow(ExecutionNotFoundException::new);
     }
+    
+    public List<Execution> findAll() {
+        return this.executionRepository.findAll();
+    }
 
     public List<ExecutionSimplifiedDTO> findExecutionSimplifiedDTOByUserId(String userId) {
         return executionRepository.findByUserIdAndSolutionsNotNull(userId);
@@ -161,5 +165,27 @@ public class ExecutionService {
             return false;
         
         return !isOwner(execution) && execution.getVisibility() == Visibility.PUBLIC;
+    }
+    
+    public Execution getParent(String executionId) {
+
+        if (executionId == null) {
+            return null;
+        }
+
+        Execution execution = executionRepository.findById(executionId).orElse(null);
+
+        if (execution != null) {
+
+            Execution parent = getParent(execution.getLastExecutionId());
+
+            if (parent != null) {
+                return parent;
+            }
+            
+            return execution;
+        }
+
+        return null;
     }
 }
