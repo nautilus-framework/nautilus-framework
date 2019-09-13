@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-	<head th:replace="fragments/head :: title(#{btn.done})"></head>
+	<head th:replace="fragments/head :: title('Experiment Results')"></head>
 
 	<body>
 	
@@ -34,8 +34,8 @@
                               <th th:text="#{execution.instance}"></th>
                               <th th:text="#{execution.algorithm}"></th>
                               <th>Selected Solution</th>
-                              <th>Time</th>
-                              <th>Time 2</th>
+                              <th>Execution Time</th>
+                              <th>Selected Date</th>
                           </tr>
                       </thead>
                       <tbody>
