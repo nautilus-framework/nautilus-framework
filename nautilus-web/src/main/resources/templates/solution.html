@@ -74,7 +74,8 @@
 										</div>
 									</div>
 									<br>
-									<div class="card border-success" th:if="${not isReadOnly}">
+									<div th:if="${isCORNSGAII}">
+									   <div class="card border-success" th:if="${not isReadOnly}">
 										  <div class="card-header border-success " th:text="#{nav.feedback-for(${feedbackForObjective.getName()})}"></div>
 										  <div class="card-body">
 										  	<form action="#" th:action="@{|/solution/${executionId}/${solutionIndex}/${feedbackForObjectiveIndex}/save/feedback|}" method="post" th:object="${userFeedbackDTO}">
@@ -91,7 +92,8 @@
 												<button type="submit" class="btn btn-success mt-4" id="btn-feedback">Save</button>
 												</form>
 											</div>
-										</div> 
+										</div>
+									</div> 
 								</div>
 							</div>
 						</div>

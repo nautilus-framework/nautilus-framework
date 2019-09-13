@@ -355,6 +355,14 @@ $(function(){
 			$(".nav-preferences").addClass("disabled");
 		}
 		
+		var def = 134400;
+		
+		if(selected == "cor-nsga-ii"){
+			$("#maxEvaluations").val(def/3);
+		}else{
+			$("#maxEvaluations").val(def);
+		}
+		
 		return false;
 	});
 	

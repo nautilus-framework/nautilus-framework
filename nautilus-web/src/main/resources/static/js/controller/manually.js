@@ -14,15 +14,17 @@ $(function(){
    
 	$('.checkbox-variable').change(function (e) {
 		e.preventDefault();
-	   
+		
 		var obj = {
-			instance: "james.txt",
-			problemId: "spl-problem",
+			instance: $("#instance").text(),
+			problemId: $("#problem-id").text(),
 			variables: getSelectec(),
 			objectiveIds: [],
 			normalizedObjectiveValues: [],
 			objectiveValues: []
 		}
+		
+		console.log(obj)
 			
 		$.ajax({
 			type: "GET",
@@ -49,8 +51,6 @@ $(function(){
 					
 					$tbody.append(str)
 				}
-				
-				
 			},
 			error: function(a, b, c){
 				console.log(a, b, c)

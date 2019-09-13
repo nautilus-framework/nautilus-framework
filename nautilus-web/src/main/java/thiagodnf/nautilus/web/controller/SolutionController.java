@@ -108,6 +108,7 @@ public class SolutionController {
 		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
 		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
 		model.addAttribute("isReadOnly", executionService.isReadOnly(execution));
+		model.addAttribute("isCORNSGAII", execution.getAlgorithmId().equalsIgnoreCase("cor-nsga-ii"));
 		
 		return "solution";
 	}
