@@ -53,11 +53,6 @@ public class NumberOfObjective extends AbstractObjective {
 
 	@Override
 	public String getGroupName() {
-
-		if (searchFor % 2 == 0) {
-			return "Even";
-		}
-
-		return "Odd";
+		return "General";
 	}
 }
