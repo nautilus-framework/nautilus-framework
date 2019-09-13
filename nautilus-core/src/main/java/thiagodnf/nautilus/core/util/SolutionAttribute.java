@@ -27,4 +27,6 @@ public class SolutionAttribute {
 	public static final String USER_SELECTED_AS_BEST = "user-selected-as-best";
 	
 	public static final String USER_SELECTED_AS_WORST = "user-selected-as-worst";
+	
+	public static final String SELECTED_DATE = "selected-date";
 }

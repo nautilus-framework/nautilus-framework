@@ -3,6 +3,7 @@ package thiagodnf.nautilus.web.service;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -149,7 +150,7 @@ public class OptimizeService {
             // Algorithm
             
             try {
-            
+                
                 List<NSolution<?>> rawSolutions = null;
                 
                 setStatus(itemQueue, "execution.status.optimizing");

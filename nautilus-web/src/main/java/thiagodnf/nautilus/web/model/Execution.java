@@ -13,12 +13,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.normalizer.ByMaxAndMinValuesNormalizerExtension;
-import thiagodnf.nautilus.plugin.extension.normalizer.ByParetoFrontValuesNormalizerExtension;
 import thiagodnf.nautilus.plugin.extension.remover.ObjectivesRemoverExtension;
 
 @Document
@@ -91,7 +89,9 @@ public class Execution {
 
     private List<ItemForEvaluation> itemForEvaluations = new ArrayList<>();
     
-	@CreatedDate
+    private NSolution<?> selectedSolution;
+    
+    @CreatedDate
 	private Date creationDate;
 	
 	@LastModifiedDate

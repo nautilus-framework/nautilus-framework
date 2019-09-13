@@ -1,6 +1,7 @@
 package thiagodnf.nautilus.web.controller;
 
 import java.nio.file.Path;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -22,6 +23,7 @@ import thiagodnf.nautilus.core.model.Instance;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
+import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.dto.UserFeedbackDTO;
 import thiagodnf.nautilus.web.exception.SolutionNotFoundException;
@@ -164,6 +166,36 @@ public class SolutionController {
 		execution = executionService.save(execution);
 
 		return redirect.to("/execution/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_SAVED_SUCCESS);
+	}
+	
+	@GetMapping("/select")
+    public String select(
+            @PathVariable String executionId, 
+            @PathVariable int solutionIndex, 
+            @Valid UserFeedbackDTO userFeedbackDTO,
+            BindingResult bindingResult,
+            RedirectAttributes ra,
+            Model model) {
+        
+        LOGGER.info("Selecting solution SolutionIndex {} in ExecutionId {}", solutionIndex, executionId);
+        
+        Execution execution = executionService.findExecutionById(executionId);
+
+        List<NSolution<?>> solutions = execution.getSolutions();
+        
+        if (solutionIndex < 0 || solutionIndex >= solutions.size()) {
+            throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
+        }
+        
+        NSolution<?> solution = solutions.get(solutionIndex);
+        
+        solution.setAttribute(SolutionAttribute.SELECTED_DATE, new Date());
+        
+        execution.setSelectedSolution(solution);
+        
+        execution = executionService.save(execution);
+        
+        return redirect.to("/execution/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_SAVED_SUCCESS);
 	}
 	
 	private ItemForEvaluation findBySolutionIndexAndObjectiveIndex(List<ItemForEvaluation> items, int solutionIndex, int objectiveIndex) {

@@ -12,7 +12,7 @@
 		<div class="page-header">
 			<div class="container">
 				<div class="row">
-					<div class="col-12 path">
+					<div class="col-8 path">
 						<h6 class="title">
 							<a th:href="@{/}" th:text="#{nav.home}"></a>
 							<span class="path-divider">/</span> 
@@ -20,6 +20,9 @@
 							<span class="path-divider">/</span>
 							<a th:href="@{/solution/}+${execution.id}+@{/}+${solutionIndex}+@{/}+${objectiveIndex}" th:text="'Solution '+ ${solutionIndex}"></a> 
 						</h6>
+					</div>
+					<div class="col-4">
+					   <a class="btn btn-success float-right" th:href="@{|/solution/${executionId}/${solutionIndex}/${feedbackForObjectiveIndex}/select|}" >Select it</a>
 					</div>
 				</div>
 			</div>
