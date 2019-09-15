@@ -1,10 +1,10 @@
 package thiagodnf.nautilus.web.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.model.SelectedSolution;
 import thiagodnf.nautilus.core.util.Formatter;
-import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.web.dto.UserDTO;
 import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.User;
@@ -44,8 +43,6 @@ public class ExperimentController {
 
         User user = securityService.getLoggedUser().getUser();
 
-        List<Execution> executions = executionService.findAll();
-        
         Map<String, String> users = new HashMap<>();
         Map<String, Date> dates = new HashMap<>();
         Map<String, Execution> parents = new HashMap<>();
@@ -54,25 +51,36 @@ public class ExperimentController {
         for (UserDTO dto : userService.findAll()) {
             users.put(dto.getId(), dto.getEmail());
         }
+
+        List<Execution> executions = new ArrayList<>();
+
+        for (Execution execution : executionService.findAll()) {
+
+            if (execution.getSolutions() == null || execution.getSolutions().isEmpty()) {
+                continue;
+            }
+            
+            if (execution.getSelectedSolutions() == null || execution.getSelectedSolutions().isEmpty()) {
+                continue;
+            }
+            
+            executions.add(execution);
+        }
         
         for (Execution execution : executions) {
 
             Execution parent = executionService.getParent(execution.getId());
-
+            
             parents.put(execution.getId(), parent);
 
-//            NSolution<?> solution = execution.getSelectedSolution();
-//
-//            if (solution != null) {
-//
-//                Date selectedDate = (Date) solution.getAttribute(SolutionAttribute.SELECTED_DATE);
-//
-//                dates.put(execution.getId(), selectedDate);
-//
-//                long diff = selectedDate.getTime() - parent.getCreationDate().getTime();
-//
-//                times.put(execution.getId(), Formatter.interval(diff));
-//            }
+            for (SelectedSolution selectedSolution : execution.getSelectedSolutions()) {
+                
+                Date selectedDate = selectedSolution.getSelectionDate();
+                
+                long diff = selectedDate.getTime() - parent.getCreationDate().getTime();
+                
+                times.put(execution.getId(), Formatter.interval(diff));
+            }
         }
         
         model.addAttribute("users", users);
