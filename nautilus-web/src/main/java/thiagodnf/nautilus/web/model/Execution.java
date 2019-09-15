@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.model.SelectedSolution;
 import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
@@ -89,7 +90,7 @@ public class Execution {
 
     private List<ItemForEvaluation> itemForEvaluations = new ArrayList<>();
     
-    private NSolution<?> selectedSolution;
+    private List<SelectedSolution> selectedSolutions = new ArrayList<>();
     
     @CreatedDate
 	private Date creationDate;

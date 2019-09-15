@@ -61,8 +61,8 @@
 											
 											</td>
 											<td>
-											     <span th:if="${solution.getAttributes().get('selected-date')}" class="text-success">True</span>
-											     <span th:unless="${solution.getAttributes().get('selected-date')}" class="text-danger">False</span>
+											     <span th:if="${#lists.contains(selectedIndexes, i)}" class="text-success">True</span>
+											     <span th:unless="${#lists.contains(selectedIndexes, i)}" class="text-danger">False</span>
 											</td>
 										</tr>
 									</tbody>

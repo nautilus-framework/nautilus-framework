@@ -32,6 +32,7 @@ import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
 import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
 import thiagodnf.nautilus.core.model.Instance;
+import thiagodnf.nautilus.core.model.SelectedSolution;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
@@ -195,6 +196,10 @@ public class OptimizeController {
         
         ProblemExtension problemExtension = pluginService.getProblemById(problemId);
 
+        if (!problemId.equalsIgnoreCase("spl-problem")) {
+            throw new RuntimeException("This problem is not supported");
+        }
+        
         if (!fileService.containsInstance(problemId, instance)) {
             throw new InstanceNotFoundException();
         }
@@ -224,7 +229,9 @@ public class OptimizeController {
             }
         }
         
-        model.addAttribute("execution", new Execution());
+        Execution execution = executionService.save(new Execution());
+        
+        model.addAttribute("execution", execution);
         model.addAttribute("objectives", objectives);
         model.addAttribute("solution", solution);
         model.addAttribute("variables", problemExtension.getVariablesAsList(inst, solution));
@@ -236,6 +243,7 @@ public class OptimizeController {
     public String manuallySave( 
             @PathVariable String problemId, 
             @PathVariable String instance,
+            @RequestParam String executionId,
             @RequestParam List<String> selectedVariables,
             RedirectAttributes ra,
             Model model){
@@ -246,6 +254,10 @@ public class OptimizeController {
 
         ProblemExtension problemExtension = pluginService.getProblemById(problemId);
 
+        if (!problemId.equalsIgnoreCase("spl-problem")) {
+            throw new RuntimeException("This problem is not supported");
+        }
+            
         if (!fileService.containsInstance(problemId, instance)) {
             throw new InstanceNotFoundException();
         }
@@ -261,7 +273,7 @@ public class OptimizeController {
         NProblem<?> p = (NProblem<?>) problemExtension.getProblem(inst, objectives);
 
         
-        Execution execution = new Execution();
+        Execution execution = executionService.findExecutionById(executionId);
         
         execution.setUserId(user.getId());
         execution.setAlgorithmId("manually");
@@ -302,7 +314,8 @@ public class OptimizeController {
             sol.getAttributes().clear();
             sol.setAttribute(SolutionAttribute.ID, String.valueOf(0));
             sol.setAttribute(SolutionAttribute.OPTIMIZED_OBJECTIVES, Converter.toJson(execution.getObjectiveIds()));
-            sol.setAttribute(SolutionAttribute.SELECTED_DATE, new Date());
+
+            execution.getSelectedSolutions().add(new SelectedSolution(0));
             
             execution.setSolutions(Arrays.asList(sol));
         }

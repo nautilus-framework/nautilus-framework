@@ -3,6 +3,7 @@ package thiagodnf.nautilus.web.controller;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -132,6 +133,11 @@ public class ExecutionController {
             solutions = execution.getSolutions();
             objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
         }
+        
+        List<String> selectedIndexes = execution.getSelectedSolutions()
+                .stream()
+                .map(e -> String.valueOf(e.getSolutionIndex()))
+                .collect(Collectors.toList());
 		
 		List<NSolution<?>> normalizedSolutions = normalizerExtension.getNormalizer().normalize(objectives, solutions);
 		List<NSolution<?>> distinctSolutions = duplicatesRemover.getRemover(problemExtension).execute(normalizedSolutions);
@@ -150,6 +156,7 @@ public class ExecutionController {
 		model.addAttribute("isReadOnly", executionService.isReadOnly(execution));
 		model.addAttribute("colors", Color.values());
 		model.addAttribute("visibilities", Visibility.values());
+		model.addAttribute("selectedIndexes", selectedIndexes);
 		
 		return "execution";
 	}

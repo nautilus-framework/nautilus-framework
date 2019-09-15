@@ -23,12 +23,12 @@ import thiagodnf.nautilus.core.encoding.problem.NIntegerProblem;
 import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
 import thiagodnf.nautilus.core.encoding.solution.NIntegerSolution;
 import thiagodnf.nautilus.core.model.Instance;
+import thiagodnf.nautilus.core.model.SelectedSolution;
 import thiagodnf.nautilus.core.normalize.AbstractNormalize;
 import thiagodnf.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
-import thiagodnf.nautilus.core.util.SolutionUtils;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.dto.CompareDTO;
 import thiagodnf.nautilus.web.model.Execution;
@@ -64,9 +64,9 @@ public class CompareController {
         User user = securityService.getLoggedUser().getUser();
 
         Map<String, ProblemExtension> problems = pluginService.getProblems();
-
+        
         model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
-        model.addAttribute("executions", executionService.findExecutionSimplifiedDTOByUserId(user.getId()));
+        //model.addAttribute("executions", executionService.findExecutionSimplifiedDTOByUserId(user.getId()));
         model.addAttribute("problems", problems);
         model.addAttribute("compareDTO", compareDTO);
         
@@ -92,11 +92,13 @@ public class CompareController {
 
             List<NSolution<?>> selectedSolutions = new ArrayList<>();
 
-            for (Solution<?> sol : execution.getSolutions()) {
-
-                if (SolutionUtils.isSelected(sol)) {
-                    selectedSolutions.add((NSolution<?>) sol);
-                }
+            for (SelectedSolution selectedSolution: execution.getSelectedSolutions()) {
+                
+                int solutionIndex = selectedSolution.getSolutionIndex();
+                
+                NSolution<?> solution = execution.getSolutions().get(solutionIndex);
+                
+                selectedSolutions.add(solution);
             }
 
             execution.setSolutions(selectedSolutions);

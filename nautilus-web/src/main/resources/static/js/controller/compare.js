@@ -56,9 +56,11 @@ $(function(){
 	var series = [];
 	var objectiveIds = [];
 	
-	for(var i = 0; i < executions.length; i++){
+	for (var i = 0; i < executions.length; i++){
 		
 		var execution = executions[i];
+		
+		console.log(execution)
 		
 		objectiveIds = execution.objectiveIds
 		
@@ -68,13 +70,14 @@ $(function(){
 		
 		for (var j = 0; j < solutions.length; j++){
 			
+			var id = solutions[j].attributes.id;
+			
 			series.push({
-		        name: name,
+		        name: name+", "+id,
 		        data: solutions[j].objectives
 		    });
 		}
 	}
 	
-	plot(objectiveIds, series);
-	
+	plot(objectiveIds, series);	
 })

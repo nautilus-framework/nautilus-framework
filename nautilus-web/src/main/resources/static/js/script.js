@@ -371,8 +371,6 @@ $(function(){
 		
 		var targetId = $(this).data("target-id")
 		
-		console.log(targetId)
-		
 		if($(this).is(':checked')){
 			$("#"+targetId).val(0.0.toFixed(1));
 		}else{
@@ -380,11 +378,5 @@ $(function(){
 		}
 		
 		return false;
-	});
-	
-	
-	$('.dual-list').bootstrapDualListbox({
-		moveOnSelect: false,
-		preserveSelectionOnMove: 'moved',
 	});
 })

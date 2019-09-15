@@ -24,6 +24,10 @@ public class CompareDTO {
     @HTMLAutoFocus
     private String problemId;
     
+    @NotBlank
+    @HTMLAutoFocus
+    private String instance;
+    
     @NotNull
     @Size(min = 1)
     private List<String> executionIds;

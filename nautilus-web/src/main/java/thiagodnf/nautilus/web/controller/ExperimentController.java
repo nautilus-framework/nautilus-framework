@@ -61,18 +61,18 @@ public class ExperimentController {
 
             parents.put(execution.getId(), parent);
 
-            NSolution<?> solution = execution.getSelectedSolution();
-
-            if (solution != null) {
-
-                Date selectedDate = (Date) solution.getAttribute(SolutionAttribute.SELECTED_DATE);
-
-                dates.put(execution.getId(), selectedDate);
-
-                long diff = selectedDate.getTime() - parent.getCreationDate().getTime();
-
-                times.put(execution.getId(), Formatter.interval(diff));
-            }
+//            NSolution<?> solution = execution.getSelectedSolution();
+//
+//            if (solution != null) {
+//
+//                Date selectedDate = (Date) solution.getAttribute(SolutionAttribute.SELECTED_DATE);
+//
+//                dates.put(execution.getId(), selectedDate);
+//
+//                long diff = selectedDate.getTime() - parent.getCreationDate().getTime();
+//
+//                times.put(execution.getId(), Formatter.interval(diff));
+//            }
         }
         
         model.addAttribute("users", users);

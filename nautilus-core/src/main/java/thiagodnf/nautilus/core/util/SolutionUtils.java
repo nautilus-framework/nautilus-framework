@@ -10,6 +10,7 @@ import org.uma.jmetal.solution.Solution;
 import com.google.common.base.Preconditions;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
+import thiagodnf.nautilus.core.model.SelectedSolution;
 
 public class SolutionUtils {
 	
@@ -76,7 +77,10 @@ public class SolutionUtils {
         return (Date) solution.getAttribute(SolutionAttribute.SELECTED_DATE);
     }
 
-    public static boolean isSelected(Solution<?> solution) {
-        return getSelectedDate(solution) != null;
+    public static boolean isSelected(List<SelectedSolution> selectedSolution, int solutionIndex) {
+        return selectedSolution.stream()
+                .filter(e -> e.getSolutionIndex() == solutionIndex)
+                .findFirst()
+                .isPresent();
     }
 }

@@ -1,7 +1,6 @@
 package thiagodnf.nautilus.web.controller;
 
 import java.nio.file.Path;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,10 +19,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
 import thiagodnf.nautilus.core.model.Instance;
+import thiagodnf.nautilus.core.model.SelectedSolution;
 import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
-import thiagodnf.nautilus.core.util.SolutionAttribute;
 import thiagodnf.nautilus.core.util.SolutionUtils;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.dto.UserFeedbackDTO;
@@ -80,7 +79,6 @@ public class SolutionController {
 			throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
 		}
 		
-		
 		List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
 		
 		List<NSolution<?>> normalizedSolutions = new ByParetoFrontValuesNormalize().normalize(objectives, execution.getSolutions());
@@ -111,7 +109,7 @@ public class SolutionController {
 		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
 		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
 		model.addAttribute("isReadOnly", executionService.isReadOnly(execution));
-		model.addAttribute("isSelected", SolutionUtils.isSelected(solution));
+		model.addAttribute("isSelected", SolutionUtils.isSelected(execution.getSelectedSolutions(), solutionIndex));
 		model.addAttribute("isCORNSGAII", execution.getAlgorithmId().equalsIgnoreCase("cor-nsga-ii"));
 		
 		return "solution";
@@ -188,15 +186,11 @@ public class SolutionController {
             throw new SolutionNotFoundException().redirectTo("/execution/" + executionId);
         }
         
-        NSolution<?> solution = solutions.get(solutionIndex);
-
         if (action == 0) {
-            solution.setAttribute(SolutionAttribute.SELECTED_DATE, null);
+            execution.getSelectedSolutions().removeIf(e -> e.getSolutionIndex() == solutionIndex);
         } else {
-            solution.setAttribute(SolutionAttribute.SELECTED_DATE, new Date());
+            execution.getSelectedSolutions().add(new SelectedSolution(solutionIndex));
         }
-        
-        execution.setSelectedSolution(solution);
         
         execution = executionService.save(execution);
         

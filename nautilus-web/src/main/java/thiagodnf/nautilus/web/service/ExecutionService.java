@@ -117,7 +117,8 @@ public class ExecutionService {
             execution.getProblemId(),
             execution.getInstance(),
             execution.getAlgorithmId(),
-            execution.getCreationDate()
+            execution.getCreationDate(),
+            execution.getSelectedSolutions()
         );
     }
 
