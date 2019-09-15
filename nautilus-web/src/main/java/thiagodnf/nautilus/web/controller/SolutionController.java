@@ -24,6 +24,7 @@ import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
 import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
 import thiagodnf.nautilus.core.util.SolutionAttribute;
+import thiagodnf.nautilus.core.util.SolutionUtils;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.dto.UserFeedbackDTO;
 import thiagodnf.nautilus.web.exception.SolutionNotFoundException;
@@ -110,6 +111,7 @@ public class SolutionController {
 		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
 		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
 		model.addAttribute("isReadOnly", executionService.isReadOnly(execution));
+		model.addAttribute("isSelected", SolutionUtils.isSelected(solution));
 		model.addAttribute("isCORNSGAII", execution.getAlgorithmId().equalsIgnoreCase("cor-nsga-ii"));
 		
 		return "solution";
@@ -168,12 +170,11 @@ public class SolutionController {
 		return redirect.to("/execution/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_SAVED_SUCCESS);
 	}
 	
-	@GetMapping("/select")
+	@GetMapping("/select/{action:.+}")
     public String select(
             @PathVariable String executionId, 
-            @PathVariable int solutionIndex, 
-            @Valid UserFeedbackDTO userFeedbackDTO,
-            BindingResult bindingResult,
+            @PathVariable int solutionIndex,
+            @PathVariable int action,
             RedirectAttributes ra,
             Model model) {
         
@@ -188,8 +189,12 @@ public class SolutionController {
         }
         
         NSolution<?> solution = solutions.get(solutionIndex);
-        
-        solution.setAttribute(SolutionAttribute.SELECTED_DATE, new Date());
+
+        if (action == 0) {
+            solution.setAttribute(SolutionAttribute.SELECTED_DATE, null);
+        } else {
+            solution.setAttribute(SolutionAttribute.SELECTED_DATE, new Date());
+        }
         
         execution.setSelectedSolution(solution);
         

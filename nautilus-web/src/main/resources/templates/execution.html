@@ -18,7 +18,7 @@
 						</h6>
 					</div>
 					<div class="col-4 toolbar" th:if="${not isReadOnly}">
-						<a class="btn btn-success float-right" th:href="@{/done/} + ${execution.id}" th:text="#{btn.done}"></a>
+						<a class="btn btn-success float-right" th:href="@{/compare/form}" th:text="#{btn.compare}"></a>
 						<a class="btn btn-outline-secondary float-right" th:href="@{/continue/} + ${execution.id}" th:if="${algorithm.reduction}" th:text="#{btn.continue}"></a>
 					</div>
 				</div>
@@ -60,7 +60,10 @@
 											     <a th:href="@{|/solution/${execution.getId()}/${i}/${j.index}|}" th:text="${#numbers.formatDecimal(value,1, userSettingsDTO.decimalPlaces, userSettingsDTO.decimalSeparator )}"></a>
 											
 											</td>
-											<td th:text="${solution.getAttributes().containsKey('selected')}"/>
+											<td>
+											     <span th:if="${solution.getAttributes().get('selected-date')}" class="text-success">True</span>
+											     <span th:unless="${solution.getAttributes().get('selected-date')}" class="text-danger">False</span>
+											</td>
 										</tr>
 									</tbody>
 								</table>

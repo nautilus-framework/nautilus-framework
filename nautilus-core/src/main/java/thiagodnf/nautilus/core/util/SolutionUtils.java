@@ -1,10 +1,13 @@
 package thiagodnf.nautilus.core.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
 import org.uma.jmetal.solution.Solution;
+
+import com.google.common.base.Preconditions;
 
 import thiagodnf.nautilus.core.encoding.NSolution;
 
@@ -65,4 +68,15 @@ public class SolutionUtils {
 
 		return variables;
 	}
+	
+    public static Date getSelectedDate(Solution<?> solution) {
+
+        Preconditions.checkNotNull(solution, "The solution must not be null");
+
+        return (Date) solution.getAttribute(SolutionAttribute.SELECTED_DATE);
+    }
+
+    public static boolean isSelected(Solution<?> solution) {
+        return getSelectedDate(solution) != null;
+    }
 }

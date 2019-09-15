@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:replace="fragments/head :: title(#{btn.result})"></head>
+
+	<body>
+	
+	<div th:replace="fragments/navbar :: default('Home')"></div>
+	
+	<div class="page-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 path">
+					<h6 class="title">
+                          <a th:href="@{/}" th:text="#{nav.home}"></a> 
+                          <span class="path-divider">/</span> 
+                          <a th:href="@{/compare/form}" th:text="#{btn.compare}"></a>
+                          <span class="path-divider">/</span> 
+                          <a th:href="@{#}" th:text="#{btn.result}"></a>
+                     </h6>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">
+		<div class="row">
+		      <div class="col-12">
+		          <div id="chart"></div>
+		      </div>
+		</div>
+		
+		<a class="btn btn-light" th:href="@{/compare/form}" th:text="#{btn.cancel}"></a>
+	</div>
+	
+	<div id="data" class="d-none" th:text="${executions}"></div>
+
+
+	<div th:replace="fragments/footer :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/controller/compare.js}"></script>
+</body>
+
+</html>

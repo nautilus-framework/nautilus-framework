@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-	<head th:replace="fragments/head :: title(#{btn.done})"></head>
+	<head th:replace="fragments/head :: title(#{btn.compare})"></head>
 
 	<body>
 	
@@ -13,7 +13,7 @@
 					<h6 class="title">
                           <a th:href="@{/}" th:text="#{nav.home}"></a> 
                           <span class="path-divider">/</span> 
-                          <a th:href="@{#}">Compare</a>
+                          <a th:href="@{#}" th:text="#{btn.compare}"></a>
                      </h6>
 				</div>
 			</div>
@@ -23,29 +23,32 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
-			     <form id="demoform" action="#" method="post">
-					 <!-- <div class="form-group">
-	                     <label for="problemId" th:text="#{nav.problem}" ></label> 
-	                     <select class="form-control" >
+			     <form id="demoform" th:action="@{/compare/result}" method="post" th:object="${compareDTO}">
+					<div class="form-group">
+	                     <label for="problemId" th:text="#{nav.problem}"></label> 
+	                     <select class="form-control" th:field="*{problemId}">
 	                         <option th:each="problem : ${problems}" 
 	                             th:value="${problem.key}"
 	                             th:text="${problem.value.name}" 
 	                         />
 	                     </select>
-	                 </div> -->
+	                     <span class="text-danger" th:if="${#fields.hasErrors('problemId')}" th:errors="*{problemId}"></span>
+                    </div>
 					<div class="form-group">
 					   <label th:text="#{nav.execution}" ></label> 
-					   <select class="form-control" multiple="multiple" size="10" name="duallistbox_demo1[]" title="duallistbox_demo1[]">
+					   <select class="form-control dual-list" multiple="multiple" size="10" th:field="*{executionIds}">
 					       <option th:each="execution : ${executions}" 
                                  th:value="${execution.id}"
                                  th:text="
                                 (${#strings.isEmpty(execution.title)} ? ${#formatter.date(execution.creationDate, userSettingsDTO.timeZone)} : ${execution.title})+', '+${execution.problemId}+', '+${execution.instance}+', '+${execution.algorithmId}" 
                              />
 					   </select>
+					   <span class="text-danger" th:if="${#fields.hasErrors('executionIds')}" th:errors="*{executionIds}"></span>
 					</div>
+					
                     <br>
-                    <button type="submit" class="btn btn-success">Compare</button>
-                    <a href="/" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success" th:text="#{btn.compare}"></button>
+                    <a href="/" class="btn btn-outline-secondary" th:text="#{btn.cancel}"></a>
                 </form>
 			</div>
 		</div>

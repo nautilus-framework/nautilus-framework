@@ -3,6 +3,7 @@ package thiagodnf.nautilus.web.controller;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -301,6 +302,7 @@ public class OptimizeController {
             sol.getAttributes().clear();
             sol.setAttribute(SolutionAttribute.ID, String.valueOf(0));
             sol.setAttribute(SolutionAttribute.OPTIMIZED_OBJECTIVES, Converter.toJson(execution.getObjectiveIds()));
+            sol.setAttribute(SolutionAttribute.SELECTED_DATE, new Date());
             
             execution.setSolutions(Arrays.asList(sol));
         }

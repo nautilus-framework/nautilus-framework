@@ -22,7 +22,12 @@
 						</h6>
 					</div>
 					<div class="col-4">
-					   <a class="btn btn-success float-right" th:href="@{|/solution/${executionId}/${solutionIndex}/${feedbackForObjectiveIndex}/select|}" >Select it</a>
+					   <div th:if="${isSelected}">
+					       <a class="btn btn-danger float-right" th:href="@{|/solution/${executionId}/${solutionIndex}/${feedbackForObjectiveIndex}/select/0|}" >Unselect it</a>
+				       </div>
+				       <div th:if="${not isSelected}">
+                           <a class="btn btn-success float-right" th:href="@{|/solution/${executionId}/${solutionIndex}/${feedbackForObjectiveIndex}/select/1|}" >Select it</a>
+                       </div>
 					</div>
 				</div>
 			</div>

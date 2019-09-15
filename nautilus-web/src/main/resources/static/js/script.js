@@ -381,4 +381,10 @@ $(function(){
 		
 		return false;
 	});
+	
+	
+	$('.dual-list').bootstrapDualListbox({
+		moveOnSelect: false,
+		preserveSelectionOnMove: 'moved',
+	});
 })
