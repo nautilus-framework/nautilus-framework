@@ -192,12 +192,13 @@ public class OptimizeController {
     public String manually( 
             @PathVariable String problemId, 
             @PathVariable String instance,
+            RedirectAttributes ra,  
             Model model){
         
         ProblemExtension problemExtension = pluginService.getProblemById(problemId);
 
         if (!problemId.equalsIgnoreCase("spl-problem")) {
-            throw new RuntimeException("This problem is not supported");
+            return redirect.to("/optimize/" + problemId + "/" + instance).withError(ra, Messages.PROBLEM_NOT_SUPPORTED);
         }
         
         if (!fileService.containsInstance(problemId, instance)) {

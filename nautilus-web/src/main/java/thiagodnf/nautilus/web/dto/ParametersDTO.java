@@ -112,6 +112,7 @@ public class ParametersDTO {
 	private double epsilon = 0.001;
 	
 	@NotNull
+	@Size(min = 1)
 	@ContainsNotBlank
 	private List<List<Double>> referencePoints = new ArrayList<>();
 	

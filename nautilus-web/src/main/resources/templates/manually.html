@@ -67,15 +67,13 @@
                                                     <tr>
                                                         <th width="20px">#</th>
                                                         <th th:text="#{nav.objective}"></th>
-                                                        <th th:text="#{nav.raw}"></th>
-                                                        <th th:text="#{nav.normalized}"></th>
+                                                        <th>Value</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                       <tr th:each="i : ${#numbers.sequence(0, solution.numberOfObjectives - 1)}">
                                                         <td th:text="${i}"></td>
                                                         <td th:text="${objectives.get(i)}"></td>
-                                                        <td>0.00000</td>
                                                         <td>0.00000</td>
                                                     </tr>
                                                 </tbody>

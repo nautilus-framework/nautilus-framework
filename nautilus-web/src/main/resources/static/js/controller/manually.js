@@ -46,7 +46,7 @@ $(function(){
 					str += ("<td>"+i+"</td>")
 					str += ("<td>"+result.objectiveIds[i]+"</td>")
 					str += ("<td>"+result.objectiveValues[i].toFixed(5)+"</td>")
-					str += ("<td>"+result.normalizedObjectiveValues[i].toFixed(5)+"</td>")
+					//str += ("<td>"+result.normalizedObjectiveValues[i].toFixed(5)+"</td>")
 					str += "</str>";
 					
 					$tbody.append(str)

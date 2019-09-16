@@ -53,4 +53,6 @@ public class Messages {
 	
 	public static String EXECUTION_FEEDBACK_SAVED_SUCCESS = "msg.execution-feedback-saved-success";
 	
+	public static String PROBLEM_NOT_SUPPORTED = "msg.problem-not-supported";
+	
 }

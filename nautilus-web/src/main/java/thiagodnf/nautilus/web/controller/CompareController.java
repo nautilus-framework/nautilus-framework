@@ -145,6 +145,7 @@ public class CompareController {
         }
 
         model.addAttribute("executions", executions);
+        model.addAttribute("objectiveIds", objectives);
 
         return "compare";
     }
