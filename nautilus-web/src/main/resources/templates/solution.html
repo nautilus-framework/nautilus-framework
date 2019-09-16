@@ -89,10 +89,10 @@
 										  	<form action="#" th:action="@{|/solution/${executionId}/${solutionIndex}/${feedbackForObjectiveIndex}/save/feedback|}" method="post" th:object="${userFeedbackDTO}">
 											  	<input type="hidden" th:field="*{objectiveIndex}" th:validation="objectiveIndex">
 											  	<div class="d-flex justify-content-center mt-0">
-														  <span class="font-weight-bold indigo-text mr-2 mt-1">Bad</span>
+														  <span class="font-weight-bold indigo-text mr-2 mt-1">Not Preferred</span>
 														  
 														  <input type="range" class="custom-range" th:field="*{feedback}" min="-1" max="1" step="1" th:validation="feedback"/>
-														  <span class="font-weight-bold indigo-text ml-2 mt-1">Good</span>
+														  <span class="font-weight-bold indigo-text ml-2 mt-1">Preferred</span>
 														</div>
 												
 												
