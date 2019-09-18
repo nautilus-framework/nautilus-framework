@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
@@ -19,10 +20,15 @@ import thiagodnf.nautilus.web.model.Execution;
 @EnableScheduling
 public class AsyncConfiguration implements AsyncConfigurer {
 
+    @Value("${nThreads}")
+    private int nThreads = 1;
+    
 	@Bean
 	public ExecutorService taskExecutor() {
+	    
+	    System.out.println("nThreads: " + nThreads);
 
-	    return Executors.newFixedThreadPool(1);
+	    return Executors.newFixedThreadPool(nThreads);
 	    
 //		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 //
