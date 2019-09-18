@@ -9,6 +9,7 @@ import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDiale
 import thiagodnf.nautilus.web.dialet.ConverterDialect;
 import thiagodnf.nautilus.web.dialet.FormatterDialect;
 import thiagodnf.nautilus.web.dialet.InputValidationDialect;
+import thiagodnf.nautilus.web.dialet.NumberDialect;
 
 @Configuration
 public class ThymeleafConfiguration {
@@ -34,5 +35,10 @@ public class ThymeleafConfiguration {
 	@Bean
     public InputValidationDialect getInputValidationDialect() {
 	    return new InputValidationDialect(useInputValidation);
+    }
+	
+	@Bean
+    public NumberDialect getNumberDialect() {
+        return new NumberDialect();
     }
 }

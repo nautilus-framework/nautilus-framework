@@ -16,7 +16,7 @@
 					<div class="col-4 toolbar">
 						<a class="btn btn-success float-right" th:href="@{/problems}" th:text="#{btn.new-execution}"></a>
 						<a class="btn btn-outline-success float-right ml-2" th:href="@{/compare/form}" th:text="#{btn.compare}"></a>
-                        <a class="btn btn-outline-success float-right" href="#" data-toggle="modal" data-target="#modal-upload-execution" th:text="#{btn.upload}"></a>
+                        <a class="btn btn-outline-success float-right disabled"  href="#" data-toggle="modal" data-target="#modal-upload-execution" th:text="#{btn.upload}"></a>
 					</div>
 				</div>
 			</div>
@@ -103,7 +103,7 @@
 				</div>
 			</div>
 		</div>
-
+          
 		<div th:replace="fragments/modal/upload-execution"></div>
 		<div th:replace="fragments/footer :: footer"></div>
 		<script type="text/javascript" th:src="@{/js/src/execution-queue.js}"></script>

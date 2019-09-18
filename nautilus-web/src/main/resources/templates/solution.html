@@ -74,8 +74,8 @@
 													   <tr th:each="i : ${#numbers.sequence(0, solution.numberOfObjectives - 1)}">
 													    <td th:text="${i+1}"></td>
 													    <td th:text="${objectives.get(i)}"></td>
-													    <td th:text="${#numbers.formatDecimal(solution.getObjective(i),1, userSettingsDTO.decimalPlaces, userSettingsDTO.decimalSeparator)}"></td>
-													    <td th:text="${#numbers.formatDecimal(normalizedSolution.getObjective(i),1, userSettingsDTO.decimalPlaces, userSettingsDTO.decimalSeparator)}"></td>
+													    <td number:real="${solution.getObjective(i)}"></td>
+													    <td number:real="${normalizedSolution.getObjective(i)}"></td>
 													</tr>
 												</tbody>
 											</table>
