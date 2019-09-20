@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -145,7 +146,7 @@ public class CompareController {
         }
 
         model.addAttribute("executions", executions);
-        model.addAttribute("objectiveIds", objectives);
+        model.addAttribute("objectiveIds", Converter.toJson(objectives.stream().map(e -> e.getId()).collect(Collectors.toList())));
 
         return "compare";
     }
