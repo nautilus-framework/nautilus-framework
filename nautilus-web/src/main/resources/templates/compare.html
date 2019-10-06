@@ -23,10 +23,49 @@
 	</div>
 	
 	<div class="container">
-		<div class="row">
-		      <div class="col-12">
-		          <div id="chart"></div>
-		      </div>
+	   
+	    <h5 class="text-primary">Charts</h5>
+        <hr/>
+		<div id="chart"></div>
+		
+		<h5 class=" mt-4 text-primary">Preferred Objectives</h5>
+        <hr/>
+        <div >
+            <ul>
+                <li th:each="objectiveId : ${compareDTO.objectiveIds}" th:text="${objectiveId}">
+            </ul>
+        </div>
+        
+        <h5 class="mt-4 text-primary">Delta</h5>
+        <hr/>
+        <div th:text="${compareDTO.delta}"></div>
+		
+		<h5 class="mt-4  text-primary">Metrics</h5>
+		<hr/>
+		<div class="table-responsive">
+			<table class="table table-striped table-hover table-sm table-datatable">
+	             <thead>
+	                 <tr>
+	                     <th width="25px">#</th>
+	                     <th th:text="#{execution.title}"></th>
+	                     <th th:text="#{execution.algorithm}"></th>
+	                     <th th:each="metric : ${executions.get(0).attributes.get('metrics')}" th:text="${metric.key}"></th>
+	                 </tr>
+	             </thead>
+	             <tbody>
+	                 <tr th:each="execution,i : ${executions}">
+	                     <td th:text="${i.count}"></td>
+	                     <td>
+	                         <a  class="format-date"
+	                             th:href="@{|/execution/${execution.id}|}"  
+	                             th:text="${#strings.isEmpty(execution.title)} ? ${#formatter.date(execution.creationDate, userSettingsDTO.timeZone)} : ${execution.title}">
+	                         </a>
+	                     </td>
+	                     <td th:text="${execution.algorithmId}"></td>
+	                     <td th:each="metric : ${execution.attributes.get('metrics')}" th:text="${metric.value}"></td>
+	                 </tr>
+	             </tbody>
+	         </table>
 		</div>
 		
 		<a class="btn btn-light" th:href="@{/compare/form}" th:text="#{btn.cancel}"></a>

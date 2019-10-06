@@ -90,6 +90,11 @@
 			<version>1.18.8</version>
 			<scope>provided</scope>
 		</dependency>
+    <dependency>
+        <groupId>thiagodnf.rnsgaii</groupId>
+        <artifactId>rnsgaii</artifactId>
+        <version>2.1.0</version>
+    </dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -100,4 +105,10 @@
 			</plugin>
 		</plugins>
 	</build>
+  <repositories>
+      <repository>
+          <id>rnsgaii-github</id>
+          <url>https://github.com/thiagodnf/rnsgaii/raw/master/mvn-repo/releases</url>
+      </repository>
+  </repositories>
 </project>

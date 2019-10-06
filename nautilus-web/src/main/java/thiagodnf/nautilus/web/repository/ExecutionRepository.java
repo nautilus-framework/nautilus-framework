@@ -10,8 +10,12 @@ import thiagodnf.nautilus.web.model.Execution;
 import thiagodnf.nautilus.web.model.Execution.Visibility;
 
 public interface ExecutionRepository extends MongoRepository<Execution, String> {
-
-	List<ExecutionSimplifiedDTO> findByUserId(String userId);
+    
+    List<Execution> findByProblemIdAndInstance(String problemId, String instance);
+    
+    Execution findByProblemIdAndInstanceAndAlgorithmId(String problemId, String instance, String algorithmId);
+    
+    List<ExecutionSimplifiedDTO> findByUserId(String userId);
 	
 	List<ExecutionSimplifiedDTO> findByUserIdAndSolutionsNotNull(String userId);
 	

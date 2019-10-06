@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import thiagodnf.nautilus.plugin.extension.algorithm.ParetoFrontApproxExtension;
 import thiagodnf.nautilus.web.dto.ExecutionQueueDTO;
 import thiagodnf.nautilus.web.dto.ExecutionSettingsDTO;
 import thiagodnf.nautilus.web.dto.ExecutionSimplifiedDTO;
@@ -75,6 +76,14 @@ public class ExecutionService {
 
         save(execution);
     }
+    
+    public Execution findParetoFrontApprox(String problemId, String instance){
+        return this.executionRepository.findByProblemIdAndInstanceAndAlgorithmId(problemId, instance, new ParetoFrontApproxExtension().getId());
+    }
+    
+    public List<Execution> findByProblemIdAndInstance(String problemId, String instance){
+        return this.executionRepository.findByProblemIdAndInstance(problemId, instance);
+    }
 
     public Execution save(Execution execution) {
         return this.executionRepository.save(execution);
@@ -118,7 +127,8 @@ public class ExecutionService {
             execution.getInstance(),
             execution.getAlgorithmId(),
             execution.getCreationDate(),
-            execution.getSelectedSolutions()
+            execution.getSelectedSolutions(),
+            execution.getUserId()
         );
     }
 
@@ -188,5 +198,9 @@ public class ExecutionService {
         }
 
         return null;
+    }
+
+    public Execution findById(String id) {
+        return executionRepository.findById(id).orElse(null);
     }
 }

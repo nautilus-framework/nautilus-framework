@@ -36,6 +36,7 @@ import thiagodnf.nautilus.plugin.extension.SelectionExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.ManuallyExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
+import thiagodnf.nautilus.plugin.extension.algorithm.ParetoFrontApproxExtension;
 import thiagodnf.nautilus.plugin.extension.algorithm.RNSGAIIAlgorithmExtension;
 import thiagodnf.nautilus.plugin.extension.correlation.KendallCorrelationExtension;
 import thiagodnf.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
@@ -147,6 +148,7 @@ public class PluginService {
 		addAlgorithmExtension(new NSGAIIWithConfidenceBasedReductionAlgorithmExtension());
 //		addAlgorithmExtension(new NSGAIIWithRandomReductionAlgorithmExtension());
 		addAlgorithmExtension(new ManuallyExtension());
+		addAlgorithmExtension(new ParetoFrontApproxExtension());
 		
 		LOGGER.info("Done. Loading crossover extensions from classpath");
 		

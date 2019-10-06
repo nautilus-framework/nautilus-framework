@@ -2,7 +2,9 @@ package thiagodnf.nautilus.web.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -91,6 +93,8 @@ public class Execution {
     private List<ItemForEvaluation> itemForEvaluations = new ArrayList<>();
     
     private List<SelectedSolution> selectedSolutions = new ArrayList<>();
+    
+    private Map<String, Object> attributes = new HashMap<>();
     
     @CreatedDate
 	private Date creationDate;

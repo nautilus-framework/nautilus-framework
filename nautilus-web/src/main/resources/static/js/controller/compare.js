@@ -50,10 +50,13 @@ function plot(objectiveIds, series){
 $(function(){
    
 	var executions = $("#data").text();
+	
 	var objectiveIds = $("#objectiveIds").text();
 	
 	objectiveIds = JSON.parse(objectiveIds)
 	executions = JSON.parse(executions);
+	
+	console.log(executions)
 	
 	var series = [];
 	

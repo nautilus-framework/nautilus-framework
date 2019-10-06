@@ -20,6 +20,7 @@ import thiagodnf.nautilus.core.util.Converter;
 import thiagodnf.nautilus.plugin.extension.ProblemExtension;
 import thiagodnf.nautilus.web.dto.ExecutionSimplifiedDTO;
 import thiagodnf.nautilus.web.exception.ProblemNotFoundException;
+import thiagodnf.nautilus.web.exception.UserNotFoundException;
 import thiagodnf.nautilus.web.model.ObjectiveValue;
 import thiagodnf.nautilus.web.model.User;
 import thiagodnf.nautilus.web.service.ExecutionService;
@@ -43,7 +44,7 @@ public class ApiController {
     private ExecutionService executionService;
     
     @GetMapping("/api/problem/{problemId:.+}/instances")
-    public Object getInstances(@PathVariable String problemId) {
+    public Object getInstancesGivenAProblem(@PathVariable String problemId) {
 
         if (Strings.isNullOrEmpty(problemId)) {
             throw new ProblemNotFoundException();
@@ -58,20 +59,22 @@ public class ApiController {
         return filenames;
     }
     
-    @GetMapping("/api/execution/{problemId:.+}/{instance:.+}")
+    @GetMapping("/api/execution/{problemId:.+}/{instance:.+}/{userId:.+}")
     public Object getExecutions(
             @PathVariable String problemId, 
             @PathVariable String instance,
+            @PathVariable String userId,
             @RequestParam(value="selectedSolutions", defaultValue="0") String selectedSolutions) {
 
         if (Strings.isNullOrEmpty(problemId)) {
             throw new ProblemNotFoundException();
         }
         
-        User user = securityService.getLoggedUser().getUser();
-
-       
-        List<ExecutionSimplifiedDTO> executions = executionService.findExecutionSimplifiedDTOByUserId(user.getId());
+        if (Strings.isNullOrEmpty(userId)) {
+            throw new UserNotFoundException();
+        }
+        
+        List<ExecutionSimplifiedDTO> executions = executionService.findExecutionSimplifiedDTOByUserId(userId);
         
         executions = executions.stream()
                 .filter(e -> e.getProblemId().equalsIgnoreCase(problemId))

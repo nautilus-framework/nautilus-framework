@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:replace="fragments/head :: title(#{app.name})"></head>
+	<body class="light-gray">
+		<div th:replace="fragments/navbar :: default('home')"></div>
+	
+		<div class="page-header">
+	        <div class="container">
+	            <div class="row">
+	                <div class="col-12 path">
+	                    <h6 class="title">
+	                          <a th:href="@{/}" th:text="#{nav.home}"></a> 
+	                          <span class="path-divider">/</span> 
+	                          <a th:href="@{#}">Generate Pareto-front Approx</a>
+	                     </h6>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+    
+		<div class="container">
+			
+				
+			<div th:each="problem : ${problems}" class="mb-3">
+                <h5 th:text="${problem.value.name}"></h5>
+                
+                <div th:each="instance : ${instances.get(problem.key)}">
+                    <a th:href="@{|/pareto-front/generate/approx/${problem.key}/${instance.getFileName()}|}" th:text="${instance.getFileName()}"></a>
+                </div>
+            </div>
+            
+	        <a th:href="@{/}" class="btn btn-outline-secondary">Back</a>
+		</div>
+	
+		<div th:replace="fragments/footer :: footer"></div>
+	</body>
+</html>

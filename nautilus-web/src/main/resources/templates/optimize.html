@@ -151,6 +151,7 @@
 										    <li class="list-group-item" th:each="objective,i : ${objectiveGroup.value}">
 											    <div class="form-check checkbox-all-selected">
 											        <input type="checkbox" 
+											             onclick="return false;"
 			                                            class="form-check-input"
 			                                            th:field="*{objectiveIds}"
 			                                            th:value="${objective}"

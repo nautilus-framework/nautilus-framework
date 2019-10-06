@@ -22,5 +22,7 @@ public class ExecutionSimplifiedDTO {
 	private Date creationDate;
 	
 	private List<SelectedSolution> selectedSolutions;
+	
+	private String userId;
 }
 

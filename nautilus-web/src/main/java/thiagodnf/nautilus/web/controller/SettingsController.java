@@ -55,8 +55,8 @@ public class SettingsController {
     }
 	
 	private String form(UserSettingsDTO userSettingsDTO, Model model) {
-
-        model.addAttribute("availableTimeZones", TimeZones.getAvailableTimeZones());
+	    
+	    model.addAttribute("availableTimeZones", TimeZones.getAvailableTimeZones());
         model.addAttribute("userSettingsDTO", userSettingsDTO);
         
         return "settings";

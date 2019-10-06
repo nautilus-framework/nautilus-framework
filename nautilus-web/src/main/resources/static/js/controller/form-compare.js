@@ -12,9 +12,11 @@ function fetchInstancesFromServer(problemId){
 	});
 }
 
-function fetchExecutionsFromServer(problemId, instance){
+function fetchExecutionsFromServer(problemId, instance, userId){
 	
-	$.get(`/api/execution/${problemId}/${instance}?selectedSolutions=1`, function(executions){
+	console.log(problemId, instance, userId);
+	
+	$.get(`/api/execution/${problemId}/${instance}/${userId}?selectedSolutions=1`, function(executions){
 		
 		$("#executionIds").empty();
 		
@@ -30,6 +32,10 @@ function fetchExecutionsFromServer(problemId, instance){
 	});
 }
 
+function getUserId(){ 
+	return $("#userId option:selected").val();
+}
+
 function getProblemId(){ 
 	return $("#problemId option:selected").val();
 }
@@ -40,33 +46,43 @@ function getInstance(){
 
 $(function(){
 	
-	var selectedProblemId = $("#problemId option:selected").val()
+//	fetchInstancesFromServer(getProblemId());
+//	
+//	$('#userId').change(function (e) {
+//		e.preventDefault();
+//		
+//		fetchExecutionsFromServer(getProblemId(), getInstance(), getUserId());
+//		
+//		return false;
+//	});
+//	
+//	$('#problemId').change(function (e) {
+//		e.preventDefault();
+//		
+//		fetchExecutionsFromServer(getProblemId(), getInstance(), getUserId());
+//		
+//		return false;
+//	});
+//	
+//	$('.filter-executions').change(function (e) {
+//		e.preventDefault();
+//		
+//		fetchExecutionsFromServer(getProblemId(), getInstance(), getUserId());
+//	
+//		return false;
+//	});
 	
-	fetchInstancesFromServer(selectedProblemId);
 	
-	var $dualList = $('.dualx-list').bootstrapDualListbox({
-		moveOnSelect: false,
-		preserveSelectionOnMove: 'moved',
-	});
-	
-	$('#problemId').change(function (e) {
-		e.preventDefault();
-		
-		var problemId = $(this).find(':selected').val()
-		
-		fetchInstancesFromServer(problemId);
-		
-		return false;
-	});
-	
-	$('.filter-executions').change(function (e) {
-		e.preventDefault();
-		
-		fetchExecutionsFromServer(getProblemId(), getInstance());
-	
-		return false;
-	});
-	
-	console.log($dualList)
-	
+//	$("#form-compare").submit(function(e){
+//		
+//		e.preventDefault();
+//		
+//		var data = $('#execution-table').find('input, select').serializeArray();
+//		
+//		console.log(data)
+//		console.log($(this).serializeArray())
+//		
+//	
+//		return false;
+//	});
 })

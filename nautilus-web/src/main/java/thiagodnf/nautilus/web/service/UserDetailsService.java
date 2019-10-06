@@ -28,11 +28,11 @@ public class UserDetailsService implements org.springframework.security.core.use
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-		User user = userService.findByEmail(email);
+        User user = userService.findByEmail(email);
 
-		if (user == null) {
-			throw new UsernameNotFoundException("The username was not found. Please verify the e-mail");
-		}
+        if (user == null) {
+            throw new UsernameNotFoundException("The username was not found. Please verify the e-mail");
+        }
 		
 		RoleDTO roleDTO = roleService.findById(user.getRoleId());
 
