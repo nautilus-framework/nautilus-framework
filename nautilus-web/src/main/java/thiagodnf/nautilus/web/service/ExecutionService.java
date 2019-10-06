@@ -200,7 +200,7 @@ public class ExecutionService {
         return null;
     }
 
-    public Execution findById(String id) {
+    public Execution findByIdOrNull(String id) {
         return executionRepository.findById(id).orElse(null);
     }
 }

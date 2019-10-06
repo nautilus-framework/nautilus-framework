@@ -1,27 +1,37 @@
 package thiagodnf.nautilus.web.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Collection;
+
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import thiagodnf.nautilus.web.model.UserDetails;
 
 @Service
 public class SecurityService {
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	
-	@Autowired
-	private UserDetailsService userDetailsService;
-	
 	public boolean isUserLogged() {
 		return getLoggedUser() != null;
 	}
+	
+    public boolean isAdmin() {
+
+        if (!isUserLogged()) {
+            return false;
+        }
+
+        Collection<GrantedAuthority> authorities = getLoggedUser().getAuthorities();
+
+        for (GrantedAuthority authority : authorities) {
+
+            if (authority.getAuthority().equalsIgnoreCase("SHOW_ADMIN_PAGE")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 	
 	public thiagodnf.nautilus.web.model.UserDetails getLoggedUser() {
 
@@ -38,20 +48,5 @@ public class SecurityService {
 		return null;
 	}
 	
-	public void autologin(String username, String password) {
 
-		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-			userDetails, 
-			password, 
-			userDetails.getAuthorities()
-		);
-
-		authenticationManager.authenticate(token);
-		
-		if (token.isAuthenticated()) {
-			SecurityContextHolder.getContext().setAuthentication(token);
-		}
-	}
 }

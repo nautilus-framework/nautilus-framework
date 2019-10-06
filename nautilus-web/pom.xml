@@ -168,12 +168,6 @@
       <artifactId>datatables</artifactId>
       <version>1.10.19</version>
     </dependency>
-    <!-- highcharts -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>highcharts</artifactId>
-      <version>7.1.1</version>
-    </dependency>
     <dependency>
       <groupId>org.webjars.bower</groupId>
       <artifactId>numeralJs</artifactId>

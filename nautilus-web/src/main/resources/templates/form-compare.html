@@ -72,6 +72,8 @@
                             </table>
 					<span class="text-danger" th:if="${#fields.hasErrors('executionIds')}" th:errors="*{executionIds}"></span>
 					
+					<h5 class="mt-4 text-primary">Options</h5>
+                    <hr/>
 					<div class="form-group">
                          <label for="problemId">Delta</label> 
                          <input type="number" class="form-control" th:field="*{delta}" min="0.0" max="1.0" step="0.1" required/>
@@ -82,7 +84,7 @@
                        <input type="checkbox" class="form-check-input" th:field="*{filterBySelectedSolutions}"/>
                        <label class="form-check-label" for="filterBySelectedSolutions1">Filter by Selected Solutions</label>
                     </div>
-                    <div class="form-check">
+                    <div class="form-check mt-3">
                        <input type="checkbox" class="form-check-input" th:field="*{restrictedRP}"/>
                        <label class="form-check-label" for="restrictedRP1">Restricted RP</label>
                     </div>

@@ -56,8 +56,6 @@ $(function(){
 	objectiveIds = JSON.parse(objectiveIds)
 	executions = JSON.parse(executions);
 	
-	console.log(executions)
-	
 	var series = [];
 	
 	for (var i = 0; i < executions.length; i++){

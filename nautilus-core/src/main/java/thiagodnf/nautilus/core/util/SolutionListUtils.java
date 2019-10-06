@@ -327,9 +327,6 @@ public class SolutionListUtils {
             }
         }
         
-        System.out.println(maxValue);
-        
         return maxValue;
-        
     }
 }

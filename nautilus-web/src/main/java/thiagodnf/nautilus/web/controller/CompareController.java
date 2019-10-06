@@ -64,7 +64,7 @@ public class CompareController {
     private SecurityService securityService;
 
     @GetMapping("/form")
-    public String form(CompareDTO compareDTO, Model model) {
+    public String form(CompareDTO compareDTO,  Model model) {
 
         User user = securityService.getLoggedUser().getUser();
 
@@ -72,30 +72,38 @@ public class CompareController {
         
         List<UserDTO> users = userService.findAll();
         
+        List<ExecutionSimplifiedDTO> executions = null;
+        
+        if (securityService.isAdmin()) {
+            executions = findAllExecutions(users, true);
+        } else {
+            executions = executionService.findExecutionSimplifiedDTOByUserId(user.getId());
+        }
+        
         ProblemExtension problem = pluginService.getProblemById("spl-problem");
         
         model.addAttribute("users", users);
         model.addAttribute("objectives", problem.getObjectives());
         model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
-        model.addAttribute("executions", findAllExecutions(users));
+        model.addAttribute("executions", executions);
         model.addAttribute("problems", problems);
         model.addAttribute("compareDTO", compareDTO);
         
         return "form-compare";
     }
     
-    private List<ExecutionSimplifiedDTO> findAllExecutions( List<UserDTO> users){
+    private List<ExecutionSimplifiedDTO> findAllExecutions(List<UserDTO> users, boolean filterSelectedSolutions){
         
         List<ExecutionSimplifiedDTO> executions = new ArrayList<>();
         
-        for(UserDTO userDTO : users) {
-            
+        for (UserDTO userDTO : users) {
+
             List<ExecutionSimplifiedDTO> found = executionService.findExecutionSimplifiedDTOByUserId(userDTO.getId());
-            
-            found = found.stream()
-                    .filter(e -> !e.getSelectedSolutions().isEmpty())
-                    .collect(Collectors.toList());
-            
+
+            if (filterSelectedSolutions) {
+                found = found.stream().filter(e -> !e.getSelectedSolutions().isEmpty()).collect(Collectors.toList());
+            }
+
             executions.addAll(found);
         }
         
@@ -232,7 +240,7 @@ public class CompareController {
 
         long executionTime = execution.getExecutionTime();
 
-        Execution parent = executionService.findById(execution.getLastExecutionId());
+        Execution parent = executionService.findByIdOrNull(execution.getLastExecutionId());
 
         while (parent != null) {
 
@@ -241,7 +249,7 @@ public class CompareController {
             if (parent.getLastExecutionId() == null) {
                 parent = null;
             } else {
-                parent = executionService.findById(parent.getLastExecutionId());
+                parent = executionService.findByIdOrNull(parent.getLastExecutionId());
             }
         }
 
