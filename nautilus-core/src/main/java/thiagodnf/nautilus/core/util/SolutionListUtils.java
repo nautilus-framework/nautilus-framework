@@ -229,7 +229,8 @@ public class SolutionListUtils {
 
         // Normalize the values
         
-        double maxValue = getMaxValue(trimmedPfApproxFront, transferredPfFront);
+//        double maxValue = getMaxValue(trimmedPfApproxFront, transferredPfFront);
+        double maxValue = 3.5;
         
         List<? extends Solution<?>> nadirPoints = PointSolutionUtils.getNadirPoint(problem.getNumberOfObjectives(), 0.0, maxValue);
         
@@ -250,6 +251,8 @@ public class SolutionListUtils {
         
         values.put("ed-mean-to-zr", getMeanEuclideanDistancetoPoint(normalizedPfFront, normalizedZr));
         values.put("ed-min-to-zr", getMinEuclideanDistancetoPoint(normalizedPfFront, normalizedZr));
+        
+        values.put("original-min-to-zr", getMinEuclideanDistance(normalizedPf, normalizedZr));
         
         // Trandicional Metrics
         
@@ -277,6 +280,24 @@ public class SolutionListUtils {
         }
 
         return (double) distance / (double) front.getNumberOfPoints();
+    }
+    
+    public static double getMinEuclideanDistance(List<NSolution<?>> solutions, PointSolution zr) {
+
+        EuclideanDistance ed = new EuclideanDistance();
+
+        double distance = Double.MAX_VALUE;
+
+        for (NSolution<?> solution : solutions) {
+
+            double dist = ed.compute(solution.getObjectives(), zr.getObjectives());
+
+            if (dist < distance) {
+                distance = dist;
+            }
+        }
+
+        return distance;
     }
     
     public static double getMinEuclideanDistancetoPoint(Front front, PointSolution zr) {

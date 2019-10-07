@@ -184,6 +184,8 @@ public class CompareController {
             long executionTime = getExecutionTime(execution);
             
             metrics.put("execution-time", executionTime);
+            metrics.put("#-of-reductions", getNumberOfReductions(execution));
+            
 
             if (execution.getSelectedSolutions().size() == 1) {
 
@@ -195,6 +197,8 @@ public class CompareController {
 
                 metrics.put("all-time", diff);
             }
+            
+            metrics.put("interation-time", (long)metrics.get("all-time") - (long)metrics.get("execution-time"));
             
             execution.setSolutions(recalculated);
             execution.getAttributes().put("metrics", metrics);
@@ -254,6 +258,34 @@ public class CompareController {
         }
 
         return executionTime;
+    }
+    
+    private int getNumberOfReductions(Execution execution) {
+        
+        if (execution.getAlgorithmId().equalsIgnoreCase(new ManuallyExtension().getId())) {
+            return 0;
+        }
+
+        if (Strings.isBlank(execution.getLastExecutionId())) {
+            return 0;
+        }
+
+        int numberOfReductions = 0;
+
+        Execution parent = executionService.findByIdOrNull(execution.getLastExecutionId());
+
+        while (parent != null) {
+
+            numberOfReductions += 1;
+
+            if (parent.getLastExecutionId() == null) {
+                parent = null;
+            } else {
+                parent = executionService.findByIdOrNull(parent.getLastExecutionId());
+            }
+        }
+
+        return numberOfReductions;
     }
    
 }
