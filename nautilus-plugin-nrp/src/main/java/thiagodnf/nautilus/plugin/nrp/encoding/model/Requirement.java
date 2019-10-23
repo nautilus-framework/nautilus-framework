@@ -3,9 +3,8 @@ package thiagodnf.nautilus.plugin.nrp.encoding.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.nautilus.core.util.Converter;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
-
-import thiagodnf.nautilus.core.util.Converter;
 
 public class Requirement {
 

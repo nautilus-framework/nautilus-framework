@@ -5,17 +5,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.nautilus.core.gui.Tab;
+import org.nautilus.core.gui.TableTabContent;
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.objective.AbstractObjective;
+import org.nautilus.core.util.Converter;
+import org.nautilus.plugin.extension.problem.AbstractProblemExtension;
 import org.pf4j.Extension;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.gui.Tab;
-import thiagodnf.nautilus.core.gui.TableTabContent;
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.util.Converter;
-import thiagodnf.nautilus.plugin.extension.problem.AbstractProblemExtension;
 import thiagodnf.nautilus.plugin.zdt.encoding.instance.TXTInstanceData;
 import thiagodnf.nautilus.plugin.zdt.encoding.objective.F1Objective;
 import thiagodnf.nautilus.plugin.zdt.encoding.objective.F2ForZDT2Objective;

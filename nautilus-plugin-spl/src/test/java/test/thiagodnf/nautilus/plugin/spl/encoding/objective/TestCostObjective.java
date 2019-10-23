@@ -9,15 +9,14 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
-
-import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
-import thiagodnf.nautilus.core.encoding.solution.NBinarySolution;
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.util.Converter;
-import thiagodnf.nautilus.plugin.spl.encoding.objective.CostObjective;
-import thiagodnf.nautilus.plugin.spl.encoding.problem.SPLProblem;
-import thiagodnf.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
+import org.nautilus.core.encoding.problem.NBinaryProblem;
+import org.nautilus.core.encoding.solution.NBinarySolution;
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.objective.AbstractObjective;
+import org.nautilus.core.util.Converter;
+import org.nautilus.plugin.spl.encoding.objective.CostObjective;
+import org.nautilus.plugin.spl.encoding.problem.SPLProblem;
+import org.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
 
 public class TestCostObjective {
 

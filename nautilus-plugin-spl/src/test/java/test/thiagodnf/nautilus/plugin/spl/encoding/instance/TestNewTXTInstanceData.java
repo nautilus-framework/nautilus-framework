@@ -8,9 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
-
-import thiagodnf.nautilus.plugin.spl.encoding.instance.NewTXTInstanceData;
-import thiagodnf.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
+import org.nautilus.plugin.spl.encoding.instance.NewTXTInstanceData;
+import org.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
 class TestNewTXTInstanceData {
 
 	private static Path path = Paths.get("src")

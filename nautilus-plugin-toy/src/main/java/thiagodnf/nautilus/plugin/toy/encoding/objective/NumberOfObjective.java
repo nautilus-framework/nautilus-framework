@@ -1,10 +1,9 @@
 package thiagodnf.nautilus.plugin.toy.encoding.objective;
 
+import org.nautilus.core.encoding.solution.NIntegerSolution;
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.objective.AbstractObjective;
 import org.uma.jmetal.solution.Solution;
-
-import thiagodnf.nautilus.core.encoding.solution.NIntegerSolution;
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class NumberOfObjective extends AbstractObjective {
 

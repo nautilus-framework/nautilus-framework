@@ -3,13 +3,13 @@ package thiagodnf.nautilus.plugin.nrp.encoding.problem;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.nautilus.core.encoding.problem.NBinaryProblem;
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.objective.AbstractObjective;
 import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
-import thiagodnf.nautilus.core.encoding.problem.NBinaryProblem;
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.nrp.encoding.instance.TXTInstance;
 
 public class NRPProblem extends NBinaryProblem {

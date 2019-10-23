@@ -4,14 +4,14 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.objective.AbstractObjective;
+import org.nautilus.plugin.extension.problem.AbstractProblemExtension;
 import org.pf4j.Extension;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.plugin.extension.problem.AbstractProblemExtension;
 import thiagodnf.nautilus.plugin.nrp.encoding.instance.TXTInstance;
 import thiagodnf.nautilus.plugin.nrp.encoding.objective.CostObjective;
 import thiagodnf.nautilus.plugin.nrp.encoding.objective.ImportanceObjective;

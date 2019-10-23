@@ -3,8 +3,8 @@ package test.thiagodnf.nautilus.plugin.spl.encoding.objective;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.plugin.spl.encoding.objective.SimilarityObjective;
+import org.nautilus.core.objective.AbstractObjective;
+import org.nautilus.plugin.spl.encoding.objective.SimilarityObjective;
 
 public class TestSimilarityObjective {
 

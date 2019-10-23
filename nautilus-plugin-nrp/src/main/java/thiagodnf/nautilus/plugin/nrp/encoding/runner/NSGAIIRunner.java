@@ -5,6 +5,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.objective.AbstractObjective;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIBuilder;
 import org.uma.jmetal.operator.CrossoverOperator;
@@ -18,8 +20,6 @@ import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.nrp.encoding.problem.NRPProblem;
 import thiagodnf.nautilus.plugin.nrp.extension.problem.NRPProblemExtension;
 

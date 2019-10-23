@@ -1,10 +1,9 @@
 package thiagodnf.nautilus.plugin.zdt.encoding.objective;
 
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.objective.AbstractObjective;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
-
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
 
 public class F1Objective extends AbstractObjective {
 

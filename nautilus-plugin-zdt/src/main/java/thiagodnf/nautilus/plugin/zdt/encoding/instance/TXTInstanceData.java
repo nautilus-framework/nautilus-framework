@@ -5,12 +5,12 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.common.base.Preconditions;
+import org.nautilus.core.gui.Tab;
+import org.nautilus.core.gui.TableTabContent;
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.util.InstanceReader;
 
-import thiagodnf.nautilus.core.gui.Tab;
-import thiagodnf.nautilus.core.gui.TableTabContent;
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.util.InstanceReader;
+import com.google.common.base.Preconditions;
 
 public class TXTInstanceData extends Instance {
 

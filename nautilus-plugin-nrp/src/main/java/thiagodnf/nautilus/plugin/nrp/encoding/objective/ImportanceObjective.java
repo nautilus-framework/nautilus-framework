@@ -1,9 +1,9 @@
 package thiagodnf.nautilus.plugin.nrp.encoding.objective;
 
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.objective.AbstractObjective;
 import org.uma.jmetal.solution.Solution;
 
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
 import thiagodnf.nautilus.plugin.nrp.encoding.instance.TXTInstance;
 
 public class ImportanceObjective extends AbstractObjective {

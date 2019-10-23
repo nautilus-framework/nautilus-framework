@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.nautilus.core.util.Is;
 import org.uma.jmetal.problem.impl.AbstractBinaryProblem;
 import org.uma.jmetal.problem.impl.AbstractIntegerProblem;
 import org.uma.jmetal.solution.BinarySolution;
@@ -20,8 +21,6 @@ import org.uma.jmetal.solution.impl.DefaultIntegerSolution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 
 import com.google.common.primitives.Doubles;
-
-import thiagodnf.nautilus.core.util.Is;
 
 public class IsTest {
 	

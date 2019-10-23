@@ -8,22 +8,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.nautilus.core.encoding.NSolution;
+import org.nautilus.core.encoding.problem.NIntegerProblem;
+import org.nautilus.core.encoding.solution.NIntegerSolution;
+import org.nautilus.core.gui.Tab;
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.normalize.ByParetoFrontValuesNormalize;
+import org.nautilus.core.objective.AbstractObjective;
+import org.nautilus.core.reduction.AbstractReduction;
+import org.nautilus.core.reduction.ConfidenceBasedReduction;
+import org.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
+import org.nautilus.core.reduction.AbstractReduction.RankingItem;
+import org.nautilus.core.util.Converter;
+import org.nautilus.core.util.SolutionAttribute;
 import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
-
-import thiagodnf.nautilus.core.encoding.NSolution;
-import thiagodnf.nautilus.core.encoding.problem.NIntegerProblem;
-import thiagodnf.nautilus.core.encoding.solution.NIntegerSolution;
-import thiagodnf.nautilus.core.gui.Tab;
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.normalize.ByParetoFrontValuesNormalize;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
-import thiagodnf.nautilus.core.reduction.AbstractReduction;
-import thiagodnf.nautilus.core.reduction.AbstractReduction.ItemForEvaluation;
-import thiagodnf.nautilus.core.reduction.AbstractReduction.RankingItem;
-import thiagodnf.nautilus.core.reduction.ConfidenceBasedReduction;
-import thiagodnf.nautilus.core.util.Converter;
-import thiagodnf.nautilus.core.util.SolutionAttribute;
 
 public class TestConfidenceBasedReduction2 {
 

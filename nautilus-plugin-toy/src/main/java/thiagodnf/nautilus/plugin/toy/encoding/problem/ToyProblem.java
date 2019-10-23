@@ -3,9 +3,10 @@ package thiagodnf.nautilus.plugin.toy.encoding.problem;
 import java.util.Collections;
 import java.util.List;
 
-import thiagodnf.nautilus.core.encoding.problem.NIntegerProblem;
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
+import org.nautilus.core.encoding.problem.NIntegerProblem;
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.objective.AbstractObjective;
+
 import thiagodnf.nautilus.plugin.toy.encoding.instance.TXTInstance;
 
 public class ToyProblem extends NIntegerProblem {

@@ -3,9 +3,10 @@ package thiagodnf.nautilus.plugin.zdt.encoding.problem;
 import java.util.ArrayList;
 import java.util.List;
 
-import thiagodnf.nautilus.core.encoding.problem.NDoubleProblem;
-import thiagodnf.nautilus.core.model.Instance;
-import thiagodnf.nautilus.core.objective.AbstractObjective;
+import org.nautilus.core.encoding.problem.NDoubleProblem;
+import org.nautilus.core.model.Instance;
+import org.nautilus.core.objective.AbstractObjective;
+
 import thiagodnf.nautilus.plugin.zdt.encoding.instance.TXTInstanceData;
 
 public class ZDT2Problem extends NDoubleProblem {

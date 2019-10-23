@@ -1,8 +1,7 @@
 package thiagodnf.nautilus.plugin.nrp.encoding.model;
 
+import org.nautilus.core.util.Converter;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
-
-import thiagodnf.nautilus.core.util.Converter;
 
 public class Task {
 	
