@@ -127,7 +127,8 @@ public class ExecutionService {
             execution.getAlgorithmId(),
             execution.getCreationDate(),
             execution.getSelectedSolutions(),
-            execution.getUserId()
+            execution.getUserId(),
+            execution.getObjectiveIds()
         );
     }
 

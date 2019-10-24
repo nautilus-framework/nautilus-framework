@@ -3,6 +3,7 @@ package org.nautilus.web.controller;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ import org.nautilus.core.util.Converter;
 import org.nautilus.core.util.SolutionListUtils;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.algorithm.ManuallyExtension;
+import org.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
 import org.nautilus.web.dto.CompareDTO;
 import org.nautilus.web.dto.ExecutionSimplifiedDTO;
 import org.nautilus.web.dto.UserDTO;
@@ -82,12 +84,30 @@ public class CompareController {
         
         ProblemExtension problem = pluginService.getProblemById("spl-problem");
         
+        Map<String, Integer> numberOfReductions = new HashMap<>();
+
+        for (ExecutionSimplifiedDTO executionSimplified : executions) {
+            
+            int numberOfReduction = 0;
+            
+            if(executionSimplified.getAlgorithmId().equalsIgnoreCase(new NSGAIIWithConfidenceBasedReductionAlgorithmExtension().getId())) {
+                
+                Execution execution = executionService.findExecutionById(executionSimplified.getId());
+                
+                numberOfReduction = getNumberOfReductions(execution);
+            }
+            
+            numberOfReductions.put(executionSimplified.getId(), numberOfReduction);
+        }
+        
+        
         model.addAttribute("users", users);
         model.addAttribute("objectives", problem.getObjectives());
         model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
         model.addAttribute("executions", executions);
         model.addAttribute("problems", problems);
         model.addAttribute("compareDTO", compareDTO);
+        model.addAttribute("numberOfReductions", numberOfReductions);
         
         return "form-compare";
     }

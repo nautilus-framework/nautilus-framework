@@ -25,5 +25,7 @@ public class ExecutionSimplifiedDTO {
 	private List<SelectedSolution> selectedSolutions;
 	
 	private String userId;
+	
+	private List<String> objectiveIds;
 }
 
