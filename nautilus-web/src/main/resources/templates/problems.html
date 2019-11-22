@@ -18,7 +18,7 @@
 					</h6>
 				</div>
 				<div class="col-4 toolbar">
-					<a class="btn btn-outline-success float-right disabled" href="#" data-toggle="modal" data-target="#modal-upload-instance" th:text="#{btn.upload-instance}"></a>
+					<a class="btn btn-outline-success float-right" th:href="@{/upload/instance}" th:text="#{btn.upload-instance}"></a>
 				</div>
 			</div>
 		</div>
@@ -73,7 +73,6 @@
 		</div>
 	</div>
 
-	<div th:replace="fragments/modal/upload-instance"></div>
 	<div th:replace="fragments/footer :: footer"></div>
 </body>
 

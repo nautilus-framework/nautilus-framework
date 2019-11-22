@@ -1,6 +1,5 @@
 package org.nautilus.web.controller;
 
-import org.nautilus.web.dto.UploadExecutionDTO;
 import org.nautilus.web.model.User;
 import org.nautilus.web.service.ExecutionService;
 import org.nautilus.web.service.PluginService;
@@ -34,7 +33,6 @@ public class HomeController {
 	    User user = securityService.getLoggedUser().getUser(); 
 		
 		model.addAttribute("problems", pluginService.getProblems());
-		model.addAttribute("uploadExecutionDTO", new UploadExecutionDTO());
 		model.addAttribute("executions", executionService.findExecutionSimplifiedDTOByUserId(user.getId()));
 		model.addAttribute("runningExecutions", executionService.findRunningExecutions());
 		model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));

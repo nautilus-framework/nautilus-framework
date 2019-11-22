@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.nautilus.plugin.extension.ProblemExtension;
-import org.nautilus.web.dto.UploadInstanceDTO;
 import org.nautilus.web.model.User;
 import org.nautilus.web.service.FileService;
 import org.nautilus.web.service.PluginService;
@@ -50,7 +49,6 @@ public class ProblemController {
         model.addAttribute("problems", problems);
         model.addAttribute("instances", instances);
 
-        model.addAttribute("uploadInstanceDTO", new UploadInstanceDTO());
         model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
 
         return "problems";

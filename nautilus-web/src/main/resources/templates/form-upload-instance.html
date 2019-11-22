@@ -11,9 +11,9 @@
 				<div class="row">
 					<div class="col-12 path">
 						<h6 class="title">
-							<a th:href="@{/upload/execution}">Upload</a>
+							<a th:href="@{/upload/instance}">Upload</a>
 							<span class="path-divider">/</span>
-							<a th:href="@{#}">Execution</a>
+							<a th:href="@{#}">Instance</a>
 						</h6>
 					</div>
 				</div>
@@ -21,7 +21,17 @@
 		</div>
 	
 		<div class="container">
-			 <form method="POST" th:action="@{/upload/execution/}" th:object="${uploadExecutionDTO}" enctype="multipart/form-data">
+			 <form method="POST" th:action="@{/upload/instance}" th:object="${uploadInstanceDTO}" enctype="multipart/form-data">
+			      <div class="form-group">
+                      <label for="problemId" th:text="#{nav.problem}" ></label> 
+                      <select class="form-control"  th:field="*{problemId}" th:validation="problemId">
+                          <option th:each="problem : ${problems}" 
+                              th:value="${problem.key}"
+                              th:text="${problem.value.name}" 
+                          />
+                      </select>
+                     <span class="text-danger" th:if="${#fields.hasErrors('problemId')}" th:errors="*{problemId}"></span>
+                  </div>
 			      <p th:text="#{nav.select-a-file-to-upload}"></p>
 		          <div class="custom-file">
                       <label for="file" class="custom-file-label" th:text="#{nav.nofilechosen}"></label> 
@@ -31,7 +41,7 @@
                   <br/>
                   <br/>
                   <button type="submit" class="btn btn-success" th:text="#{btn.upload}"></button>
-				  <a th:href="@{/home}" class="btn btn-light" th:text="#{btn.cancel}"></a>
+				  <a th:href="@{/problems}" class="btn btn-light" th:text="#{btn.cancel}"></a>
 			</form>
 			<br/>
 		</div>
