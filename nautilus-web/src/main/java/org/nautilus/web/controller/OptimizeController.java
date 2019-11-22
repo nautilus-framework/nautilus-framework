@@ -3,14 +3,12 @@ package org.nautilus.web.controller;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.nautilus.core.encoding.NProblem;
-import org.nautilus.core.encoding.NSolution;
 import org.nautilus.core.encoding.problem.NBinaryProblem;
 import org.nautilus.core.encoding.solution.NBinarySolution;
 import org.nautilus.core.model.Instance;
@@ -27,8 +25,8 @@ import org.nautilus.web.dto.ContinueDTO;
 import org.nautilus.web.dto.ParametersDTO;
 import org.nautilus.web.exception.InstanceNotFoundException;
 import org.nautilus.web.model.Execution;
-import org.nautilus.web.model.User;
 import org.nautilus.web.model.Execution.Visibility;
+import org.nautilus.web.model.User;
 import org.nautilus.web.service.ExecutionService;
 import org.nautilus.web.service.FileService;
 import org.nautilus.web.service.OptimizeService;
@@ -50,7 +48,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.uma.jmetal.operator.impl.crossover.SinglePointCrossover;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 
