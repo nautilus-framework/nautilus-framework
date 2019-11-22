@@ -1,13 +1,7 @@
 package org.nautilus.web.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.nautilus.web.model.Role;
 import org.nautilus.web.model.User;
-import org.nautilus.web.repository.RoleRepository;
 import org.nautilus.web.service.UserService;
-import org.nautilus.web.util.Privileges;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +18,6 @@ public class InitialDataConfiguration implements ApplicationListener<ContextRefr
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private RoleRepository roleRepository;
 	
 	@Value("${admin.email}")
 	private String adminEmail;
@@ -46,40 +37,18 @@ public class InitialDataConfiguration implements ApplicationListener<ContextRefr
 		
 		LOGGER.info("Creating the default users and privilegies");
 
-		createRoleIfNotFound(Role.ADMIN, Privileges.getPrivilegies(), false);
-		createRoleIfNotFound(Role.USER, new ArrayList<>(), false);
-
 		User adminUser = new User();
 		
 		adminUser.setEmail(adminEmail);
 		adminUser.setPassword(adminPassword);
 		adminUser.setFirstname(adminFirstname);
 		adminUser.setLastname(adminLastname);
-		adminUser.setRoleId(roleRepository.findByName(Role.ADMIN).getId());
+		adminUser.setAdmin(true);
 		adminUser.setEditable(false);
 		adminUser.setEnabled(true);
 		adminUser.setMaxExecutions(Integer.MAX_VALUE);
 
 		createUserIfNotFound(adminUser);
-	}
-	
-	@Transactional
-	private Role createRoleIfNotFound(String name, List<String> privileges, boolean isEditable) {
-
-		Role role = roleRepository.findByName(name);
-
-		if (role == null) {
-
-			role = new Role();
-
-			role.setName(name);
-			role.setPrivileges(privileges);
-			role.setEditable(isEditable);
-
-			return roleRepository.save(role);
-		}
-
-		return role;
 	}
 	
 	@Transactional

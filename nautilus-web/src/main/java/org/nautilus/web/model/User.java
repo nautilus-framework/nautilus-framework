@@ -24,13 +24,13 @@ public class User {
 
 	private String password;
 	
-	private String roleId;
-	
 	private String firstname;
 
 	private String lastname;
 	
 	private String confirmationToken;
+	
+	private boolean admin = false;
 	
 	private boolean enabled = false;
 	

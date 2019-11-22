@@ -23,11 +23,17 @@ import org.nautilus.plugin.extension.NormalizerExtension;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.RemoverExtension;
 import org.nautilus.plugin.extension.SelectionExtension;
+import org.nautilus.plugin.extension.algorithm.BruteForceSearchAlgorithmExtension;
+import org.nautilus.plugin.extension.algorithm.GAAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.ManuallyExtension;
 import org.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
+import org.nautilus.plugin.extension.algorithm.NSGAIIIAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
+import org.nautilus.plugin.extension.algorithm.NSGAIIWithRandomReductionAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.ParetoFrontApproxExtension;
 import org.nautilus.plugin.extension.algorithm.RNSGAIIAlgorithmExtension;
+import org.nautilus.plugin.extension.algorithm.RandomSearchAlgorithmExtension;
+import org.nautilus.plugin.extension.algorithm.SPEA2AlgorithmExtension;
 import org.nautilus.plugin.extension.correlation.KendallCorrelationExtension;
 import org.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
 import org.nautilus.plugin.extension.correlation.SpearmanCorrelationExtension;
@@ -138,15 +144,15 @@ public class PluginService {
 		
 		LOGGER.info("Done. Loading algorithms extensions from classpath");
 		
-//		addAlgorithmExtension(new BruteForceSearchAlgorithmExtension());
-//		addAlgorithmExtension(new GAAlgorithmExtension());
+		addAlgorithmExtension(new BruteForceSearchAlgorithmExtension());
+		addAlgorithmExtension(new GAAlgorithmExtension());
 		addAlgorithmExtension(new NSGAIIAlgorithmExtension());
-//		addAlgorithmExtension(new NSGAIIIAlgorithmExtension());
-//		addAlgorithmExtension(new RandomSearchAlgorithmExtension());
+		addAlgorithmExtension(new NSGAIIIAlgorithmExtension());
+		addAlgorithmExtension(new RandomSearchAlgorithmExtension());
 		addAlgorithmExtension(new RNSGAIIAlgorithmExtension());
-//		addAlgorithmExtension(new SPEA2AlgorithmExtension());
+		addAlgorithmExtension(new SPEA2AlgorithmExtension());
 		addAlgorithmExtension(new NSGAIIWithConfidenceBasedReductionAlgorithmExtension());
-//		addAlgorithmExtension(new NSGAIIWithRandomReductionAlgorithmExtension());
+		addAlgorithmExtension(new NSGAIIWithRandomReductionAlgorithmExtension());
 		addAlgorithmExtension(new ManuallyExtension());
 		addAlgorithmExtension(new ParetoFrontApproxExtension());
 		

@@ -34,12 +34,9 @@ public class UserDTO {
     @HTMLAutoComplete("off")
     private String lastname;
 
-	@NotBlank
-	private String roleId;
-	
-	private String roleName;
-		
 	public boolean enabled;
+	
+	public boolean admin;
 	
 	private boolean accountNonExpired;
 	

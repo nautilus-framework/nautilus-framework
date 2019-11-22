@@ -4,7 +4,6 @@ import javax.validation.Valid;
 
 import org.nautilus.web.dto.UserDTO;
 import org.nautilus.web.model.User;
-import org.nautilus.web.service.RoleService;
 import org.nautilus.web.service.UserService;
 import org.nautilus.web.util.Messages;
 import org.nautilus.web.util.Redirect;
@@ -25,9 +24,6 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private RoleService roleService;
 	
 	@Autowired
     private Redirect redirect;
@@ -70,7 +66,6 @@ public class UserController {
 	private String form(UserDTO userDTO, Model model) {
 		
 		model.addAttribute("userDTO", userDTO);
-		model.addAttribute("roleDTOs", roleService.findAll());
 		
 		return "form-user";
 	}

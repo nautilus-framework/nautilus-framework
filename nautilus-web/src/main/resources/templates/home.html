@@ -7,16 +7,17 @@
 		<div class="page-header">
 			<div class="container">
 				<div class="row">
-					<div class="col-8 path">
+					<div class="col-7 path">
 						<h6 class="title">
 							<a th:href="@{/home}" th:text="#{nav.home}"></a>
 							<span class="path-divider">/</span>
 						</h6>
 					</div>
-					<div class="col-4 toolbar">
+					<div class="col-5 toolbar">
 						<a class="btn btn-success float-right" th:href="@{/problems}" th:text="#{btn.new-execution}"></a>
 						<a class="btn btn-outline-success float-right ml-2" th:href="@{/compare/form}" th:text="#{btn.compare}"></a>
-                        <a class="btn btn-outline-success float-right disabled"  href="#" data-toggle="modal" data-target="#modal-upload-execution" th:text="#{btn.upload}"></a>
+                        <!-- <a class="btn btn-outline-success float-right"  href="#" data-toggle="modal" data-target="#modal-upload-execution" th:text="#{btn.upload}"></a> -->
+                        <a class="btn btn-outline-success float-right"  th:href="@{/upload/execution/}">Upload Execution</a>
 					</div>
 				</div>
 			</div>

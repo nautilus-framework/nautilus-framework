@@ -28,20 +28,6 @@ public class AsyncConfiguration implements AsyncConfigurer {
 	    System.out.println("nThreads: " + nThreads);
 
 	    return Executors.newFixedThreadPool(nThreads);
-	    
-//		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-//
-//		// Number of thread running at the same time. After this value new ones will wait
-//		executor.setCorePoolSize(2);
-//		executor.setMaxPoolSize(5);
-//		
-//		// After this value, a new thread will be rejected
-//		executor.setQueueCapacity(10);
-//		executor.setThreadNamePrefix("optimizing-");
-//		
-//		executor.initialize();
-//		
-//		return executor;
 	}
 	
 	@Bean

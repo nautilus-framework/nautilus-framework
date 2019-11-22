@@ -1,6 +1,5 @@
 package org.nautilus.web.controller;
 
-import org.nautilus.web.service.RoleService;
 import org.nautilus.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,16 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 	
 	@Autowired
-	private RoleService roleService;
-	
-	@Autowired
 	private UserService userService;
 	
 	@GetMapping("")
 	public String showUsers(Model model){
 		
-		model.addAttribute("userDTOs", userService.findAll());
-		model.addAttribute("rolesDTOs", roleService.findAll());
+		model.addAttribute("users", userService.findAll());
 		
 		return "admin";
 	}

@@ -23,7 +23,7 @@
 						      <li class="nav-item" th:classappend="${active == 'gallery'} ? active : ''">
 						        <a class="nav-link" th:href="@{/gallery}" th:text="#{nav.gallery}"></a>
 						      </li>
-						      <li class="nav-item" th:classappend="${active == 'admin'} ? active : ''" sec:authorize="hasAuthority('SHOW_ADMIN_PAGE')">
+						      <li class="nav-item" th:classappend="${active == 'admin'} ? active : ''" sec:authorize="hasAuthority('IS_ADMIN')">
 						        <a class="nav-link" th:href="@{/admin}" th:text="#{nav.admin}"></a>
 						      </li>
 						</ul>

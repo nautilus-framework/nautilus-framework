@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.nautilus.web.dto.ExecutionSimplifiedDTO;
-import org.nautilus.web.dto.RoleDTO;
 import org.nautilus.web.dto.UserDTO;
 import org.nautilus.web.dto.UserSettingsDTO;
 import org.nautilus.web.exception.ConfirmationTokenNotFoundException;
@@ -23,9 +22,6 @@ public class UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private RoleService roleService;
 	
 	@Autowired
     private ExecutionService executionService;
@@ -87,38 +83,30 @@ public class UserService {
 		return this.userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 	
-	public List<User> findUsersByRoleId(String id) {
-		return this.userRepository.findByRoleId(id);
-    }
-	
 	public List<UserDTO> findAll() {
 		return convertToUserDTOs(userRepository.findAll());
 	}
-	
-	
 	
 	private List<UserDTO> convertToUserDTOs(List<User> models) {
 		return models.stream().map(this::convertToUserDTO).collect(Collectors.toList());
 	}
 	
-	public void updateUser(UserDTO userDTO) {
+	public void updateUser(UserDTO user) {
 
-        User found = findUserById(userDTO.getId());
+        User found = findUserById(user.getId());
 
         if (!found.isEditable()) {
             throw new UserNotEditableException();
         }
         
-        RoleDTO roleDTO = roleService.findById(userDTO.getRoleId());
-        
-        found.setRoleId(roleDTO.getId());
-        found.setEnabled(userDTO.isEnabled());
-        found.setAccountNonExpired(userDTO.isAccountNonExpired());
-        found.setCredentialsNonExpired(userDTO.isCredentialsNonExpired());
-        found.setAccountNonLocked(userDTO.isAccountNonLocked());
-        found.setMaxExecutions(userDTO.getMaxExecutions());
-        found.setFirstname(userDTO.getFirstname());
-        found.setLastname(userDTO.getLastname());
+        found.setEnabled(user.isEnabled());
+        found.setAdmin(user.isAdmin());
+        found.setAccountNonExpired(user.isAccountNonExpired());
+        found.setCredentialsNonExpired(user.isCredentialsNonExpired());
+        found.setAccountNonLocked(user.isAccountNonLocked());
+        found.setMaxExecutions(user.getMaxExecutions());
+        found.setFirstname(user.getFirstname());
+        found.setLastname(user.getLastname());
         
         userRepository.save(found);
     }
@@ -143,19 +131,17 @@ public class UserService {
     
     private UserDTO convertToUserDTO(User user) {
         
-        if (user == null)
+        if (user == null) {
             return null;
-        
-        RoleDTO role = roleService.findById(user.getRoleId());
+        }
         
         return new UserDTO(
             user.getId(),
             user.getEmail(),
             user.getFirstname(),
             user.getLastname(),
-            role.getId(),
-            role.getName(),
             user.isEnabled(),
+            user.isAdmin(),
             user.isAccountNonExpired(),
             user.isAccountNonLocked(),
             user.isCredentialsNonExpired(),
