@@ -1,7 +1,9 @@
 package org.nautilus.web.service;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -59,6 +61,12 @@ import org.pf4j.PluginWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
@@ -73,7 +81,10 @@ public class PluginService {
 	@Autowired
 	private FileService fileService;
 
-	private final PluginManager pluginManager = new DefaultPluginManager(); 
+	private final PluginManager pluginManager = new DefaultPluginManager();
+	
+    @Autowired
+    private RestTemplateBuilder restTemplate;
 	
 	// Extensions
 	
@@ -193,16 +204,57 @@ public class PluginService {
 	
 	private void addProblemExtension(ProblemExtension problemExtension) {
 
-		if (this.problems.containsKey(problemExtension.getId())) {
+	    String key = problemExtension.getId();
+	    
+		if (this.problems.containsKey(key)) {
 			throw new RuntimeException("The problems w");
 		}
 		
-		this.problems.put(problemExtension.getId(), problemExtension);
+		this.problems.put(key, problemExtension);
 		
-		this.fileService.createInstancesDirectory(problemExtension.getId());
+		this.fileService.createInstancesDirectory(key);
 		
-		LOGGER.info("Added '{}' problem extension", problemExtension.getId());
+		LOGGER.info("Added '{}' problem extension", key);
+		
+		List<Path> files = fileService.getInstances(key);
+		
+		Path directory = fileService.getInstancesLocation().resolve(key);
+		        
+        if (files.isEmpty()) {
+
+            String host = "https://raw.githubusercontent.com/thiagodnf/thiagodnf.github.io/master/supporting-pages/nautilus/instances/";
+
+            if (key.equalsIgnoreCase("toy-problem")) {
+
+                Path file = directory.resolve("1-to-100-w-010.txt");
+
+                downloadFile(host + "1-to-100-w-010.txt", file);
+            } else if (key.equalsIgnoreCase("spl-problem")) {
+
+                Path file = directory.resolve("james.txt");
+
+                downloadFile(host + "james.txt", file);
+            }
+        }
 	}
+	
+    private void downloadFile(String url, Path file) { // This method will download file using RestTemplate
+        try {
+            
+            HttpHeaders headers = new HttpHeaders();
+            
+            headers.setAccept(Arrays.asList(MediaType.TEXT_PLAIN));
+            
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+            
+            ResponseEntity<byte[]> response = restTemplate.build().exchange(url, HttpMethod.GET, entity, byte[].class);
+            
+            Files.write(file, response.getBody());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 	
 	private void addAlgorithmExtension(AlgorithmExtension algorithmExtension) {
 
