@@ -89,10 +89,10 @@
 			<scope>provided</scope>
 		</dependency>
     <dependency>
-        <groupId>thiagodnf.rnsgaii</groupId>
-        <artifactId>rnsgaii</artifactId>
-        <version>2.1.0</version>
-    </dependency>
+      <groupId>ufpr.gres</groupId>
+      <artifactId>r-nsga-ii</artifactId>
+      <version>3.0.0</version>
+  </dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -104,9 +104,15 @@
 		</plugins>
 	</build>
   <repositories>
-      <repository>
-          <id>rnsgaii-github</id>
-          <url>https://github.com/thiagodnf/rnsgaii/raw/master/mvn-repo/releases</url>
-      </repository>
-  </repositories>
+    <repository>
+        <id>mvn-repo</id>
+        <url>https://github.com/gres-ufpr/mvn-repo/raw/master/releases</url>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
 </project>

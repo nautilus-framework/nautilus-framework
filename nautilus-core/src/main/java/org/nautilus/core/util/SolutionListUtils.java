@@ -27,11 +27,11 @@ import org.uma.jmetal.util.front.util.FrontNormalizer;
 import org.uma.jmetal.util.point.Point;
 import org.uma.jmetal.util.point.PointSolution;
 
-import thiagodnf.rnsgaii.qualityattribute.RHypervolume;
-import thiagodnf.rnsgaii.qualityattribute.RInvertedGenerationalDistance;
-import thiagodnf.rnsgaii.qualityattribute.RSpread;
-import thiagodnf.rnsgaii.rmetric.RMetric;
-import thiagodnf.rnsgaii.util.PointSolutionUtils;
+import ufpr.gres.rnsgaii.qualityattribute.RHypervolume;
+import ufpr.gres.rnsgaii.qualityattribute.RInvertedGenerationalDistance;
+import ufpr.gres.rnsgaii.qualityattribute.RSpread;
+import ufpr.gres.rnsgaii.rmetric.RMetric;
+import ufpr.gres.rnsgaii.util.PointSolutionUtils;
 
 public class SolutionListUtils {
 	

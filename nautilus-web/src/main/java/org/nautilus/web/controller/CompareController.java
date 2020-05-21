@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.uma.jmetal.util.point.PointSolution;
 
-import thiagodnf.rnsgaii.util.PointSolutionUtils;
+import ufpr.gres.rnsgaii.util.PointSolutionUtils;
 
 @Controller
 @RequestMapping("/compare")
