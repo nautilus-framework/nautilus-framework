@@ -209,3 +209,6 @@ color: RGB(32, 57, 81);
   margin-right: 20px;
 }
 
+#execution-chart{
+	overflow: unset !important;
+}

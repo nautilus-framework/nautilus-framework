@@ -28,6 +28,8 @@ class ScatterChart4D {
 	
 	plot(el){
 		
+		console.log(el)
+		
 		var that = this;
 		
 		this.highcharts = Highcharts.chart(el, {

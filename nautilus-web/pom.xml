@@ -204,6 +204,11 @@
       <artifactId>nautilus-plugin-spl</artifactId>
       <version>1.0.0</version>
     </dependency>
+    <dependency>
+      <groupId>thiagodnf.nautilus.plugin.nrp</groupId>
+      <artifactId>nautilus-plugin-nrp</artifactId>
+      <version>1.0.0</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

@@ -13,6 +13,7 @@
 		<module>nautilus-plugin</module>
     <module>nautilus-plugin-spl</module>
 		<module>nautilus-plugin-toy</module>
+    <module>nautilus-plugin-nrp</module>
 		<module>nautilus-web</module>
 	</modules>
 	<properties>
