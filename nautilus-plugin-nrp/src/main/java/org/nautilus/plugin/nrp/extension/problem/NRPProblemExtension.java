@@ -13,7 +13,7 @@ import org.nautilus.plugin.nrp.encoding.objective.CostObjective;
 import org.nautilus.plugin.nrp.encoding.objective.ImportanceObjective;
 import org.nautilus.plugin.nrp.encoding.objective.NumberOfRequirementsObjective;
 import org.nautilus.plugin.nrp.encoding.objective.ProfitObjective;
-import org.nautilus.plugin.nrp.encoding.objective.TasksObjective;
+import org.nautilus.plugin.nrp.encoding.objective.NumberOfTasksObjective;
 import org.nautilus.plugin.nrp.encoding.problem.NRPProblem;
 import org.pf4j.Extension;
 import org.uma.jmetal.problem.Problem;
@@ -48,7 +48,7 @@ public class NRPProblemExtension extends AbstractProblemExtension {
 		objectives.add(new CostObjective());
 		objectives.add(new ProfitObjective());
 		objectives.add(new ImportanceObjective());
-		objectives.add(new TasksObjective());
+		objectives.add(new NumberOfTasksObjective());
 
 		return objectives;
 	}

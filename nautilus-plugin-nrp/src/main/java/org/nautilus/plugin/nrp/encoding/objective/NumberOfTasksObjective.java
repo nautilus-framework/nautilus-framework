@@ -5,7 +5,7 @@ import org.nautilus.core.objective.AbstractObjective;
 import org.nautilus.plugin.nrp.encoding.instance.TXTInstance;
 import org.uma.jmetal.solution.Solution;
 
-public class TasksObjective extends AbstractObjective {
+public class NumberOfTasksObjective extends AbstractObjective {
 	
 	protected double sum;
 	
@@ -36,7 +36,7 @@ public class TasksObjective extends AbstractObjective {
 	
 	@Override
 	public String getName() {
-		return "Task";
+		return "Number of Tasks";
 	}
 
 	@Override
