@@ -133,7 +133,7 @@ public class NSGAIII<S extends Solution<?>> implements Algorithm<List<S>>, Algor
         initPopulation();
         evaluations += populationSize_;
 
-        while (evaluations < maxEvaluations) {
+        while (!isStoppingConditionReached()) {
             offspringPopulation_ = new ArrayList<>(populationSize_);
             for (int i = 0; i < (populationSize_ / 2); i++) {
                 if (evaluations < maxEvaluations) {
@@ -197,6 +197,10 @@ public class NSGAIII<S extends Solution<?>> implements Algorithm<List<S>>, Algor
             updateProgress();
         }
 
+    }
+    
+    protected boolean isStoppingConditionReached() {
+        return evaluations >= maxEvaluations;
     }
 
     protected void initPopulation() {
