@@ -20,8 +20,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class CompareDTO {
     
-    @NotNull
-    @Size(min = 1)
+//    @NotNull
+//    @Size(min = 1)
     private List<String> objectiveIds;
     
     @NotNull

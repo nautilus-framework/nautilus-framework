@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:replace="fragments/head :: title(#{btn.result})"></head>
+
+	<body>
+	
+	<div th:replace="fragments/navbar :: default('Home')"></div>
+	
+	<div class="page-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 path">
+					<h6 class="title">
+                          <a th:href="@{/}" th:text="#{nav.home}"></a> 
+                          <span class="path-divider">/</span> 
+                          <a th:href="@{/compare/form}" th:text="#{btn.compare}"></a>
+                          <span class="path-divider">/</span> 
+                          <a th:href="@{#}" th:text="#{btn.result}"></a>
+                     </h6>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">
+	   
+	    <h5 class="text-primary">Charts</h5>
+        <hr/>
+		<div id="chart"></div>
+		
+		<h5 class="mt-4  text-primary">Metrics</h5>
+		<hr/>
+		<div class="table-responsive">
+			<table class="table table-striped table-hover table-sm table-datatable">
+	             <thead>
+	                 <tr>
+	                     <th width="25px">#</th>
+	                     <th th:text="#{execution.title}"></th>
+	                     <th th:text="#{execution.algorithm}"></th>
+	                     <th th:each="metric : ${executions.get(0).attributes.get('metrics')}" th:text="${metric.key}"></th>
+	                 </tr>
+	             </thead>
+	             <tbody>
+	                 <tr th:each="execution,i : ${executions}">
+	                     <td th:text="${i.count}"></td>
+	                     <td>
+	                         <a  class="format-date"
+	                             th:href="@{|/execution/${execution.id}|}"  
+	                             th:text="${#strings.isEmpty(execution.title)} ? ${#formatter.date(execution.creationDate, userSettingsDTO.timeZone)} : ${execution.title}">
+	                         </a>
+	                     </td>
+	                     <td th:text="${execution.algorithmId}"></td>
+	                     <td th:each="metric : ${execution.attributes.get('metrics')}" th:text="${metric.value}"></td>
+	                 </tr>
+	             </tbody>
+	         </table>
+		</div>
+		<br/>
+		<a class="btn btn-outline-secondary" th:href="@{/compare/form}" th:text="#{btn.cancel}"></a>
+		<br/>
+		<br/>
+	</div>
+	
+	<div id="data" class="d-none" th:text="${executions}"></div>
+	<div id="objectiveIds" class="d-none" th:text="${objectiveIds}"></div>
+
+
+	<div th:replace="fragments/footer :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/controller/compare.js}"></script>
+</body>
+
+</html>

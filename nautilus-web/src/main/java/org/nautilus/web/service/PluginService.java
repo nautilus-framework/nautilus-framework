@@ -32,6 +32,7 @@ import org.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.NSGAIIIAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.NSGAIIWithRandomReductionAlgorithmExtension;
+import org.nautilus.plugin.extension.algorithm.PCANSGAIIAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.ParetoFrontApproxExtension;
 import org.nautilus.plugin.extension.algorithm.RNSGAIIAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.RandomSearchAlgorithmExtension;
@@ -151,9 +152,9 @@ public class PluginService {
 			
 		LOGGER.info("Loading problem extensions from classpath");
 		
-		addProblemExtension(new ToyProblemExtension());
+//		addProblemExtension(new ToyProblemExtension());
 		addProblemExtension(new SPLProblemExtension());
-		addProblemExtension(new NRPProblemExtension());
+//		addProblemExtension(new NRPProblemExtension());
 		
 		LOGGER.info("Done. Loading algorithms extensions from classpath");
 		
@@ -168,6 +169,7 @@ public class PluginService {
 		addAlgorithmExtension(new NSGAIIWithRandomReductionAlgorithmExtension());
 		addAlgorithmExtension(new ManuallyExtension());
 		addAlgorithmExtension(new ParetoFrontApproxExtension());
+		addAlgorithmExtension(new PCANSGAIIAlgorithmExtension());
 		
 		LOGGER.info("Done. Loading crossover extensions from classpath");
 		

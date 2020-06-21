@@ -13,14 +13,18 @@ import javax.validation.Valid;
 import org.apache.logging.log4j.util.Strings;
 import org.nautilus.core.encoding.NProblem;
 import org.nautilus.core.encoding.NSolution;
+import org.nautilus.core.indicator.HypervolumeApprox;
 import org.nautilus.core.model.Instance;
 import org.nautilus.core.model.SelectedSolution;
+import org.nautilus.core.normalize.AbstractNormalize;
+import org.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import org.nautilus.core.objective.AbstractObjective;
 import org.nautilus.core.util.Converter;
 import org.nautilus.core.util.SolutionListUtils;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.algorithm.ManuallyExtension;
 import org.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
+import org.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
 import org.nautilus.web.dto.CompareDTO;
 import org.nautilus.web.dto.ExecutionSimplifiedDTO;
 import org.nautilus.web.dto.UserDTO;
@@ -40,6 +44,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.uma.jmetal.qualityindicator.impl.InvertedGenerationalDistance;
+import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
+import org.uma.jmetal.util.front.imp.ArrayFront;
 import org.uma.jmetal.util.point.PointSolution;
 
 import ufpr.gres.rnsgaii.util.PointSolutionUtils;
@@ -82,7 +89,7 @@ public class CompareController {
             executions = executionService.findExecutionSimplifiedDTOByUserId(user.getId());
         }
         
-        ProblemExtension problem = pluginService.getProblemById("spl-problem");
+        ProblemExtension problem = pluginService.getProblemById(new SPLProblemExtension().getId());
         
         Map<String, Integer> numberOfReductions = new HashMap<>();
 
@@ -109,7 +116,7 @@ public class CompareController {
         model.addAttribute("compareDTO", compareDTO);
         model.addAttribute("numberOfReductions", numberOfReductions);
         
-        return "form-compare";
+        return "form-compare-2";
     }
     
     private List<ExecutionSimplifiedDTO> findAllExecutions(List<UserDTO> users, boolean filterSelectedSolutions){
@@ -141,9 +148,9 @@ public class CompareController {
         
         User user = securityService.getLoggedUser().getUser();
         
-        String problemId = "spl-problem";
+        String problemId = new SPLProblemExtension().getId();
         
-        String instanceId = "eshop.txt";
+        String instanceId = "james.txt";
         
         ProblemExtension problemExtension = pluginService.getProblemById(problemId);
         
@@ -231,6 +238,95 @@ public class CompareController {
         model.addAttribute("objectiveIds", Converter.toJson(objectives.stream().map(e -> e.getId()).collect(Collectors.toList())));
   
         return "compare";
+    }
+    
+    @PostMapping("/result/2")
+    public String resultAll(@Valid CompareDTO dto, BindingResult bindingResult, Model model) {
+        
+        System.out.println(dto);
+
+        if (bindingResult.hasErrors()) {
+            return form(dto, model);
+        }
+        
+        User user = securityService.getLoggedUser().getUser();
+        
+        String problemId = new SPLProblemExtension().getId();
+        
+        String instanceId = "james.txt";
+        
+        ProblemExtension problemExtension = pluginService.getProblemById(problemId);
+        
+        List<AbstractObjective> objectives = problemExtension.getObjectives();
+        
+        Path path = fileService.getInstance(problemId, instanceId);
+
+        Instance instance = problemExtension.getInstance(path);
+
+        NProblem<?> problem = (NProblem<?>) problemExtension.getProblem(instance, objectives);
+        
+        Execution pfApproxExecution = executionService.findParetoFrontApprox(problemId, instanceId);
+        
+        if(pfApproxExecution == null) {
+            throw new RuntimeException("The pareto-front approx for "+problemId+" and "+instanceId+ "was not found");
+        }
+        
+        List<NSolution<?>> pfApprox = pfApproxExecution.getSolutions();
+        
+        List<Execution> executions = new ArrayList<>();
+        
+        for (String executionId : dto.getExecutionIds()) {
+
+            Execution execution = executionService.findExecutionById(executionId);
+
+            List<NSolution<?>> solutions = execution.getSolutions();
+
+            if (dto.isFilterBySelectedSolutions()) {
+                solutions = filterBySelectedSolutions(execution);
+            }
+            
+            if (solutions.isEmpty()) {
+                continue;
+            }
+
+            Map<String, Number> metrics = calculateMetrics(problem, pfApprox, solutions);
+            
+            long executionTime = getExecutionTime(execution);
+            
+            metrics.put("execution-time", executionTime);
+            
+            execution.setSolutions(solutions);
+            execution.getAttributes().put("metrics", metrics);
+            
+            executions.add(execution);
+        }
+        
+        model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+        model.addAttribute("executions", executions);
+        model.addAttribute("objectiveIds", Converter.toJson(objectives.stream().map(e -> e.getId()).collect(Collectors.toList())));
+  
+        return "compare-2";
+    }
+    
+    public static Map<String, Number> calculateMetrics(NProblem<?> problem, List<NSolution<?>> pfApprox,
+            List<NSolution<?>> solutions) {
+        
+        AbstractNormalize normalizer = new ByMaxAndMinValuesNormalize();
+        
+        List<NSolution<?>> normalizedPf = (List<NSolution<?>>) normalizer.normalize(problem.getObjectives(), solutions);
+        List<NSolution<?>> normalizedPfApprox = (List<NSolution<?>>) normalizer.normalize(problem.getObjectives(), pfApprox);
+      
+        List<PointSolution> pfSolutions = SolutionListUtils.getPointSolutions(normalizedPf);
+        
+        Map<String, Number> values = new HashMap<>();
+        
+//        values.put("hypervolume", new PISAHypervolume<PointSolution>(new ArrayFront(normalizedPfApprox)).evaluate(pfSolutions));
+        values.put("igd", new InvertedGenerationalDistance<PointSolution>(new ArrayFront(normalizedPfApprox)).evaluate(pfSolutions));
+        values.put("hypervolume-approx", new HypervolumeApprox<PointSolution>(new ArrayFront(normalizedPfApprox)).evaluate(pfSolutions));
+        
+        values.put("number-of-solutions", normalizedPf.size());
+        
+        return values;
     }
     
     private List<NSolution<?>> filterBySelectedSolutions(Execution execution) {

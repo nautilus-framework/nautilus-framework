@@ -12,6 +12,8 @@ import java.util.concurrent.ExecutorService;
 import org.apache.logging.log4j.util.Strings;
 import org.nautilus.core.algorithm.Builder;
 import org.nautilus.core.algorithm.GA;
+import org.nautilus.core.algorithm.pcansgaii.PCANSGAII;
+import org.nautilus.core.algorithm.pcansgaii.PCANSGAII.ProblemListener;
 import org.nautilus.core.encoding.NSolution;
 import org.nautilus.core.listener.AlgorithmListener;
 import org.nautilus.core.listener.OnProgressListener;
@@ -174,6 +176,20 @@ public class OptimizeService {
                     }
                 });
                 
+                if (algorithm instanceof PCANSGAII) {
+
+                    ((PCANSGAII<?>) algorithm).setProblemListener(new ProblemListener() {
+
+                        @Override
+                        public Problem<?> getNewProblem(List<String> objectives) {
+                            
+                            List<AbstractObjective> objs = problemExtension.getObjectiveByIds(objectives);
+                            
+                            return problemExtension.getProblem(instance, objs);
+                        }
+                    });
+                }
+                
                 long initTime = System.currentTimeMillis();
                 
                 algorithm.run();
@@ -181,7 +197,22 @@ public class OptimizeService {
                 long computingTime = System.currentTimeMillis() - initTime ;
                 
                 if (algorithm instanceof GA) {
-                    rawSolutions = (List<NSolution<?>>)(Object) Arrays.asList(algorithm.getResult());
+                    rawSolutions = (List<NSolution<?>>) (Object) Arrays.asList(algorithm.getResult());
+                } else if (algorithm instanceof PCANSGAII) {
+
+                    rawSolutions = new ArrayList<>();
+
+                    Problem originalProblem = builder.getProblem();
+                    
+                    for (NSolution<?> sol : (List<NSolution<?>>) algorithm.getResult()) {
+
+                        NSolution<?> newSolution = (NSolution<?>) Converter.toSolutionWithOutObjectives(originalProblem, sol);
+                        
+                        originalProblem.evaluate(newSolution);
+                        
+                        rawSolutions.add(newSolution);
+                    }
+
                 } else {
                     rawSolutions = (List<NSolution<?>>) algorithm.getResult();
                 }

@@ -44,7 +44,7 @@ public class ParametersDTO {
 	@Min(100)
     @Max(1000)
 	@HTMLAutoFocus
-    @HTMLStep(50)
+    @HTMLStep(1)
     @HTMLRequired
     @HTMLAutoComplete("off")
 	@HTMLSpellCheck("false")
