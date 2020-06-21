@@ -8,7 +8,7 @@ import org.nautilus.core.encoding.solution.NBinarySolution;
 import org.nautilus.core.model.Instance;
 import org.nautilus.core.objective.AbstractObjective;
 import org.nautilus.plugin.extension.problem.AbstractProblemExtension;
-import org.nautilus.plugin.spl.encoding.instance.NewTXTInstanceData;
+import org.nautilus.plugin.spl.encoding.instance.TXTInstanceData;
 import org.nautilus.plugin.spl.encoding.objective.AliveMutantsObjective;
 import org.nautilus.plugin.spl.encoding.objective.CostObjective;
 import org.nautilus.plugin.spl.encoding.objective.NewSimilarityObjective;
@@ -60,13 +60,13 @@ public class SPLProblemExtension extends AbstractProblemExtension {
 
 	@Override
 	public Instance getInstance(Path path) {
-		return new NewTXTInstanceData(path);
+		return new TXTInstanceData(path);
 	}
 	
 	@Override
     public List<String> getVariablesAsList(Instance instance, Solution<?> solution) {
 	    
-	    NewTXTInstanceData data = (NewTXTInstanceData) instance;
+	    TXTInstanceData data = (TXTInstanceData) instance;
 	    
 	    NBinarySolution sol = (NBinarySolution) solution;
 	    

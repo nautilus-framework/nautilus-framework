@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
-import org.nautilus.plugin.spl.encoding.instance.NewTXTInstanceData;
+import org.nautilus.plugin.spl.encoding.instance.TXTInstanceData;
 import org.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
 class TestNewTXTInstanceData {
 
@@ -17,17 +17,17 @@ class TestNewTXTInstanceData {
 			.resolve("resources")
 			.resolve("instance-test.txt");
 	
-	public static NewTXTInstanceData getInstanceData() {
+	public static TXTInstanceData getInstanceData() {
 
 		SPLProblemExtension instanceDataExtension = new SPLProblemExtension();
 
-		return (NewTXTInstanceData) instanceDataExtension.getInstance(path);
+		return (TXTInstanceData) instanceDataExtension.getInstance(path);
 	}
 	
 	@Test
 	public void shouldReturnTheCorrectValues() {
 
-		NewTXTInstanceData instance = getInstanceData();
+		TXTInstanceData instance = getInstanceData();
 		
 		assertEquals(5, instance.getNumberOfProducts());
 		assertEquals(5, instance.getNumberOfFeatures());

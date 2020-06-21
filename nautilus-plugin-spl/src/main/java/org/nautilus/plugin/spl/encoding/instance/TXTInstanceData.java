@@ -13,7 +13,7 @@ import org.nautilus.core.model.Instance;
 import org.nautilus.core.util.InstanceReader;
 import org.nautilus.core.util.SimilarityUtils;
 
-public class NewTXTInstanceData extends Instance implements AbstractTXTInstanceData {
+public class TXTInstanceData extends Instance implements AbstractTXTInstanceData {
 	
 	protected int numberOfProducts;
 	
@@ -53,11 +53,8 @@ public class NewTXTInstanceData extends Instance implements AbstractTXTInstanceD
 	
 	protected Map<String, Integer> indexesForOptionalFeatures;
 	
-	public NewTXTInstanceData(Path path) {
+	public TXTInstanceData(Path path) {
 
-//		require(path, not(nullValue()));
-//		require(Files.exists(path), equalTo(true));
-		
 		this.products = new ArrayList<>();
 		this.mutants = new ArrayList<>();
 		this.pairs = new ArrayList<>();
@@ -312,7 +309,7 @@ public class NewTXTInstanceData extends Instance implements AbstractTXTInstanceD
 	@Override
     public List<Tab> getTabs(Instance data) {
 
-        NewTXTInstanceData c = (NewTXTInstanceData) data;
+        TXTInstanceData c = (TXTInstanceData) data;
 
         List<Tab> tabs = new ArrayList<>();
 
@@ -324,7 +321,7 @@ public class NewTXTInstanceData extends Instance implements AbstractTXTInstanceD
         return tabs;
     }
 
-    protected Tab getFeaturesTab(NewTXTInstanceData data) {
+    protected Tab getFeaturesTab(TXTInstanceData data) {
 
         TableTabContent table = new TableTabContent(Arrays.asList("Feature", "Cost", "Importance"));
 
@@ -341,7 +338,7 @@ public class NewTXTInstanceData extends Instance implements AbstractTXTInstanceD
         return new Tab("Features", table);
     }
 
-    protected Tab getProductsTab(NewTXTInstanceData data) {
+    protected Tab getProductsTab(TXTInstanceData data) {
 
         TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Feature", "Cost", "Importance"));
 
@@ -356,7 +353,7 @@ public class NewTXTInstanceData extends Instance implements AbstractTXTInstanceD
         return new Tab("Products", table);
     }
     
-    protected Tab getPairwiseCoverageTab(NewTXTInstanceData data) {
+    protected Tab getPairwiseCoverageTab(TXTInstanceData data) {
 
         TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Covered", "Uncovered", "# of Uncovered"));
 
@@ -379,7 +376,7 @@ public class NewTXTInstanceData extends Instance implements AbstractTXTInstanceD
         return new Tab("Pairwise Coverate", table);
     }
     
-    protected Tab getMutationCoverageTab(NewTXTInstanceData data) {
+    protected Tab getMutationCoverageTab(TXTInstanceData data) {
 
         TableTabContent table = new TableTabContent(Arrays.asList("Product Id", "Dead", "Alive", "# of Alive"));
 
