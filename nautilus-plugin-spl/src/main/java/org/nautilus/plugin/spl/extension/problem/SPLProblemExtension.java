@@ -49,7 +49,6 @@ public class SPLProblemExtension extends AbstractProblemExtension {
 		objectives.add(new NumberOfProductsObjective());
 		objectives.add(new AliveMutantsObjective());
 		objectives.add(new UncoveredPairsObjective());
-//		objectives.add(new SimilarityObjective());
 		objectives.add(new NewSimilarityObjective());
 		objectives.add(new CostObjective());
 		objectives.add(new UnselectedFeaturesObjective());
