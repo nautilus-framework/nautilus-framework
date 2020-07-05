@@ -24,7 +24,7 @@ import org.nautilus.core.util.SolutionListUtils;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.algorithm.ManuallyExtension;
 import org.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
-import org.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
+import org.nautilus.plugin.nrp.extension.problem.NRPProblemExtension;
 import org.nautilus.web.dto.CompareDTO;
 import org.nautilus.web.dto.ExecutionSimplifiedDTO;
 import org.nautilus.web.dto.UserDTO;
@@ -45,7 +45,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.uma.jmetal.qualityindicator.impl.InvertedGenerationalDistance;
-import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
 import org.uma.jmetal.util.front.imp.ArrayFront;
 import org.uma.jmetal.util.point.PointSolution;
 
@@ -89,7 +88,7 @@ public class CompareController {
             executions = executionService.findExecutionSimplifiedDTOByUserId(user.getId());
         }
         
-        ProblemExtension problem = pluginService.getProblemById(new SPLProblemExtension().getId());
+        ProblemExtension problem = pluginService.getProblemById(new NRPProblemExtension().getId());
         
         Map<String, Integer> numberOfReductions = new HashMap<>();
 
@@ -148,9 +147,9 @@ public class CompareController {
         
         User user = securityService.getLoggedUser().getUser();
         
-        String problemId = new SPLProblemExtension().getId();
+        String problemId = new NRPProblemExtension().getId();
         
-        String instanceId = "james.txt";
+        String instanceId = "r025.txt";
         
         ProblemExtension problemExtension = pluginService.getProblemById(problemId);
         
@@ -251,9 +250,9 @@ public class CompareController {
         
         User user = securityService.getLoggedUser().getUser();
         
-        String problemId = new SPLProblemExtension().getId();
+        String problemId = new NRPProblemExtension().getId();
         
-        String instanceId = "james.txt";
+        String instanceId = "r025.txt";
         
         ProblemExtension problemExtension = pluginService.getProblemById(problemId);
         

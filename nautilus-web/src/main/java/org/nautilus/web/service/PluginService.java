@@ -153,8 +153,8 @@ public class PluginService {
 		LOGGER.info("Loading problem extensions from classpath");
 		
 //		addProblemExtension(new ToyProblemExtension());
-		addProblemExtension(new SPLProblemExtension());
-//		addProblemExtension(new NRPProblemExtension());
+//		addProblemExtension(new SPLProblemExtension());
+		addProblemExtension(new NRPProblemExtension());
 		
 		LOGGER.info("Done. Loading algorithms extensions from classpath");
 		
