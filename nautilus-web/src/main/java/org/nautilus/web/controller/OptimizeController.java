@@ -124,30 +124,35 @@ public class OptimizeController {
         
         User user = securityService.getLoggedUser().getUser();
         
-        Execution execution = new Execution();
+        for (int i = 1; i <= parametersDTO.getNumberOfRuns(); i++) {
 
-        execution.setUserId(user.getId());
-        execution.setSolutions(null);
-        execution.setAlgorithmId(parametersDTO.getAlgorithmId());
-        execution.setProblemId(parametersDTO.getProblemId());
-        execution.setInstance(parametersDTO.getInstance());
-        execution.setPopulationSize(parametersDTO.getPopulationSize());
-        execution.setMaxEvaluations(parametersDTO.getMaxEvaluations());
-        execution.setSelectionId(parametersDTO.getSelectionId());
-        execution.setCrossoverId(parametersDTO.getCrossoverId());
-        execution.setCrossoverProbability(parametersDTO.getCrossoverProbability());
-        execution.setCrossoverDistribution(parametersDTO.getCrossoverDistribution());
-        execution.setMutationId(parametersDTO.getMutationId());
-        execution.setMutationProbability(parametersDTO.getMutationProbability());
-        execution.setMutationDistribution(parametersDTO.getMutationDistribution());
-        execution.setReferencePoints(parametersDTO.getReferencePoints());
-        execution.setEpsilon(parametersDTO.getEpsilon());
-        execution.setObjectiveIds(parametersDTO.getObjectiveIds());
-        execution.setVisibility(Visibility.PRIVATE);
-        
-        execution = executionService.save(execution);
-        
-        pendingExecutions.add(execution);
+            Execution execution = new Execution();
+
+            execution.setUserId(user.getId());
+            execution.setSolutions(null);
+            execution.setRunId(i);
+            execution.setTitle(parametersDTO.getTitle() + "-" + i);
+            execution.setAlgorithmId(parametersDTO.getAlgorithmId());
+            execution.setProblemId(parametersDTO.getProblemId());
+            execution.setInstance(parametersDTO.getInstance());
+            execution.setPopulationSize(parametersDTO.getPopulationSize());
+            execution.setMaxEvaluations(parametersDTO.getMaxEvaluations());
+            execution.setSelectionId(parametersDTO.getSelectionId());
+            execution.setCrossoverId(parametersDTO.getCrossoverId());
+            execution.setCrossoverProbability(parametersDTO.getCrossoverProbability());
+            execution.setCrossoverDistribution(parametersDTO.getCrossoverDistribution());
+            execution.setMutationId(parametersDTO.getMutationId());
+            execution.setMutationProbability(parametersDTO.getMutationProbability());
+            execution.setMutationDistribution(parametersDTO.getMutationDistribution());
+            execution.setReferencePoints(parametersDTO.getReferencePoints());
+            execution.setEpsilon(parametersDTO.getEpsilon());
+            execution.setObjectiveIds(parametersDTO.getObjectiveIds());
+            execution.setVisibility(Visibility.PRIVATE);
+
+            execution = executionService.save(execution);
+
+            pendingExecutions.add(execution);
+        }
         
         return redirect.to("/home").withSuccess(ra, Messages.EXECUTION_SCHEDULED_SUCCESS);
     }

@@ -1,7 +1,7 @@
 package org.nautilus.web.config;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,6 +14,9 @@ import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 @EnableAsync
 @EnableScheduling
@@ -25,18 +28,18 @@ public class AsyncConfiguration implements AsyncConfigurer {
 	@Bean
 	public ExecutorService taskExecutor() {
 	    
-	    System.out.println("nThreads: " + nThreads);
+	    log.info("nThreads: " + nThreads);
 
 	    return Executors.newFixedThreadPool(nThreads);
 	}
 	
 	@Bean
     public List<Execution> pendingExecutions() {
-        return new LinkedList<>();
+        return new CopyOnWriteArrayList<>();
     }
 	
 	@Bean
     public List<ExecutionQueueDTO> runningExecutions() {
-        return new LinkedList<>();
+        return new CopyOnWriteArrayList<>();
     }
 }

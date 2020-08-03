@@ -3,7 +3,7 @@ package org.nautilus.web.service;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -79,7 +79,11 @@ public class OptimizeService {
     @Scheduled(fixedRate = 1000)
     public void execute() {
         
-        for(Execution execution : pendingExecutions) {
+        Iterator<Execution> it = pendingExecutions.iterator();
+        
+        while (it.hasNext()) {
+            
+            Execution execution = it.next();
             
             UserDTO userDTO = userService.findUserDTOById(execution.getUserId());
             

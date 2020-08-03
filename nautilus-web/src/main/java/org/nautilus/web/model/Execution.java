@@ -1,3 +1,4 @@
+
 package org.nautilus.web.model;
 
 import java.util.ArrayList;
@@ -53,6 +54,8 @@ public class Execution {
 	private int populationSize;
 	
 	private int maxEvaluations;
+	
+	private int runId;
 	
 	private String algorithmId;
 	

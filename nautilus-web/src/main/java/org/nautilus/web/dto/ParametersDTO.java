@@ -58,6 +58,15 @@ public class ParametersDTO {
 	@HTMLSpellCheck("false")
 	private int maxEvaluations = 100000;
 	
+
+    @Min(1)
+    @Max(1000)
+    @HTMLStep(1)
+    @HTMLRequired
+    @HTMLAutoComplete("off")
+    @HTMLSpellCheck("false")
+    private int numberOfRuns = 1;
+	
 	@NotBlank
 	private String algorithmId = new NSGAIIAlgorithmExtension().getId();
 	
@@ -130,4 +139,8 @@ public class ParametersDTO {
     private String correlationId = new PearsonCorrelationExtension().getId();
 
     private String removerId = new ObjectivesRemoverExtension().getId();
+    
+    public String getTitle() {
+        return problemId + "-" + instance + "-" + algorithmId;
+    }
 }
