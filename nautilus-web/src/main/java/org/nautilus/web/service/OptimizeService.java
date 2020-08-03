@@ -243,6 +243,8 @@ public class OptimizeService {
                 sendProgress(email, itemQueue);
             } catch (Exception ex) {
                 
+                ex.printStackTrace();
+                
                 executionRepository.deleteById(execution.getId());
 
                 itemQueue.setStatus(ex.getMessage());
@@ -293,21 +295,39 @@ public class OptimizeService {
     
     public void sendError(String email, ExecutionQueueDTO itemQueue) {
         
-        for (String sessionId : loggedUsers.get(email)) {
+        List<String> sessions = loggedUsers.get(email);
+
+        if (sessions == null) {
+            return;
+        }
+        
+        for (String sessionId : sessions) {
             messaging.convertAndSendToUser(sessionId,"/execution/queue/error", itemQueue);
         }
     }
     
     public void sendAppend(String email, ExecutionQueueDTO itemQueue) {
         
-        for (String sessionId : loggedUsers.get(email)) {
+        List<String> sessions = loggedUsers.get(email);
+
+        if (sessions == null) {
+            return;
+        }
+        
+        for (String sessionId : sessions) {
             messaging.convertAndSendToUser(sessionId, "/execution/queue/append", itemQueue);
         }
     }
     
     public void sendProgress(String email, ExecutionQueueDTO itemQueue) {
         
-        for (String sessionId : loggedUsers.get(email)) {
+        List<String> sessions = loggedUsers.get(email);
+
+        if (sessions == null) {
+            return;
+        }
+        
+        for (String sessionId : sessions) {
             messaging.convertAndSendToUser(sessionId,"/execution/queue/progress", itemQueue);
         }
     }

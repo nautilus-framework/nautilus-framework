@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +34,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer{
     
     @Bean
     public Map<String, List<String>> loggedUsers() {
-        return new HashMap<>();
+        return new ConcurrentHashMap<>();
     }
     
 	@Override
@@ -90,7 +92,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer{
             String key = sha.getUser().getName();
 
             if (!loggedUsers.containsKey(key)) {
-                loggedUsers.put(key, new ArrayList<>());
+                loggedUsers.put(key, new CopyOnWriteArrayList<>());
             }
 
             loggedUsers.get(key).add(sha.getSessionId());
