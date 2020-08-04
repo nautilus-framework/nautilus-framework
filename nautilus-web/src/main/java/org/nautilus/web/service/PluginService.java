@@ -27,6 +27,7 @@ import org.nautilus.plugin.extension.RemoverExtension;
 import org.nautilus.plugin.extension.SelectionExtension;
 import org.nautilus.plugin.extension.algorithm.BruteForceSearchAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.GAAlgorithmExtension;
+import org.nautilus.plugin.extension.algorithm.IBEAAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.ManuallyExtension;
 import org.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.NSGAIIIAlgorithmExtension;
@@ -170,6 +171,7 @@ public class PluginService {
 		addAlgorithmExtension(new ManuallyExtension());
 		addAlgorithmExtension(new ParetoFrontApproxExtension());
 		addAlgorithmExtension(new PCANSGAIIAlgorithmExtension());
+		addAlgorithmExtension(new IBEAAlgorithmExtension());
 		
 		LOGGER.info("Done. Loading crossover extensions from classpath");
 		
