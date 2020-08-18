@@ -344,27 +344,27 @@ $(function(){
 	});
 	
 	
-	$('.optimize-algorithm').change(function (e) {
-		e.preventDefault();
-		
-		var selected = $(this).find(":selected").val();
-		
-		if(selected == "r-nsga-ii"){
-			$(".nav-preferences").removeClass("disabled");
-		} else {
-			$(".nav-preferences").addClass("disabled");
-		}
-		
-		var def = 134400;
-		
-		if(selected == "cor-nsga-ii"){
-			$("#maxEvaluations").val(def/3);
-		}else{
-			$("#maxEvaluations").val(def);
-		}
-		
-		return false;
-	});
+//	$('.optimize-algorithm').change(function (e) {
+//		e.preventDefault();
+//		
+//		var selected = $(this).find(":selected").val();
+//		
+//		if(selected == "r-nsga-ii"){
+//			$(".nav-preferences").removeClass("disabled");
+//		} else {
+//			$(".nav-preferences").addClass("disabled");
+//		}
+//		
+//		var def = 134400;
+//		
+//		if(selected == "cor-nsga-ii"){
+//			$("#maxEvaluations").val(def/3);
+//		}else{
+//			$("#maxEvaluations").val(def);
+//		}
+//		
+//		return false;
+//	});
 	
 	$('.rp-objective').change(function (e) {
 		e.preventDefault();

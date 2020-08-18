@@ -38,6 +38,7 @@ import org.nautilus.plugin.extension.algorithm.ParetoFrontApproxExtension;
 import org.nautilus.plugin.extension.algorithm.RNSGAIIAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.RandomSearchAlgorithmExtension;
 import org.nautilus.plugin.extension.algorithm.SPEA2AlgorithmExtension;
+import org.nautilus.plugin.extension.algorithm.WASFGAAlgorithmExtension;
 import org.nautilus.plugin.extension.correlation.KendallCorrelationExtension;
 import org.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
 import org.nautilus.plugin.extension.correlation.SpearmanCorrelationExtension;
@@ -172,6 +173,7 @@ public class PluginService {
 		addAlgorithmExtension(new ParetoFrontApproxExtension());
 		addAlgorithmExtension(new PCANSGAIIAlgorithmExtension());
 		addAlgorithmExtension(new IBEAAlgorithmExtension());
+		addAlgorithmExtension(new WASFGAAlgorithmExtension());
 		
 		LOGGER.info("Done. Loading crossover extensions from classpath");
 		

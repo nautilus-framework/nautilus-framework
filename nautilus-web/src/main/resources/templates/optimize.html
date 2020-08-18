@@ -29,7 +29,7 @@
 							<a class="nav-item nav-link nav-general" role="tab" data-toggle="tab" href="#general" th:text="#{nav.general}"></a>
 							<a class="nav-item nav-link nav-operators" role="tab" data-toggle="tab" href="#operators" th:text="#{nav.operators}"></a>
 							<a class="nav-item nav-link nav-objectives" role="tab" data-toggle="tab" href="#objectives" th:text="#{nav.objectives}"></a>
-							<a class="nav-item nav-link nav-preferences disabled" role="tab" data-toggle="tab" href="#preferences" th:text="#{nav.preferences}"></a>
+							<a class="nav-item nav-link nav-preferences" role="tab" data-toggle="tab" href="#preferences" th:text="#{nav.preferences}"></a>
 						</div>
 					</nav>
 					<form  method="POST" th:action="@{/optimize/save}" th:object="${parametersDTO}">
