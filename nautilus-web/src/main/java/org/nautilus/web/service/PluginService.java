@@ -57,6 +57,7 @@ import org.nautilus.plugin.extension.remover.VariablesRemoverExtension;
 import org.nautilus.plugin.extension.selection.BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension;
 import org.nautilus.plugin.nrp.extension.problem.NRPProblemExtension;
 import org.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
+import org.nautilus.plugin.vtspl.extension.problem.VTSPLProblemExtension;
 import org.nautilus.web.exception.PluginNotFoundException;
 import org.nautilus.web.exception.ProblemNotFoundException;
 import org.pf4j.DefaultPluginManager;
@@ -154,9 +155,14 @@ public class PluginService {
 			
 		LOGGER.info("Loading problem extensions from classpath");
 		
-		addProblemExtension(new ToyProblemExtension());
-		addProblemExtension(new SPLProblemExtension());
-		addProblemExtension(new NRPProblemExtension());
+//		addProblemExtension(new ToyProblemExtension());
+//		addProblemExtension(new SPLProblemExtension());
+//		addProblemExtension(new NRPProblemExtension());
+		
+		addProblemExtension(new VTSPLProblemExtension());
+		
+		
+		
 		
 		LOGGER.info("Done. Loading algorithms extensions from classpath");
 		

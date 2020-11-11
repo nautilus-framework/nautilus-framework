@@ -24,7 +24,7 @@ import org.nautilus.core.util.SolutionListUtils;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.algorithm.ManuallyExtension;
 import org.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
-import org.nautilus.plugin.nrp.extension.problem.NRPProblemExtension;
+import org.nautilus.plugin.vtspl.extension.problem.VTSPLProblemExtension;
 import org.nautilus.web.dto.CompareDTO;
 import org.nautilus.web.dto.ExecutionSimplifiedDTO;
 import org.nautilus.web.dto.UserDTO;
@@ -88,7 +88,7 @@ public class CompareController {
             executions = executionService.findExecutionSimplifiedDTOByUserId(user.getId());
         }
         
-        ProblemExtension problem = pluginService.getProblemById(new NRPProblemExtension().getId());
+        ProblemExtension problem = pluginService.getProblemById(new VTSPLProblemExtension().getId());
         
         Map<String, Integer> numberOfReductions = new HashMap<>();
 
@@ -147,9 +147,9 @@ public class CompareController {
         
         User user = securityService.getLoggedUser().getUser();
         
-        String problemId = new NRPProblemExtension().getId();
+        String problemId = new VTSPLProblemExtension().getId();
         
-        String instanceId = "r025.txt";
+        String instanceId = "james.txt";
         
         ProblemExtension problemExtension = pluginService.getProblemById(problemId);
         
@@ -250,9 +250,9 @@ public class CompareController {
         
         User user = securityService.getLoggedUser().getUser();
         
-        String problemId = new NRPProblemExtension().getId();
+        String problemId = new VTSPLProblemExtension().getId();
         
-        String instanceId = "r025.txt";
+        String instanceId = "james.txt";
         
         ProblemExtension problemExtension = pluginService.getProblemById(problemId);
         

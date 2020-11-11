@@ -33,7 +33,7 @@ public class SPLProblemExtension extends AbstractProblemExtension {
 
 	@Override
 	public String getName() {
-		return "VTSPL Problem";
+		return "SPL Problem";
 	}
 
 	@Override
