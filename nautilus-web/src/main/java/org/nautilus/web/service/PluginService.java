@@ -1,8 +1,10 @@
 package org.nautilus.web.service;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -55,9 +57,7 @@ import org.nautilus.plugin.extension.remover.DontRemoverExtension;
 import org.nautilus.plugin.extension.remover.ObjectivesRemoverExtension;
 import org.nautilus.plugin.extension.remover.VariablesRemoverExtension;
 import org.nautilus.plugin.extension.selection.BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension;
-import org.nautilus.plugin.nrp.extension.problem.NRPProblemExtension;
-import org.nautilus.plugin.spl.extension.problem.SPLProblemExtension;
-import org.nautilus.plugin.vtspl.extension.problem.VTSPLProblemExtension;
+import org.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 import org.nautilus.web.exception.PluginNotFoundException;
 import org.nautilus.web.exception.ProblemNotFoundException;
 import org.pf4j.DefaultPluginManager;
@@ -75,8 +75,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
-
-import thiagodnf.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 
 @Service
 public class PluginService {
@@ -155,14 +153,7 @@ public class PluginService {
 			
 		LOGGER.info("Loading problem extensions from classpath");
 		
-//		addProblemExtension(new ToyProblemExtension());
-//		addProblemExtension(new SPLProblemExtension());
-//		addProblemExtension(new NRPProblemExtension());
-		
-		addProblemExtension(new VTSPLProblemExtension());
-		
-		
-		
+		addProblemExtension(new ToyProblemExtension());
 		
 		LOGGER.info("Done. Loading algorithms extensions from classpath");
 		
@@ -230,46 +221,34 @@ public class PluginService {
 		
 		LOGGER.info("Added '{}' problem extension", key);
 		
-		List<Path> files = fileService.getInstances(key);
+		Path toolFolder = Paths.get(System.getProperty("user.dir"));
+		
+		Path parentFolder = toolFolder.getParent().getParent();
 		
 		Path directory = fileService.getInstancesLocation().resolve(key);
-		        
-        if (files.isEmpty()) {
 
-            String host = "https://raw.githubusercontent.com/thiagodnf/thiagodnf.github.io/master/supporting-pages/nautilus/instances/";
+		LOGGER.info("Copying the instance files for '{}'", key);
+		
+		System.out.println(parentFolder.getParent());
+		
+        for (Path instance : problemExtension.getAllInstances()) {
 
-            if (key.equalsIgnoreCase("toy-problem")) {
+            Path original = parentFolder.resolve(instance);
+            Path copied = directory.resolve(original.getFileName());
+            
+            if (Files.exists(original) && !Files.exists(copied)) {
 
-                Path file = directory.resolve("1-to-100-w-010.txt");
+                LOGGER.info("> Copying {}", original);
 
-                downloadFile(host + "1-to-100-w-010.txt", file);
-            } else if (key.equalsIgnoreCase("spl-problem")) {
-
-                Path file = directory.resolve("james.txt");
-
-                downloadFile(host + "james.txt", file);
+                try {
+                    Files.copy(original, copied, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException ex) {
+                    new RuntimeException(ex);
+                }
             }
         }
 	}
-	
-    private void downloadFile(String url, Path file) { // This method will download file using RestTemplate
-        try {
-            
-            HttpHeaders headers = new HttpHeaders();
-            
-            headers.setAccept(Arrays.asList(MediaType.TEXT_PLAIN));
-            
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            
-            ResponseEntity<byte[]> response = restTemplate.build().exchange(url, HttpMethod.GET, entity, byte[].class);
-            
-            Files.write(file, response.getBody());
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-	
+		
 	private void addAlgorithmExtension(AlgorithmExtension algorithmExtension) {
 
 		if (this.algorithms.containsKey(algorithmExtension.getId())) {
