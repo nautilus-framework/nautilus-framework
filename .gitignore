@@ -185,5 +185,7 @@ $RECYCLE.BIN/
 jMetal.log.lck
 jMetal.log
 
+nautilus-web/files/instances
+
 
 # End of https://www.gitignore.io/api/java,maven,macos,linux,eclipse,windows,netbeans

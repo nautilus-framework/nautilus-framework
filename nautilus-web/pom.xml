@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>thiagodnf.nautilus</groupId>
+    <groupId>org.nautilus</groupId>
     <artifactId>nautilus</artifactId>
     <version>1.0.0</version>
   </parent>
@@ -175,12 +175,12 @@
     </dependency>
 
     <dependency>
-      <groupId>thiagodnf.nautilus</groupId>
+      <groupId>org.nautilus</groupId>
       <artifactId>nautilus-core</artifactId>
       <version>1.0.0</version>
     </dependency>
     <dependency>
-      <groupId>thiagodnf.nautilus</groupId>
+      <groupId>org.nautilus</groupId>
       <artifactId>nautilus-plugin</artifactId>
       <version>1.0.0</version>
     </dependency>
@@ -195,25 +195,20 @@
       <version>2.4.0</version>
     </dependency>
     <dependency>
-      <groupId>thiagodnf.nautilus.plugin.toy</groupId>
+      <groupId>org.nautilus.plugin</groupId>
       <artifactId>nautilus-plugin-toy</artifactId>
       <version>1.0.0</version>
     </dependency>
-    <dependency>
-      <groupId>thiagodnf.nautilus.plugin.spl</groupId>
-      <artifactId>nautilus-plugin-spl</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>thiagodnf.nautilus.plugin.nrp</groupId>
-      <artifactId>nautilus-plugin-nrp</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
+    <!-- <dependency>
       <groupId>org.nautilus.plugin</groupId>
       <artifactId>nautilus-plugin-vtspl</artifactId>
       <version>1.0.0</version>
-    </dependency>
+    </dependency> -->
+    <!-- <dependency>
+      <groupId>org.nautilus.plugin</groupId>
+      <artifactId>nautilus-plugin-nrp</artifactId>
+      <version>1.0.0</version>
+    </dependency> -->
   </dependencies>
   <build>
     <plugins>

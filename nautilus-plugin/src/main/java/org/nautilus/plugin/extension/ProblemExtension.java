@@ -29,4 +29,6 @@ public interface ProblemExtension extends ExtensionPoint {
 	public List<String> getVariablesAsList(Instance instance, Solution<?> solution);
 	
 	public AbstractRemover getRemover();
+	
+	public List<Path> getAllInstances();
 }

@@ -30,12 +30,11 @@
 				 <div th:each="problem,i : ${problems}">
 				     <h5  th:text="${problem.value.name}"></h5>
 				     <hr/>
-				     
-				        <div class="container horizontal-scroll">
-						  <div class="row flex-nowrap">
+                        <div class="container horizontal-scroll">
+						  <div class="row flex-nowrap" >
 						    
-						    <div class="col-sm-3" th:each="instance : ${instances.get(problem.key)}">
-						    	 <div class="card light-gray">
+						    <div class="mr-4 mb-4" th:each="instance : ${instances.get(problem.key)}">
+						    	 <div class="card light-gray" style="width: 250px">
 								  <div class="card-body">
 								  
 									<div class="d-flex w-100 justify-content-between">

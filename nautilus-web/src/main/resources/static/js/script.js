@@ -231,6 +231,7 @@ $(function(){
 	$("div.datatable-toolbar").html('<a th:href="@{/role/add}" class="btn btn-outline-success">New</a>');
    
 	$('.table-datatable').DataTable({
+	    responsive: true,
 		language: {
 	        url: getDatatableLanguage()
 	    }		
@@ -238,12 +239,14 @@ $(function(){
 	
 	$('.table-datatable-no-paginaton').dataTable({
 	    "bPaginate": false,
+	    responsive: true,
 	    language: {
 	        url: getDatatableLanguage()
 	    }
 	});
 	
 	$('.table-datatable-no-orderable').dataTable({
+	   responsive: true,
 		"columnDefs": [ {
 			"targets": getNoOrderableIndexes(),
 			"orderable": false
@@ -254,6 +257,7 @@ $(function(){
 	});
 	
 	$('.table-datatable-with-checkbox').dataTable({
+	   responsive: true,
 		columnDefs: [ {
             orderable: false,
             className: 'select-checkbox',
@@ -267,6 +271,7 @@ $(function(){
 	});
 	
 	$('.table-datatable-without-search').dataTable( {
+	   responsive: true,
 	  "searching": false,
 	  language: {
 	        url: getDatatableLanguage()
