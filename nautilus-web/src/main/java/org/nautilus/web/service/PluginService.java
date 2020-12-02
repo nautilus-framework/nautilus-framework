@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -67,11 +66,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
@@ -154,6 +148,8 @@ public class PluginService {
 		LOGGER.info("Loading problem extensions from classpath");
 		
 		addProblemExtension(new ToyProblemExtension());
+//		addProblemExtension(new NRPProblemExtension());
+//		addProblemExtension(new VTSPLProblemExtension());
 		
 		LOGGER.info("Done. Loading algorithms extensions from classpath");
 		
@@ -227,11 +223,9 @@ public class PluginService {
 		
 		Path directory = fileService.getInstancesLocation().resolve(key);
 
-		LOGGER.info("Copying the instance files for '{}'", key);
+		LOGGER.info("Copying the instance files from '{}'", key);
 		
-		System.out.println(parentFolder.getParent());
-		
-        for (Path instance : problemExtension.getAllInstances()) {
+		for (Path instance : problemExtension.getAllInstances()) {
 
             Path original = parentFolder.resolve(instance);
             Path copied = directory.resolve(original.getFileName());

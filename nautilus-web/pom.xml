@@ -195,17 +195,17 @@
       <version>2.4.0</version>
     </dependency>
     <dependency>
-      <groupId>thiagodnf.nautilus.plugin.toy</groupId>
+      <groupId>org.nautilus.plugin</groupId>
       <artifactId>nautilus-plugin-toy</artifactId>
       <version>1.0.0</version>
     </dependency>
-    <dependency>
-      <groupId>thiagodnf.nautilus.plugin.spl</groupId>
-      <artifactId>nautilus-plugin-spl</artifactId>
-      <version>1.0.0</version>
-    </dependency>
     <!-- <dependency>
-      <groupId>thiagodnf.nautilus.plugin.nrp</groupId>
+      <groupId>org.nautilus.plugin</groupId>
+      <artifactId>nautilus-plugin-vtspl</artifactId>
+      <version>1.0.0</version>
+    </dependency> -->
+    <!-- <dependency>
+      <groupId>org.nautilus.plugin</groupId>
       <artifactId>nautilus-plugin-nrp</artifactId>
       <version>1.0.0</version>
     </dependency> -->

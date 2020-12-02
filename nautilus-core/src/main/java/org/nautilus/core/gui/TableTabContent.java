@@ -61,7 +61,7 @@ public class TableTabContent extends TabContent {
 		
 		StringBuffer buffer = new StringBuffer();
 		
-		buffer.append("<table class=\"table table-striped table-hover table-sm table-datatable\">");
+		buffer.append("<table class=\"table table-striped table-hover table-sm table-datatable\" style=\"width:100%\">");
 		buffer.append("<thead>");
 		buffer.append("<tr>");
 		

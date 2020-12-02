@@ -7,10 +7,10 @@
 		<artifactId>nautilus</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<groupId>thiagodnf.nautilus.plugin.toy</groupId>
+	<groupId>org.nautilus.plugin</groupId>
 	<artifactId>nautilus-plugin-toy</artifactId>
 	<name>Nautilus Plugin Toy</name>
-	<description>A Toy Problem for Nautilus Tool</description>
+	<description>Nautilus plugin for a Toy problem</description>
 	<properties>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
@@ -19,7 +19,7 @@
 		<sonar.test.exclusions>src/test/**</sonar.test.exclusions>
 	</properties>
 	<organization>
-		<name>Thiago N. Ferreira</name>
+		<name>Thiago Ferreira</name>
 		<url>http://github.com/thiagodnf</url>
 	</organization>
 	<dependencies>

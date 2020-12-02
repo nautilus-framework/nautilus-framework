@@ -23,10 +23,10 @@ import org.nautilus.core.util.Converter;
 import org.nautilus.core.util.SolutionListUtils;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.algorithm.ManuallyExtension;
-import org.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
 import org.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 import org.nautilus.web.dto.CompareDTO;
 import org.nautilus.web.dto.ExecutionSimplifiedDTO;
+import org.nautilus.web.dto.FormCompareDTO;
 import org.nautilus.web.dto.UserDTO;
 import org.nautilus.web.model.Execution;
 import org.nautilus.web.model.User;
@@ -72,12 +72,10 @@ public class CompareController {
     private SecurityService securityService;
 
     @GetMapping("/form")
-    public String form(CompareDTO compareDTO,  Model model) {
+    public String form(CompareDTO compareDTO,  FormCompareDTO formCompareDTO, Model model) {
 
         User user = securityService.getLoggedUser().getUser();
 
-        Map<String, ProblemExtension> problems = pluginService.getProblems();
-        
         List<UserDTO> users = userService.findAll();
         
         List<ExecutionSimplifiedDTO> executions = null;
@@ -88,31 +86,48 @@ public class CompareController {
             executions = executionService.findExecutionSimplifiedDTOByUserId(user.getId());
         }
         
-        ProblemExtension problem = pluginService.getProblemById(new ToyProblemExtension().getId());
+        Map<String, ProblemExtension> problems = pluginService.getProblems();
+
+        List<Path> instances = new ArrayList<>();
+
+        for (String problemId : problems.keySet()) {
+            instances.addAll(fileService.getInstances(problemId));
+        }
+        
+        executions = executions.stream()
+            .filter(e -> e.getProblemId().equalsIgnoreCase(formCompareDTO.getProblemId()))
+            .filter(e -> e.getInstance().equalsIgnoreCase(formCompareDTO.getInstanceId()))
+            .collect(Collectors.toList());
+        
+        String problemId = new ToyProblemExtension().getId();
+        
+        ProblemExtension problem = pluginService.getProblemById(problemId);
         
         Map<String, Integer> numberOfReductions = new HashMap<>();
 
-        for (ExecutionSimplifiedDTO executionSimplified : executions) {
-            
-            int numberOfReduction = 0;
-            
-            if(executionSimplified.getAlgorithmId().equalsIgnoreCase(new NSGAIIWithConfidenceBasedReductionAlgorithmExtension().getId())) {
-                
-                Execution execution = executionService.findExecutionById(executionSimplified.getId());
-                
-                numberOfReduction = getNumberOfReductions(execution);
-            }
-            
-            numberOfReductions.put(executionSimplified.getId(), numberOfReduction);
-        }
+//        for (ExecutionSimplifiedDTO executionSimplified : executions) {
+//            
+//            int numberOfReduction = 0;
+//            
+//            if(executionSimplified.getAlgorithmId().equalsIgnoreCase(new NSGAIIWithConfidenceBasedReductionAlgorithmExtension().getId())) {
+//                
+//                Execution execution = executionService.findExecutionById(executionSimplified.getId());
+//                
+//                numberOfReduction = getNumberOfReductions(execution);
+//            }
+//            
+//            numberOfReductions.put(executionSimplified.getId(), numberOfReduction);
+//        }
         
         
+        model.addAttribute("instances", instances);
         model.addAttribute("users", users);
         model.addAttribute("objectives", problem.getObjectives());
         model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
         model.addAttribute("executions", executions);
         model.addAttribute("problems", problems);
         model.addAttribute("compareDTO", compareDTO);
+        model.addAttribute("formCompareDTO", formCompareDTO);
         model.addAttribute("numberOfReductions", numberOfReductions);
         
         return "form-compare-2";
@@ -137,12 +152,12 @@ public class CompareController {
     }
 
     @PostMapping("/result")
-    public String show(@Valid CompareDTO dto, BindingResult bindingResult, Model model) {
+    public String show(@Valid CompareDTO dto, @Valid FormCompareDTO formCompareDTO, BindingResult bindingResult, Model model) {
         
         System.out.println(dto);
 
         if (bindingResult.hasErrors()) {
-            return form(dto, model);
+            return form(dto, formCompareDTO, model);
         }
         
         User user = securityService.getLoggedUser().getUser();
@@ -240,19 +255,25 @@ public class CompareController {
     }
     
     @PostMapping("/result/2")
-    public String resultAll(@Valid CompareDTO dto, BindingResult bindingResult, Model model) {
+    public String resultAll(@Valid CompareDTO dto, BindingResult bindingResult, Model model, FormCompareDTO formCompareDTO) {
         
         System.out.println(dto);
-
+        
         if (bindingResult.hasErrors()) {
-            return form(dto, model);
+            return form(dto, formCompareDTO, model);
+        }
+        
+        List<Execution> executions = new ArrayList<>();
+
+        for (String executionId : dto.getExecutionIds()) {
+            executions.add(executionService.findExecutionById(executionId));
         }
         
         User user = securityService.getLoggedUser().getUser();
         
-        String problemId = new ToyProblemExtension().getId();
+        String problemId = executions.get(0).getProblemId();
         
-        String instanceId = "james.txt";
+        String instanceId = executions.get(0).getInstance();
         
         ProblemExtension problemExtension = pluginService.getProblemById(problemId);
         
@@ -267,16 +288,12 @@ public class CompareController {
         Execution pfApproxExecution = executionService.findParetoFrontApprox(problemId, instanceId);
         
         if(pfApproxExecution == null) {
-            throw new RuntimeException("The pareto-front approx for "+problemId+" and "+instanceId+ "was not found");
+            throw new RuntimeException("The pareto-front approx for "+problemId+" and "+instanceId+ " was not found");
         }
         
         List<NSolution<?>> pfApprox = pfApproxExecution.getSolutions();
         
-        List<Execution> executions = new ArrayList<>();
-        
-        for (String executionId : dto.getExecutionIds()) {
-
-            Execution execution = executionService.findExecutionById(executionId);
+        for (Execution execution : executions) {
 
             List<NSolution<?>> solutions = execution.getSolutions();
 
@@ -296,8 +313,6 @@ public class CompareController {
             
             execution.setSolutions(solutions);
             execution.getAttributes().put("metrics", metrics);
-            
-            executions.add(execution);
         }
         
         model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
