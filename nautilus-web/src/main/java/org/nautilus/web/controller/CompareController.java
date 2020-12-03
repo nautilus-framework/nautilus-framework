@@ -21,8 +21,10 @@ import org.nautilus.core.normalize.ByMaxAndMinValuesNormalize;
 import org.nautilus.core.objective.AbstractObjective;
 import org.nautilus.core.util.Converter;
 import org.nautilus.core.util.SolutionListUtils;
+import org.nautilus.plugin.extension.NormalizerExtension;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.algorithm.ManuallyExtension;
+import org.nautilus.plugin.extension.normalizer.ByMaxAndMinValuesNormalizerExtension;
 import org.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 import org.nautilus.web.dto.CompareDTO;
 import org.nautilus.web.dto.ExecutionSimplifiedDTO;
@@ -151,113 +153,109 @@ public class CompareController {
         return executions;
     }
 
-    @PostMapping("/result")
-    public String show(@Valid CompareDTO dto, @Valid FormCompareDTO formCompareDTO, BindingResult bindingResult, Model model) {
-        
-        System.out.println(dto);
-
-        if (bindingResult.hasErrors()) {
-            return form(dto, formCompareDTO, model);
-        }
-        
-        User user = securityService.getLoggedUser().getUser();
-        
-        String problemId = new ToyProblemExtension().getId();
-        
-        String instanceId = "james.txt";
-        
-        ProblemExtension problemExtension = pluginService.getProblemById(problemId);
-        
-        List<AbstractObjective> objectives = problemExtension.getObjectives();
-        
-        Path path = fileService.getInstance(problemId, instanceId);
-
-        Instance instance = problemExtension.getInstance(path);
-
-        NProblem<?> problem = (NProblem<?>) problemExtension.getProblem(instance, objectives);
-        
-        Execution pfApproxExecution = executionService.findParetoFrontApprox(problemId, instanceId);
-        
-        if(pfApproxExecution == null) {
-            throw new RuntimeException("The pareto-front approx for "+problemId+" and "+instanceId+ "was not found");
-        }
-        
-        List<NSolution<?>> pfApprox = pfApproxExecution.getSolutions();
-        
-        
-        List<Double> rpValues = new ArrayList<>();
-        
-        for (int i = 0; i < objectives.size(); i++) {
-
-            String objectiveId = objectives.get(i).getId();
-
-            if (dto.getObjectiveIds().contains(objectiveId)) {
-                rpValues.add(0.0);
-            } else {
-                if (dto.isRestrictedRP()) {
-                    rpValues.add(1.0);
-                } else {
-                    rpValues.add(0.5);
-                }
-            }
-        }
-        
-        LOGGER.debug("RP: "+ rpValues);
-        
-        PointSolution zr = PointSolutionUtils.createSolution(rpValues);
-        
-        List<Execution> executions = new ArrayList<>();
-        
-        for (String executionId : dto.getExecutionIds()) {
-
-            Execution execution = executionService.findExecutionById(executionId);
-
-            List<NSolution<?>> solutions = execution.getSolutions();
-
-            if (dto.isFilterBySelectedSolutions()) {
-                solutions = filterBySelectedSolutions(execution);
-            }
-
-            List<NSolution<?>> recalculated = SolutionListUtils.recalculate(problem, solutions);
-
-            Map<String, Number> metrics = SolutionListUtils.calculateMetrics(problem, pfApprox, recalculated, zr, dto.getDelta());
-            
-            long executionTime = getExecutionTime(execution);
-            
-            metrics.put("execution-time", executionTime);
-            metrics.put("#-of-reductions", getNumberOfReductions(execution));
-            
-
-            if (execution.getSelectedSolutions().size() == 1) {
-
-                Execution parent = executionService.getParent(execution.getId());
-
-                Date selectedDate = execution.getSelectedSolutions().get(0).getSelectionDate();
-
-                long diff = selectedDate.getTime() - parent.getCreationDate().getTime();
-
-                metrics.put("all-time", diff);
-            }
-            
-            metrics.put("interation-time", (long)metrics.get("all-time") - (long)metrics.get("execution-time"));
-            
-            execution.setSolutions(recalculated);
-            execution.getAttributes().put("metrics", metrics);
-            
-            executions.add(execution);
-        }
-        
-        model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
-        model.addAttribute("executions", executions);
-        model.addAttribute("objectiveIds", Converter.toJson(objectives.stream().map(e -> e.getId()).collect(Collectors.toList())));
-  
-        return "compare";
-    }
+//    @PostMapping("/result")
+//    public String show(@Valid CompareDTO dto, @Valid FormCompareDTO formCompareDTO, BindingResult bindingResult, Model model) {
+//        
+//        if (bindingResult.hasErrors()) {
+//            return form(dto, formCompareDTO, model);
+//        }
+//        
+//        User user = securityService.getLoggedUser().getUser();
+//        
+//        String problemId = new ToyProblemExtension().getId();
+//        
+//        String instanceId = "james.txt";
+//        
+//        ProblemExtension problemExtension = pluginService.getProblemById(problemId);
+//        
+//        List<AbstractObjective> objectives = problemExtension.getObjectives();
+//        
+//        Path path = fileService.getInstance(problemId, instanceId);
+//
+//        Instance instance = problemExtension.getInstance(path);
+//
+//        NProblem<?> problem = (NProblem<?>) problemExtension.getProblem(instance, objectives);
+//        
+//        Execution pfApproxExecution = executionService.findParetoFrontApprox(problemId, instanceId);
+//        
+//        if(pfApproxExecution == null) {
+//            throw new RuntimeException("The pareto-front approx for "+problemId+" and "+instanceId+ "was not found");
+//        }
+//        
+//        List<NSolution<?>> pfApprox = pfApproxExecution.getSolutions();
+//        
+//        
+//        List<Double> rpValues = new ArrayList<>();
+//        
+//        for (int i = 0; i < objectives.size(); i++) {
+//
+//            String objectiveId = objectives.get(i).getId();
+//
+//            if (dto.getObjectiveIds().contains(objectiveId)) {
+//                rpValues.add(0.0);
+//            } else {
+//                if (dto.isRestrictedRP()) {
+//                    rpValues.add(1.0);
+//                } else {
+//                    rpValues.add(0.5);
+//                }
+//            }
+//        }
+//        
+//        LOGGER.debug("RP: "+ rpValues);
+//        
+//        PointSolution zr = PointSolutionUtils.createSolution(rpValues);
+//        
+//        List<Execution> executions = new ArrayList<>();
+//        
+//        for (String executionId : dto.getExecutionIds()) {
+//
+//            Execution execution = executionService.findExecutionById(executionId);
+//
+//            List<NSolution<?>> solutions = execution.getSolutions();
+//
+//            if (dto.isFilterBySelectedSolutions()) {
+//                solutions = filterBySelectedSolutions(execution);
+//            }
+//
+//            List<NSolution<?>> recalculated = SolutionListUtils.recalculate(problem, solutions);
+//
+//            Map<String, Number> metrics = SolutionListUtils.calculateMetrics(problem, pfApprox, recalculated, zr, dto.getDelta());
+//            
+//            long executionTime = getExecutionTime(execution);
+//            
+//            metrics.put("execution-time", executionTime);
+//            metrics.put("#-of-reductions", getNumberOfReductions(execution));
+//            
+//
+//            if (execution.getSelectedSolutions().size() == 1) {
+//
+//                Execution parent = executionService.getParent(execution.getId());
+//
+//                Date selectedDate = execution.getSelectedSolutions().get(0).getSelectionDate();
+//
+//                long diff = selectedDate.getTime() - parent.getCreationDate().getTime();
+//
+//                metrics.put("all-time", diff);
+//            }
+//            
+//            metrics.put("interation-time", (long)metrics.get("all-time") - (long)metrics.get("execution-time"));
+//            
+//            execution.setSolutions(recalculated);
+//            execution.getAttributes().put("metrics", metrics);
+//            
+//            executions.add(execution);
+//        }
+//        
+//        model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+//        model.addAttribute("executions", executions);
+//        model.addAttribute("objectiveIds", Converter.toJson(objectives.stream().map(e -> e.getId()).collect(Collectors.toList())));
+//  
+//        return "compare";
+//    }
     
     @PostMapping("/result/2")
     public String resultAll(@Valid CompareDTO dto, BindingResult bindingResult, Model model, FormCompareDTO formCompareDTO) {
-        
-        System.out.println(dto);
         
         if (bindingResult.hasErrors()) {
             return form(dto, formCompareDTO, model);
@@ -275,6 +273,7 @@ public class CompareController {
         
         String instanceId = executions.get(0).getInstance();
         
+        NormalizerExtension normalizerExtension = pluginService.getNormalizerExtensionById(new ByMaxAndMinValuesNormalizerExtension().getId());
         ProblemExtension problemExtension = pluginService.getProblemById(problemId);
         
         List<AbstractObjective> objectives = problemExtension.getObjectives();
@@ -304,6 +303,8 @@ public class CompareController {
             if (solutions.isEmpty()) {
                 continue;
             }
+            
+            solutions = normalizerExtension.getNormalizer().normalize(objectives, solutions);
 
             Map<String, Number> metrics = calculateMetrics(problem, pfApprox, solutions);
             
