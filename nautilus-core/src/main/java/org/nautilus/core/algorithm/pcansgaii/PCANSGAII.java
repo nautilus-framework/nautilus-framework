@@ -44,6 +44,8 @@ public class PCANSGAII<S extends Solution<?>> extends org.uma.jmetal.algorithm.m
             problem, 
             maxEvaluations, 
             populationSize, 
+            populationSize, 
+            populationSize, 
             crossoverOperator, 
             mutationOperator, 
             selectionOperator,

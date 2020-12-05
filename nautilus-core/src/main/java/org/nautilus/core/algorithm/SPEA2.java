@@ -27,7 +27,8 @@ public class SPEA2<S extends Solution<?>> extends org.uma.jmetal.algorithm.multi
 				builder.getCrossover(), 
 				builder.getMutation(), 
 				builder.getSelection(),
-				new SequentialSolutionListEvaluator<S>());
+				new SequentialSolutionListEvaluator<S>(),
+				1);
 		
 		this.maxEvaluations = builder.getMaxEvaluations();
 		this.initialPopulation = builder.getInitialPopulation();
