@@ -15,10 +15,10 @@
     <module>nautilus-web</module>
   </modules>
   <properties>
-    <springframework.boot.version>2.0.3.RELEASE</springframework.boot.version>
+    <springframework.boot.version>2.3.6.RELEASE</springframework.boot.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <jmetal.version>5.6</jmetal.version>
+    <jmetal.version>5.9</jmetal.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
     <sonar.test.exclusions>
@@ -63,13 +63,13 @@
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>2.8.5</version>
+      <version>2.8.6</version>
     </dependency>
     <!-- Google Guava -->
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>22.0</version>
+      <version>30.0-jre</version>
     </dependency>
     <!-- JUnit Test Framework -->
     <dependency>
@@ -81,7 +81,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.8</version>
+      <version>1.18.16</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

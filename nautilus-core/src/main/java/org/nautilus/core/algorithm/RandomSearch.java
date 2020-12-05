@@ -23,6 +23,8 @@ public class RandomSearch<S extends Solution<?>> extends org.uma.jmetal.algorith
 		super(builder.getProblem(), 
 				builder.getMaxEvaluations(), 
 				builder.getPopulationSize(), 
+				builder.getPopulationSize(), 
+				builder.getPopulationSize(), 
 				builder.getCrossover(), 
 				builder.getMutation(), 
 				builder.getSelection(),
