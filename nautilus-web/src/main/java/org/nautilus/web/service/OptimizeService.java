@@ -27,6 +27,7 @@ import org.nautilus.plugin.extension.CrossoverExtension;
 import org.nautilus.plugin.extension.MutationExtension;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.SelectionExtension;
+import org.nautilus.web.feature.user.service.UserService;
 import org.nautilus.web.persistence.dto.ExecutionQueueDTO;
 import org.nautilus.web.persistence.dto.UserDTO;
 import org.nautilus.web.persistence.model.Execution;
@@ -89,7 +90,7 @@ public class OptimizeService {
             
             String email = userDTO.getEmail();
             
-            String timeZone = userService.findByEmail(email).getTimeZone();
+            String timeZone = userService.findByEmail(email).getSettings().getTimeZone();
             
             ExecutionQueueDTO itemQueue = new ExecutionQueueDTO();
             

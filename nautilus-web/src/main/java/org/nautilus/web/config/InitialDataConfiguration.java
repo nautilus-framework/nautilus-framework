@@ -1,7 +1,8 @@
 package org.nautilus.web.config;
 
-import org.nautilus.web.persistence.model.User;
-import org.nautilus.web.service.UserService;
+import org.nautilus.web.feature.user.constant.Role;
+import org.nautilus.web.feature.user.model.User;
+import org.nautilus.web.feature.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,18 +38,14 @@ public class InitialDataConfiguration implements ApplicationListener<ContextRefr
 		
 		LOGGER.info("Creating the default users and privilegies");
 
-		User adminUser = new User();
+		User user = new User();
 		
-		adminUser.setEmail(adminEmail);
-		adminUser.setPassword(adminPassword);
-		adminUser.setFirstname(adminFirstname);
-		adminUser.setLastname(adminLastname);
-		adminUser.setAdmin(true);
-		adminUser.setEditable(false);
-		adminUser.setEnabled(true);
-		adminUser.setMaxExecutions(Integer.MAX_VALUE);
-
-		createUserIfNotFound(adminUser);
+		user.setEmail(adminEmail);
+		user.setPassword(adminPassword);
+		user.setRole(Role.ADMIN);
+		user.setEnabled(true);
+		
+		createUserIfNotFound(user);
 	}
 	
 	@Transactional

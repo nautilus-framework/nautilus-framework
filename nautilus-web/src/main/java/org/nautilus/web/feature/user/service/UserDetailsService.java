@@ -1,9 +1,10 @@
-package org.nautilus.web.service;
+package org.nautilus.web.feature.user.service;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.nautilus.web.persistence.model.User;
+import org.nautilus.web.feature.user.constant.Role;
+import org.nautilus.web.feature.user.model.User;
 import org.nautilus.web.persistence.model.UserDetails;
 import org.nautilus.web.util.Privileges;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class UserDetailsService implements org.springframework.security.core.use
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
-        if (user.isAdmin()) {
+        if (user.getRole() == Role.ADMIN) {
             grantedAuthorities.add(new SimpleGrantedAuthority(Privileges.IS_ADMIN));
         }
 

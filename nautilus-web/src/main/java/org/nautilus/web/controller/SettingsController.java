@@ -2,12 +2,12 @@ package org.nautilus.web.controller;
 
 import javax.validation.Valid;
 
-import org.nautilus.web.persistence.constant.DecimalSeparator;
-import org.nautilus.web.persistence.constant.Language;
-import org.nautilus.web.persistence.dto.UserSettingsDTO;
-import org.nautilus.web.persistence.model.User;
-import org.nautilus.web.service.SecurityService;
-import org.nautilus.web.service.UserService;
+import org.nautilus.web.feature.user.constant.DecimalSeparator;
+import org.nautilus.web.feature.user.constant.Language;
+import org.nautilus.web.feature.user.dto.SettingsDTO;
+import org.nautilus.web.feature.user.model.User;
+import org.nautilus.web.feature.user.service.SecurityService;
+import org.nautilus.web.feature.user.service.UserService;
 import org.nautilus.web.util.Messages;
 import org.nautilus.web.util.Redirect;
 import org.nautilus.web.util.TimeZones;
@@ -42,7 +42,7 @@ public class SettingsController {
     }
 	
 	@PostMapping("/update")
-    public String update(@Valid UserSettingsDTO userSettingsDTO, BindingResult bindingResult, RedirectAttributes ra, Model model) {
+    public String update(@Valid SettingsDTO userSettingsDTO, BindingResult bindingResult, RedirectAttributes ra, Model model) {
         
         if (bindingResult.hasErrors()) {
             return form(userSettingsDTO, model);
@@ -52,10 +52,10 @@ public class SettingsController {
         
         userService.updateUserSettings(user.getId(), userSettingsDTO);
         
-        return redirect.to("/settings?lang=" + userSettingsDTO.getLanguage()).withSuccess(ra, Messages.SETTINGS_SAVE_SUCCESS);
+        return redirect.to("/settings?lang=" + userSettingsDTO.getSettings().getLanguage()).withSuccess(ra, Messages.SETTINGS_SAVE_SUCCESS);
     }
 	
-	private String form(UserSettingsDTO userSettingsDTO, Model model) {
+	private String form(SettingsDTO userSettingsDTO, Model model) {
 	    
 	    model.addAttribute("availableTimeZones", TimeZones.getAvailableTimeZones());
         model.addAttribute("userSettingsDTO", userSettingsDTO);

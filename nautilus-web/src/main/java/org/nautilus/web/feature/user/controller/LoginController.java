@@ -1,9 +1,9 @@
-package org.nautilus.web.controller;
+package org.nautilus.web.feature.user.controller;
 
-import org.nautilus.web.persistence.dto.LoginDTO;
-import org.nautilus.web.persistence.model.User;
+import org.nautilus.web.feature.user.dto.LoginDTO;
+import org.nautilus.web.feature.user.model.User;
+import org.nautilus.web.feature.user.service.SecurityService;
 import org.nautilus.web.service.FlashMessageService;
-import org.nautilus.web.service.SecurityService;
 import org.nautilus.web.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,7 +43,7 @@ public class LoginController {
 			return "redirect:/login";
 		}
 		
-		return "login";
+		return "user/login";
 	}
 	
 	@RequestMapping("/success")
@@ -51,6 +51,6 @@ public class LoginController {
 
 		User user = securityService.getLoggedUser().getUser();
 
-		return "redirect:/home?lang=" + user.getLanguage();
+		return "redirect:/home?lang=" + user.getSettings().getLanguage();
 	}
 }

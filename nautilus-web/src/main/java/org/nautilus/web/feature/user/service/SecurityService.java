@@ -1,4 +1,4 @@
-package org.nautilus.web.service;
+package org.nautilus.web.feature.user.service;
 
 import java.util.Collection;
 

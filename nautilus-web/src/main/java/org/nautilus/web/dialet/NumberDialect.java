@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.nautilus.web.persistence.model.User;
-import org.nautilus.web.service.SecurityService;
+import org.nautilus.web.feature.user.model.User;
+import org.nautilus.web.feature.user.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.dialect.AbstractProcessorDialect;
@@ -95,8 +95,8 @@ public class NumberDialect extends AbstractProcessorDialect {
                     number, 
                     1, 
                     NumberPointType.COMMA.toString(), 
-                    user.getDecimalPlaces(), 
-                    user.getDecimalSeparator());
+                    user.getSettings().getDecimalPlaces(), 
+                    user.getSettings().getDecimalSeparator());
             
             // Report the result to the engine, whichever the type of process we have applied
             structureHandler.setBody(formatted, false);

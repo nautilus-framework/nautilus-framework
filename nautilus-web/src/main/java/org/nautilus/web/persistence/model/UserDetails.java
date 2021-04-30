@@ -2,6 +2,7 @@ package org.nautilus.web.persistence.model;
 
 import java.util.Set;
 
+import org.nautilus.web.feature.user.model.User;
 import org.springframework.security.core.GrantedAuthority;
 
 public class UserDetails extends org.springframework.security.core.userdetails.User {

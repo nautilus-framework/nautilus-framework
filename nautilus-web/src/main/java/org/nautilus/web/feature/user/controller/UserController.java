@@ -1,10 +1,10 @@
-package org.nautilus.web.controller;
+package org.nautilus.web.feature.user.controller;
 
 import javax.validation.Valid;
 
+import org.nautilus.web.feature.user.model.User;
+import org.nautilus.web.feature.user.service.UserService;
 import org.nautilus.web.persistence.dto.UserDTO;
-import org.nautilus.web.persistence.model.User;
-import org.nautilus.web.service.UserService;
 import org.nautilus.web.util.Messages;
 import org.nautilus.web.util.Redirect;
 import org.springframework.beans.factory.annotation.Autowired;

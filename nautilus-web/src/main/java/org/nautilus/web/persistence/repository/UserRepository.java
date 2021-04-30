@@ -2,10 +2,10 @@ package org.nautilus.web.persistence.repository;
 
 import java.util.Optional;
 
-import org.nautilus.web.persistence.model.User;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.nautilus.web.feature.user.model.User;
+import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends MongoRepository<User, String>{
+public interface UserRepository extends CrudRepository<User, String>{
 
 	public User findByEmail(String email);
 	

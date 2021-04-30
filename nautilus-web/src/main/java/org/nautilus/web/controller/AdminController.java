@@ -1,7 +1,7 @@
 package org.nautilus.web.controller;
 
+import org.nautilus.web.feature.user.service.UserService;
 import org.nautilus.web.service.PluginService;
-import org.nautilus.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

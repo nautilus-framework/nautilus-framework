@@ -1,4 +1,4 @@
-package org.nautilus.web.persistence.dto;
+package org.nautilus.web.feature.user.dto;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -12,29 +12,20 @@ import org.nautilus.web.annotation.HTMLRequired;
 import org.nautilus.web.annotation.HTMLSpellCheck;
 import org.nautilus.web.annotation.HTMLStep;
 import org.nautilus.web.annotation.TimeZone;
+import org.nautilus.web.feature.user.model.Settings;
 
-import lombok.Value;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Value
-public class UserSettingsDTO {
+@Getter
+@Setter
+@NoArgsConstructor
+//@Value
+public class SettingsDTO {
 	
-    @NotBlank
-    @HTMLAutoFocus
-    @HTMLSpellCheck("false")
-    @HTMLAutoComplete("given-name")
-	private String firstname;
-
-	@NotBlank
-	@HTMLSpellCheck("false")
-	@HTMLAutoComplete("family-name")
-	private String lastname;
-	
-	@Min(1)
+    @Min(1)
     @Max(10)
-    @HTMLStep(1)
-    @HTMLRequired
-    @HTMLSpellCheck("false")
-    @HTMLAutoComplete("off")
     private int decimalPlaces;
     
     @NotBlank
@@ -48,6 +39,8 @@ public class UserSettingsDTO {
     @NotBlank
     @TimeZone
     private String timeZone;
+    
+    private Settings settings;
     
     public String toString() {
         return Converter.toJson(this);

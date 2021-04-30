@@ -1,12 +1,12 @@
-package org.nautilus.web.controller;
+package org.nautilus.web.feature.user.controller;
 
 import javax.validation.Valid;
 
-import org.nautilus.web.persistence.dto.SignupDTO;
-import org.nautilus.web.persistence.model.User;
+import org.nautilus.web.feature.user.dto.SignupDTO;
+import org.nautilus.web.feature.user.model.User;
+import org.nautilus.web.feature.user.service.SecurityService;
+import org.nautilus.web.feature.user.service.SignupService;
 import org.nautilus.web.service.EmailService;
-import org.nautilus.web.service.SecurityService;
-import org.nautilus.web.service.SignupService;
 import org.nautilus.web.util.Messages;
 import org.nautilus.web.util.Redirect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,22 +21,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/signup")
-public class SignupController {
+public class SignupController extends BasicController{
 	
 	@Autowired
 	private SignupService signupService;
-	
-	@Autowired
-	private EmailService emailService;
-	
-	@Autowired
-    private Redirect redirect;
-	
-	@Autowired
-	private SecurityService securityService;
-	
-	@Value("${server.use.confirmation.token}")
-    private boolean useConfirmationToken;
 	
 	@GetMapping("")
 	public String form(SignupDTO signupDTO, Model model) {
@@ -47,7 +35,7 @@ public class SignupController {
 		
 		model.addAttribute("signupDTO", signupDTO);
 		
-		return "signup";
+		return "user/signup";
 	}
 	
 	@PostMapping("/save")
@@ -59,13 +47,6 @@ public class SignupController {
 		
 		User saved = signupService.create(signupDTO);
 		
-		if (useConfirmationToken) {
-
-			emailService.sendConfirmationMail(saved);
-
-			return redirect.to("/login").withSuccess(ra, Messages.USER_CONFIRMATION_EMAIL, saved.getEmail());
-		}
-
 		return redirect.to("/user/confirmation?token=" + saved.getConfirmationToken()).withNoMessage();
 	}
 }

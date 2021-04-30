@@ -1,6 +1,6 @@
 package org.nautilus.web.config;
 
-import org.nautilus.web.service.UserDetailsService;
+import org.nautilus.web.feature.user.service.UserDetailsService;
 import org.nautilus.web.util.Privileges;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +34,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers(HttpMethod.POST, "/user/delete/**").hasAuthority(Privileges.IS_ADMIN)
                 .antMatchers(HttpMethod.GET, "/user/edit/**").hasAuthority(Privileges.IS_ADMIN)
                 
+                .and()
+                .authorizeRequests().antMatchers("/h2-console/**").permitAll()
+                
+                
+                
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
@@ -47,6 +52,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
             .logout()
             	.invalidateHttpSession(true)
             	.permitAll();
+        
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
     }
 	
 	@Bean

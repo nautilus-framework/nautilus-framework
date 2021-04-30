@@ -1,16 +1,18 @@
-package org.nautilus.web.service;
+    package org.nautilus.web.feature.user.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.nautilus.web.exception.ConfirmationTokenNotFoundException;
 import org.nautilus.web.exception.UserNotEditableException;
 import org.nautilus.web.exception.UserNotFoundException;
+import org.nautilus.web.feature.user.dto.SettingsDTO;
+import org.nautilus.web.feature.user.model.User;
 import org.nautilus.web.persistence.dto.ExecutionSimplifiedDTO;
 import org.nautilus.web.persistence.dto.UserDTO;
-import org.nautilus.web.persistence.dto.UserSettingsDTO;
-import org.nautilus.web.persistence.model.User;
 import org.nautilus.web.persistence.repository.UserRepository;
+import org.nautilus.web.service.ExecutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -64,9 +66,9 @@ public class UserService {
 
 		User found = findUserById(id);
 
-		if (!found.isEditable()) {
-			throw new UserNotEditableException();
-		}
+//		if (!found.isEditable()) {
+//			throw new UserNotEditableException();
+//		}
 		
 		// After removing a user, we have to remove all his/her executions
 
@@ -84,7 +86,12 @@ public class UserService {
     }
 	
 	public List<UserDTO> findAll() {
-		return convertToUserDTOs(userRepository.findAll());
+	    
+	    List<User> users = new ArrayList<>();
+	    
+	    userRepository.findAll().forEach(users::add);
+	    
+		return convertToUserDTOs(users);
 	}
 	
 	private List<UserDTO> convertToUserDTOs(List<User> models) {
@@ -95,37 +102,33 @@ public class UserService {
 
         User found = findUserById(user.getId());
 
-        if (!found.isEditable()) {
-            throw new UserNotEditableException();
-        }
+//        if (!found.isEditable()) {
+//            throw new UserNotEditableException();
+//        }
         
         found.setEnabled(user.isEnabled());
-        found.setAdmin(user.isAdmin());
+        
         found.setAccountNonExpired(user.isAccountNonExpired());
         found.setCredentialsNonExpired(user.isCredentialsNonExpired());
         found.setAccountNonLocked(user.isAccountNonLocked());
-        found.setMaxExecutions(user.getMaxExecutions());
-        found.setFirstname(user.getFirstname());
-        found.setLastname(user.getLastname());
+        found.getSettings().setMaxExecutions(user.getMaxExecutions());
         
         userRepository.save(found);
     }
 	
-    public void updateUserSettings(String userId, UserSettingsDTO dto) {
+    public void updateUserSettings(String userId, SettingsDTO dto) {
 
         User found = findUserById(userId);
 
-        found.setFirstname(dto.getFirstname());
-        found.setLastname(dto.getLastname());
-        found.setDecimalPlaces(dto.getDecimalPlaces());
-        found.setDecimalSeparator(dto.getDecimalSeparator());
-        found.setLanguage(dto.getLanguage());
-        found.setTimeZone(dto.getTimeZone());
+        found.getSettings().setDecimalPlaces(dto.getDecimalPlaces());
+        found.getSettings().setDecimalSeparator(dto.getDecimalSeparator());
+        found.getSettings().setLanguage(dto.getLanguage());
+        found.getSettings().setTimeZone(dto.getTimeZone());
 
         userRepository.save(found);
     }
 
-    public UserSettingsDTO findUserSettingsDTOById(String id) {
+    public SettingsDTO findUserSettingsDTOById(String id) {
         return convertToUserSettingsDTO(findUserById(id));
     }
     
@@ -135,32 +138,27 @@ public class UserService {
             return null;
         }
         
-        return new UserDTO(
-            user.getId(),
-            user.getEmail(),
-            user.getFirstname(),
-            user.getLastname(),
-            user.isEnabled(),
-            user.isAdmin(),
-            user.isAccountNonExpired(),
-            user.isAccountNonLocked(),
-            user.isCredentialsNonExpired(),
-            user.getMaxExecutions()
-        );
+        UserDTO dto = new UserDTO();
+        
+        return dto;
     }
     
-    public UserSettingsDTO convertToUserSettingsDTO(User user) {
+    public SettingsDTO convertToUserSettingsDTO(User user) {
         
         if (user == null)
             return null;
         
-        return new UserSettingsDTO(
-            user.getFirstname(),
-            user.getLastname(),  
-            user.getDecimalPlaces(),
-            user.getDecimalSeparator(),
-            user.getLanguage(),
-            user.getTimeZone()
-        );
+        SettingsDTO dto = new SettingsDTO();
+        
+//        return new UserSettingsDTO(
+//            user.getFirstname(),
+//            user.getLastname(),  
+//            user.getDecimalPlaces(),
+//            user.getDecimalSeparator(),
+//            user.getLanguage(),
+//            user.getTimeZone()
+//        );
+        
+        return dto;
     }
 }

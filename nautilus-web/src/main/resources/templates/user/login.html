@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout-simple :: layout (~{::body},'vets')}">
+	<body>
+		<div class="offset-md-4 col-md-4 offset-md-4">
+	        <div class="card card-body">
+	            <h4 class="center" th:text="#{nav.login}"></h4>
+                <p class="center">Welcome back!</p>
+                <hr/>
+                <form th:action="@{/login}" method="post" th:object="${loginDTO}">
+                    <div class="form-group">
+                        <label for="email" th:text="#{user.e-mail}"></label> 
+                        <input type="email" class="form-control" th:field="*{email}" th:validation="email"/>
+                        <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" th:text="#{user.password}"></label> 
+                        <input type="password" class="form-control" th:field="*{password}" th:validation="password"/>
+                        <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                        <span class="text-danger" th:if="${param.error}" th:text="#{msg.login-error}"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="remember-me" name="remember-me" />
+                        <label for="remember-me" th:text="#{btn.remember-me}"></label>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block" th:text="#{btn.login}"></button>
+                    <br>
+                    <p class="center"><a th:href="@{/signup}" th:text="#{nav.register-for-an-account}"></a></p>
+                </form>
+	        </div>
+	    </div>
+	</body>
+</html>

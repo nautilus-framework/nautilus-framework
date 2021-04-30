@@ -1,4 +1,4 @@
-package org.nautilus.web.persistence.constant;
+package org.nautilus.web.feature.user.constant;
 
 public enum DecimalSeparator {
     COMMA, 
