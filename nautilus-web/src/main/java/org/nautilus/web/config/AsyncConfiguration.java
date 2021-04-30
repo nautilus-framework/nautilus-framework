@@ -5,8 +5,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.nautilus.web.dto.ExecutionQueueDTO;
-import org.nautilus.web.model.Execution;
+import org.nautilus.web.persistence.dto.ExecutionQueueDTO;
+import org.nautilus.web.persistence.model.Execution;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

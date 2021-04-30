@@ -1,8 +1,8 @@
-package org.nautilus.web.repository;
+package org.nautilus.web.persistence.repository;
 
 import java.util.Optional;
 
-import org.nautilus.web.model.User;
+import org.nautilus.web.persistence.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserRepository extends MongoRepository<User, String>{

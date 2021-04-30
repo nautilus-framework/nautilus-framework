@@ -1,4 +1,4 @@
-package org.nautilus.web.dto;
+package org.nautilus.web.persistence.dto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import org.nautilus.web.annotation.HTMLReadonly;
 import org.nautilus.web.annotation.HTMLRequired;
 import org.nautilus.web.annotation.HTMLSpellCheck;
 import org.nautilus.web.annotation.HTMLStep;
-import org.nautilus.web.model.Execution.Visibility;
+import org.nautilus.web.persistence.model.Execution.Visibility;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

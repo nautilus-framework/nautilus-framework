@@ -1,5 +1,5 @@
 
-package org.nautilus.web.model;
+package org.nautilus.web.persistence.model;
 
 import java.util.ArrayList;
 import java.util.Date;

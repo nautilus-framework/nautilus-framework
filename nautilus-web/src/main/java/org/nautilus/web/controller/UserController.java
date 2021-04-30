@@ -2,8 +2,8 @@ package org.nautilus.web.controller;
 
 import javax.validation.Valid;
 
-import org.nautilus.web.dto.UserDTO;
-import org.nautilus.web.model.User;
+import org.nautilus.web.persistence.dto.UserDTO;
+import org.nautilus.web.persistence.model.User;
 import org.nautilus.web.service.UserService;
 import org.nautilus.web.util.Messages;
 import org.nautilus.web.util.Redirect;

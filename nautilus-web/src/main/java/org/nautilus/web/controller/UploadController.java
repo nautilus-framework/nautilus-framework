@@ -4,12 +4,12 @@ import javax.validation.Valid;
 
 import org.nautilus.core.util.Converter;
 import org.nautilus.plugin.extension.ProblemExtension;
-import org.nautilus.web.dto.UploadExecutionDTO;
-import org.nautilus.web.dto.UploadInstanceDTO;
 import org.nautilus.web.exception.AbstractRedirectException;
-import org.nautilus.web.model.Execution;
-import org.nautilus.web.model.UploadPlugin;
-import org.nautilus.web.model.User;
+import org.nautilus.web.persistence.dto.UploadExecutionDTO;
+import org.nautilus.web.persistence.dto.UploadInstanceDTO;
+import org.nautilus.web.persistence.model.Execution;
+import org.nautilus.web.persistence.model.UploadPlugin;
+import org.nautilus.web.persistence.model.User;
 import org.nautilus.web.service.ExecutionService;
 import org.nautilus.web.service.FileService;
 import org.nautilus.web.service.FlashMessageService;

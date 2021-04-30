@@ -1,4 +1,4 @@
-package org.nautilus.web.model;
+package org.nautilus.web.persistence.model;
 
 import java.util.Set;
 

@@ -1,11 +1,11 @@
-package org.nautilus.web.repository;
+package org.nautilus.web.persistence.repository;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.nautilus.web.dto.ExecutionSimplifiedDTO;
-import org.nautilus.web.model.Execution;
-import org.nautilus.web.model.Execution.Visibility;
+import org.nautilus.web.persistence.dto.ExecutionSimplifiedDTO;
+import org.nautilus.web.persistence.model.Execution;
+import org.nautilus.web.persistence.model.Execution.Visibility;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ExecutionRepository extends MongoRepository<Execution, String> {

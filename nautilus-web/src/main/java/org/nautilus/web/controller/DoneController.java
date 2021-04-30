@@ -3,8 +3,8 @@ package org.nautilus.web.controller;
 import java.util.Map;
 
 import org.nautilus.plugin.extension.ProblemExtension;
-import org.nautilus.web.model.Execution;
-import org.nautilus.web.model.User;
+import org.nautilus.web.persistence.model.Execution;
+import org.nautilus.web.persistence.model.User;
 import org.nautilus.web.service.ExecutionService;
 import org.nautilus.web.service.PluginService;
 import org.nautilus.web.service.SecurityService;

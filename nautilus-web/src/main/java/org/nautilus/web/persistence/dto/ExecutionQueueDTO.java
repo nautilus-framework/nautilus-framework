@@ -1,4 +1,4 @@
-package org.nautilus.web.dto;
+package org.nautilus.web.persistence.dto;
 
 import java.util.Date;
 

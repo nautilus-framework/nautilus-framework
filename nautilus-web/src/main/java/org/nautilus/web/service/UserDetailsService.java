@@ -3,8 +3,8 @@ package org.nautilus.web.service;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.nautilus.web.model.User;
-import org.nautilus.web.model.UserDetails;
+import org.nautilus.web.persistence.model.User;
+import org.nautilus.web.persistence.model.UserDetails;
 import org.nautilus.web.util.Privileges;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

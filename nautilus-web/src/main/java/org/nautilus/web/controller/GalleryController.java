@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.nautilus.plugin.extension.ProblemExtension;
-import org.nautilus.web.dto.ExecutionSimplifiedDTO;
-import org.nautilus.web.model.User;
-import org.nautilus.web.model.Execution.Visibility;
+import org.nautilus.web.persistence.dto.ExecutionSimplifiedDTO;
+import org.nautilus.web.persistence.model.User;
+import org.nautilus.web.persistence.model.Execution.Visibility;
 import org.nautilus.web.service.ExecutionService;
 import org.nautilus.web.service.PluginService;
 import org.nautilus.web.service.SecurityService;

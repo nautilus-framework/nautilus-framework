@@ -2,8 +2,8 @@ package org.nautilus.web.controller;
 
 import javax.validation.Valid;
 
-import org.nautilus.web.dto.SignupDTO;
-import org.nautilus.web.model.User;
+import org.nautilus.web.persistence.dto.SignupDTO;
+import org.nautilus.web.persistence.model.User;
 import org.nautilus.web.service.EmailService;
 import org.nautilus.web.service.SecurityService;
 import org.nautilus.web.service.SignupService;

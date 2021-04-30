@@ -1,7 +1,7 @@
 package org.nautilus.web.controller;
 
-import org.nautilus.web.dto.LoginDTO;
-import org.nautilus.web.model.User;
+import org.nautilus.web.persistence.dto.LoginDTO;
+import org.nautilus.web.persistence.model.User;
 import org.nautilus.web.service.FlashMessageService;
 import org.nautilus.web.service.SecurityService;
 import org.nautilus.web.util.Messages;

@@ -4,7 +4,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.nautilus.web.annotation.UniqueEmail;
-import org.nautilus.web.model.User;
+import org.nautilus.web.persistence.model.User;
 import org.nautilus.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 

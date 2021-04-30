@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.nautilus.plugin.extension.algorithm.ParetoFrontApproxExtension;
-import org.nautilus.web.dto.ExecutionQueueDTO;
-import org.nautilus.web.dto.ExecutionSettingsDTO;
-import org.nautilus.web.dto.ExecutionSimplifiedDTO;
 import org.nautilus.web.exception.ExecutionNotFoundException;
 import org.nautilus.web.exception.UserNotOwnerException;
-import org.nautilus.web.model.Execution;
-import org.nautilus.web.model.User;
-import org.nautilus.web.model.Execution.Visibility;
-import org.nautilus.web.repository.ExecutionRepository;
+import org.nautilus.web.persistence.dto.ExecutionQueueDTO;
+import org.nautilus.web.persistence.dto.ExecutionSettingsDTO;
+import org.nautilus.web.persistence.dto.ExecutionSimplifiedDTO;
+import org.nautilus.web.persistence.model.Execution;
+import org.nautilus.web.persistence.model.User;
+import org.nautilus.web.persistence.model.Execution.Visibility;
+import org.nautilus.web.persistence.repository.ExecutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

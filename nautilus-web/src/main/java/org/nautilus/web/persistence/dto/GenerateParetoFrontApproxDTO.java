@@ -1,8 +1,6 @@
-package org.nautilus.web.dto;
+package org.nautilus.web.persistence.dto;
 
 import javax.validation.constraints.NotBlank;
-
-import org.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,12 +13,12 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class FormCompareDTO {
+public class GenerateParetoFrontApproxDTO {
     
     @NotBlank
-    private String problemId = new ToyProblemExtension().getId();
+    private String problemId;
     
     @NotBlank
-    private String instanceId = "1-to-020-w-005.txt";
+    private String instanceId;
 }
 

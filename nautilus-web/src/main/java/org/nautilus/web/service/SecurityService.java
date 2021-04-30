@@ -33,7 +33,7 @@ public class SecurityService {
         return false;
     }
 	
-	public org.nautilus.web.model.UserDetails getLoggedUser() {
+	public org.nautilus.web.persistence.model.UserDetails getLoggedUser() {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -41,8 +41,8 @@ public class SecurityService {
 			return null;
 		}
 		
-		if(auth.getPrincipal() instanceof org.nautilus.web.model.UserDetails) {
-			return (org.nautilus.web.model.UserDetails) auth.getPrincipal();
+		if(auth.getPrincipal() instanceof org.nautilus.web.persistence.model.UserDetails) {
+			return (org.nautilus.web.persistence.model.UserDetails) auth.getPrincipal();
 		}
 		
 		return null;

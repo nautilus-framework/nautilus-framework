@@ -1,10 +1,10 @@
-package org.nautilus.web.dto;
+package org.nautilus.web.persistence.dto;
 
 import javax.validation.constraints.NotBlank;
 
 import org.nautilus.core.util.Converter;
 import org.nautilus.web.annotation.Contains;
-import org.nautilus.web.model.Execution.Visibility;
+import org.nautilus.web.persistence.model.Execution.Visibility;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

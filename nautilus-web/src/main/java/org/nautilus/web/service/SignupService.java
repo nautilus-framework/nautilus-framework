@@ -2,8 +2,8 @@ package org.nautilus.web.service;
 
 import java.util.UUID;
 
-import org.nautilus.web.dto.SignupDTO;
-import org.nautilus.web.model.User;
+import org.nautilus.web.persistence.dto.SignupDTO;
+import org.nautilus.web.persistence.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

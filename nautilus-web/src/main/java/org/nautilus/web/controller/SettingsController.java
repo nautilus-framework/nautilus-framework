@@ -2,8 +2,10 @@ package org.nautilus.web.controller;
 
 import javax.validation.Valid;
 
-import org.nautilus.web.dto.UserSettingsDTO;
-import org.nautilus.web.model.User;
+import org.nautilus.web.persistence.constant.DecimalSeparator;
+import org.nautilus.web.persistence.constant.Language;
+import org.nautilus.web.persistence.dto.UserSettingsDTO;
+import org.nautilus.web.persistence.model.User;
 import org.nautilus.web.service.SecurityService;
 import org.nautilus.web.service.UserService;
 import org.nautilus.web.util.Messages;
@@ -57,6 +59,9 @@ public class SettingsController {
 	    
 	    model.addAttribute("availableTimeZones", TimeZones.getAvailableTimeZones());
         model.addAttribute("userSettingsDTO", userSettingsDTO);
+        
+        model.addAttribute("decimalSeparators", DecimalSeparator.values());
+        model.addAttribute("languages", Language.values());
         
         return "settings";
     }

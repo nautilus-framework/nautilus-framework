@@ -7,7 +7,7 @@ import java.nio.file.Path;
 
 import org.nautilus.core.util.Converter;
 import org.nautilus.plugin.extension.ProblemExtension;
-import org.nautilus.web.model.Execution;
+import org.nautilus.web.persistence.model.Execution;
 import org.nautilus.web.service.ExecutionService;
 import org.nautilus.web.service.FileService;
 import org.nautilus.web.service.PluginService;

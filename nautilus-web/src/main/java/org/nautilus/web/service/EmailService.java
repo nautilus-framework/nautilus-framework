@@ -3,7 +3,7 @@ package org.nautilus.web.service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.nautilus.web.model.User;
+import org.nautilus.web.persistence.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
