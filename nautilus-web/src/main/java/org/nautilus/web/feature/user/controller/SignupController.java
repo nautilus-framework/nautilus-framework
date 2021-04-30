@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -49,4 +50,16 @@ public class SignupController extends BasicController{
 		
 		return redirect.to("/user/confirmation?token=" + saved.getConfirmationToken()).withNoMessage();
 	}
+	
+	@GetMapping("/confirmation")
+    public String confirmation(@RequestParam(required = true) String token, RedirectAttributes ra, Model model) {
+    
+	    signupService.confirm(token);
+	    
+//        User user = userService.findByConfirmationToken(token);
+        
+//        userService.confirm(user);
+
+        return redirect.to("/login").withSuccess(ra, Messages.USER_CONFIRMATION_TOKEN_SUCCESS);
+    }
 }

@@ -9,6 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.nautilus.web.annotation.UniqueEmail;
 import org.nautilus.web.config.DatabaseConfiguration.BaseModel;
 import org.nautilus.web.feature.user.constant.Role;
 
@@ -26,6 +27,7 @@ public class User extends BaseModel {
 
     @Email
     @NotBlank
+//    @UniqueEmail
     private String email;
 
     @NotBlank

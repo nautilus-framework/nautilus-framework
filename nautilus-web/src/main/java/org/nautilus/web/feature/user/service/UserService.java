@@ -28,28 +28,6 @@ public class UserService {
 	@Autowired
     private ExecutionService executionService;
 
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
-
-	public User create(User user) {
-
-		user.setId(null);
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		
-		return save(user);
-	}
-	
-	public void confirm(User user) {
-		
-		user.setEnabled(true);
-		
-		save(user);
-	}
-	
-	public User save(User user) {
-		return userRepository.save(user);
-	}
-
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}

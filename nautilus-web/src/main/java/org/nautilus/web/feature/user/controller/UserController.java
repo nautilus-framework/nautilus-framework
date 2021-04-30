@@ -28,16 +28,6 @@ public class UserController {
 	@Autowired
     private Redirect redirect;
 	
-	@GetMapping("/confirmation")
-	public String confirmation(@RequestParam(required = true) String token, RedirectAttributes ra, Model model) {
-	
-		User user = userService.findByConfirmationToken(token);
-		
-		userService.confirm(user);
-
-		return redirect.to("/login").withSuccess(ra, Messages.USER_CONFIRMATION_TOKEN_SUCCESS);
-	}
-	
 	@PostMapping("/update")
 	public String update(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes ra, Model model) {
 		
