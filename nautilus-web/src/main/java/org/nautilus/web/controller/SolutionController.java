@@ -104,7 +104,7 @@ public class SolutionController {
 		model.addAttribute("objectives", objectives);
 		model.addAttribute("execution", execution);
 		model.addAttribute("variables", problemExtension.getVariablesAsList(instance, solution));
-		model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+		model.addAttribute("userSettingsDTO", userService.getSettings());
 		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
 		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
 		model.addAttribute("isReadOnly", executionService.isReadOnly(execution));

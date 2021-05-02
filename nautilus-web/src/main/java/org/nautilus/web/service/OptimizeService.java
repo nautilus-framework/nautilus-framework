@@ -90,14 +90,14 @@ public class OptimizeService {
             
             String email = userDTO.getEmail();
             
-            String timeZone = userService.findByEmail(email).getSettings().getTimeZone();
+//            String timeZone = userService.findByEmail(email).getSettings().getTimeZone();
             
             ExecutionQueueDTO itemQueue = new ExecutionQueueDTO();
             
             itemQueue.setId(execution.getId());
             itemQueue.setUserId(execution.getUserId());
             itemQueue.setCreationDate(execution.getCreationDate());
-            itemQueue.setTitle(Formatter.date(execution.getCreationDate(), timeZone));
+//            itemQueue.setTitle(Formatter.date(execution.getCreationDate(), timeZone));
             itemQueue.setProgress(0.0);
             
             setStatus(itemQueue, "execution.status.pending");

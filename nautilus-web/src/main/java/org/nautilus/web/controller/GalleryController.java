@@ -55,7 +55,7 @@ public class GalleryController {
 
         model.addAttribute("problems", problems);
 		model.addAttribute("executions", executions);
-		model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+		model.addAttribute("userSettingsDTO", userService.getSettings());
 		
 		return "gallery";
 	}

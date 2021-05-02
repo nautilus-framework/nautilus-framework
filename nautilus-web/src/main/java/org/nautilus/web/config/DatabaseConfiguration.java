@@ -1,6 +1,6 @@
 package org.nautilus.web.config;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.modelmapper.ModelMapper;
 import org.nautilus.web.listener.TrimStringMongoEventListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,7 +46,7 @@ public class DatabaseConfiguration {
 
         @CreatedDate
         @Column(name = "created_date")
-        private Date createdDate;
+        private LocalDateTime createdDate;
 
         @LastModifiedBy
         @Column(name = "last_modified_by")
@@ -53,11 +54,16 @@ public class DatabaseConfiguration {
 
         @LastModifiedDate
         @Column(name = "last_modified_date")
-        private Date lastModifiedDate;
+        private LocalDateTime lastModifiedDate;
     }
     
 	@Bean
 	public TrimStringMongoEventListener trimStringMongoEventListener() {
 	    return new TrimStringMongoEventListener();
+	}
+	
+	@Bean
+	public ModelMapper modelMapper() {
+	    return new ModelMapper();
 	}
 }

@@ -51,6 +51,6 @@ public class LoginController {
 
 		User user = securityService.getLoggedUser().getUser();
 
-		return "redirect:/home?lang=" + user.getSettings().getLanguage();
+		return "redirect:/home?lang=" + user.getLanguage();
 	}
 }

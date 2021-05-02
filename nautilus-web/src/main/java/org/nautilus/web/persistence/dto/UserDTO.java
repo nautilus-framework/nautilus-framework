@@ -4,12 +4,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
-import org.nautilus.web.annotation.HTMLAutoComplete;
-import org.nautilus.web.annotation.HTMLAutoFocus;
-import org.nautilus.web.annotation.HTMLRequired;
-import org.nautilus.web.annotation.HTMLSpellCheck;
-import org.nautilus.web.annotation.HTMLStep;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,14 +20,9 @@ public class UserDTO {
 	private String email;
 
 	@NotBlank
-    @HTMLAutoFocus
-    @HTMLSpellCheck("false")
-	@HTMLAutoComplete("off")
     private String firstname;
 
     @NotBlank
-    @HTMLSpellCheck("false")
-    @HTMLAutoComplete("off")
     private String lastname;
 
 	public boolean enabled;
@@ -48,9 +37,6 @@ public class UserDTO {
 	
 	@Min(1)
     @Max(Integer.MAX_VALUE)
-    @HTMLStep(1)
-    @HTMLRequired
-    @HTMLAutoComplete("off")
     private int maxExecutions;
 	
 	public String getFullname() {

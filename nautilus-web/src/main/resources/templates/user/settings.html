@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns:th="http://www.thymeleaf.org" 
+    th:replace="~{fragments/layout-bar :: layout (~{::header}, ~{::body},'vets')}">
+    <header>
+        <div class="col-12 path">
+            <h6 class="title">
+                <a th:href="@{/home}">Settings</a> 
+                <span class="path-divider">&nbsp;</span>
+            </h6>
+        </div>
+    </header>
+    <body>
+        <div class="col-12">
+			<form method="POST" th:action="@{/settings/update}" th:object="${settingsDTO}">
+			    <div class="form-group">
+			        <label for="decimalPlaces" th:text="#{user.decimal-places}"></label>
+			        <input type="number" class="form-control" th:field="*{decimalPlaces}" min="0" max="10" step="1" autofocus /> 
+			        <small class="form-text text-muted">Min: 0 and Max: 10</small>
+			        <span class="text-danger" th:if="${#fields.hasErrors('decimalPlaces')}" th:errors="*{decimalPlaces}"></span>
+			    </div>
+			    <div class="form-group">
+			        <label for="decimalSeparator" th:text="#{user.decimal-separator}"></label>
+			        <select class="form-control" th:field="*{decimalSeparator}">
+                        <option th:each="decimalSeparator : ${decimalSeparators}" 
+                                th:value="${decimalSeparator}" 
+                                th:text="${decimalSeparator}"/>
+			        </select> 
+			        <small class="form-text text-muted" th:text="#{help.user.decimal-separator}"></small> 
+			        <span class="text-danger" th:if="${#fields.hasErrors('decimalSeparator')}" th:errors="*{decimalSeparator}"></span>
+			    </div>
+			    <div class="form-group">
+			        <label for="language" th:text="#{user.language}"></label> 
+			        <select class="form-control" th:field="*{language}">
+                        <option th:each="language : ${languages}" 
+                                th:value="${language}" 
+                                th:text="${language}"/>
+			        </select> 
+			        <small class="form-text text-muted" th:text="#{help.user.language}"></small>
+			        <span class="text-danger" th:if="${#fields.hasErrors('language')}" th:errors="*{language}"></span>
+			    </div>
+			    <button type="submit" class="btn btn-success" th:text="#{btn.save}"></button>
+			</form>
+		</div>
+    </body>
+</html>

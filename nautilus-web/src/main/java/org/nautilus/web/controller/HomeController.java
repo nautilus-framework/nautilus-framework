@@ -35,7 +35,7 @@ public class HomeController {
 		model.addAttribute("problems", pluginService.getProblems());
 		model.addAttribute("executions", executionService.findExecutionSimplifiedDTOByUserId(user.getId()));
 		model.addAttribute("runningExecutions", executionService.findRunningExecutions());
-		model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+		model.addAttribute("userSettingsDTO", userService.getSettings());
 		
 		return "home";
 	}

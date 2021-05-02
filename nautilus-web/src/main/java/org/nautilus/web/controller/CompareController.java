@@ -125,7 +125,7 @@ public class CompareController {
         model.addAttribute("instances", instances);
         model.addAttribute("users", users);
         model.addAttribute("objectives", problem.getObjectives());
-        model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+        model.addAttribute("userSettingsDTO", userService.getSettings());
         model.addAttribute("executions", executions);
         model.addAttribute("problems", problems);
         model.addAttribute("compareDTO", compareDTO);
@@ -316,7 +316,7 @@ public class CompareController {
             execution.getAttributes().put("metrics", metrics);
         }
         
-        model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+        model.addAttribute("userSettingsDTO", userService.getSettings());
         model.addAttribute("executions", executions);
         model.addAttribute("objectiveIds", Converter.toJson(objectives.stream().map(e -> e.getId()).collect(Collectors.toList())));
   

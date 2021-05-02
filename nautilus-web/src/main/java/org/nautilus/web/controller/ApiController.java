@@ -11,7 +11,7 @@ import org.nautilus.core.objective.AbstractObjective;
 import org.nautilus.core.util.Converter;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.web.exception.ProblemNotFoundException;
-import org.nautilus.web.exception.UserNotFoundException;
+import org.nautilus.web.feature.user.exception.UserNotFoundException;
 import org.nautilus.web.feature.user.model.User;
 import org.nautilus.web.feature.user.service.SecurityService;
 import org.nautilus.web.persistence.dto.ExecutionSimplifiedDTO;

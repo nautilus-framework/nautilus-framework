@@ -49,7 +49,7 @@ public class ProblemController {
         model.addAttribute("problems", problems);
         model.addAttribute("instances", instances);
 
-        model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+        model.addAttribute("userSettingsDTO", userService.getSettings());
 
         return "problems";
 	}

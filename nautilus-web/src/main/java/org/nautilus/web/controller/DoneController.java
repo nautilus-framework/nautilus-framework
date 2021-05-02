@@ -47,7 +47,7 @@ public class DoneController {
 	    
         Execution execution = executionService.findExecutionById(executionId);
 	    
-        model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+        model.addAttribute("userSettingsDTO", userService.getSettings());
         model.addAttribute("executions", executionService.findExecutionSimplifiedDTOByUserId(user.getId()));
         model.addAttribute("problems", problems);
         model.addAttribute("execution", execution);

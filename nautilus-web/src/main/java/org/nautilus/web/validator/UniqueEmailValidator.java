@@ -4,29 +4,20 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.nautilus.web.annotation.UniqueEmail;
-import org.nautilus.web.feature.user.model.User;
-import org.nautilus.web.feature.user.service.UserService;
+import org.nautilus.web.feature.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
 
 	@Autowired
-	private UserService userService;
+	private UserRepository userRepository;
 	
 	@Override
 	public void initialize(UniqueEmail contraint) {
-		
 	}
 
 	@Override
 	public boolean isValid(String email, ConstraintValidatorContext cxt) {
-		
-		User user = userService.findByEmail(email);
-		
-		if (user == null) {
-			return true;
-		}
-		
-		return false;
+	    return !userRepository.findByEmail(email).isPresent();		
 	}
 }

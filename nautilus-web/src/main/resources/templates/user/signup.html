@@ -5,7 +5,7 @@
 	        <div class="card card-body">
 	            <h4 class="center" th:text="#{nav.signup}">Sign Up</h4>
                 <p class="center" th:text="#{nav.get-started-with-your-free-account}"></p>
-                <hr/>
+                <hr class="mt-0"/>
                 <form th:action="@{/signup/save}" method="post" th:object="${signupDTO}">
                     <div class="form-group">
                         <label for="email" th:text="#{user.e-mail}">E-mail</label> 

@@ -150,7 +150,7 @@ public class ExecutionController {
 		model.addAttribute("normalizers", pluginService.getNormalizers());
 		model.addAttribute("removers", pluginService.getRemovers());
 		model.addAttribute("correlationers", pluginService.getCorrelations());
-		model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+		model.addAttribute("userSettingsDTO", userService.getSettings());
 		model.addAttribute("executionSettingsDTO", executionService.convertToExecutionSettingsDTO(execution));
 		model.addAttribute("isReadOnly", executionService.isReadOnly(execution));
 		model.addAttribute("colors", Color.values());

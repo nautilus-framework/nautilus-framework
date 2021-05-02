@@ -1,4 +1,4 @@
-package org.nautilus.web.persistence.repository;
+package org.nautilus.web.feature.user.repository;
 
 import java.util.Optional;
 
@@ -7,7 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, String>{
 
-	public User findByEmail(String email);
-	
-	public Optional<User> findByConfirmationToken(String confirmationToken);
+    public Optional<User> findByEmail(String email);
 }

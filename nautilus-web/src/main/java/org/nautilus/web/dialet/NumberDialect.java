@@ -95,8 +95,8 @@ public class NumberDialect extends AbstractProcessorDialect {
                     number, 
                     1, 
                     NumberPointType.COMMA.toString(), 
-                    user.getSettings().getDecimalPlaces(), 
-                    user.getSettings().getDecimalSeparator());
+                    user.getDecimalPlaces(), 
+                    user.getDecimalSeparator().toString());
             
             // Report the result to the engine, whichever the type of process we have applied
             structureHandler.setBody(formatted, false);

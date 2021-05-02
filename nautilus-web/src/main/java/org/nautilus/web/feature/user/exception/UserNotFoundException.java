@@ -1,5 +1,6 @@
-package org.nautilus.web.exception;
+package org.nautilus.web.feature.user.exception;
 
+import org.nautilus.web.exception.AbstractRedirectException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

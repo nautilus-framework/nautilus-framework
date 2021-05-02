@@ -1,6 +1,6 @@
 package org.nautilus.web.config;
 
-import org.nautilus.web.feature.user.service.UserDetailsService;
+import org.nautilus.web.feature.user.service.SecurityService;
 import org.nautilus.web.util.Privileges;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private SecurityService securityService;
 	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -57,6 +57,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
         http.headers().frameOptions().disable();
     }
 	
+	@Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(securityService).passwordEncoder(bCryptPasswordEncoder());
+    }
+	
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
@@ -65,10 +70,5 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
-	}
-
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
 }
