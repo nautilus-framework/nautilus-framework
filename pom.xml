@@ -2,22 +2,22 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <groupId>org.nautilus-framework</groupId>
     <artifactId>nautilus-framework</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
-    
+
     <name>Nautilus</name>
     <description>A preference-base objective reduction for SBSE problems</description>
-    
+
     <modules>
         <module>nautilus-framework-core</module>
         <module>nautilus-framework-plugin</module>
         <module>nautilus-framework-plugin-toy</module>
         <module>nautilus-framework-web</module>
     </modules>
-    
+
     <properties>
         <springframework.boot.version>2.3.6.RELEASE</springframework.boot.version>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -29,12 +29,12 @@
             src/test/**
         </sonar.test.exclusions>
     </properties>
-    
+
     <organization>
         <name>Nautilus Framework</name>
         <url>https://github.com/nautilus-framework/nautilus-framework</url>
     </organization>
-    
+
     <dependencies>
         <!-- JMetal -->
         <dependency>
@@ -94,7 +94,7 @@
             <version>3.0.0</version>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -104,18 +104,18 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <repositories>
-    <repository>
-        <id>mvn-repo</id>
-        <url>https://github.com/gres-ufpr/mvn-repo/raw/master/releases</url>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-    </repository>
-</repositories>
-  
+        <repository>
+            <id>mvn-repo</id>
+            <url>https://github.com/gres-ufpr/mvn-repo/raw/master/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
 </project>
