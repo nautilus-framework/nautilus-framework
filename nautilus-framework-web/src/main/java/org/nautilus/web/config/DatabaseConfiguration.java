@@ -50,15 +50,8 @@ public class DatabaseConfiguration implements ApplicationListener<ContextRefresh
         adminUser.setEnabled(true);
         adminUser.setMaxExecutions(Integer.MAX_VALUE);
 
-        createUserIfNotFound(adminUser);
-    }
-    
-    private User createUserIfNotFound(User user) {
-
-        if (userService.findByEmail(user.getEmail()) == null) {
-            user = userService.create(user);
+        if (userService.findByEmail(adminUser.getEmail()) == null) {
+            userService.create(adminUser);
         }
-
-        return user;
     }
 }

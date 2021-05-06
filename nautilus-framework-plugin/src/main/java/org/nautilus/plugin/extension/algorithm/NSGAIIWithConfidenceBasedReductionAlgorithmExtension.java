@@ -4,11 +4,9 @@ import org.nautilus.core.algorithm.Builder;
 import org.nautilus.core.algorithm.NSGAII;
 import org.nautilus.core.reduction.AbstractReduction;
 import org.nautilus.core.reduction.ConfidenceBasedReduction;
-import org.pf4j.Extension;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.solution.Solution;
 
-@Extension
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class NSGAIIWithConfidenceBasedReductionAlgorithmExtension extends AbstractAlgorithmExtension {
 

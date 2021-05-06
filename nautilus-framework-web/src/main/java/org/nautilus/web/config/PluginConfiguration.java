@@ -23,6 +23,8 @@ import org.nautilus.plugin.extension.remover.AbstractRemoverExtension;
 import org.nautilus.plugin.extension.selection.AbstractSelectionExtension;
 import org.nautilus.web.service.PluginService;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +32,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 @Configuration
 public class PluginConfiguration  implements ApplicationListener<ContextRefreshedEvent>{
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(PluginConfiguration.class);
     
     @Autowired
     protected PluginService pluginService;
@@ -48,6 +52,8 @@ public class PluginConfiguration  implements ApplicationListener<ContextRefreshe
             }
 
             Object obj = getNewInstance(c);
+            
+            LOGGER.info("Adding plugin {}", obj.getClass().getCanonicalName());
 
             if (obj instanceof AbstractProblemExtension) {
                 pluginService.addProblemExtension((ProblemExtension) obj);

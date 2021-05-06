@@ -3,9 +3,7 @@ package org.nautilus.plugin.extension.remover;
 import org.nautilus.core.remover.AbstractRemover;
 import org.nautilus.core.remover.ObjectivesRemover;
 import org.nautilus.plugin.extension.ProblemExtension;
-import org.pf4j.Extension;
 
-@Extension
 public class ObjectivesRemoverExtension extends AbstractRemoverExtension {
 
     @Override

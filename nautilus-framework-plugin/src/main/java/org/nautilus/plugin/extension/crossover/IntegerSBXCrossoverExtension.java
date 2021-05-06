@@ -1,12 +1,10 @@
 package org.nautilus.plugin.extension.crossover;
 
-import org.pf4j.Extension;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.impl.crossover.IntegerSBXCrossover;
 import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
 
-@Extension
 public class IntegerSBXCrossoverExtension extends AbstractCrossoverExtension {
 
 	@Override

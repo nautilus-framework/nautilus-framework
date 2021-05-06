@@ -7,7 +7,6 @@ import org.nautilus.core.model.Instance;
 import org.nautilus.core.objective.AbstractObjective;
 import org.nautilus.core.remover.AbstractRemover;
 import org.nautilus.plugin.annotations.Extension;
-import org.pf4j.ExtensionPoint;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 

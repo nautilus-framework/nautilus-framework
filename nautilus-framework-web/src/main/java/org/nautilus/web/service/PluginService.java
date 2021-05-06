@@ -147,82 +147,31 @@ public class PluginService {
 	}
 		
 	public void addAlgorithmExtension(AlgorithmExtension algorithmExtension) {
-
-		if (this.algorithms.containsKey(algorithmExtension.getId())) {
-			throw new RuntimeException("The algorithm w");
-		}
-
 		this.algorithms.put(algorithmExtension.getId(), algorithmExtension);
-		
-		LOGGER.info("Added '{}' algorithm extension", algorithmExtension.getId());
 	}
 	
 	public void addCrossoverExtension(CrossoverExtension crossoverExtension) {
-	    
-	    System.out.println(crossoverExtension);
-
-		if (this.crossovers.containsKey(crossoverExtension.getId())) {
-			throw new RuntimeException("The crossover w");
-		}
-
 		this.crossovers.put(crossoverExtension.getId(), crossoverExtension);
-		
-		LOGGER.info("Added '{}' crossover extension", crossoverExtension.getId());
 	}
 	
 	public void addMutationExtension(MutationExtension mutationExtension) {
-
-		if (this.mutations.containsKey(mutationExtension.getId())) {
-			throw new RuntimeException("The mutation w");
-		}
-
 		this.mutations.put(mutationExtension.getId(), mutationExtension);
-
-		LOGGER.info("Added '{}' mutation extension", mutationExtension.getId());
 	}
 	
 	public void addSelectionExtension(SelectionExtension selectionExtension) {
-
-		if (this.selections.containsKey(selectionExtension.getId())) {
-			throw new RuntimeException("The selection w");
-		}
-
 		this.selections.put(selectionExtension.getId(), selectionExtension);
-
-		LOGGER.info("Added '{}' selection extension", selectionExtension.getId());
 	}
 	
 	public void addNormalizerExtension(NormalizerExtension normalizerExtension) {
-
-        if (this.normalizers.containsKey(normalizerExtension.getId())) {
-            throw new RuntimeException("The normalizer w");
-        }
-
         this.normalizers.put(normalizerExtension.getId(), normalizerExtension);
-
-        LOGGER.info("Added '{}' normalizer extension", normalizerExtension.getId());
     }
 	
 	public void addCorrelationExtension(CorrelationExtension correlationExtension) {
-
-        if (this.correlations.containsKey(correlationExtension.getId())) {
-            throw new RuntimeException("The correlation w");
-        }
-
         this.correlations.put(correlationExtension.getId(), correlationExtension);
-
-        LOGGER.info("Added '{}' correlation extension", correlationExtension.getId());
     }
     
 	public void addRemoverExtension(RemoverExtension removerExtension) {
-
-        if (this.removers.containsKey(removerExtension.getId())) {
-            throw new RuntimeException("The remover w");
-        }
-
         this.removers.put(removerExtension.getId(), removerExtension);
-
-        LOGGER.info("Added '{}' remover extension", removerExtension.getId());
     }
 	
 	

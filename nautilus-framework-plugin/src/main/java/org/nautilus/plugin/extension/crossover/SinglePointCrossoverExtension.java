@@ -1,12 +1,10 @@
 package org.nautilus.plugin.extension.crossover;
 
-import org.pf4j.Extension;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.impl.crossover.SinglePointCrossover;
 import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.solution.Solution;
 
-@Extension
 public class SinglePointCrossoverExtension extends AbstractCrossoverExtension {
 
 	@Override
