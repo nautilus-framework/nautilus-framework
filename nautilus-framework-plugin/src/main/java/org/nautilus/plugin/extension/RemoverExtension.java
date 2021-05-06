@@ -1,9 +1,9 @@
 package org.nautilus.plugin.extension;
 
 import org.nautilus.core.remover.AbstractRemover;
-import org.pf4j.ExtensionPoint;
+import org.nautilus.plugin.annotations.Extension;
 
-public interface RemoverExtension extends ExtensionPoint {
+public interface RemoverExtension extends Extension {
 
     public AbstractRemover getRemover(ProblemExtension problemExtension);
     

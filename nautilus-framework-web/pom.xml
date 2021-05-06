@@ -197,9 +197,19 @@
             <version>2.4.0</version>
         </dependency>
         <dependency>
+    <groupId>org.reflections</groupId>
+    <artifactId>reflections</artifactId>
+    <version>0.9.11</version>
+</dependency>
+        <dependency>
             <groupId>org.nautilus-framework</groupId>
             <artifactId>nautilus-framework-plugin-toy</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nautilus-framework</groupId>
+            <artifactId>nautilus-framework-plugin-nrp</artifactId>
+            <version>0.0.2</version>
         </dependency>
     </dependencies>
     

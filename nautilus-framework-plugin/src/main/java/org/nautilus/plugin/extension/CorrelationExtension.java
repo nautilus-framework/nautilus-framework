@@ -1,9 +1,9 @@
 package org.nautilus.plugin.extension;
 
 import org.nautilus.core.correlation.AbstractCorrelation;
-import org.pf4j.ExtensionPoint;
+import org.nautilus.plugin.annotations.Extension;
 
-public interface CorrelationExtension extends ExtensionPoint {
+public interface CorrelationExtension extends Extension {
 
 	public AbstractCorrelation getCorrelation();
 	

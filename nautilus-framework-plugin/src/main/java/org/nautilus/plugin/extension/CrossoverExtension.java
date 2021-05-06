@@ -1,10 +1,10 @@
 package org.nautilus.plugin.extension;
 
-import org.pf4j.ExtensionPoint;
+import org.nautilus.plugin.annotations.Extension;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.solution.Solution;
 
-public interface CrossoverExtension extends ExtensionPoint {
+public interface CrossoverExtension extends Extension {
 
 	public CrossoverOperator<? extends Solution<?>> getCrossover(double probability, double distributionIndex);
 	

@@ -2,11 +2,11 @@ package org.nautilus.plugin.extension;
 
 import java.util.List;
 
-import org.pf4j.ExtensionPoint;
+import org.nautilus.plugin.annotations.Extension;
 import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.solution.Solution;
 
-public interface SelectionExtension extends ExtensionPoint {
+public interface SelectionExtension extends Extension {
 
 	public SelectionOperator<List<? extends Solution<?>>, ? extends Solution<?>> getSelection();
 	

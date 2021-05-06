@@ -1,10 +1,10 @@
 package org.nautilus.plugin.extension;
 
-import org.pf4j.ExtensionPoint;
+import org.nautilus.plugin.annotations.Extension;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.solution.Solution;
 
-public interface MutationExtension extends ExtensionPoint {
+public interface MutationExtension extends Extension {
 
 	public MutationOperator<? extends Solution<?>> getMutation(double probability, double distributionIndex);
 	

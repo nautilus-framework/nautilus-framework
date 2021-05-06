@@ -26,37 +26,6 @@ import org.nautilus.plugin.extension.NormalizerExtension;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.RemoverExtension;
 import org.nautilus.plugin.extension.SelectionExtension;
-import org.nautilus.plugin.extension.algorithm.BruteForceSearchAlgorithmExtension;
-import org.nautilus.plugin.extension.algorithm.GAAlgorithmExtension;
-import org.nautilus.plugin.extension.algorithm.IBEAAlgorithmExtension;
-import org.nautilus.plugin.extension.algorithm.ManuallyExtension;
-import org.nautilus.plugin.extension.algorithm.NSGAIIAlgorithmExtension;
-import org.nautilus.plugin.extension.algorithm.NSGAIIIAlgorithmExtension;
-import org.nautilus.plugin.extension.algorithm.NSGAIIWithConfidenceBasedReductionAlgorithmExtension;
-import org.nautilus.plugin.extension.algorithm.NSGAIIWithRandomReductionAlgorithmExtension;
-import org.nautilus.plugin.extension.algorithm.PCANSGAIIAlgorithmExtension;
-import org.nautilus.plugin.extension.algorithm.ParetoFrontApproxExtension;
-import org.nautilus.plugin.extension.algorithm.RNSGAIIAlgorithmExtension;
-import org.nautilus.plugin.extension.algorithm.RandomSearchAlgorithmExtension;
-import org.nautilus.plugin.extension.algorithm.SPEA2AlgorithmExtension;
-import org.nautilus.plugin.extension.algorithm.WASFGAAlgorithmExtension;
-import org.nautilus.plugin.extension.correlation.KendallCorrelationExtension;
-import org.nautilus.plugin.extension.correlation.PearsonCorrelationExtension;
-import org.nautilus.plugin.extension.correlation.SpearmanCorrelationExtension;
-import org.nautilus.plugin.extension.crossover.IntegerSBXCrossoverExtension;
-import org.nautilus.plugin.extension.crossover.SBXCrossoverExtension;
-import org.nautilus.plugin.extension.crossover.SinglePointCrossoverExtension;
-import org.nautilus.plugin.extension.mutation.BitFlipMutationExtension;
-import org.nautilus.plugin.extension.mutation.IntegerPolynomialMutationExtension;
-import org.nautilus.plugin.extension.mutation.PolynomialMutationExtension;
-import org.nautilus.plugin.extension.normalizer.ByMaxAndMinValuesNormalizerExtension;
-import org.nautilus.plugin.extension.normalizer.ByParetoFrontValuesNormalizerExtension;
-import org.nautilus.plugin.extension.normalizer.DontNormalizeNormalizerExtension;
-import org.nautilus.plugin.extension.remover.DontRemoverExtension;
-import org.nautilus.plugin.extension.remover.ObjectivesRemoverExtension;
-import org.nautilus.plugin.extension.remover.VariablesRemoverExtension;
-import org.nautilus.plugin.extension.selection.BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension;
-import org.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 import org.nautilus.web.exception.PluginNotFoundException;
 import org.nautilus.web.exception.ProblemNotFoundException;
 import org.pf4j.DefaultPluginManager;
@@ -65,11 +34,13 @@ import org.pf4j.PluginWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.binarySet.BinarySet;
 
+import lombok.Getter;
+
+@Getter
 @Service
 public class PluginService {
 	
@@ -79,11 +50,6 @@ public class PluginService {
 	private FileService fileService;
 
 	private final PluginManager pluginManager = new DefaultPluginManager();
-	
-    @Autowired
-    private RestTemplateBuilder restTemplate;
-	
-	// Extensions
 	
 	private Map<String, ProblemExtension> problems = new TreeMap<>();
 	
@@ -105,7 +71,6 @@ public class PluginService {
 	@PostConstruct
 	private void initIt() {
 		loadPluginsFromDirectory();
-		loadPluginsFromClasspath();
 	}
 	
 	public void loadPluginsFromDirectory() {
@@ -141,69 +106,7 @@ public class PluginService {
 		LOGGER.info("Done. All plugins were loaded and started");
 	}
 	
-	public void loadPluginsFromClasspath() {
-		
-		LOGGER.info("Loading plugins from classpath");
-			
-		LOGGER.info("Loading problem extensions from classpath");
-		
-		addProblemExtension(new ToyProblemExtension());
-//		addProblemExtension(new NRPProblemExtension());
-//		addProblemExtension(new VTSPLProblemExtension());
-		
-		LOGGER.info("Done. Loading algorithms extensions from classpath");
-		
-		addAlgorithmExtension(new BruteForceSearchAlgorithmExtension());
-		addAlgorithmExtension(new GAAlgorithmExtension());
-		addAlgorithmExtension(new NSGAIIAlgorithmExtension());
-		addAlgorithmExtension(new NSGAIIIAlgorithmExtension());
-		addAlgorithmExtension(new RandomSearchAlgorithmExtension());
-		addAlgorithmExtension(new RNSGAIIAlgorithmExtension());
-		addAlgorithmExtension(new SPEA2AlgorithmExtension());
-		addAlgorithmExtension(new NSGAIIWithConfidenceBasedReductionAlgorithmExtension());
-		addAlgorithmExtension(new NSGAIIWithRandomReductionAlgorithmExtension());
-		addAlgorithmExtension(new ManuallyExtension());
-		addAlgorithmExtension(new ParetoFrontApproxExtension());
-		addAlgorithmExtension(new PCANSGAIIAlgorithmExtension());
-		addAlgorithmExtension(new IBEAAlgorithmExtension());
-		addAlgorithmExtension(new WASFGAAlgorithmExtension());
-		
-		LOGGER.info("Done. Loading crossover extensions from classpath");
-		
-		addCrossoverExtension(new IntegerSBXCrossoverExtension());
-		addCrossoverExtension(new SBXCrossoverExtension());
-		addCrossoverExtension(new SinglePointCrossoverExtension());
-		
-		LOGGER.info("Done. Loading mutation extensions from classpath");
-		
-		addMutationExtension(new BitFlipMutationExtension());
-		addMutationExtension(new IntegerPolynomialMutationExtension());
-		addMutationExtension(new PolynomialMutationExtension());
-		
-		LOGGER.info("Done. Loading selection extensions from classpath");
-		
-		addSelectionExtension(new BinaryTournamentWithRankingAndCrowdingDistanceSelectionExtension());
-		
-		LOGGER.info("Done. Loading normalizer extensions from classpath");
-		
-		addNormalizerExtension(new DontNormalizeNormalizerExtension());
-		addNormalizerExtension(new ByMaxAndMinValuesNormalizerExtension());
-		addNormalizerExtension(new ByParetoFrontValuesNormalizerExtension());
-		
-		LOGGER.info("Done. Loading correlation extensions from classpath");
-		
-		addCorrelationExtension(new SpearmanCorrelationExtension());
-		addCorrelationExtension(new PearsonCorrelationExtension());
-		addCorrelationExtension(new KendallCorrelationExtension());
-		
-		LOGGER.info("Done. Loading remover extensions from classpath");
-		
-		addRemoverExtension(new DontRemoverExtension());
-		addRemoverExtension(new VariablesRemoverExtension());
-		addRemoverExtension(new ObjectivesRemoverExtension());
-	}
-	
-	private void addProblemExtension(ProblemExtension problemExtension) {
+	public void addProblemExtension(ProblemExtension problemExtension) {
 
 	    String key = problemExtension.getId();
 	    
@@ -243,7 +146,7 @@ public class PluginService {
         }
 	}
 		
-	private void addAlgorithmExtension(AlgorithmExtension algorithmExtension) {
+	public void addAlgorithmExtension(AlgorithmExtension algorithmExtension) {
 
 		if (this.algorithms.containsKey(algorithmExtension.getId())) {
 			throw new RuntimeException("The algorithm w");
@@ -254,7 +157,9 @@ public class PluginService {
 		LOGGER.info("Added '{}' algorithm extension", algorithmExtension.getId());
 	}
 	
-	private void addCrossoverExtension(CrossoverExtension crossoverExtension) {
+	public void addCrossoverExtension(CrossoverExtension crossoverExtension) {
+	    
+	    System.out.println(crossoverExtension);
 
 		if (this.crossovers.containsKey(crossoverExtension.getId())) {
 			throw new RuntimeException("The crossover w");
@@ -265,7 +170,7 @@ public class PluginService {
 		LOGGER.info("Added '{}' crossover extension", crossoverExtension.getId());
 	}
 	
-	private void addMutationExtension(MutationExtension mutationExtension) {
+	public void addMutationExtension(MutationExtension mutationExtension) {
 
 		if (this.mutations.containsKey(mutationExtension.getId())) {
 			throw new RuntimeException("The mutation w");
@@ -276,7 +181,7 @@ public class PluginService {
 		LOGGER.info("Added '{}' mutation extension", mutationExtension.getId());
 	}
 	
-	private void addSelectionExtension(SelectionExtension selectionExtension) {
+	public void addSelectionExtension(SelectionExtension selectionExtension) {
 
 		if (this.selections.containsKey(selectionExtension.getId())) {
 			throw new RuntimeException("The selection w");
@@ -287,7 +192,7 @@ public class PluginService {
 		LOGGER.info("Added '{}' selection extension", selectionExtension.getId());
 	}
 	
-	private void addNormalizerExtension(NormalizerExtension normalizerExtension) {
+	public void addNormalizerExtension(NormalizerExtension normalizerExtension) {
 
         if (this.normalizers.containsKey(normalizerExtension.getId())) {
             throw new RuntimeException("The normalizer w");
@@ -298,7 +203,7 @@ public class PluginService {
         LOGGER.info("Added '{}' normalizer extension", normalizerExtension.getId());
     }
 	
-    private void addCorrelationExtension(CorrelationExtension correlationExtension) {
+	public void addCorrelationExtension(CorrelationExtension correlationExtension) {
 
         if (this.correlations.containsKey(correlationExtension.getId())) {
             throw new RuntimeException("The correlation w");
@@ -309,7 +214,7 @@ public class PluginService {
         LOGGER.info("Added '{}' correlation extension", correlationExtension.getId());
     }
     
-    private void addRemoverExtension(RemoverExtension removerExtension) {
+	public void addRemoverExtension(RemoverExtension removerExtension) {
 
         if (this.removers.containsKey(removerExtension.getId())) {
             throw new RuntimeException("The remover w");
@@ -385,38 +290,6 @@ public class PluginService {
 		
 		return plugin;
 	}
-
-	public Map<String, AlgorithmExtension> getAlgorithms() {
-		return algorithms;
-	}
-	
-	public Map<String, ProblemExtension> getProblems() {
-		return problems;
-	}
-	
-	public Map<String, SelectionExtension> getSelections() {
-		return selections;
-	}
-	
-	public Map<String, CrossoverExtension> getCrossovers() {
-		return crossovers;
-	}
-	
-	public Map<String, MutationExtension> getMutations() {
-		return mutations;
-	}
-	
-	public Map<String, NormalizerExtension> getNormalizers() {
-        return normalizers;
-    }
-	
-	public Map<String, CorrelationExtension> getCorrelations() {
-        return correlations;
-    }
-	
-	public Map<String, RemoverExtension> getRemovers() {
-        return removers;
-    }
 	
 	public ProblemExtension getProblemById(String id) {
 		
