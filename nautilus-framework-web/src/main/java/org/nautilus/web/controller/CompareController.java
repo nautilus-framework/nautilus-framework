@@ -50,8 +50,6 @@ import org.uma.jmetal.qualityindicator.impl.InvertedGenerationalDistance;
 import org.uma.jmetal.util.front.imp.ArrayFront;
 import org.uma.jmetal.util.point.PointSolution;
 
-import ufpr.gres.rnsgaii.util.PointSolutionUtils;
-
 @Controller
 @RequestMapping("/compare")
 public class CompareController {
@@ -102,6 +100,7 @@ public class CompareController {
             .collect(Collectors.toList());
         
         String problemId = new ToyProblemExtension().getId();
+//        String problemId = new NRPProblemExtension().getId();
         
         ProblemExtension problem = pluginService.getProblemById(problemId);
         

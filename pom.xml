@@ -1,114 +1,121 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.nautilus</groupId>
-  <artifactId>nautilus</artifactId>
-  <version>1.0.0</version>
-  <packaging>pom</packaging>
-  <name>Nautilus</name>
-  <description>A preference-base objective reduction for SBSE problems</description>
-  <modules>
-    <module>nautilus-core</module>
-    <module>nautilus-plugin</module>
-    <module>nautilus-plugin-toy</module>
-    <module>nautilus-web</module>
-  </modules>
-  <properties>
-    <springframework.boot.version>2.3.6.RELEASE</springframework.boot.version>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <jmetal.version>5.9</jmetal.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.8</java.version>
-    <sonar.test.exclusions>
-      src/test/**
-    </sonar.test.exclusions>
-  </properties>
-  <!-- <parent> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-parent</artifactId> 
-    <version>2.0.3.RELEASE</version> </parent> -->
-  <organization>
-    <name>Thiago Ferreira</name>
-    <url>http://github.com/thiagodnf</url>
-  </organization>
-  <dependencies>
-    <!-- JMetal -->
-    <dependency>
-      <groupId>org.uma.jmetal</groupId>
-      <artifactId>jmetal-exec</artifactId>
-      <version>${jmetal.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.uma.jmetal</groupId>
-      <artifactId>jmetal-algorithm</artifactId>
-      <version>${jmetal.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.uma.jmetal</groupId>
-      <artifactId>jmetal-core</artifactId>
-      <version>${jmetal.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.uma.jmetal</groupId>
-      <artifactId>jmetal-problem</artifactId>
-      <version>${jmetal.version}</version>
-    </dependency>
-    <!-- Apache Commons Math3 -->
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-math3</artifactId>
-      <version>3.6.1</version>
-    </dependency>
-    <!-- Google GSON -->
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.8.6</version>
-    </dependency>
-    <!-- Google Guava -->
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>30.0-jre</version>
-    </dependency>
-    <!-- JUnit Test Framework -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.1.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.16</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>ufpr.gres</groupId>
-      <artifactId>r-nsga-ii</artifactId>
-      <version>3.0.0</version>
-    </dependency>
-  </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${springframework.boot.version}</version>
-      </plugin>
-    </plugins>
-  </build>
-  <repositories>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>org.nautilus-framework</groupId>
+    <artifactId>nautilus-framework</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    
+    <name>Nautilus</name>
+    <description>A preference-base objective reduction for SBSE problems</description>
+    
+    <modules>
+        <module>nautilus-framework-core</module>
+        <module>nautilus-framework-plugin</module>
+        <module>nautilus-framework-plugin-toy</module>
+        <module>nautilus-framework-web</module>
+    </modules>
+    
+    <properties>
+        <springframework.boot.version>2.3.6.RELEASE</springframework.boot.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <jmetal.version>5.9</jmetal.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <sonar.test.exclusions>
+            src/test/**
+        </sonar.test.exclusions>
+    </properties>
+    
+    <organization>
+        <name>Nautilus Framework</name>
+        <url>https://github.com/nautilus-framework/nautilus-framework</url>
+    </organization>
+    
+    <dependencies>
+        <!-- JMetal -->
+        <dependency>
+            <groupId>org.uma.jmetal</groupId>
+            <artifactId>jmetal-exec</artifactId>
+            <version>${jmetal.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.uma.jmetal</groupId>
+            <artifactId>jmetal-algorithm</artifactId>
+            <version>${jmetal.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.uma.jmetal</groupId>
+            <artifactId>jmetal-core</artifactId>
+            <version>${jmetal.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.uma.jmetal</groupId>
+            <artifactId>jmetal-problem</artifactId>
+            <version>${jmetal.version}</version>
+        </dependency>
+        <!-- Apache Commons Math3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+        <!-- Google GSON -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>
+        <!-- Google Guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.0-jre</version>
+        </dependency>
+        <!-- JUnit Test Framework -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ufpr.gres</groupId>
+            <artifactId>r-nsga-ii</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springframework.boot.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <repositories>
     <repository>
-      <id>mvn-repo</id>
-      <url>https://github.com/gres-ufpr/mvn-repo/raw/master/releases</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
+        <id>mvn-repo</id>
+        <url>https://github.com/gres-ufpr/mvn-repo/raw/master/releases</url>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
     </repository>
-  </repositories>
+</repositories>
+  
 </project>
