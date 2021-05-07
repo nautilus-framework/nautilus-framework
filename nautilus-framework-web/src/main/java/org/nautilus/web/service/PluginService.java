@@ -67,53 +67,10 @@ public class PluginService {
 	
 	private Map<String, RemoverExtension> removers = new TreeMap<>();
     
-	
-	@PostConstruct
-	private void initIt() {
-		loadPluginsFromDirectory();
-	}
-	
-	public void loadPluginsFromDirectory() {
-		
-		LOGGER.info("Loading plugins from directory");
-		
-		List<String> files = fileService.getPlugins();
-
-		LOGGER.info("Done. It was found {} .jar files. Loading all of them", files.size());
-
-		for (String file : files) {
-			pluginManager.loadPlugin(Paths.get(file));
-		}
-
-		LOGGER.info("Done. Starting the loaded plugins");
-
-		pluginManager.startPlugins();
-		
-		LOGGER.info("Done. It was started {} plugins. Creating the folders", pluginManager.getStartedPlugins().size());
-
-		for (PluginWrapper plugin : getStartedPlugins()) {
-
-			for (ProblemExtension extension : getProblemExtensions(plugin.getPluginId())) {
-
-				LOGGER.info("Creating folder for {}/{}", plugin.getPluginId(), extension.getId());
-
-				fileService.createPluginDirectory(plugin.getPluginId(), extension.getId());
-				
-				addProblemExtension(extension);
-			}
-		}
-		
-		LOGGER.info("Done. All plugins were loaded and started");
-	}
-	
 	public void addProblemExtension(ProblemExtension problemExtension) {
 
 	    String key = problemExtension.getId();
 	    
-		if (this.problems.containsKey(key)) {
-			throw new RuntimeException("The problems w");
-		}
-		
 		this.problems.put(key, problemExtension);
 		
 		this.fileService.createInstancesDirectory(key);
@@ -128,7 +85,7 @@ public class PluginService {
 
 		LOGGER.info("Copying the instance files from '{}'", key);
 		
-		for (Path instance : problemExtension.getAllInstances()) {
+		for (Path instance : problemExtension.getInstancePaths()) {
 
             Path original = parentFolder.resolve(instance);
             Path copied = directory.resolve(original.getFileName());
@@ -145,76 +102,9 @@ public class PluginService {
             }
         }
 	}
-		
-	public void addAlgorithmExtension(AlgorithmExtension algorithmExtension) {
-		this.algorithms.put(algorithmExtension.getId(), algorithmExtension);
-	}
-	
-	public void addCrossoverExtension(CrossoverExtension crossoverExtension) {
-		this.crossovers.put(crossoverExtension.getId(), crossoverExtension);
-	}
-	
-	public void addMutationExtension(MutationExtension mutationExtension) {
-		this.mutations.put(mutationExtension.getId(), mutationExtension);
-	}
-	
-	public void addSelectionExtension(SelectionExtension selectionExtension) {
-		this.selections.put(selectionExtension.getId(), selectionExtension);
-	}
-	
-	public void addNormalizerExtension(NormalizerExtension normalizerExtension) {
-        this.normalizers.put(normalizerExtension.getId(), normalizerExtension);
-    }
-	
-	public void addCorrelationExtension(CorrelationExtension correlationExtension) {
-        this.correlations.put(correlationExtension.getId(), correlationExtension);
-    }
-    
-	public void addRemoverExtension(RemoverExtension removerExtension) {
-        this.removers.put(removerExtension.getId(), removerExtension);
-    }
-	
-	
-	
-	
-	
-	public List<PluginWrapper> getStartedPlugins() {
-		return pluginManager.getStartedPlugins();
-	}
-	
-	public PluginWrapper getPluginWrapper(String pluginId) {
-
-		PluginWrapper plugin = pluginManager.getPlugin(pluginId);
-
-		if (plugin == null) {
-			throw new PluginNotFoundException();
-		}
-
-		return plugin;
-	}
 	
 	public List<ProblemExtension> getProblemExtensions(String pluginId) {
 		return pluginManager.getExtensions(ProblemExtension.class, pluginId);
-	}
-	
-	public List<AlgorithmExtension> getAlgorithmExtensions(String pluginId) {
-		return pluginManager.getExtensions(AlgorithmExtension.class, pluginId);
-	}
-	
-	public List<SelectionExtension> getSelectionExtensions(String pluginId) {
-		return pluginManager.getExtensions(SelectionExtension.class, pluginId);
-	}
-	
-	public List<CrossoverExtension> getCrossoverExtensions(String pluginId) {
-		return pluginManager.getExtensions(CrossoverExtension.class, pluginId);
-	}
-	
-	public List<MutationExtension> getMutationExtensions(String pluginId) {
-		return pluginManager.getExtensions(MutationExtension.class, pluginId);
-	}
-	
-	public List<IndicatorExtension> getIndicatorExtensions(String pluginId) {
-		return pluginManager.getExtensions(IndicatorExtension.class, pluginId);
 	}
 	
 	public ProblemExtension getProblemExtension(String pluginId, String problemId) {
@@ -225,21 +115,6 @@ public class PluginService {
 				.orElseThrow(ProblemNotFoundException::new);
 	}
 
-	/**
-	 * Delete a given plugin
-	 * 
-	 * @param pluginId
-	 * @return the deleted plugin wrapper
-	 */
-	public PluginWrapper deletePlugin(String pluginId) {
-		
-		PluginWrapper plugin = getPluginWrapper(pluginId);
-		
-		this.pluginManager.deletePlugin(pluginId);
-		
-		return plugin;
-	}
-	
 	public ProblemExtension getProblemById(String id) {
 		
         if (Strings.isBlank(id) || !problems.containsKey(id)) {

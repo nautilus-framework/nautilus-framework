@@ -79,7 +79,7 @@ public abstract class AbstractProblemExtension implements ProblemExtension {
     }
     
     @Override
-    public List<Path> getAllInstances() {
+    public List<Path> getInstancePaths() {
         return new ArrayList<>();
     }
 }

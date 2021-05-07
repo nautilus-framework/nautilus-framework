@@ -12,12 +12,10 @@ import org.nautilus.plugin.extension.problem.AbstractProblemExtension;
 import org.nautilus.plugin.toy.encoding.instance.TXTInstance;
 import org.nautilus.plugin.toy.encoding.objective.NumberOfObjective;
 import org.nautilus.plugin.toy.encoding.problem.ToyProblem;
-import org.pf4j.Extension;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.Solution;
 
-@Extension
 public class ToyProblemExtension extends AbstractProblemExtension {
 
 	@Override
@@ -70,7 +68,7 @@ public class ToyProblemExtension extends AbstractProblemExtension {
     }
     
     @Override
-    public List<Path> getAllInstances() {
+    public List<Path> getInstancePaths() {
 
         List<Path> allInstances = new ArrayList<>();
 

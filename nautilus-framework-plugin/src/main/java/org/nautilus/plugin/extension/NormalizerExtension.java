@@ -1,15 +1,9 @@
 package org.nautilus.plugin.extension;
 
 import org.nautilus.core.normalize.AbstractNormalize;
-import org.nautilus.plugin.annotations.Extension;
+import org.nautilus.plugin.annotations.ExtensionPoint;
 
-public interface NormalizerExtension extends Extension {
+public interface NormalizerExtension extends ExtensionPoint {
 
 	public AbstractNormalize getNormalizer();
-	
-	public String getName();
-	
-	public String getId();
-	
-	public String toString();
 }

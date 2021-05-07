@@ -1,6 +1,5 @@
 package org.nautilus.web.controller;
 
-import org.nautilus.web.service.PluginService;
 import org.nautilus.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,14 +14,10 @@ public class AdminController {
 	@Autowired
 	private UserService userService;
 	
-	@Autowired
-    private PluginService pluginService;
-	
 	@GetMapping("")
 	public String showUsers(Model model){
 		
 		model.addAttribute("users", userService.findAll());
-		model.addAttribute("plugins", pluginService.getStartedPlugins());
 		
 		return "admin";
 	}

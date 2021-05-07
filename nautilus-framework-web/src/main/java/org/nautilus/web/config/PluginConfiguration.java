@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 
+import org.nautilus.plugin.annotations.ExtensionPoint;
 import org.nautilus.plugin.annotations.PluginExtension;
 import org.nautilus.plugin.extension.AlgorithmExtension;
 import org.nautilus.plugin.extension.CorrelationExtension;
@@ -51,53 +52,53 @@ public class PluginConfiguration  implements ApplicationListener<ContextRefreshe
                 continue;
             }
 
-            Object obj = getNewInstance(c);
+            ExtensionPoint ep = getNewInstance(c);
             
-            LOGGER.info("Adding plugin {}", obj.getClass().getCanonicalName());
+            LOGGER.info("Adding plugin {}", ep.getClass().getCanonicalName());
 
-            if (obj instanceof AbstractProblemExtension) {
-                pluginService.addProblemExtension((ProblemExtension) obj);
+            if (ep instanceof AbstractProblemExtension) {
+                pluginService.addProblemExtension((ProblemExtension) ep);
             }
             
-            if (obj instanceof AbstractAlgorithmExtension) {
-                pluginService.addAlgorithmExtension((AlgorithmExtension) obj);
+            if (ep instanceof AbstractAlgorithmExtension) {
+                pluginService.getAlgorithms().put(ep.getId(), (AlgorithmExtension) ep);
             }
 
-            if (obj instanceof AbstractSelectionExtension) {
-                pluginService.addSelectionExtension((SelectionExtension) obj);
+            if (ep instanceof AbstractSelectionExtension) {
+                pluginService.getSelections().put(ep.getId(), (SelectionExtension) ep);
             }
             
-            if (obj instanceof AbstractCrossoverExtension) {
-                pluginService.addCrossoverExtension((CrossoverExtension) obj);
+            if (ep instanceof AbstractCrossoverExtension) {
+                pluginService.getCrossovers().put(ep.getId(), (CrossoverExtension) ep);
             }
             
-            if (obj instanceof AbstractMutationExtension) {
-                pluginService.addMutationExtension((MutationExtension) obj);
+            if (ep instanceof AbstractMutationExtension) {
+                pluginService.getMutations().put(ep.getId(), (MutationExtension) ep);
             }
              
-            if (obj instanceof AbstractNormalizerExtension) {
-                pluginService.addNormalizerExtension((NormalizerExtension) obj);
+            if (ep instanceof AbstractNormalizerExtension) {
+                pluginService.getNormalizers().put(ep.getId(), (NormalizerExtension) ep);
             }
 
-            if (obj instanceof AbstractCorrelationExtension) {
-                pluginService.addCorrelationExtension((CorrelationExtension) obj);
+            if (ep instanceof AbstractCorrelationExtension) {
+                pluginService.getCorrelations().put(ep.getId(), (CorrelationExtension) ep);
             }
             
-            if (obj instanceof AbstractRemoverExtension) {
-                pluginService.addRemoverExtension((RemoverExtension) obj);
+            if (ep instanceof AbstractRemoverExtension) {
+                pluginService.getRemovers().put(ep.getId(), (RemoverExtension) ep);
             }
         }
     }
-    
-    protected Object getNewInstance(Class<?> c) {
+     
+    protected ExtensionPoint getNewInstance(Class<?> c) {
 
         try {
-            Constructor<?> ctor = c.getConstructor();
-            return ctor.newInstance();
+            Constructor<?> ctr = c.getConstructor();
+            return (ExtensionPoint) ctr.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return c;
+        return null;
     }
 }

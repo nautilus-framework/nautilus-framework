@@ -8,7 +8,6 @@ import org.nautilus.web.dto.UploadExecutionDTO;
 import org.nautilus.web.dto.UploadInstanceDTO;
 import org.nautilus.web.exception.AbstractRedirectException;
 import org.nautilus.web.model.Execution;
-import org.nautilus.web.model.UploadPlugin;
 import org.nautilus.web.model.User;
 import org.nautilus.web.service.ExecutionService;
 import org.nautilus.web.service.FileService;
@@ -100,34 +99,6 @@ public class UploadController {
         
         return "redirect:/home/";
     }
-	
-	@PostMapping("/plugin/")
-	public String uploadPlugin(
-			@Valid UploadPlugin uploadPlugin, 
-			BindingResult result,
-			RedirectAttributes ra,
-			Model model) {
-
-		if (result.hasErrors()) {
-			flashMessageService.error(ra, result.getAllErrors());
-		}else {
-			MultipartFile file = uploadPlugin.getFile();
-			
-			String filename = file.getOriginalFilename();
-			
-			LOGGER.info("Storing the plugin " + filename);
-			
-			try {
-				fileService.storePlugin(filename, file);
-				pluginService.loadPluginsFromDirectory();
-				flashMessageService.success(ra, "msg.upload.plugin.success", filename);
-			} catch (AbstractRedirectException ex) {
-				flashMessageService.error(ra, ex);
-			}
-		}
-		
-		return "redirect:/home";
-	}
 	
 	@GetMapping("/instance")
     public String formUploadInstance(Model model, UploadInstanceDTO uploadInstanceDTO) {

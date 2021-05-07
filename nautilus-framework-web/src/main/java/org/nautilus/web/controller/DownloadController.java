@@ -3,7 +3,6 @@ package org.nautilus.web.controller;
 import java.io.IOException;
 import java.net.FileNameMap;
 import java.net.URLConnection;
-import java.nio.file.Path;
 
 import org.nautilus.core.util.Converter;
 import org.nautilus.plugin.extension.ProblemExtension;
@@ -11,7 +10,6 @@ import org.nautilus.web.model.Execution;
 import org.nautilus.web.service.ExecutionService;
 import org.nautilus.web.service.FileService;
 import org.nautilus.web.service.PluginService;
-import org.pf4j.PluginWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,25 +122,6 @@ public class DownloadController {
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilename())
 				.header(HttpHeaders.CONTENT_TYPE, contentType)
-				.body(file);
-	}
-	
-	@GetMapping("/plugin/{pluginId:.+}")
-	@ResponseBody
-	public ResponseEntity<Resource> downloadPlugin(
-			@PathVariable("pluginId") String pluginId){
-
-		LOGGER.info("Downloading the plugin: {}", pluginId);
-		
-		PluginWrapper plugin = pluginService.getPluginWrapper(pluginId);
-
-		Path path = plugin.getPluginPath();
-		
-		Resource file = fileService.loadAsResource(path);
-		
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilename())
-				.header(HttpHeaders.CONTENT_TYPE, "application/java-archive")
 				.body(file);
 	}
 }

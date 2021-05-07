@@ -32,7 +32,6 @@ public class FileService {
 	private void initIt() {
 		createDirectories(getRootLocation());
 		createDirectories(getInstancesLocation());
-		createDirectories(getPluginsLocation());
 	}
 	
 	public Path getRootLocation() {
@@ -43,23 +42,6 @@ public class FileService {
 		return getRootLocation().resolve("instances");
 	}
 	
-	public Path getPluginsLocation() {
-		return getRootLocation().resolve("plugins");
-	}
-	
-	public List<String> getPlugins() {
-		try {
-			return Files.walk(getPluginsLocation(), 1)
-				.filter(path -> !path.toFile().isDirectory())
-				.filter(path -> path.toFile().getAbsolutePath().endsWith(".jar"))
-				.filter(p -> !p.endsWith(".DS_Store"))
-				.map(path -> path.toFile().getAbsolutePath())
-				.collect(Collectors.toList());
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-	
 	public List<Path> getInstances(String problemId){
 		return findAll(getInstancesLocation().resolve(problemId))
 			.sorted()
@@ -68,10 +50,6 @@ public class FileService {
 	
 	public void createInstancesDirectory(String pluginKey) {
 		createDirectories(getInstancesLocation().resolve(pluginKey));
-	}
-	
-	public void createPluginDirectory(String pluginId, String problemId) {
-		createDirectories(getInstancesLocation().resolve(pluginId).resolve(problemId));
 	}
 	
 	public void createDirectories(Path directory) {
@@ -145,10 +123,6 @@ public class FileService {
 	
 	public void storeInstance(String problemId, String filename, MultipartFile file) {
 		store(getInstancesLocation().resolve(problemId), filename, file);
-	}
-	
-	public void storePlugin(String filename, MultipartFile file) {
-		store(getPluginsLocation(), filename, file);
 	}
 	
 	public boolean exists(Path path, String filename) {
