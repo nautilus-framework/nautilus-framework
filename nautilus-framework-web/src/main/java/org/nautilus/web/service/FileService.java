@@ -1,24 +1,21 @@
 package org.nautilus.web.service;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.io.FilenameUtils;
-import org.nautilus.core.util.Converter;
 import org.nautilus.core.util.FileUtils;
 import org.nautilus.web.exception.FileIsEmptyException;
 import org.nautilus.web.exception.FileNotFoundException;
 import org.nautilus.web.exception.FileNotReadableException;
 import org.nautilus.web.exception.InstanceNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -30,9 +27,7 @@ import lombok.Getter;
 @Service
 public class FileService {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileService.class);
-
-	protected Path rootLocation = Paths.get("data");
+   protected Path rootLocation = Paths.get("data");
 	
 	protected Path instancesLocation = rootLocation.resolve("instances");
 	
@@ -71,8 +66,6 @@ public class FileService {
         }
     }
     
-    
-    
 	public Resource getInstanceAsResource(String problemId, String filename) {
 
         if (!instanceExists(problemId, filename)) {
@@ -102,56 +95,29 @@ public class FileService {
 		}
 	}
 	
-    public Path load(Path root, String filename) {
-		return root.resolve(filename);
-	}
-
-	public Path loadInstances(String pluginKey, String filename) {
-		return load(getInstancesLocation().resolve(pluginKey), filename);
-	}
-	
-    public Path deleteInstance(String problemId, String filename) {
+	public Path deleteInstance(String problemId, String filename) {
         return FileUtils.deleteFile(getInstanceLocation(problemId, filename));
     }
 	
-	
-    public Path saveInstance(String problemId, MultipartFile file) {
+	public Path saveInstance(String problemId, MultipartFile file) {
         return save(getInstancesLocation().resolve(problemId), file);
     }
     
-	public Path save(Path path, MultipartFile file) {
+    public Path save(Path path, MultipartFile multipartFile) {
+        
+        checkArgument(!multipartFile.isEmpty(), new FileIsEmptyException().toString());
 
-	    String filename = file.getOriginalFilename();
-	    
-	    LOGGER.info("Saving file {}", filename);
-	    
-		String name = FilenameUtils.removeExtension(filename);
-		String extension = FilenameUtils.getExtension(filename);
-		
-		name = Converter.toKey(name);
-		filename = String.format("%s.%s", name, extension);
-		
-		if (file.isEmpty()) {
-			throw new FileIsEmptyException();
-		}
-		
-		// This is a security check
-		if (filename.contains("..")) {
-			throw new RuntimeException("StoreFileWithRelativePathException");
-		}
-		
-//		if (Files.exists(path, filename)) {
-//			throw new FileAlreadyExistsException();
-//		}
-		
-		try {
-			Files.copy(file.getInputStream(), load(path, filename), StandardCopyOption.REPLACE_EXISTING);
-		} catch (Exception ex) {
-			throw new RuntimeException("StoreFileIsNotPossibleException", ex);
-		}
-		
-		return path.resolve(filename);
-	}
+        String filename = FileUtils.format(multipartFile.getOriginalFilename());
+        Path file = path.resolve(filename);
+
+        try {
+            multipartFile.transferTo(file);
+        } catch (Exception ex) {
+            throw new RuntimeException("StoreFileIsNotPossibleException", ex);
+        }
+
+        return file;
+    }
 	
 	public String readFileToString(String problemId, String filename) {
 

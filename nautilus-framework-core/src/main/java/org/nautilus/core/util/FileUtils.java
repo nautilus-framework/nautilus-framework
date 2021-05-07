@@ -9,6 +9,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FilenameUtils;
+
 /**
  * Utility class for managing files
  * 
@@ -95,5 +97,15 @@ public class FileUtils {
         }
 
         return path;
+    }
+    
+    public static String format(String filename) {
+        
+        String name = FilenameUtils.removeExtension(filename);
+        String extension = FilenameUtils.getExtension(filename);
+        
+        name = Converter.toKey(name);
+        
+        return String.format("%s.%s", name, extension);
     }
 }
