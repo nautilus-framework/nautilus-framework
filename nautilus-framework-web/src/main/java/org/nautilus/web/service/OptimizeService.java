@@ -123,7 +123,7 @@ public class OptimizeService {
             
             ProblemExtension problemExtension = pluginService.getProblemById(execution.getProblemId());
             
-            Path path = fileService.getInstance(execution.getProblemId(), execution.getInstance());
+            Path path = fileService.getInstanceLocation(execution.getProblemId(), execution.getInstance());
             
             List<AbstractObjective> objectives = problemExtension.getObjectiveByIds(execution.getObjectiveIds());
             

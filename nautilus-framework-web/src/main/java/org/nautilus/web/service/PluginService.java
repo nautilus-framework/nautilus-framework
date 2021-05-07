@@ -1,15 +1,11 @@
 package org.nautilus.web.service;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.logging.log4j.util.Strings;
 import org.nautilus.core.encoding.NProblem;
@@ -20,17 +16,12 @@ import org.nautilus.core.objective.AbstractObjective;
 import org.nautilus.plugin.extension.AlgorithmExtension;
 import org.nautilus.plugin.extension.CorrelationExtension;
 import org.nautilus.plugin.extension.CrossoverExtension;
-import org.nautilus.plugin.extension.IndicatorExtension;
 import org.nautilus.plugin.extension.MutationExtension;
 import org.nautilus.plugin.extension.NormalizerExtension;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.RemoverExtension;
 import org.nautilus.plugin.extension.SelectionExtension;
-import org.nautilus.web.exception.PluginNotFoundException;
 import org.nautilus.web.exception.ProblemNotFoundException;
-import org.pf4j.DefaultPluginManager;
-import org.pf4j.PluginManager;
-import org.pf4j.PluginWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +40,6 @@ public class PluginService {
 	@Autowired
 	private FileService fileService;
 
-	private final PluginManager pluginManager = new DefaultPluginManager();
-	
 	private Map<String, ProblemExtension> problems = new TreeMap<>();
 	
 	private Map<String, AlgorithmExtension> algorithms = new TreeMap<>();
@@ -67,54 +56,15 @@ public class PluginService {
 	
 	private Map<String, RemoverExtension> removers = new TreeMap<>();
     
-	public void addProblemExtension(ProblemExtension problemExtension) {
-
-	    String key = problemExtension.getId();
-	    
-		this.problems.put(key, problemExtension);
-		
-		this.fileService.createInstancesDirectory(key);
-		
-		LOGGER.info("Added '{}' problem extension", key);
-		
-		Path toolFolder = Paths.get(System.getProperty("user.dir"));
-		
-		Path parentFolder = toolFolder.getParent().getParent();
-		
-		Path directory = fileService.getInstancesLocation().resolve(key);
-
-		LOGGER.info("Copying the instance files from '{}'", key);
-		
-		for (Path instance : problemExtension.getInstancePaths()) {
-
-            Path original = parentFolder.resolve(instance);
-            Path copied = directory.resolve(original.getFileName());
-            
-            if (Files.exists(original) && !Files.exists(copied)) {
-
-                LOGGER.info("> Copying {}", original);
-
-                try {
-                    Files.copy(original, copied, StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException ex) {
-                    new RuntimeException(ex);
-                }
-            }
-        }
-	}
+    public List<ProblemExtension> getProblemsSorted() {
+        
+        List<ProblemExtension> problems = new ArrayList<>(this.problems.values());
+        
+        Collections.sort(problems, (ProblemExtension o1, ProblemExtension o2) -> o1.getName().compareTo(o2.getName()));
+        
+        return problems;
+    }
 	
-	public List<ProblemExtension> getProblemExtensions(String pluginId) {
-		return pluginManager.getExtensions(ProblemExtension.class, pluginId);
-	}
-	
-	public ProblemExtension getProblemExtension(String pluginId, String problemId) {
-		return getProblemExtensions(pluginId)
-				.stream()
-				.filter(p -> p.getId().equalsIgnoreCase(problemId))
-				.findFirst()
-				.orElseThrow(ProblemNotFoundException::new);
-	}
-
 	public ProblemExtension getProblemById(String id) {
 		
         if (Strings.isBlank(id) || !problems.containsKey(id)) {
@@ -191,7 +141,7 @@ public class PluginService {
 	
 	public Solution<?> getSolution(String problemId, String instanceId, List<String> variables){
 	    
-        Path path = fileService.getInstance(problemId, instanceId);
+        Path path = fileService.getInstanceLocation(problemId, instanceId);
 
         ProblemExtension problemExtension = getProblemById(problemId);
 

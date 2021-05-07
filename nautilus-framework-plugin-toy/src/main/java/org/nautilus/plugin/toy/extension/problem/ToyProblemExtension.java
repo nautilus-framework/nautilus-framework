@@ -1,7 +1,6 @@
 package org.nautilus.plugin.toy.extension.problem;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,27 +64,5 @@ public class ToyProblemExtension extends AbstractProblemExtension {
         }
 
         return variables;
-    }
-    
-    @Override
-    public List<Path> getInstancePaths() {
-
-        List<Path> allInstances = new ArrayList<>();
-
-        allInstances.add(getInstanceFolder().resolve("1-to-020-w-005.txt"));
-        allInstances.add(getInstanceFolder().resolve("1-to-100-w-100.txt"));
-        allInstances.add(getInstanceFolder().resolve("1-to-100-w-010.txt"));
-
-        return allInstances;
-    }
-    
-    private Path getInstanceFolder() {
-        
-        return Paths.get("nautilus-framework")
-                .resolve("nautilus-plugin-toy")
-                .resolve("src")
-                .resolve("main")
-                .resolve("resources")
-                .resolve("instances");
     }
 }

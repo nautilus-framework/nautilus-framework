@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import org.nautilus.core.util.Converter;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.web.dto.UploadExecutionDTO;
-import org.nautilus.web.dto.UploadInstanceDTO;
+import org.nautilus.web.dto.UploadFileDTO;
 import org.nautilus.web.exception.AbstractRedirectException;
 import org.nautilus.web.model.Execution;
 import org.nautilus.web.model.User;
@@ -99,42 +99,4 @@ public class UploadController {
         
         return "redirect:/home/";
     }
-	
-	@GetMapping("/instance")
-    public String formUploadInstance(Model model, UploadInstanceDTO uploadInstanceDTO) {
-        
-        model.addAttribute("uploadInstanceDTO", uploadInstanceDTO);
-        model.addAttribute("problems", pluginService.getProblems());
-        
-        return "form-upload-instance";
-    }
-	
-	@PostMapping("/instance")
-	public String uploadInstance(
-			@Valid UploadInstanceDTO uploadInstanceDTO, 
-			BindingResult result, 
-			RedirectAttributes ra,
-			Model model) {
-
-		if (result.hasErrors()) {
-            return formUploadInstance(model, uploadInstanceDTO);
-        }
-		
-		ProblemExtension problem = pluginService.getProblemById(uploadInstanceDTO.getProblemId());
-		
-		MultipartFile file = uploadInstanceDTO.getFile();
-		
-		String filename = file.getOriginalFilename();
-		
-		LOGGER.info("Storing the instance {}", filename);
-
-		try {
-			fileService.storeInstance(problem.getId(), filename, file);
-			flashMessageService.success(ra, Messages.FILE_UPLOADED_SUCCESS, filename);
-		} catch (AbstractRedirectException ex) {
-			flashMessageService.error(ra, ex);
-		}
-		
-		return "redirect:/problems/";
-	}
 }

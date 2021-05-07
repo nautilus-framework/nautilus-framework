@@ -32,7 +32,7 @@ public class HomeController {
 	    
 	    User user = securityService.getLoggedUser().getUser(); 
 		
-		model.addAttribute("problems", pluginService.getProblems());
+		model.addAttribute("problems", pluginService.getProblemsSorted());
 		model.addAttribute("executions", executionService.findExecutionSimplifiedDTOByUserId(user.getId()));
 		model.addAttribute("runningExecutions", executionService.findRunningExecutions());
 		model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));

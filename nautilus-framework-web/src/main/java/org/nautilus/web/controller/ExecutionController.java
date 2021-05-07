@@ -103,7 +103,7 @@ public class ExecutionController {
 
             objectives = problemExtension.getObjectives();
 
-            Path path = fileService.getInstance(execution.getProblemId(), execution.getInstance());
+            Path path = fileService.getInstanceLocation(execution.getProblemId(), execution.getInstance());
 
             Instance instance = problemExtension.getInstance(path);
 

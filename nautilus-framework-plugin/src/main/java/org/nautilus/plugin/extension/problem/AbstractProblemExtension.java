@@ -1,6 +1,5 @@
 package org.nautilus.plugin.extension.problem;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,10 +75,5 @@ public abstract class AbstractProblemExtension implements ProblemExtension {
         }
 
         return null;
-    }
-    
-    @Override
-    public List<Path> getInstancePaths() {
-        return new ArrayList<>();
     }
 }

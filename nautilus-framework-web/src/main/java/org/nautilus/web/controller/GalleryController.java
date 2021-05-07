@@ -40,7 +40,7 @@ public class GalleryController {
 	    
         User user = securityService.getLoggedUser().getUser(); 
         
-	    Map<String, ProblemExtension> problems = pluginService.getProblems();
+        List<ProblemExtension> problems = pluginService.getProblemsSorted();
 
         Map<String, List<ExecutionSimplifiedDTO>> executions = new HashMap<>();
 

@@ -86,12 +86,11 @@ public class CompareController {
             executions = executionService.findExecutionSimplifiedDTOByUserId(user.getId());
         }
         
-        Map<String, ProblemExtension> problems = pluginService.getProblems();
-
+        List<ProblemExtension> problems = pluginService.getProblemsSorted();
         List<Path> instances = new ArrayList<>();
 
-        for (String problemId : problems.keySet()) {
-            instances.addAll(fileService.getInstances(problemId));
+        for (ProblemExtension problem: problems) {
+            instances.addAll(fileService.getInstances(problem.getId()));
         }
         
         executions = executions.stream()
@@ -277,7 +276,7 @@ public class CompareController {
         
         List<AbstractObjective> objectives = problemExtension.getObjectives();
         
-        Path path = fileService.getInstance(problemId, instanceId);
+        Path path = fileService.getInstanceLocation(problemId, instanceId);
 
         Instance instance = problemExtension.getInstance(path);
 

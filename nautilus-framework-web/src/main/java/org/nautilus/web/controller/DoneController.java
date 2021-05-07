@@ -1,6 +1,6 @@
 package org.nautilus.web.controller;
 
-import java.util.Map;
+import java.util.List;
 
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.web.model.Execution;
@@ -43,7 +43,7 @@ public class DoneController {
         
 	    User user = securityService.getLoggedUser().getUser();
 	    
-	    Map<String, ProblemExtension> problems = pluginService.getProblems();
+	    List<ProblemExtension> problems = pluginService.getProblemsSorted();
 	    
         Execution execution = executionService.findExecutionById(executionId);
 	    

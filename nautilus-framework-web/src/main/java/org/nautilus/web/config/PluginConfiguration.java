@@ -22,6 +22,7 @@ import org.nautilus.plugin.extension.normalizer.AbstractNormalizerExtension;
 import org.nautilus.plugin.extension.problem.AbstractProblemExtension;
 import org.nautilus.plugin.extension.remover.AbstractRemoverExtension;
 import org.nautilus.plugin.extension.selection.AbstractSelectionExtension;
+import org.nautilus.web.service.FileService;
 import org.nautilus.web.service.PluginService;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -38,6 +39,9 @@ public class PluginConfiguration  implements ApplicationListener<ContextRefreshe
     
     @Autowired
     protected PluginService pluginService;
+    
+    @Autowired
+    protected FileService fileService;
     
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -57,7 +61,7 @@ public class PluginConfiguration  implements ApplicationListener<ContextRefreshe
             LOGGER.info("Adding plugin {}", ep.getClass().getCanonicalName());
 
             if (ep instanceof AbstractProblemExtension) {
-                pluginService.addProblemExtension((ProblemExtension) ep);
+                pluginService.getProblems().put(ep.getId(), (ProblemExtension) ep);
             }
             
             if (ep instanceof AbstractAlgorithmExtension) {
@@ -87,6 +91,10 @@ public class PluginConfiguration  implements ApplicationListener<ContextRefreshe
             if (ep instanceof AbstractRemoverExtension) {
                 pluginService.getRemovers().put(ep.getId(), (RemoverExtension) ep);
             }
+        }
+        
+        for (ProblemExtension problem : pluginService.getProblems().values()) {
+            fileService.createProblemLocation(problem.getId());
         }
     }
      

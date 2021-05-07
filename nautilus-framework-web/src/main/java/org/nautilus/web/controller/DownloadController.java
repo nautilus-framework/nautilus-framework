@@ -102,26 +102,4 @@ public class DownloadController {
 				.header(HttpHeaders.CONTENT_ENCODING, "UTF-8")
 				.body(file);
 	}
-	
-	@GetMapping("/instance/{problemId:.+}/{filename:.+}")
-	@ResponseBody
-	public ResponseEntity<Resource> downloadInstanceFile(
-			@PathVariable String problemId, 
-			@PathVariable String filename) throws IOException {
-
-		ProblemExtension problem = pluginService.getProblemById(problemId);
-		
-		LOGGER.info("Downloading the instance file: {}", filename);
-
-		Resource file = fileService.getInstanceAsResource(problem.getId(), filename);
-		
-		FileNameMap fileNameMap = URLConnection.getFileNameMap();
-		
-		String contentType = fileNameMap.getContentTypeFor(file.getFile().getName());
-		  
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilename())
-				.header(HttpHeaders.CONTENT_TYPE, contentType)
-				.body(file);
-	}
 }

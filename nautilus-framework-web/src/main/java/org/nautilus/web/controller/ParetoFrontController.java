@@ -57,12 +57,14 @@ public class ParetoFrontController {
 	@GetMapping("/generate/approx")
 	public String generateApprox(GenerateParetoFrontApproxDTO generateParetoFrontApproxDTO, Model model) {
 		
-	    Map<String, ProblemExtension> problems = pluginService.getProblems();
+	    List<ProblemExtension> problems = pluginService.getProblemsSorted();
+	    
+//	    Map<String, ProblemExtension> problems = pluginService.getProblems();
 
         Map<String, List<Path>> instances = new HashMap<>();
 
-        for (String key : problems.keySet()) {
-            instances.put(key, fileService.getInstances(key));
+        for (ProblemExtension problem : problems) {
+            instances.put(problem.getId(), fileService.getInstances(problem.getId()));
         }
 
         model.addAttribute("generateParetoFrontApproxDTO", generateParetoFrontApproxDTO);
@@ -79,7 +81,7 @@ public class ParetoFrontController {
 	    
 	    ProblemExtension problemExtension = pluginService.getProblemById(problemId);
 	    
-	    if (!fileService.containsInstance(problemId, instanceId)) {
+	    if (!fileService.instanceExists(problemId, instanceId)) {
             throw new InstanceNotFoundException();
         }
 	    
@@ -96,7 +98,7 @@ public class ParetoFrontController {
                 .map(e -> e.getId())
                 .collect(Collectors.toList());
         
-        Path path = fileService.getInstance(problemId, instanceId);
+        Path path = fileService.getInstanceLocation(problemId, instanceId);
 
         Instance instance = problemExtension.getInstance(path);
 

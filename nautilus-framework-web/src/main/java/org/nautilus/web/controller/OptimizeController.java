@@ -87,7 +87,7 @@ public class OptimizeController {
 		
         ProblemExtension problem = pluginService.getProblemById(problemId);
 
-        if (!fileService.containsInstance(problemId, instance)) {
+        if (!fileService.instanceExists(problemId, instance)) {
             throw new InstanceNotFoundException();
         }
 		
@@ -202,11 +202,11 @@ public class OptimizeController {
             return redirect.to("/optimize/" + problemId + "/" + instance).withError(ra, Messages.PROBLEM_NOT_SUPPORTED);
         }
         
-        if (!fileService.containsInstance(problemId, instance)) {
+        if (!fileService.instanceExists(problemId, instance)) {
             throw new InstanceNotFoundException();
         }
         
-        Path path = fileService.getInstance(problemId, instance);
+        Path path = fileService.getInstanceLocation(problemId, instance);
         
         Instance inst = problemExtension.getInstance(path);
         
@@ -260,13 +260,13 @@ public class OptimizeController {
             throw new RuntimeException("This problem is not supported");
         }
             
-        if (!fileService.containsInstance(problemId, instance)) {
+        if (!fileService.instanceExists(problemId, instance)) {
             throw new InstanceNotFoundException();
         }
 
         User user = securityService.getLoggedUser().getUser();
         
-        Path path = fileService.getInstance(problemId, instance);
+        Path path = fileService.getInstanceLocation(problemId, instance);
 
         Instance inst = problemExtension.getInstance(path);
 
