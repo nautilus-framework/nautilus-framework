@@ -131,7 +131,14 @@ $(function(){
 		var that = $(this);
 		
 		if(confirm(that.data("confirm"), function(){
-			that.parent().submit();
+            
+            const target = that.data("target");
+            
+            if (target) {
+                $(target).submit();
+            } else {
+                that.parent().submit();   
+            }
 		}));
 		
 		return false;

@@ -170,8 +170,8 @@ public class ExecutionController {
 		return "executions/execution";
 	}
 	
-	@GetMapping("/{executionId:.+}/download")
-    @ResponseBody
+	@ResponseBody
+	@GetMapping("/{executionId:.+}/download")    
     public ResponseEntity<Resource> download(@PathVariable("executionId") String executionId) {
 
         LOGGER.info("Downloading as json file the execution id {}", executionId);
@@ -198,23 +198,18 @@ public class ExecutionController {
 	}
 	
 	@PostMapping("/settings/save")
-	public String saveSettings(
+	public String saveSettings(Model model, RedirectAttributes ra, 
 			@PathVariable String executionId,
 			@Valid ExecutionSettingsDTO executionSettingsDTO,
-			BindingResult bindingResult,
-			RedirectAttributes ra, 
-			Model model) {
+			BindingResult bindingResult) {
 	    	    
         executionService.updateSettings(executionId, executionSettingsDTO);
             
-        return redirect.to("/execution/" + executionId+"#settings").withSuccess(ra, Messages.EXECUTION_SETTINGS_SAVED_SUCCESS);
+        return redirect.to("/executions/" + executionId+"#settings").withSuccess(ra, Messages.EXECUTION_SETTINGS_SAVED_SUCCESS);
 	}
 	
-	@PostMapping("/clear/user-feedback")
-	public String clearUserFeedback(
-			@PathVariable String executionId,
-			RedirectAttributes ra,
-			Model model) {
+	@PostMapping("/{executionId:.+}/clear-user-feedback")
+	public String clearUserFeedback(Model model, RedirectAttributes ra, @PathVariable String executionId) {
 			
 		Execution execution = executionService.findExecutionById(executionId);
 
@@ -222,8 +217,20 @@ public class ExecutionController {
 		
 		execution = executionService.save(execution);
 		
-		return redirect.to("/execution/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_CLEANED_SUCCESS);
+		return redirect.to("/executions/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_CLEANED_SUCCESS);
 	}
+	
+	@PostMapping("/{executionId:.+}/unselect-all")
+    public String unselectAll(Model model, RedirectAttributes ra, @PathVariable String executionId) {
+            
+        Execution execution = executionService.findExecutionById(executionId);
+
+        execution.getSelectedSolutions().clear();
+        
+        execution = executionService.save(execution);
+        
+        return redirect.to("/executions/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_CLEANED_SUCCESS);
+    }
 	
 	@GetMapping("/upload")
     public String formUploadExecution(Model model, UploadFileDTO uploadFileDTO) {
