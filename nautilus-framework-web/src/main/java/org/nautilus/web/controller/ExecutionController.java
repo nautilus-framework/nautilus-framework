@@ -23,13 +23,15 @@ import org.nautilus.plugin.extension.NormalizerExtension;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.RemoverExtension;
 import org.nautilus.web.dto.ExecutionSettingsDTO;
+import org.nautilus.web.dto.UploadFileDTO;
+import org.nautilus.web.exception.AbstractRedirectException;
 import org.nautilus.web.exception.ExecutionNotPublicException;
 import org.nautilus.web.exception.ExecutionNotReadyException;
 import org.nautilus.web.model.Execution;
 import org.nautilus.web.model.User;
-import org.nautilus.web.model.Execution.Visibility;
 import org.nautilus.web.service.ExecutionService;
 import org.nautilus.web.service.FileService;
+import org.nautilus.web.service.FlashMessageService;
 import org.nautilus.web.service.PluginService;
 import org.nautilus.web.service.SecurityService;
 import org.nautilus.web.service.UserService;
@@ -39,6 +41,10 @@ import org.nautilus.web.util.Redirect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -46,11 +52,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.uma.jmetal.solution.Solution;
 
 @Controller
-@RequestMapping("/execution/{executionId:.+}")
+@RequestMapping("/executions")
 public class ExecutionController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionController.class);
@@ -73,7 +81,10 @@ public class ExecutionController {
 	@Autowired
     private Redirect redirect;
 	
-	@GetMapping("")
+	@Autowired
+    private FlashMessageService flashMessageService;
+	
+	@GetMapping("/{executionId:.+}")
 	public String view(@PathVariable String executionId, Model model) {
 		
 		LOGGER.debug("Displaying '{}'", executionId);
@@ -85,7 +96,7 @@ public class ExecutionController {
         if (execution.getSolutions() == null)
             throw new ExecutionNotReadyException();
         
-        if (!execution.getUserId().equalsIgnoreCase(user.getId()) && execution.getVisibility() == Visibility.PRIVATE) {
+        if (!execution.getUserId().equalsIgnoreCase(user.getId())) {
             throw new ExecutionNotPublicException();
         }
         
@@ -150,35 +161,40 @@ public class ExecutionController {
 		model.addAttribute("normalizers", pluginService.getNormalizers());
 		model.addAttribute("removers", pluginService.getRemovers());
 		model.addAttribute("correlationers", pluginService.getCorrelations());
-		model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+		model.addAttribute("userSettingsDTO", userService.getSettingsDTO());
 		model.addAttribute("executionSettingsDTO", executionService.convertToExecutionSettingsDTO(execution));
 		model.addAttribute("isReadOnly", executionService.isReadOnly(execution));
 		model.addAttribute("colors", Color.values());
-		model.addAttribute("visibilities", Visibility.values());
 		model.addAttribute("selectedIndexes", selectedIndexes);
 		
-		return "execution";
+		return "executions/execution";
 	}
 	
-	@PostMapping("/delete")
+	@GetMapping("/{executionId:.+}/download")
+    @ResponseBody
+    public ResponseEntity<Resource> download(@PathVariable("executionId") String executionId) {
+
+        LOGGER.info("Downloading as json file the execution id {}", executionId);
+
+        Execution execution = executionService.findExecutionById(executionId);
+        
+        String content = Converter.toJson(execution);
+
+        Resource file = new ByteArrayResource(content.getBytes());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + executionId + ".json\"")
+                .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                .header(HttpHeaders.CONTENT_ENCODING, "UTF-8")
+                .body(file);
+    }
+	
+	@PostMapping("/{executionId:.+}/delete")
 	public String delete(@PathVariable String executionId, RedirectAttributes ra, Model model) {
 
 	    executionService.deleteById(executionId);
 			
 		return redirect.to("/home/").withSuccess(ra, Messages.EXECUTION_DELETED_SUCCESS, executionId);
-	}
-	
-	@PostMapping("/duplicate")
-	public String duplicate(
-	        @PathVariable String executionId, 
-	        RedirectAttributes ra, 
-	        Model model) {
-
-	    User user = securityService.getLoggedUser().getUser(); 
-	    
-		executionService.duplicate(user.getId(), executionId);
-		
-		return redirect.to("/home/").withSuccess(ra, Messages.EXECUTION_DUPLICATED_SUCCESS);
 	}
 	
 	@PostMapping("/settings/save")
@@ -208,4 +224,56 @@ public class ExecutionController {
 		
 		return redirect.to("/execution/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_CLEANED_SUCCESS);
 	}
+	
+	@GetMapping("/upload")
+    public String formUploadExecution(Model model, UploadFileDTO uploadFileDTO) {
+        
+        model.addAttribute("uploadFileDTO", uploadFileDTO);
+        
+        return "executions/form-upload-execution";
+    }
+    
+    @PostMapping("/upload")
+    public String uploadExecution(
+            @Valid UploadFileDTO uploadFileDTO, 
+            BindingResult result, 
+            RedirectAttributes ra,
+            Model model) {
+
+        LOGGER.info("Uploading file: {}", uploadFileDTO.getFile().getOriginalFilename());
+
+        if (result.hasErrors()) {
+            return formUploadExecution(model, uploadFileDTO);
+        }
+            
+        User user = securityService.getLoggedUser().getUser(); 
+        
+        try {
+
+            MultipartFile file = uploadFileDTO.getFile();
+
+            String content = null;
+
+            try {
+                content = new String(file.getBytes(), "UTF-8");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            } 
+
+            Execution execution = Converter.fromJson(content, Execution.class);
+
+            execution.setId(null);
+            execution.setUserId(user.getId());
+            execution.setCreationDate(null);
+            execution.setLastChangeDate(null);
+            
+            executionService.save(execution);
+            
+            flashMessageService.success(ra, Messages.EXECUTION_UPLOADED_SUCCESS);
+        } catch (AbstractRedirectException ex) {
+            flashMessageService.error(ra, ex);
+        }
+        
+        return "redirect:/home/";
+    }
 }

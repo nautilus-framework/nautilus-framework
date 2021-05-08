@@ -29,12 +29,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Execution {
 
-    public enum Visibility {
-        PUBLIC, 
-        PRIVATE
-    }
-    
-	@Id
+    @Id
 	private String id;
 	
 	private long executionTime;
@@ -78,8 +73,6 @@ public class Execution {
 	private List<List<Double>> referencePoints;
 	
 	private List<String> objectiveIds;
-	
-	private Visibility visibility = Visibility.PRIVATE;
 	
 	private boolean showLines = true;
 	

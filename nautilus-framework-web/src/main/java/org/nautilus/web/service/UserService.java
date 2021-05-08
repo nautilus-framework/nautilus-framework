@@ -1,166 +1,114 @@
 package org.nautilus.web.service;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
-import org.nautilus.web.dto.ExecutionSimplifiedDTO;
-import org.nautilus.web.dto.UserDTO;
-import org.nautilus.web.dto.UserSettingsDTO;
-import org.nautilus.web.exception.ConfirmationTokenNotFoundException;
-import org.nautilus.web.exception.UserNotEditableException;
+import org.modelmapper.ModelMapper;
+import org.nautilus.web.dto.SettingsDTO;
+import org.nautilus.web.dto.SignupDTO;
 import org.nautilus.web.exception.UserNotFoundException;
 import org.nautilus.web.model.User;
+import org.nautilus.web.model.UserDetails;
 import org.nautilus.web.repository.UserRepository;
+import org.nautilus.web.util.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class UserService {
+public class UserService implements org.springframework.security.core.userdetails.UserDetailsService {
 	
+    @Autowired
+    private SecurityService securityService;
+    
 	@Autowired
 	private UserRepository userRepository;
 	
 	@Autowired
-    private ExecutionService executionService;
-
-	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-
-	public User create(User user) {
-
-		user.setId(null);
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		
-		return save(user);
-	}
 	
-	public void confirm(User user) {
-		
-		user.setEnabled(true);
-		
-		save(user);
-	}
-	
-	public User save(User user) {
-		return userRepository.save(user);
-	}
+	@Autowired
+    private ModelMapper modelMapper;
 
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        User user = findByEmail(email);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("The username was not found. Please verify the e-mail");
+        }
+
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+
+        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+
+        return new UserDetails(user, grantedAuthorities);
+    }
+	 
+    @Transactional
+    public User create(SignupDTO signupDTO) {
+        return create(signupDTO.getName(), signupDTO.getEmail(), signupDTO.getPassword(), Role.USER);
+    }
+    
+    @Transactional
+    public User create(String name, String email, String password, Role role) {
+        
+        User user = new User();
+
+        user.setId(null);
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(role);
+
+        return userRepository.save(user);
+    }
+	
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
 	
-	public User findByConfirmationToken(String confirmationToken) {
-		return userRepository.findByConfirmationToken(confirmationToken).orElseThrow(ConfirmationTokenNotFoundException::new);
-	}
-	
-	public UserDTO findUserDTOById(String id) {
-		return convertToUserDTO(findUserById(id));
-	}
-	
-	public void deleteById(String id) {
-
-		User found = findUserById(id);
-
-		if (!found.isEditable()) {
-			throw new UserNotEditableException();
-		}
-		
-		// After removing a user, we have to remove all his/her executions
-
-        List<ExecutionSimplifiedDTO> executions = executionService.findExecutionSimplifiedDTOByUserId(found.getId());
-
-        for (ExecutionSimplifiedDTO execution : executions) {
-            executionService.deleteById(execution.getId());
-        }
-
-        userRepository.delete(found);
-	}
-	
-	public User findUserById(String id) {
-		return this.userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+	public User findByUserId(String userId) {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 	
-	public List<UserDTO> findAll() {
-		return convertToUserDTOs(userRepository.findAll());
-	}
+	public List<User> findAll() {
+        return userRepository.findAll(); 
+    }
 	
-	private List<UserDTO> convertToUserDTOs(List<User> models) {
-		return models.stream().map(this::convertToUserDTO).collect(Collectors.toList());
-	}
-	
-	public void updateUser(UserDTO user) {
+    public void updateSettings(SettingsDTO dto) {
 
-        User found = findUserById(user.getId());
-
-        if (!found.isEditable()) {
-            throw new UserNotEditableException();
-        }
+        User user = securityService.getLoggedUser().getUser();
         
-        found.setEnabled(user.isEnabled());
-        found.setAdmin(user.isAdmin());
-        found.setAccountNonExpired(user.isAccountNonExpired());
-        found.setCredentialsNonExpired(user.isCredentialsNonExpired());
-        found.setAccountNonLocked(user.isAccountNonLocked());
-        found.setMaxExecutions(user.getMaxExecutions());
-        found.setFirstname(user.getFirstname());
-        found.setLastname(user.getLastname());
+        user = findByUserId(user.getId());
+
+        user.setName(dto.getName());
+        user.setDecimalPlaces(dto.getDecimalPlaces());
+        user.setDecimalSeparator(dto.getDecimalSeparator());
+        user.setLanguage(dto.getLanguage());
+        user.setTimeZone(dto.getTimeZone());
+
+        user = userRepository.save(user);
         
-        userRepository.save(found);
-    }
-	
-    public void updateUserSettings(String userId, UserSettingsDTO dto) {
-
-        User found = findUserById(userId);
-
-        found.setFirstname(dto.getFirstname());
-        found.setLastname(dto.getLastname());
-        found.setDecimalPlaces(dto.getDecimalPlaces());
-        found.setDecimalSeparator(dto.getDecimalSeparator());
-        found.setLanguage(dto.getLanguage());
-        found.setTimeZone(dto.getTimeZone());
-
-        userRepository.save(found);
+        securityService.getLoggedUser().setUser(user);
     }
 
-    public UserSettingsDTO findUserSettingsDTOById(String id) {
-        return convertToUserSettingsDTO(findUserById(id));
+    public SettingsDTO getSettingsDTO() {
+
+        User user = securityService.getLoggedUser().getUser();
+
+        return convertToSettingsDTO(findByUserId(user.getId()));
     }
     
-    private UserDTO convertToUserDTO(User user) {
-        
-        if (user == null) {
-            return null;
-        }
-        
-        return new UserDTO(
-            user.getId(),
-            user.getEmail(),
-            user.getFirstname(),
-            user.getLastname(),
-            user.isEnabled(),
-            user.isAdmin(),
-            user.isAccountNonExpired(),
-            user.isAccountNonLocked(),
-            user.isCredentialsNonExpired(),
-            user.getMaxExecutions()
-        );
-    }
-    
-    public UserSettingsDTO convertToUserSettingsDTO(User user) {
-        
-        if (user == null)
-            return null;
-        
-        return new UserSettingsDTO(
-            user.getFirstname(),
-            user.getLastname(),  
-            user.getDecimalPlaces(),
-            user.getDecimalSeparator(),
-            user.getLanguage(),
-            user.getTimeZone()
-        );
+    protected SettingsDTO convertToSettingsDTO(User user) {
+        return modelMapper.map(user, SettingsDTO.class);
     }
 }

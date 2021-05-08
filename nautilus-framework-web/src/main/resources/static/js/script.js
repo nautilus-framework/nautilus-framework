@@ -122,7 +122,8 @@ function updateExecutionQueue(){
  
 $(function(){
     
-    $('.nav-pills a:first-child').tab('show')
+    $('.nav-pills a:first-child').tab('show');
+    $('.list-group a:first-child').tab('show');
     
 	$("button[data-confirm], a[data-confirm]").click(function(e){
 		e.preventDefault();

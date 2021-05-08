@@ -4,7 +4,6 @@ import javax.validation.constraints.NotBlank;
 
 import org.nautilus.core.util.Converter;
 import org.nautilus.web.annotation.Contains;
-import org.nautilus.web.model.Execution.Visibility;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +17,6 @@ import lombok.Setter;
 public class ExecutionSettingsDTO {
 	
 	private String title;
-	
-	private Visibility visibility;
 	
 	private boolean showLines;
 	

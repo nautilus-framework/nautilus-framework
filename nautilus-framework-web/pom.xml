@@ -185,6 +185,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.nautilus-framework</groupId>
             <artifactId>nautilus-framework-core</artifactId>
             <version>1.0.0</version>

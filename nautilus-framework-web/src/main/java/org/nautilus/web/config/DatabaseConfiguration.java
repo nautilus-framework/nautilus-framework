@@ -1,12 +1,14 @@
 package org.nautilus.web.config;
 
-import org.nautilus.web.model.User;
+import org.modelmapper.ModelMapper;
 import org.nautilus.web.service.UserService;
+import org.nautilus.web.util.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
@@ -21,17 +23,19 @@ public class DatabaseConfiguration implements ApplicationListener<ContextRefresh
     @Autowired
     private UserService userService;
     
-    @Value("${admin.email}")
+    @Value("${app.admin.name}")
+    private String adminName;
+    
+    @Value("${app.admin.email}")
     private String adminEmail;
     
-    @Value("${admin.password}")
+    @Value("${app.admin.password}")
     private String adminPassword;
     
-    @Value("${admin.firstname}")
-    private String adminFirstname;
-    
-    @Value("${admin.lastname}")
-    private String adminLastname;
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
     
     @Override
     @Transactional
@@ -39,19 +43,8 @@ public class DatabaseConfiguration implements ApplicationListener<ContextRefresh
         
         LOGGER.info("Creating the default users and privilegies");
 
-        User adminUser = new User();
-        
-        adminUser.setEmail(adminEmail);
-        adminUser.setPassword(adminPassword);
-        adminUser.setFirstname(adminFirstname);
-        adminUser.setLastname(adminLastname);
-        adminUser.setAdmin(true);
-        adminUser.setEditable(false);
-        adminUser.setEnabled(true);
-        adminUser.setMaxExecutions(Integer.MAX_VALUE);
-
-        if (userService.findByEmail(adminUser.getEmail()) == null) {
-            userService.create(adminUser);
+        if (userService.findByEmail(adminEmail) == null) {
+            userService.create(adminName, adminEmail, adminPassword, Role.ADMIN);
         }
     }
 }

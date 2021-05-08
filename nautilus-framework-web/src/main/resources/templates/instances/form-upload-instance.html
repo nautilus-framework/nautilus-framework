@@ -7,7 +7,7 @@
 		<div th:replace="fragments/navbar :: default('home')"></div>
 	
 		<div class="page-header">
-			<div class="container">
+			<div class="container-fluid">
 				<div class="row">
 					<div class="col-12 path">
 					   <h6 class="title">
@@ -15,29 +15,31 @@
 	                        <span class="path-divider">/</span>
 	                        <a th:href="@{/instances}">Instances</a>
 	                        <span class="path-divider">/</span>
-							<a th:href="@{/upload/instance}">Upload</a>							
+							<a th:href="@{/upload/instance}">Upload Instance</a>							
 						</h6>
 					</div>
 				</div>
 			</div>
 		</div>
 	
-        <div class="container">
-            <form method="POST" th:action="@{|/instances/upload/${problemId}/save|}" th:object="${uploadFileDTO}" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label>Problem</label>
-                    <input type="text" class="form-control" th:value="${problem.name}" disabled />                    
-                </div>
-                <p th:text="#{nav.select-a-file-to-upload}">Select a file to upload</p>
-                <div class="custom-file">
-                    <label for="file" class="custom-file-label" th:text="#{nav.nofilechosen}"></label> 
-                    <input id="file" type="file" name="file" class="form-control-file custom-file-input" /> 
-                    <span class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
-                </div>
-                <hr/>
-                <button type="submit" class="btn btn-success" th:text="#{btn.upload}">Upload</button>
-				<a th:href="@{/instances}" class="btn btn-light" th:text="#{btn.cancel}">Cancel</a>
-			</form>
+        <div class="container-fluid">
+            <div class="card card-body">
+	            <form method="POST" th:action="@{|/instances/upload/${problemId}/save|}" th:object="${uploadFileDTO}" enctype="multipart/form-data">
+	                <div class="form-group">
+	                    <label>Problem</label>
+	                    <input type="text" class="form-control" th:value="${problem.name}" disabled />                    
+	                </div>
+	                <p th:text="#{nav.select-a-file-to-upload}">Select a file to upload</p>
+	                <div class="custom-file">
+	                    <label for="file" class="custom-file-label" th:text="#{nav.nofilechosen}"></label> 
+	                    <input id="file" type="file" name="file" class="form-control-file custom-file-input" /> 
+	                    <span class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></span>
+	                </div>
+	                <hr/>
+	                <button type="submit" class="btn btn-success" th:text="#{btn.upload}">Upload</button>
+					<a th:href="@{/instances}" class="btn btn-light" th:text="#{btn.cancel}">Cancel</a>
+				</form>
+			</div>
 		</div>
 	
 		<div th:replace="fragments/footer :: footer"></div>

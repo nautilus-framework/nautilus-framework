@@ -22,7 +22,6 @@ import org.nautilus.web.annotation.HTMLReadonly;
 import org.nautilus.web.annotation.HTMLRequired;
 import org.nautilus.web.annotation.HTMLSpellCheck;
 import org.nautilus.web.annotation.HTMLStep;
-import org.nautilus.web.model.Execution.Visibility;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -130,9 +129,7 @@ public class ParametersDTO {
 	
 	private String lastExecutionId;
 	
-	private Visibility visibility = Visibility.PRIVATE;
-    
-    private boolean showLines = true;
+	private boolean showLines = true;
     
     private String normalizeId = new ByParetoFrontValuesNormalizerExtension().getId();
 

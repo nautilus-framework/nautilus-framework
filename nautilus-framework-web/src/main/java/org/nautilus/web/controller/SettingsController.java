@@ -2,9 +2,7 @@ package org.nautilus.web.controller;
 
 import javax.validation.Valid;
 
-import org.nautilus.web.dto.UserSettingsDTO;
-import org.nautilus.web.model.User;
-import org.nautilus.web.service.SecurityService;
+import org.nautilus.web.dto.SettingsDTO;
 import org.nautilus.web.service.UserService;
 import org.nautilus.web.util.Messages;
 import org.nautilus.web.util.Redirect;
@@ -26,38 +24,30 @@ public class SettingsController {
     private UserService userService;
 	
 	@Autowired
-	private SecurityService securityService;
-	
-	@Autowired
 	private Redirect redirect;
 	
+	protected String showForm(Model model, SettingsDTO settingsDTO) {
+        
+        model.addAttribute("availableTimeZones", TimeZones.getAvailableTimeZones());
+        model.addAttribute("settingsDTO", settingsDTO);
+        
+        return "users/settings";
+    }
+
     @GetMapping("")
-    public String showProfile(Model model) {
-
-        User user = securityService.getLoggedUser().getUser();
-
-        return form(userService.findUserSettingsDTOById(user.getId()), model);
+    public String showForm(Model model) {
+        return showForm(model, userService.getSettingsDTO());
     }
 	
-	@PostMapping("/update")
-    public String update(@Valid UserSettingsDTO userSettingsDTO, BindingResult bindingResult, RedirectAttributes ra, Model model) {
+	@PostMapping("/save")
+    public String update(Model model, RedirectAttributes ra, @Valid SettingsDTO settingsDTO, BindingResult form) {
         
-        if (bindingResult.hasErrors()) {
-            return form(userSettingsDTO, model);
+        if (form.hasErrors()) {
+            return showForm(model, settingsDTO);
         }
         
-        User user = securityService.getLoggedUser().getUser();
+        userService.updateSettings(settingsDTO);
         
-        userService.updateUserSettings(user.getId(), userSettingsDTO);
-        
-        return redirect.to("/settings?lang=" + userSettingsDTO.getLanguage()).withSuccess(ra, Messages.SETTINGS_SAVE_SUCCESS);
-    }
-	
-	private String form(UserSettingsDTO userSettingsDTO, Model model) {
-	    
-	    model.addAttribute("availableTimeZones", TimeZones.getAvailableTimeZones());
-        model.addAttribute("userSettingsDTO", userSettingsDTO);
-        
-        return "settings";
-    }
+        return redirect.to("/settings?lang=" + settingsDTO.getLanguage()).withSuccess(ra, Messages.SETTINGS_SAVE_SUCCESS);
+    }	
 }

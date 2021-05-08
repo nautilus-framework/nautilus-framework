@@ -272,6 +272,9 @@ $(function(){
 	
 	userSettingsDTO = JSON.parse($("#userSettingsDTO").text());
 	executionSettingsDTO = JSON.parse($("#executionSettingsDTO").text());
+    
+    console.log(userSettingsDTO)
+    console.log(executionSettingsDTO)
 	
 	var table = $('#execution-table').DataTable();
 	

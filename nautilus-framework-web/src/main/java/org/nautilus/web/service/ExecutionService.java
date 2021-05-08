@@ -11,7 +11,6 @@ import org.nautilus.web.exception.ExecutionNotFoundException;
 import org.nautilus.web.exception.UserNotOwnerException;
 import org.nautilus.web.model.Execution;
 import org.nautilus.web.model.User;
-import org.nautilus.web.model.Execution.Visibility;
 import org.nautilus.web.repository.ExecutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,8 +49,7 @@ public class ExecutionService {
         execution.setUserId(userId);
         execution.setCreationDate(null);
         execution.setLastChangeDate(null);
-        execution.setVisibility(Visibility.PRIVATE);
-
+       
         Execution saved = save(execution);
 
         return convertToExecutionSimplifiedDTO(saved);
@@ -65,7 +63,6 @@ public class ExecutionService {
             throw new UserNotOwnerException();
         
         execution.setTitle(executionSettingsDTO.getTitle());
-        execution.setVisibility(executionSettingsDTO.getVisibility());
         execution.setShowLines(executionSettingsDTO.isShowLines());
         execution.setShowOriginalObjectiveValues(executionSettingsDTO.isShowOriginalObjectiveValues());
         execution.setNormalizeId(executionSettingsDTO.getNormalizeId());
@@ -80,8 +77,8 @@ public class ExecutionService {
         return this.executionRepository.findByProblemIdAndInstanceAndAlgorithmId(problemId, instance, new ParetoFrontApproxExtension().getId());
     }
     
-    public List<Execution> findByProblemIdAndInstance(String problemId, String instance){
-        return this.executionRepository.findByProblemIdAndInstance(problemId, instance);
+    public List<Execution> findByProblemIdAndInstance(String problemId, String fileName){
+        return this.executionRepository.findByProblemIdAndInstance(problemId, fileName);
     }
 
     public Execution save(Execution execution) {
@@ -140,7 +137,6 @@ public class ExecutionService {
         ExecutionSettingsDTO dto = new ExecutionSettingsDTO();
 
         dto.setTitle(execution.getTitle());
-        dto.setVisibility(execution.getVisibility());
         dto.setShowLines(execution.isShowLines());
         dto.setShowOriginalObjectiveValues(execution.isShowOriginalObjectiveValues());
         dto.setNormalizeId(execution.getNormalizeId());
@@ -149,10 +145,6 @@ public class ExecutionService {
         dto.setColor(execution.getColor());
 
         return dto;
-    }
-
-    public List<ExecutionSimplifiedDTO> findExecutionSimplifiedDTOByVisibility(Visibility visibility) {
-        return executionRepository.findByVisibility(visibility);
     }
 
     public boolean isOwner(Execution execution) {
@@ -175,7 +167,7 @@ public class ExecutionService {
         if (isOwner(execution))
             return false;
         
-        return !isOwner(execution) && execution.getVisibility() == Visibility.PUBLIC;
+        return !isOwner(execution);
     }
     
     public Execution getParent(String executionId) {

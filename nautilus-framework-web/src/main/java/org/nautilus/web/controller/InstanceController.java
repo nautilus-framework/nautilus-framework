@@ -97,10 +97,9 @@ public class InstanceController {
     }
 	
 	@GetMapping("/{problemId:.+}/{filename:.+}")
-    public String view( 
+    public String view(Model model,  
             @PathVariable String problemId, 
-            @PathVariable String filename,
-            Model model){
+            @PathVariable String filename){
         
         ProblemExtension problemExtension = pluginService.getProblemById(problemId);
         

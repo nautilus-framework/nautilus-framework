@@ -25,7 +25,6 @@ import org.nautilus.web.dto.ContinueDTO;
 import org.nautilus.web.dto.ParametersDTO;
 import org.nautilus.web.exception.InstanceNotFoundException;
 import org.nautilus.web.model.Execution;
-import org.nautilus.web.model.Execution.Visibility;
 import org.nautilus.web.model.User;
 import org.nautilus.web.service.ExecutionService;
 import org.nautilus.web.service.FileService;
@@ -147,8 +146,7 @@ public class OptimizeController {
             execution.setReferencePoints(parametersDTO.getReferencePoints());
             execution.setEpsilon(parametersDTO.getEpsilon());
             execution.setObjectiveIds(parametersDTO.getObjectiveIds());
-            execution.setVisibility(Visibility.PRIVATE);
-
+            
             execution = executionService.save(execution);
 
             pendingExecutions.add(execution);
@@ -170,7 +168,6 @@ public class OptimizeController {
         execution.setId(null);
         execution.setSolutions(null);
         execution.setObjectiveIds(continueDTO.getNextObjectiveIds());
-        execution.setVisibility(Visibility.PRIVATE);
         execution.setItemForEvaluations(new ArrayList<>());
         
         execution = executionService.save(execution);

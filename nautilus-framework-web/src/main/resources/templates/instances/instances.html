@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	
 	<head th:replace="fragments/head :: title('Instances')"></head>
 	
@@ -8,7 +10,7 @@
 	<div th:replace="fragments/navbar :: default('')"></div>
 	
 	<div class="page-header">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-12 path">
 					<h6 class="title">
@@ -21,23 +23,26 @@
 		</div>
 	</div>
 	
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-			
-                <div class="row">
-                    <div class="col-sm-3 mb-3">
-                        <div class="nav flex-column nav-pills" role="tablist">
-                            <a th:each="problem : ${problems}" class="nav-link" data-toggle="pill" th:href="|#${problem.key.id}|" th:text="${problem.key.name}">Home</a>
-                        </div>
-                    </div>
-                    <div class="col-sm-9">
-                        <div class="tab-content">
+            
+            <div class="row">
+				<div class="col-sm-3 col-lg-2 mb-3">
+				    <div class="card">
+				        <div class="card-header">Problems</div>
+						<div class="list-group list-group-flush" id="list-tab" role="tablist">
+                            <a th:each="problem : ${problems}" class="list-group-item list-group-item-action" data-toggle="list" th:href="|#${problem.key.id}|" th:text="${problem.key.name}">Home</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-9 col-lg-10">
+					<div class="tab-content">
                             <div th:each="problem,i : ${problems}" class="tab-pane fade" th:id="|${problem.key.id}|">
                                 <div class="card">
                                     <div class="card-header pb-2 pt-2">
                                         <div class="row">
-                                            <div class="col-sm-9 mt-1" th:text="${problem.key.name}">Instances</div>
+                                            <div class="col-sm-9 mt-1">Instances</div>
                                             <div class="col-sm-3 text-sm-right">
                                                 <a class="btn btn-outline-success btn-sm" th:href="@{|/instances/upload/${problem.key.id}|}" th:text="#{btn.upload-instance}"></a>
                                             </div>
@@ -46,28 +51,27 @@
                                     <ul class="list-group list-group-flush">
                                         <li th:if="${#lists.isEmpty(problem.value)}" class="list-group-item pt-2 pb-2">No Instances</li>
                                         <li th:each="instance : ${problem.value}" class="list-group-item pt-2 pb-2">
-                                            <a class="mt-1 float-left" th:href="@{|/instances/${problem.key.id}/${instance.fileName}|}" th:text="${instance.fileName}">An instance</a>
+                                            <a class="mt-1 float-left" th:href="@{|/instances/${problem.key.id}/${instance.fileName}|}" th:text="${instance.fileName}">An instances</a>
                                             <div class="btn-group float-right">
-												<a type="button" class="btn btn-success btn-sm" th:href="@{|/optimize/${problem.key.id}/${instance.fileName}|}"><i class="fa fa-play mr-2"></i>Optimize</a>
-												<button type="button" class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" >
-												   <span class="sr-only"></span>
-												</button>
-												<div class="dropdown-menu dropdown-menu-right">
-													<a class="dropdown-item" th:href="@{|/instances/download/${problem.key.id}/${instance.fileName}|}" th:text="#{btn.download}">Download</a>
-													<div class="dropdown-divider"></div>
+                                                <a type="button" class="btn btn-success btn-sm" th:href="@{|/optimize/${problem.key.id}/${instance.fileName}|}"><i class="fa fa-play mr-2"></i>Optimize</a>
+                                                <button type="button" class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" >
+                                                   <span class="sr-only"></span>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" th:href="@{|/instances/download/${problem.key.id}/${instance.fileName}|}" th:text="#{btn.download}">Download</a>
+                                                    <div class="dropdown-divider"></div>
                                                     <form method="POST" th:action="@{|/instances/delete/${problem.key.id}/${instance.fileName}|}">
                                                         <a class="dropdown-item text-danger dropdown-submit" href="#" data:confirm="#{confirm.delete-instance}"><i class="fa fa-trash mr-2"></i>Remove</a>
                                                     </form>
-												</div>
-											</div>
+                                                </div>
+                                            </div>
                                         </li>
                                    </ul>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -2,6 +2,14 @@ package org.nautilus.web.model;
 
 import java.util.Date;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.nautilus.web.util.Role;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -20,19 +28,21 @@ public class User {
 	@Id
 	private String id;
 	
+	@NotBlank
+	private String name;
+	
+	@Email
+    @NotBlank
 	private String email;
 
+	@NotBlank
+    @Size(min = 6)
 	private String password;
 	
-	private String firstname;
-
-	private String lastname;
+	@NotNull
+	private Role role = Role.USER;
 	
-	private String confirmationToken;
-	
-	private boolean admin = false;
-	
-	private boolean enabled = false;
+	private boolean enabled = true;
 	
 	private boolean accountNonExpired = true;
 	
@@ -40,13 +50,11 @@ public class User {
 	
 	private boolean credentialsNonExpired = true;
 	
-	private boolean editable = true;
-	
 	private String decimalSeparator = "POINT";
 	
+	@Min(1)
+    @Max(10)
 	private int decimalPlaces = 4;
-	
-	private int maxExecutions = 2;
 	
 	private String language = "en_US";
 	

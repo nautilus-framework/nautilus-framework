@@ -51,7 +51,7 @@ function appendToQueue(template, item){
 	var html = template.clone().attr('id',item.id);
 	
 	html.find('.execution-queue-title').text(item.title);
-	html.find('.execution-queue-title').attr("href", "/execution/"+item.id);
+	html.find('.execution-queue-title').attr("href", "/executions/"+item.id);
 	html.find('.execution-queue-status').text(item.status);
 	
 	$("#execution-queue ul").append(html)

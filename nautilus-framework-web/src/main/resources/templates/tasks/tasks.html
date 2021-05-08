@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	<head th:replace="fragments/head :: title(#{nav.admin})"></head>
+	<body>
+	
+	<div th:replace="fragments/navbar :: default('tasks')"></div>
+		
+		<div class="page-header mb-0">
+            <div class="container-fluid">
+	            <div class="row">
+	                <div class="col-12 path">
+	                    <h6 class="title">
+                            <a th:href="@{/admin}">Tasks</a>
+                            <span class="path-divider">/</span>	                        
+	                    </h6>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    
+        <br/>
+    
+		<div class="container-fluid">
+			<div class="card">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+                        <div class="row">
+                            <div class="col-9">
+		                        <label class="mb-0">Generate Approx Pareto-front</label>
+		                        <small class="form-text text-muted mt-0 pt-0">Remove the repeated and non-dominated solutions from Pareto-front for all problems and instances</small>
+	                        </div>
+	                        <div class="col-3 text-right mt-1">
+		                        <a th:href="@{tasks/generate-approx-pareto-fronts}" class="btn btn-success">Generate</a>
+	                        </div>
+                        </div>
+					</li>						
+				</ul>
+			</div>
+		</div>
+
+		<div th:replace="fragments/footer :: footer"></div>
+	</body>
+
+</html>

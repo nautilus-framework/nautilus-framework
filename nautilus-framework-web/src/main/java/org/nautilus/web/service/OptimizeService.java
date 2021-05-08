@@ -28,8 +28,8 @@ import org.nautilus.plugin.extension.MutationExtension;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.SelectionExtension;
 import org.nautilus.web.dto.ExecutionQueueDTO;
-import org.nautilus.web.dto.UserDTO;
 import org.nautilus.web.model.Execution;
+import org.nautilus.web.model.User;
 import org.nautilus.web.repository.ExecutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -85,11 +85,9 @@ public class OptimizeService {
             
             Execution execution = it.next();
             
-            UserDTO userDTO = userService.findUserDTOById(execution.getUserId());
+            User user = userService.findByUserId(execution.getUserId());
             
-            String email = userDTO.getEmail();
-            
-            String timeZone = userService.findByEmail(email).getTimeZone();
+            String timeZone = user.getTimeZone(); 
             
             ExecutionQueueDTO itemQueue = new ExecutionQueueDTO();
             
@@ -105,9 +103,9 @@ public class OptimizeService {
             
             pendingExecutions.remove(execution);
             
-            sendAppend(email, itemQueue);
+            sendAppend(user.getEmail(), itemQueue);
             
-            executorService.submit(getTask(email, execution, itemQueue));
+            executorService.submit(getTask(user.getEmail(), execution, itemQueue));
         }
     }
     

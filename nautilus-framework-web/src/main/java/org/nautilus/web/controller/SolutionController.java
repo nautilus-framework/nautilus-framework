@@ -104,7 +104,7 @@ public class SolutionController {
 		model.addAttribute("objectives", objectives);
 		model.addAttribute("execution", execution);
 		model.addAttribute("variables", problemExtension.getVariablesAsList(instance, solution));
-		model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+		model.addAttribute("userSettingsDTO", userService.getSettingsDTO());
 		model.addAttribute("feedbackForObjectiveIndex", objectiveIndex);
 		model.addAttribute("feedbackForObjective", objectives.get(objectiveIndex));
 		model.addAttribute("isReadOnly", executionService.isReadOnly(execution));
@@ -164,7 +164,7 @@ public class SolutionController {
 		
 		execution = executionService.save(execution);
 
-		return redirect.to("/execution/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_SAVED_SUCCESS);
+		return redirect.to("/executions/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_SAVED_SUCCESS);
 	}
 	
 	@GetMapping("/select/{action:.+}")
@@ -193,7 +193,7 @@ public class SolutionController {
         
         execution = executionService.save(execution);
         
-        return redirect.to("/execution/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_SAVED_SUCCESS);
+        return redirect.to("/executions/" + executionId).withSuccess(ra, Messages.EXECUTION_FEEDBACK_SAVED_SUCCESS);
 	}
 	
 	private ItemForEvaluation findBySolutionIndexAndObjectiveIndex(List<ItemForEvaluation> items, int solutionIndex, int objectiveIndex) {

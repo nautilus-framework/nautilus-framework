@@ -1,7 +1,7 @@
 package org.nautilus.web.config;
 
-import org.nautilus.web.service.UserDetailsService;
-import org.nautilus.web.util.Privileges;
+import org.nautilus.web.service.UserService;
+import org.nautilus.web.util.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private UserService userService;
 	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -28,11 +28,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
             .authorizeRequests()
                 .antMatchers("/", "/api/**", "/forms", "/images/**", "/css/**", "/js/**", "/webjars/**", "/ws/**", "/optimize/execution/cancel/**", "/signup/save", "/signup", "/user/confirmation").permitAll()
                 
-                .antMatchers(HttpMethod.GET, "/admin/**").hasAuthority(Privileges.IS_ADMIN)
+                .antMatchers(HttpMethod.GET, "/admin/**").hasAuthority(Role.ADMIN.toString())
                 
-                .antMatchers(HttpMethod.POST, "/user/update").hasAuthority(Privileges.IS_ADMIN)
-                .antMatchers(HttpMethod.POST, "/user/delete/**").hasAuthority(Privileges.IS_ADMIN)
-                .antMatchers(HttpMethod.GET, "/user/edit/**").hasAuthority(Privileges.IS_ADMIN)
+                .antMatchers(HttpMethod.POST, "/user/update").hasAuthority(Role.ADMIN.toString())
+                .antMatchers(HttpMethod.POST, "/user/delete/**").hasAuthority(Role.ADMIN.toString())
+                .antMatchers(HttpMethod.GET, "/user/edit/**").hasAuthority(Role.ADMIN.toString())
                 
                 .anyRequest().authenticated()
                 .and()
@@ -61,6 +61,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+		auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
 	}
 }

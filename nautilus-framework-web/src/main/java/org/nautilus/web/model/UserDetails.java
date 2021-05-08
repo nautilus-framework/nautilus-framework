@@ -4,6 +4,11 @@ import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class UserDetails extends org.springframework.security.core.userdetails.User {
 
 	private static final long serialVersionUID = 1816387556811377455L;
@@ -21,14 +26,6 @@ public class UserDetails extends org.springframework.security.core.userdetails.U
 			grantedAuthorities
 		);
 		
-		this.user = user;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
 		this.user = user;
 	}
 }

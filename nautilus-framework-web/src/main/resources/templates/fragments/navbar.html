@@ -6,9 +6,9 @@
 	<body>
 		<div th:fragment="default(active)" class="navbar-container">
 			<nav  class="navbar navbar-expand-lg navbar-dark bg-dark">
-				<div class="container">
+				<div class="container-fluid">
 			
-					<a class="navbar-brand" th:href="@{/}" th:text="#{app.name}"></a>
+					<a class="navbar-brand" th:href="@{/}" th:text="#{app.name}">Nautilus</a>
 					
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
 		    			<span class="navbar-toggler-icon"></span>
@@ -20,12 +20,12 @@
 		  				      <li class="nav-item" th:classappend="${active == 'home'} ? active : ''">
                                 <a class="nav-link" th:href="@{/home}" th:text="#{nav.home}"></a>
                               </li>
-						      <li class="nav-item" th:classappend="${active == 'gallery'} ? active : ''">
-						        <a class="nav-link" th:href="@{/gallery}" th:text="#{nav.gallery}"></a>
-						      </li>
-						      <li class="nav-item" th:classappend="${active == 'admin'} ? active : ''" sec:authorize="hasAuthority('IS_ADMIN')">
-						        <a class="nav-link" th:href="@{/admin}" th:text="#{nav.admin}"></a>
-						      </li>
+                              <li class="nav-item" th:classappend="${active == 'compare'} ? active : ''">
+                                <a class="nav-link" th:href="@{/compare/form}">Compare</a>
+                              </li>
+                              <li class="nav-item" th:classappend="${active == 'tasks'} ? active : ''">
+                                <a class="nav-link" th:href="@{/tasks}">Tasks</a>
+                              </li>
 						</ul>
 							
 						<div sec:authorize="isAuthenticated()">
@@ -34,7 +34,7 @@
 						
 							<div class="dropdown">
 								<a class="dropdown-toggle dropdown-toggle-white" data-toggle="dropdown" href="#">
-									<span sec:authentication="name"></span>
+									<span sec:authentication="principal.user.name"></span>
 									<span class="caret"></span>
 								</a>
 								<div class="dropdown-menu dropdown-menu-right">

@@ -29,7 +29,6 @@ import org.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 import org.nautilus.web.dto.CompareDTO;
 import org.nautilus.web.dto.ExecutionSimplifiedDTO;
 import org.nautilus.web.dto.FormCompareDTO;
-import org.nautilus.web.dto.UserDTO;
 import org.nautilus.web.model.Execution;
 import org.nautilus.web.model.User;
 import org.nautilus.web.service.ExecutionService;
@@ -76,7 +75,7 @@ public class CompareController {
 
         User user = securityService.getLoggedUser().getUser();
 
-        List<UserDTO> users = userService.findAll();
+        List<User> users = userService.findAll();
         
         List<ExecutionSimplifiedDTO> executions = null;
         
@@ -123,7 +122,7 @@ public class CompareController {
         model.addAttribute("instances", instances);
         model.addAttribute("users", users);
         model.addAttribute("objectives", problem.getObjectives());
-        model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+        model.addAttribute("userSettingsDTO", userService.getSettingsDTO());
         model.addAttribute("executions", executions);
         model.addAttribute("problems", problems);
         model.addAttribute("compareDTO", compareDTO);
@@ -133,11 +132,11 @@ public class CompareController {
         return "form-compare-2";
     }
     
-    private List<ExecutionSimplifiedDTO> findAllExecutions(List<UserDTO> users, boolean filterSelectedSolutions){
+    private List<ExecutionSimplifiedDTO> findAllExecutions(List<User> users, boolean filterSelectedSolutions){
         
         List<ExecutionSimplifiedDTO> executions = new ArrayList<>();
         
-        for (UserDTO userDTO : users) {
+        for (User userDTO : users) {
 
             List<ExecutionSimplifiedDTO> found = executionService.findExecutionSimplifiedDTOByUserId(userDTO.getId());
 
@@ -314,7 +313,7 @@ public class CompareController {
             execution.getAttributes().put("metrics", metrics);
         }
         
-        model.addAttribute("userSettingsDTO", userService.findUserSettingsDTOById(user.getId()));
+        model.addAttribute("userSettingsDTO", userService.getSettingsDTO());
         model.addAttribute("executions", executions);
         model.addAttribute("objectiveIds", Converter.toJson(objectives.stream().map(e -> e.getId()).collect(Collectors.toList())));
   

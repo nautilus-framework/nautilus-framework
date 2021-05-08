@@ -23,8 +23,7 @@ public class LoginController {
 	private FlashMessageService flashMessageService;
 	
 	@RequestMapping("")
-	public String index(Model model, 
-			RedirectAttributes ra,
+	public String index(Model model, RedirectAttributes ra,
 			@RequestParam(value = "error", required = false) String error, 
 			@RequestParam(value = "logout", required = false) String logout) {
 		
@@ -43,7 +42,7 @@ public class LoginController {
 			return "redirect:/login";
 		}
 		
-		return "login";
+		return "users/login";
 	}
 	
 	@RequestMapping("/success")
