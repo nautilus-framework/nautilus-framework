@@ -16,7 +16,7 @@
 							<span class="path-divider">/</span>
 							<a th:href="@{/instances}" th:text="${problemId}"></a> 
                             <span class="path-divider">/</span>
-                            <a th:href="@{#}" th:text="${instance}"></a>
+                            <a th:href="@{|/instances/${problem.id}/${instance}|}" th:text="${instance}"></a>
                             <span class="path-divider">/</span>
                             <a th:href="@{/optimize/} + ${problem.id} + @{/} + ${instance}" th:text="#{btn.optimize}"></a>                            
 						</h6>

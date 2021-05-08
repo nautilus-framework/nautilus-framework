@@ -9,14 +9,17 @@
 	
 		<div th:replace="fragments/navbar :: default('home')"></div>
 	
-		<div class="page-header page-header-with-navbar">
-			<div class="container">
+		<div class="page-header">
+			<div class="container-fluid">
 				<div class="row">
 					<div class="col-8 path">
 						<h6 class="title">
 							<a th:href="@{/}" th:text="#{nav.home}"></a> 
-							<span class="path-divider">/</span>
-							<a th:href="@{|/instance/${problem.id}/${filename}|}" th:text="${filename}"></a>
+                            <span class="path-divider">/</span>
+                            <a th:href="@{/instances}" th:text="${problemId}"></a> 
+                            <span class="path-divider">/</span>
+                            <a th:href="@{#}" th:text="${instance}"></a>
+							<a th:href="@{|/instances/${problem.id}/${filename}|}" th:text="${filename}"></a>
 						</h6>
 					</div>
 					<div class="col-4 toolbar">
@@ -36,7 +39,7 @@
 			</div>
         </div>
 	
-		<div class="container page-navbar">
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-12">
 					<nav>
@@ -46,7 +49,7 @@
 								th:text="${tab.getName()}"></a>
 						</div>
 					</nav>
-					<div class="tab-content">
+					<div class="tab-content mt-3">
 						<div th:each="tab,i : ${tabs}" role="tabpanel"
 							class="tab-pane fade" th:id="${tab.getId()}"
 							th:utext="${tab.getTabContent().getHTML()}"></div>

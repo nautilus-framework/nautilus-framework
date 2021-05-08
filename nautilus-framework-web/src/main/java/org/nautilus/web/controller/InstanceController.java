@@ -114,6 +114,6 @@ public class InstanceController {
         model.addAttribute("problem", problemExtension);
         model.addAttribute("tabs", instance.getTabs(instance));
     
-        return "instance";
+        return "instances/instance";
     }
 }
