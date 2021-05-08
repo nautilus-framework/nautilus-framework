@@ -7,21 +7,25 @@
 
 		<div th:replace="fragments/navbar :: default('home')"></div>
 		
-		<div class="page-header page-header-with-navbar">
-			<div class="container">
+		<div class="page-header">
+			<div class="container-fluid">
 				<div class="row">
 					<div class="col-12 path">
 						<h6 class="title">
 							<a th:href="@{/}" th:text="#{nav.home}"></a> 
 							<span class="path-divider">/</span>
-							<a th:href="@{/optimize/} + ${problem.id} + @{/} + ${instance}" th:text="#{btn.optimize}"></a>
+							<a th:href="@{/instances}" th:text="${problemId}"></a> 
+                            <span class="path-divider">/</span>
+                            <a th:href="@{#}" th:text="${instance}"></a>
+                            <span class="path-divider">/</span>
+                            <a th:href="@{/optimize/} + ${problem.id} + @{/} + ${instance}" th:text="#{btn.optimize}"></a>                            
 						</h6>
 					</div>
 				</div>
 			</div>
 		</div>
 		
-		<div class="container page-navbar">
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-12">
 					<nav>
@@ -34,25 +38,12 @@
 					</nav>
 					<form  method="POST" th:action="@{/optimize/save}" th:object="${parametersDTO}">
 						<!-- Tab panes -->
-						<div class="tab-content">
+						<div class="tab-content mt-3">
 							<div role="tabpanel" class="tab-pane fade" id="general">
-							
-							     <div class="row">
-                                    <div class="col-6">
-									    <div class="form-group">
-		                                    <label for="problemId" th:text="#{execution.problem}"></label>
-		                                    <input type="text" class="form-control" th:field="*{problemId}" th:validation="problemId"  />
-		                                    <span class="text-danger" th:if="${#fields.hasErrors('problemId')}" th:errors="*{problemId}"></span>
-		                                </div>
-		                            </div>
-		                            <div class="col-6">
-		                                <div class="form-group">
-		                                    <label for="instance" th:text="#{execution.instance}"></label>
-		                                    <input type="text" class="form-control" th:field="*{instance}" th:validation="instance"  />
-		                                    <span class="text-danger" th:if="${#fields.hasErrors('instance')}" th:errors="*{instance}"></span>
-		                                </div>
-		                             </div>
-		                          </div>
+                                
+                                <input type="hidden" class="form-control" th:field="*{problemId}" th:validation="problemId"  />
+                                <input type="hidden" class="form-control" th:field="*{instance}" th:validation="instance"  />							
+							     
 								<div class="form-group">
 									<label for="algorithmId" th:text="#{execution.algorithm}"></label>
 									<select class="form-control optimize-algorithm" th:field="*{algorithmId}" th:validation="algorithmId">
