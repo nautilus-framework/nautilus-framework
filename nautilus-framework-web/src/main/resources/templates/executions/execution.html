@@ -125,7 +125,7 @@
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="settings" th:if="${not isReadOnly}">
 						  
-                            <form th:action="@{|/execution/${executionId}/settings/save|}" method="POST" th:object="${executionSettingsDTO}">
+                            <form th:action="@{|/executions/${executionId}/settings/save|}" method="POST" th:object="${executionSettingsDTO}">
                                 <h5 th:text="#{nav.general}">General</h5>
                                 <hr/>
                                 <div class="form-group">

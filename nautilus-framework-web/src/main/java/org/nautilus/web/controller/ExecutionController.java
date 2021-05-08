@@ -197,7 +197,7 @@ public class ExecutionController {
 		return redirect.to("/home/").withSuccess(ra, Messages.EXECUTION_DELETED_SUCCESS, executionId);
 	}
 	
-	@PostMapping("/settings/save")
+	@PostMapping("/{executionId:.+}/settings/save")
 	public String saveSettings(Model model, RedirectAttributes ra, 
 			@PathVariable String executionId,
 			@Valid ExecutionSettingsDTO executionSettingsDTO,
