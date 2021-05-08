@@ -203,13 +203,7 @@
         <dependency>
             <groupId>com.github.mxab.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-data-attribute</artifactId>
-        </dependency>
-        <!-- PF4J -->
-        <dependency>
-            <groupId>org.pf4j</groupId>
-            <artifactId>pf4j</artifactId>
-            <version>2.4.0</version>
-        </dependency>
+        </dependency>       
         <dependency>
     <groupId>org.reflections</groupId>
     <artifactId>reflections</artifactId>
