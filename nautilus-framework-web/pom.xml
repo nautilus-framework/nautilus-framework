@@ -219,6 +219,11 @@
             <artifactId>nautilus-framework-plugin-nrp</artifactId>
             <version>0.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.nautilus-framework</groupId>
+            <artifactId>nautilus-framework-plugin-vtspl</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
     
     <build>
