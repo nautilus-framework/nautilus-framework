@@ -10,24 +10,16 @@ h1{
 color: RGB(32, 57, 81);	
 }
 .page-header{
-	height: 70px;
+	height: 55px;
 	background-color: #FCFBFA;
 	border-bottom: 1px solid #dee2e6;
 	margin-bottom: 20px;
 }
 
-.page-header .path{
-	/*border: 1px solid black;*/
-}
-
 .page-header .path .title{
-	margin-top: 6px;
+	margin-top: 4px;
 	margin-bottom: 0px;
 } 
-
-.page-header .toolbar{
-	/*border: 1px solid black;*/
-}
 
 
 .page-header-with-navbar{
@@ -40,7 +32,7 @@ color: RGB(32, 57, 81);
 }
 
 .page-header .row{
-	padding-top: 15px;
+	padding-top: 8px;
 }
 
 .page-navbar{
