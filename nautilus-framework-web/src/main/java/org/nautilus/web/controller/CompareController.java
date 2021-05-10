@@ -25,7 +25,6 @@ import org.nautilus.plugin.extension.NormalizerExtension;
 import org.nautilus.plugin.extension.ProblemExtension;
 import org.nautilus.plugin.extension.algorithm.ManuallyExtension;
 import org.nautilus.plugin.extension.normalizer.ByMaxAndMinValuesNormalizerExtension;
-import org.nautilus.plugin.toy.extension.problem.ToyProblemExtension;
 import org.nautilus.web.dto.CompareDTO;
 import org.nautilus.web.dto.ExecutionSimplifiedDTO;
 import org.nautilus.web.dto.FormCompareDTO;
@@ -96,12 +95,7 @@ public class CompareController {
             .filter(e -> e.getProblemId().equalsIgnoreCase(formCompareDTO.getProblemId()))
             .filter(e -> e.getInstance().equalsIgnoreCase(formCompareDTO.getInstanceId()))
             .collect(Collectors.toList());
-        
-        String problemId = new ToyProblemExtension().getId();
-//        String problemId = new NRPProblemExtension().getId();
-        
-        ProblemExtension problem = pluginService.getProblemById(problemId);
-        
+                
         Map<String, Integer> numberOfReductions = new HashMap<>();
 
 //        for (ExecutionSimplifiedDTO executionSimplified : executions) {
@@ -120,8 +114,7 @@ public class CompareController {
         
         
         model.addAttribute("instances", instances);
-        model.addAttribute("users", users);
-        model.addAttribute("objectives", problem.getObjectives());
+        model.addAttribute("users", users);        
         model.addAttribute("userSettingsDTO", userService.getSettingsDTO());
         model.addAttribute("executions", executions);
         model.addAttribute("problems", problems);
