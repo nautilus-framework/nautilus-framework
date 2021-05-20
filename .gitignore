@@ -187,6 +187,5 @@ jMetal.log
 
 nautilus-web/files/instances
 
-!nautilus-framework-web/target/nautilus-framework-web-1.0.0.jar
 
 # End of https://www.gitignore.io/api/java,maven,macos,linux,eclipse,windows,netbeans
