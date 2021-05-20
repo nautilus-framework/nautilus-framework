@@ -46,6 +46,9 @@ public class InstanceController {
     @GetMapping("")
     public String view(Model model) {
 
+        System.out.println(fileService.getRootLocation());
+        System.out.println(fileService.getInstancesLocation());
+        
         model.addAttribute("problems", instanceService.getProblemAndInstances());
 
         return "instances/instances";
@@ -69,7 +72,7 @@ public class InstanceController {
         if (form.hasErrors()) {
             return formUpload(model, problemId, uploadFileDTO);
         }
-
+        
         Path file = instanceService.save(problemId, uploadFileDTO);
 
         return redirect.to("/instances").withSuccess(ra, Messages.FILE_UPLOADED_SUCCESS, file.getFileName().toString());
