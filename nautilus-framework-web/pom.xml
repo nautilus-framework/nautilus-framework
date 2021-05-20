@@ -280,7 +280,7 @@
     <repositories>
     <repository>
         <id>nautilus-repo</id>
-        <url>https://github.com/nautilus-framework/mvn-repo/raw/master/releases</url>
+        <url>https://github.com/nautilus-framework/mvn-repo/raw/main/releases</url>
     </repository>
 </repositories>
     
