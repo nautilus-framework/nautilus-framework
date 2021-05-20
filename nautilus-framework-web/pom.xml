@@ -205,10 +205,10 @@
             <artifactId>thymeleaf-extras-data-attribute</artifactId>
         </dependency>       
         <dependency>
-    <groupId>org.reflections</groupId>
-    <artifactId>reflections</artifactId>
-    <version>0.9.11</version>
-</dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+        </dependency>
         <dependency>
             <groupId>org.nautilus-framework</groupId>
             <artifactId>nautilus-framework-plugin-toy</artifactId>
@@ -218,11 +218,6 @@
             <groupId>org.nautilus-framework</groupId>
             <artifactId>nautilus-framework-plugin-nrp</artifactId>
             <version>0.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.nautilus-framework</groupId>
-            <artifactId>nautilus-framework-plugin-vtspl</artifactId>
-            <version>1.0.0</version>
         </dependency>
     </dependencies>
     
