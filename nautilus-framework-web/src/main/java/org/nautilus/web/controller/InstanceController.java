@@ -46,9 +46,6 @@ public class InstanceController {
     @GetMapping("")
     public String view(Model model) {
 
-        System.out.println(fileService.getRootLocation());
-        System.out.println(fileService.getInstancesLocation());
-        
         model.addAttribute("problems", instanceService.getProblemAndInstances());
 
         return "instances/instances";
