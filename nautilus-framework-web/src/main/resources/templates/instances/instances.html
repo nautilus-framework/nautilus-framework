@@ -53,7 +53,7 @@
                                         <li th:each="instance : ${problem.value}" class="list-group-item pt-2 pb-2">
                                             <a class="mt-1 float-left" th:href="@{|/instances/${problem.key.id}/${instance.fileName}|}" th:text="${instance.fileName}">An instances</a>
                                             <div class="btn-group float-right">
-                                                <a type="button" class="btn btn-success btn-sm" th:href="@{|/optimize/${problem.key.id}/${instance.fileName}|}"><i class="fa fa-play mr-2"></i>Optimize</a>
+                                                <a class="btn btn-success btn-sm" th:href="@{|/optimize/${problem.key.id}/${instance.fileName}|}"><i class="fa fa-play mr-2"></i>Optimize</a>
                                                 <button type="button" class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" >
                                                    <span class="sr-only"></span>
                                                 </button>

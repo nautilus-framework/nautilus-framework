@@ -14,7 +14,7 @@
 						<h6 class="title">
 							<a th:href="@{/}" th:text="#{nav.home}"></a> 
 							<span class="path-divider">/</span> 
-							<a class="format-date" th:href="@{|/execution/${execution.id}|}" th:text="${#strings.isEmpty(execution.title)} ? ${#formatter.date(execution.creationDate, userSettingsDTO.timeZone)} : ${execution.title}"></a> 
+							<a class="format-date" th:href="@{|/executions/${execution.id}|}" th:text="${#strings.isEmpty(execution.title)} ? ${#formatter.date(execution.creationDate, userSettingsDTO.timeZone)} : ${execution.title}"></a> 
 						</h6>
 					</div>
 					<div class="col-4 toolbar" th:if="${not isReadOnly}">
